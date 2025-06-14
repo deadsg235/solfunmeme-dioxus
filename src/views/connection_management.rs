@@ -75,7 +75,7 @@ pub(crate) fn connection_management_section(
                           cluster: mc
                       };
                       if !connection.name.is_empty() && !connection.endpoint.is_empty()  {
-                          connections.add_entry(connection);
+                          let _ = connections.add_entry(connection);
                           new_connection_name.set(String::new());
                           new_connection_url.set(String::new());
                           selected_cluster_for_connection.set(String::new());

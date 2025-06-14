@@ -17,14 +17,7 @@ pub struct EncryptedPayload {
     pub sender_public_key: String,
 }
 
-#[derive(Debug, Clone)]
-pub struct MessageEntry {
-    pub title: String,
-    pub message: String,
-    pub owner: String,
-    pub recipient: String,
-    pub encrypted: bool,
-}
+
 
 #[derive(Debug)]
 pub enum CryptoError {
@@ -253,7 +246,7 @@ impl SolanaEncryption {
 }
 
 #[cfg(test)]
-mod tests {
+mod tests2 {
     //use super::*;
 
     #[test]
@@ -270,3 +263,7 @@ mod tests {
         // For now, it demonstrates the API structure
     }
 }
+
+
+
+

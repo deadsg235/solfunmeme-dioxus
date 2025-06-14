@@ -1,4 +1,6 @@
-use crate::{constants::*, level::Level};
+//use crate::{constants::*, level::Level};
+
+use crate::model::{constants::{LEVEL_U2, LEVEL_U3}, simple_expr::{levels_8, Level}};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SimpleExprType {
@@ -35,12 +37,12 @@ pub fn simple_expr_rec_chunk1() -> SimpleExprType {
             }),
             forbndr_typ_b: None,
             forbd_b: some_box(SimpleExprType::Sort {
-                level: Level::Param("u"),
+                level: Level::Param("u".to_string()),
             }),
             forbd: some_box(SimpleExprType::ForallE {
                 forbndr_typ: some_box(SimpleExprType::ForallE {
                     forbndr_typ: some_box(SimpleExprType::Sort {
-                        level: Level::Param("u_1"),
+                        level: Level::Param("u_1".to_string()),
                     }),
                     forbndr_typ_b: None,
                     forbd_b: None,
@@ -52,8 +54,9 @@ pub fn simple_expr_rec_chunk1() -> SimpleExprType {
                 forbd_b: some_box(SimpleExprType::ForallE {
                     forbndr_typ: some_box(SimpleExprType::ForallE {
                         forbndr_typ: some_box(SimpleExprType::Const {
-                            levels: vec![LEVEL_U2, LEVEL_U3],
+                            //levels: vec![LEVEL_U2.clone().into(), LEVEL_U3.clone().into()],
                             decl_name: String::from("Level"),
+                            levels: todo!(),
                         }),
                         forbndr_typ_b: None,
                         forbd_b: some_box(SimpleExprType::App {

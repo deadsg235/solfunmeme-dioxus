@@ -1,5 +1,7 @@
+use crate::model::simple_expr::Level;
+
 use super::{forbd::Forbd, sig::Sig};
-use crate::level::Level;
+//use crate::level::Level;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct CnstInf {

@@ -24,6 +24,7 @@ use std::collections::HashMap;
 //use std::fmt;
 use uuid::Uuid;
 use nalgebra::DVector;
+use serde_json;
 
 #[derive(Clone, Copy, PartialEq)]
 pub struct Expression {
@@ -286,17 +287,17 @@ pub struct LiftedExpression {
 }
 
 impl LiftedExpression {
-    pub fn from_quine(quine: Quine) -> Self {
-        let vector_representation = quine.vectorize().data.as_vec().clone();
+    // pub fn from_quine(quine: from_quine) -> Self {
+    //     let vector_representation = quine.vectorize().data.as_vec().clone();
         
-        LiftedExpression {
-            id: Uuid::new_v4().to_string(),
-            quine: Some(quine),
-            meme: None,
-            lifted_at: chrono::Utc::now().to_rfc3339(),
-            vector_representation,
-        }
-    }
+    //     LiftedExpression {
+    //         id: Uuid::new_v4().to_string(),
+    //         quine: Some(quine),
+    //         meme: None,
+    //         lifted_at: chrono::Utc::now().to_rfc3339(),
+    //         vector_representation,
+    //     }
+    // }
     
     pub fn from_meme(meme: Meme) -> Self {
         let vector_representation = meme.vectorize().data.as_vec().clone();
@@ -348,8 +349,8 @@ impl Controller {
             return Maybe::none();
         }
         
-        let quine = Quine::new(expression);
-        let lifted = LiftedExpression::from_quine(quine);
+        let meme = Meme::new(expression, Vec::new());
+        let lifted = LiftedExpression::from_meme(meme);
         let id = lifted.id.clone();
         
         state.expressions.insert(id.clone(), lifted.clone());
@@ -851,5 +852,56 @@ fn Footer() -> Element {
             class: "app-footer",
             p { "Functional Reactive Architecture • Rust + Dioxus • MVC Pattern" }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_meme_new_initializes_fields() {
+        let content = "Test meme".to_string();
+        let tags = vec!["funny".to_string(), "rust".to_string()];
+        let meme = Meme::new(content.clone(), tags.clone());
+
+        assert_eq!(meme.content, content);
+        assert_eq!(meme.semantic_tags, tags);
+        assert_eq!(meme.propagation_count, 0);
+        assert!(!meme.id.is_empty());
+        assert!(meme.virality_score > 0.0);
+    }
+
+    #[test]
+    fn test_meme_propagate_increases_count_and_virality() {
+        let mut meme = Meme::new("viral".to_string(), vec!["tag".to_string()]);
+        let initial_score = meme.virality_score;
+        let initial_count = meme.propagation_count;
+
+        meme.propagate();
+
+        assert_eq!(meme.propagation_count, initial_count + 1);
+        assert!(meme.virality_score > initial_score);
+    }
+
+    #[test]
+    fn test_meme_vectorize_dimensions_and_values() {
+        let meme = Meme::new("abc".to_string(), vec!["x".to_string(), "y".to_string()]);
+        let vector = meme.vectorize();
+
+        // 256 ASCII + virality + propagation + tags
+        assert_eq!(vector.len(), 259);
+        // Check that the vector contains the virality score, propagation count, and tag count at the end
+        assert_eq!(vector[256], meme.virality_score);
+        assert_eq!(vector[257], meme.propagation_count as f64);
+        assert_eq!(vector[258], meme.semantic_tags.len() as f64);
+    }
+
+    #[test]
+    fn test_meme_serialization_roundtrip() {
+        let meme = Meme::new("serialize".to_string(), vec!["serde".to_string()]);
+        let json = serde_json::to_string(&meme).unwrap();
+        let deserialized: Meme = serde_json::from_str(&json).unwrap();
+        assert_eq!(meme, deserialized);
     }
 }

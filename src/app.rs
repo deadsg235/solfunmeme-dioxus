@@ -48,10 +48,11 @@ pub(crate) fn App() -> Element {
                 .push_back(NotificationInfo::new(wallet_event));
         }
     });
-
+    let fi = FAVICON;
+    let tw = TAILWIND_CSS;
     rsx! {
-        document::Link { rel: "icon", href: FAVICON }
-        document::Link { rel: "stylesheet", href: TAILWIND_CSS }
+        document::Link { rel: "icon", href: fi }
+        document::Link { rel: "stylesheet", href: tw }
         document::Title {"Rust Wallet Adapter"}
 
         div { class: "w-full flex min-h-screen font-[sans-serif] dark:bg-rich-black bg-white text-black dark:text-white",

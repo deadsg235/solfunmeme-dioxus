@@ -35,7 +35,7 @@ fn list_connections(
                                             let conn_name = conn.name.clone();
                                             let mut connections = use_connections("solana_wallet");
                                             let res = connections.remove_entry(&conn_name);
-                                            res;                                          
+                                            drop(res);                                          
 
                                         },
                                         "Delete"

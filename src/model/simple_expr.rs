@@ -1,16 +1,17 @@
 
 //use std::collections::HashMap;
-
+use serde::Serialize;
+use serde::Deserialize;
 //use crate::model::simple_expr;
 
 // Equivalent to Lean's Level type
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Level {
     Zero,
     Succ(Box<Level>),
     Max(Box<Level>, Box<Level>),
     IMax(Box<Level>, Box<Level>),
-    Param(&'static str),
+    Param(String),
     MVar(u64),
 }
 
@@ -22,26 +23,26 @@ pub struct LevelDescr {
 }
 
             // Define globals for u_1 to u_8
-pub const LEVEL_U1: Level = Level::Param("u_1");
-pub const LEVEL_U2: Level = Level::Param("u_2");
-pub const LEVEL_U3: Level = Level::Param("u_3");
-pub const LEVEL_U4: Level = Level::Param("u_4");
-pub const LEVEL_U5: Level = Level::Param("u_5");
-pub const LEVEL_U6: Level = Level::Param("u_6");
-pub const LEVEL_U7: Level = Level::Param("u_7");
-pub const LEVEL_U8: Level = Level::Param("u_8");
+pub fn LEVEL_U1() -> Level { Level::Param("u_1".to_string()) }
+pub fn LEVEL_U2() -> Level { Level::Param("u_2".to_string()) }
+pub fn LEVEL_U3() -> Level { Level::Param("u_3".to_string()) }
+pub fn LEVEL_U4() -> Level { Level::Param("u_4".to_string()) }
+pub fn LEVEL_U5() -> Level { Level::Param("u_5".to_string()) }
+pub fn LEVEL_U6() -> Level { Level::Param("u_6".to_string()) }
+pub fn LEVEL_U7() -> Level { Level::Param("u_7".to_string()) }
+pub fn LEVEL_U8() -> Level { Level::Param("u_8".to_string()) }
 
 // Use a function to return the vector at runtime, since Vec and .clone() are not allowed in consts
 pub fn levels_8() -> Vec<Level> {
     vec![
-        LEVEL_U1,
-        LEVEL_U2,
-        LEVEL_U3,
-        LEVEL_U4,
-        LEVEL_U5,
-        LEVEL_U6,
-        LEVEL_U7,
-        LEVEL_U8,
+        LEVEL_U1(),
+        LEVEL_U2(),
+        LEVEL_U3(),
+        LEVEL_U4(),
+        LEVEL_U5(),
+        LEVEL_U6(),
+        LEVEL_U7(),
+        LEVEL_U8(),
     ]
 }
 #[derive(Debug, Clone, PartialEq)]
@@ -359,8 +360,9 @@ pub enum LevelType {
 }
 
 // Enhanced SimpleExpr to match JSON structure more closely
-#[derive(Debug, Clone, PartialEq)]
-pub enum SimpleExprType {
+
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+pub enum SimpleExprType<'a> {
     BVar {
         index: Option<u64>,
     },
@@ -369,32 +371,32 @@ pub enum SimpleExprType {
     },
     Const {
         levels: Vec<Level>,
-        decl_name: String,
+        decl_name: std::borrow::Cow<'a, str>,
     },
     App {
-        fn_expr: Box<SimpleExprType>,
-        arg: Box<SimpleExprType>,
+        fn_expr: Box<SimpleExprType<'a>>,
+        arg: Box<SimpleExprType<'a>>,
     },
     ForallE {
-        forbndr_typ: Option<Box<SimpleExprType>>,
-        forbndr_typ_b: Option<Box<SimpleExprType>>,
-        forbd_b: Option<Box<SimpleExprType>>,
-        forbd: Option<Box<SimpleExprType>>,
-        binder_name: String,
-        binder_info: String,
+        forbndr_typ: Option<Box<SimpleExprType<'a>>>,
+        forbndr_typ_b: Option<Box<SimpleExprType<'a>>>,
+        forbd_b: Option<Box<SimpleExprType<'a>>>,
+        forbd: Option<Box<SimpleExprType<'a>>>,
+        binder_name: std::borrow::Cow<'a, str>,
+        binder_info: std::borrow::Cow<'a, str>,
     },
     Lam {
-        binder_name: String,
-        binder_type: Box<SimpleExprType>,
-        body: Box<SimpleExprType>,
-        binder_info: String,
+        binder_name: std::borrow::Cow<'a, str>,
+        binder_type: Box<SimpleExprType<'a>>,
+        body: Box<SimpleExprType<'a>>,
+        binder_info: std::borrow::Cow<'a, str>,
     },
 }
 
 // Convert the JSON chunk 1 into a Rust value at runtime (not a const)
-pub fn simple_expr_rec_chunk1() -> SimpleExprType {
+pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
     // Helper to box and Some
-    fn some_box(expr: SimpleExprType) -> Option<Box<SimpleExprType>> {
+    fn some_box<'a>(expr: SimpleExprType<'a>) -> Option<Box<SimpleExprType<'a>>> {
         Some(Box::new(expr))
     }
 
@@ -402,41 +404,41 @@ pub fn simple_expr_rec_chunk1() -> SimpleExprType {
         forbndr_typ_b: some_box(SimpleExprType::ForallE {
             forbndr_typ: some_box(SimpleExprType::Const {
                 levels: vec![
-                    LEVEL_U1,
-                    LEVEL_U2,
-                    LEVEL_U3,
-                    LEVEL_U4,
-                    LEVEL_U5,
-                    LEVEL_U6,
-                    LEVEL_U7,
-                    LEVEL_U8,
+                    LEVEL_U1(),
+                    LEVEL_U2(),
+                    LEVEL_U3(),
+                    LEVEL_U4(),
+                    LEVEL_U5(),
+                    LEVEL_U6(),
+                    LEVEL_U7(),
+                    LEVEL_U8(),
                 ],
-                decl_name: String::from("SimpleExpr"),
+                decl_name: std::borrow::Cow::Borrowed("SimpleExpr"),
             }),
             forbndr_typ_b: None,
             forbd_b: some_box(SimpleExprType::Sort {
-                level: Level::Param("u"),
+                level: Level::Param("u".to_string()),
             }),
             forbd: some_box(SimpleExprType::ForallE {
                 forbndr_typ: some_box(SimpleExprType::ForallE {
                     forbndr_typ: some_box(SimpleExprType::Sort {
-                        level: Level::Param("u_1"),
+                        level: Level::Param("u_1".to_string()),
                     }),
                     forbndr_typ_b: None,
                     forbd_b: None,
                     forbd: None,
-                    binder_name: String::from("Nat"),
-                    binder_info: String::from("implicit"),
+                    binder_name: std::borrow::Cow::Borrowed("Nat"),
+                    binder_info: std::borrow::Cow::Borrowed("implicit"),
                 }),
                 forbndr_typ_b: None,
                 forbd_b: some_box(SimpleExprType::ForallE {
                     forbndr_typ: some_box(SimpleExprType::ForallE {
                         forbndr_typ: some_box(SimpleExprType::Const {
                             levels: vec![
-                                LEVEL_U2,
-                                LEVEL_U3,
+                                LEVEL_U2(),
+                                LEVEL_U3(),
                             ],
-                            decl_name: String::from("Level"),
+                            decl_name: std::borrow::Cow::Borrowed("Level"),
                         }),
                         forbndr_typ_b: None,
                         forbd_b: some_box(SimpleExprType::App {
@@ -444,42 +446,42 @@ pub fn simple_expr_rec_chunk1() -> SimpleExprType {
                             arg: Box::new(SimpleExprType::App {
                                 fn_expr: Box::new(SimpleExprType::Const {
                                     levels: vec![
-                                        LEVEL_U1,
-                                        LEVEL_U2,
-                                        LEVEL_U3,
-                                        LEVEL_U4,
-                                        LEVEL_U5,
-                                        LEVEL_U6,
-                                        LEVEL_U7,
-                                        LEVEL_U8,
+                                        LEVEL_U1(),
+                                        LEVEL_U2(),
+                                        LEVEL_U3(),
+                                        LEVEL_U4(),
+                                        LEVEL_U5(),
+                                        LEVEL_U6(),
+                                        LEVEL_U7(),
+                                        LEVEL_U8(),
                                     ],
-                                    decl_name: String::from("SimpleExpr.sort"),
+                                    decl_name: std::borrow::Cow::Borrowed("SimpleExpr.sort"),
                                 }),
                                 arg: Box::new(SimpleExprType::BVar { index: None }),
                             }),
                         }),
                         forbd: None,
-                        binder_name: String::from("u"),
-                        binder_info: String::from("default"),
+                        binder_name: std::borrow::Cow::Borrowed("u"),
+                        binder_info: std::borrow::Cow::Borrowed("default"),
                     }),
                     forbndr_typ_b: None,
                     forbd_b: None,
                     forbd: None,
-                    binder_name: String::from("sort"),
-                    binder_info: String::from("default"),
+                    binder_name: std::borrow::Cow::Borrowed("sort"),
+                    binder_info: std::borrow::Cow::Borrowed("default"),
                 }),
                 forbd: None,
-                binder_name: String::from("bvar"),
-                binder_info: String::from("default"),
+                binder_name: std::borrow::Cow::Borrowed("bvar"),
+                binder_info: std::borrow::Cow::Borrowed("default"),
             }),
-            binder_name: String::from("t"),
-            binder_info: String::from("default"),
+            binder_name: std::borrow::Cow::Borrowed("t"),
+            binder_info: std::borrow::Cow::Borrowed("default"),
         }),
         forbndr_typ: None,
         forbd_b: None,
         forbd: None,
-        binder_name: String::from(""),
-        binder_info: String::from(""),
+        binder_name: std::borrow::Cow::Borrowed(""),
+        binder_info: std::borrow::Cow::Borrowed(""),
     }
 }
 

@@ -87,6 +87,6 @@ pub const ZOS1 : Meme = Meme {
 };
 
 
-pub const ZOS1_array : [i32; 8] = [0, 1, 2, 3, 5, 7, 11, 13];
+pub const ZOS1_ARRAY : [i32; 8] = [0, 1, 2, 3, 5, 7, 11, 13];
 
 // 

@@ -106,3 +106,11 @@ Createing json  using https://github.com/meta-introspector/syn-serde-rust.git
 #### Area or surface of points of the spaces.
 #### connecting solana code to memes to llms
 
+# code coverage
+```
+RUSTFLAGS="-C instrument-coverage" cargo build
+```
+
+```
+$env:RUSTFLAGS="-C instrument-coverage"
+```

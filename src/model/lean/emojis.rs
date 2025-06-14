@@ -1,30 +1,35 @@
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::collections::HashMap;
+use serde_json::json;
+
+use crate::model::simple_expr::SimpleExprType;
 
 // Define Rust structs to match the JSON schema
 #[derive(Debug, Deserialize, Serialize)]
-pub struct AsyncConstB {
+pub struct AsyncConstB<'a> {
     kind: String,
     #[serde(rename = "cnstInfB")]
-    cnst_inf_b: CnstInfB,
+    cnst_inf_b: CnstInfB<'a>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct CnstInfB {
-    sig: Sig,
+pub struct CnstInfB<'a> {
+    sig: Sig<'a>,
     name: String,
     #[serde(rename = "levelParams")]
     level_params: Vec<String>,
     kind: ConstantKind,
     #[serde(rename = "cnstInf")]
-    cnst_inf: Option<CnstInf>,
+    cnst_inf: Option<CnstInf<'a>>,
 }
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Type {}
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Sig {
+pub struct Sig<'a> {
     #[serde(rename = "type")]
-    typ: Type,
+    typ: SimpleExprType<'a>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -34,7 +39,7 @@ pub struct ConstantKind {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct CnstInf {
+pub struct CnstInf<'a> {
     #[serde(rename = "type")]
     typ: Type,
     #[serde(rename = "numParams")]
@@ -54,12 +59,12 @@ pub struct CnstInf {
     is_unsafe: bool,
     all: Vec<String>,
     #[serde(rename = "Rules")]
-    rules: Vec<Rule>,
+    rules: Vec<Rule<'a>>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Rule {
-    rhs: Type,
+pub struct Rule<'a> {
+    rhs: SimpleExprType<'a>,
     nfields: u32,
     name: String,
     kind: String,
@@ -67,64 +72,29 @@ pub struct Rule {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(tag = "type")]
-pub enum Type {
-    #[serde(rename = "forallE")]
-    ForallE {
-        #[serde(rename = "forbndrTypB")]
-        forbndr_typ_b: Option<Box<Type>>,
-        #[serde(rename = "forbndrTyp")]
-        forbndr_typ: Option<Box<Type>>,
-        #[serde(rename = "forbdB")]
-        forbd_b: Option<Box<Type>>,
-        forbd: Option<Box<Type>>,
-        #[serde(rename = "binderName")]
-        binder_name: String,
-        #[serde(rename = "binderInfo")]
-        binder_info: String,
-    },
-    #[serde(rename = "const")]
-    Const {
-        levels: Vec<Level>,
-        #[serde(rename = "declName")]
-        decl_name: String,
-    },
-    #[serde(rename = "sort")]
-    Sort { level: Level },
-    #[serde(rename = "bvar")]
-    Bvar,
-    #[serde(rename = "app")]
-    App {
-        #[serde(rename = "fn")]
-        func: Box<Type>,
-        arg: Box<Type>,
-    },
-    #[serde(rename = "lam")]
-    Lam {
-        #[serde(rename = "lambndrTpB")]
-        lambndr_tp_b: Option<Box<Type>>,
-        #[serde(rename = "lambndrTp")]
-        lambndr_tp: Option<Box<Type>>,
-        #[serde(rename = "lambdB")]
-        lambd_b: Option<Box<Type>>,
-        lambd: Option<Box<Type>>,
-        #[serde(rename = "binderName")]
-        binder_name: String,
-        #[serde(rename = "binderInfo")]
-        binder_info: String,
-    },
-}
-
-#[derive(Debug, Deserialize, Serialize)]
 struct Level {
     level: String,
     kind: String,
 }
 
+// Helper function to convert Level to String
+fn level_to_string(level: &crate::model::simple_expr::Level) -> String {
+    use crate::model::simple_expr::Level;
+    match level {
+        Level::Zero => "0".to_string(),
+        Level::Succ(l) => format!("succ({})", level_to_string(l)),
+        Level::Max(l1, l2) => format!("max({}, {})", level_to_string(l1), level_to_string(l2)),
+        Level::IMax(l1, l2) => format!("imax({}, {})", level_to_string(l1), level_to_string(l2)),
+        Level::Param(s) => s.to_string(),
+        Level::MVar(n) => format!("?{}", n),
+    }
+}
+
 // Function to convert a Type node to an emoji string
-fn type_to_emoji(typ: &Type, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
+fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
     let indent = "  ".repeat(depth);
     match typ {
-        Type::ForallE {
+        SimpleExprType::ForallE {
             forbndr_typ_b,
             forbndr_typ,
             forbd_b,
@@ -151,10 +121,10 @@ fn type_to_emoji(typ: &Type, depth: usize, emoji_map: &HashMap<&str, &str>) -> S
                 indent
             )
         }
-        Type::Const { levels, decl_name } => {
+        SimpleExprType::Const { levels, decl_name } => {
             let levels_str = levels
                 .iter()
-                .map(|l| l.level.clone())
+                .map(|l| level_to_string(l))
                 .collect::<Vec<_>>()
                 .join(",");
             format!(
@@ -165,37 +135,30 @@ fn type_to_emoji(typ: &Type, depth: usize, emoji_map: &HashMap<&str, &str>) -> S
                 levels_str
             )
         }
-        Type::Sort { level } => format!(
+        SimpleExprType::Sort { level } => format!(
             "{}{} {}",
             indent,
             emoji_map.get("sort").unwrap_or(&"📏"),
-            level.level
+            level_to_string(level)
         ),
-        Type::Bvar => format!("{}{}", indent, emoji_map.get("bvar").unwrap_or(&"📍")),
-        Type::App { func, arg } => format!(
+        SimpleExprType::BVar { .. } => format!("{}{}", indent, emoji_map.get("bvar").unwrap_or(&"📍")),
+        SimpleExprType::App { //func,
+             arg, fn_expr } => format!(
             "{}{} (\n{}\n{}\n{})",
             indent,
             emoji_map.get("app").unwrap_or(&"➡️"),
-            type_to_emoji(func, depth + 1, emoji_map),
+            type_to_emoji(fn_expr, depth + 1, emoji_map),
             type_to_emoji(arg, depth + 1, emoji_map),
             indent
         ),
-        Type::Lam {
-            lambndr_tp_b,
-            lambndr_tp,
-            lambd_b,
-            lambd,
+        SimpleExprType::Lam {
             binder_name,
             binder_info,
+            binder_type,
+            body,
         } => {
-            let typ_str = match (lambndr_tp_b, lambndr_tp) {
-                (Some(t), _) | (_, Some(t)) => type_to_emoji(t, depth + 1, emoji_map),
-                _ => String::new(),
-            };
-            let body_str = match (lambd_b, lambd) {
-                (Some(t), _) | (_, Some(t)) => type_to_emoji(t, depth + 1, emoji_map),
-                _ => String::new(),
-            };
+            let typ_str = type_to_emoji(binder_type, depth + 1, emoji_map);
+            let body_str = type_to_emoji(body, depth + 1, emoji_map);
             format!(
                 "{}{} {} ({}: {})\n{}\n{}",
                 indent,
@@ -211,7 +174,7 @@ fn type_to_emoji(typ: &Type, depth: usize, emoji_map: &HashMap<&str, &str>) -> S
 }
 
 // Function to convert a Rule to an emoji string
-fn rule_to_emoji(rule: &Rule, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
+fn rule_to_emoji<'a>(rule: &Rule<'a>, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
     let indent = "  ".repeat(depth);
     format!(
         "{}📋 {} (fields: {})\n{}\n",
@@ -223,7 +186,7 @@ fn rule_to_emoji(rule: &Rule, depth: usize, emoji_map: &HashMap<&str, &str>) -> 
 }
 
 // Main translation function
-fn json_to_emoji(json_str: &str) -> Result<String, Box<dyn std::error::Error>> {
+fn json_to_emoji<'a>(json_str: &str) -> Result<String, Box<dyn std::error::Error>> {
     // Define emoji mappings
     let mut emoji_map = HashMap::new();
     emoji_map.insert("forallE", "∀");
@@ -235,7 +198,7 @@ fn json_to_emoji(json_str: &str) -> Result<String, Box<dyn std::error::Error>> {
     emoji_map.insert("SimpleExpr", "📖");
 
     // Parse JSON
-    let async_const: AsyncConstB = serde_json::from_str(json_str)?;
+    let async_const: AsyncConstB<'a> = serde_json::from_str(json_str)?;
 
     // Start with the root node
     let mut result = format!(
