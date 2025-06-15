@@ -32,7 +32,99 @@ pub struct PasswordEntry {
 #[derive(Clone, Debug)]
 pub struct DecryptedEntry {
     pub id: String,
-    pub title: String,
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        fn setup_crypto() -> CryptoManager {
+            CryptoManager::new("test_master_password")
+        }
+
+        fn sample_form() -> NewPasswordForm {
+            NewPasswordForm {
+                title: "Test Entry".to_string(),
+                username: "testuser".to_string(),
+                password: "testpass".to_string(),
+                url: "https://example.com".to_string(),
+                notes: "Some notes".to_string(),
+            }
+        }
+
+        #[test]
+        fn test_crypto_encrypt_decrypt() {
+            let crypto = setup_crypto();
+            let plaintext = "super_secret";
+            let (ciphertext, nonce) = crypto.encrypt(plaintext).unwrap();
+            let decrypted = crypto.decrypt(&ciphertext, &nonce).unwrap();
+            assert_eq!(decrypted, plaintext);
+        }
+
+        #[test]
+        fn test_password_store_add_and_get_entry() {
+            let mut store = PasswordStore::new();
+            let crypto = setup_crypto();
+            let form = sample_form();
+            let id = store.add_entry(form.clone(), &crypto).unwrap();
+            let entry = store.get_entry(&id).unwrap();
+            assert_eq!(entry.title, form.title);
+            assert_eq!(entry.username, form.username);
+            assert!(!entry.encrypted_password.is_empty());
+        }
+
+        #[test]
+        fn test_password_store_decrypt_entry() {
+            let mut store = PasswordStore::new();
+            let crypto = setup_crypto();
+            let form = sample_form();
+            let id = store.add_entry(form.clone(), &crypto).unwrap();
+            let decrypted = store.decrypt_entry(&id, &crypto).unwrap();
+            assert_eq!(decrypted.password, form.password);
+            assert_eq!(decrypted.title, form.title);
+            assert_eq!(decrypted.username, form.username);
+        }
+
+        #[test]
+        fn test_password_store_empty_fields() {
+            let mut store = PasswordStore::new();
+            let crypto = setup_crypto();
+            let mut form = sample_form();
+            form.title = "".to_string();
+            assert!(store.add_entry(form, &crypto).is_err());
+        }
+
+        #[test]
+        fn test_password_store_get_all_entries() {
+            let mut store = PasswordStore::new();
+            let crypto = setup_crypto();
+            let form1 = sample_form();
+            let mut form2 = sample_form();
+            form2.title = "Another".to_string();
+            store.add_entry(form1, &crypto).unwrap();
+            store.add_entry(form2, &crypto).unwrap();
+            let all = store.get_all_entries();
+            assert_eq!(all.len(), 2);
+        }
+
+        #[test]
+        fn test_password_store_len_and_is_empty() {
+            let mut store = PasswordStore::new();
+            assert!(store.is_empty());
+            let crypto = setup_crypto();
+            let form = sample_form();
+            store.add_entry(form, &crypto).unwrap();
+            assert_eq!(store.len(), 1);
+            assert!(!store.is_empty());
+        }
+
+        #[test]
+        fn test_crypto_wrong_password_fails() {
+            let crypto1 = CryptoManager::new("pw1");
+            let crypto2 = CryptoManager::new("pw2");
+            let (ciphertext, nonce) = crypto1.encrypt("secret").unwrap();
+            let result = crypto2.decrypt(&ciphertext, &nonce);
+            assert!(result.is_err());
+        }
+    }
     pub username: String,
     pub password: String,
     pub url: Option<String>,
@@ -169,7 +261,7 @@ impl PasswordStore {
     }
 }
 
-pub struct AppState {
+pub struct PasswordAppState {
     pub is_locked: bool,
     pub master_password: String,
     pub crypto_manager: Option<CryptoManager>,
@@ -182,7 +274,7 @@ pub struct AppState {
     pub decrypted_password: String,
 }
 
-impl Default for AppState {
+impl Default for PasswordAppState {
     fn default() -> Self {
         Self {
             is_locked: true,
@@ -203,7 +295,7 @@ impl Default for AppState {
 // BUSINESS LOGIC ACTIONS
 // ============================================================================
 
-pub fn unlock_vault(state: &mut AppState) {
+pub fn unlock_vault(state: &mut PasswordAppState) {
     if state.master_password.is_empty() {
         state.error_message = "Please enter master password".to_string();
         return;
@@ -218,7 +310,7 @@ pub fn unlock_vault(state: &mut AppState) {
     console::log_1(&"Vault unlocked".into());
 }
 
-pub fn lock_vault(state: &mut AppState) {
+pub fn lock_vault(state: &mut PasswordAppState) {
     state.is_locked = true;
     state.master_password.clear();
     state.crypto_manager = None;
@@ -229,26 +321,26 @@ pub fn lock_vault(state: &mut AppState) {
     console::log_1(&"Vault locked".into());
 }
 
-pub fn show_add_form(state: &mut AppState) {
+pub fn show_add_form(state: &mut PasswordAppState) {
     state.show_add_form = true;
     state.selected_entry = None;
     state.form_data = NewPasswordForm::default();
 }
 
-pub fn hide_add_form(state: &mut AppState) {
+pub fn hide_add_form(state: &mut PasswordAppState) {
     state.show_add_form = false;
     state.form_data = NewPasswordForm::default();
     state.error_message.clear();
 }
 
-pub fn select_entry(state: &mut AppState, entry_id: String) {
+pub fn select_entry(state: &mut PasswordAppState, entry_id: String) {
     state.selected_entry = Some(entry_id);
     state.show_add_form = false;
     state.show_password = false;
     state.decrypted_password.clear();
 }
 
-pub fn save_password(state: &mut AppState) {
+pub fn save_password(state: &mut PasswordAppState) {
     if let Some(crypto) = &state.crypto_manager {
         match state.password_store.add_entry(state.form_data.clone(), crypto) {
             Ok(_) => {
@@ -265,7 +357,7 @@ pub fn save_password(state: &mut AppState) {
     }
 }
 
-pub fn toggle_password_visibility(state: &mut AppState) {
+pub fn toggle_password_visibility(state: &mut PasswordAppState) {
     if !state.show_password {
         if let (Some(crypto), Some(entry_id)) = (&state.crypto_manager, &state.selected_entry) {
             match state.password_store.decrypt_entry(entry_id, crypto) {
@@ -299,7 +391,7 @@ pub fn copy_to_clipboard(text: String) {
 
 #[component]
 pub fn App() -> Element {
-    let mut app_state = use_signal(AppState::default);
+    let mut app_state = use_signal(PasswordAppState::default);
 
     rsx! {
         div {
@@ -324,7 +416,7 @@ pub fn App() -> Element {
 }
 
 #[component]
-fn AppHeader(app_state: Signal<AppState>) -> Element {
+fn AppHeader(app_state: Signal<PasswordAppState>) -> Element {
     let handle_lock_vault = {
         let mut app_state = app_state.clone();
         move |_| {
@@ -361,7 +453,7 @@ fn ErrorMessage(message: String) -> Element {
 }
 
 #[component]
-fn LoginScreen(app_state: Signal<AppState>) -> Element {
+fn LoginScreen(app_state: Signal<PasswordAppState>) -> Element {
     // let handle_unlock = {
     //     let mut app_state = app_state.clone();
     //     move |_| {
@@ -423,7 +515,7 @@ fn LoginScreen(app_state: Signal<AppState>) -> Element {
 }
 
 #[component]
-fn MainInterface(app_state: Signal<AppState>) -> Element {
+fn MainInterface(app_state: Signal<PasswordAppState>) -> Element {
     rsx! {
         div {
             class: "grid grid-cols-1 lg:grid-cols-3 gap-6",
@@ -448,7 +540,7 @@ fn MainInterface(app_state: Signal<AppState>) -> Element {
 }
 
 #[component]
-fn PasswordList(app_state: Signal<AppState>) -> Element {
+fn PasswordList(app_state: Signal<PasswordAppState>) -> Element {
     let handle_add_new = {
         let mut app_state = app_state.clone();
         move |_| {
@@ -528,7 +620,7 @@ fn PasswordList(app_state: Signal<AppState>) -> Element {
 }
 
 #[component]
-fn AddPasswordForm(app_state: Signal<AppState>) -> Element {
+fn AddPasswordForm(app_state: Signal<PasswordAppState>) -> Element {
     let handle_cancel = {
         let mut app_state = app_state.clone();
         move |_| {
@@ -689,7 +781,7 @@ fn AddPasswordForm(app_state: Signal<AppState>) -> Element {
 }
 
 #[component]
-fn PasswordDetail(app_state: Signal<AppState>) -> Element {
+fn PasswordDetail(app_state: Signal<PasswordAppState>) -> Element {
     let entry_id = app_state.read().selected_entry.clone().unwrap();
     
     let handle_toggle_password = {

@@ -1,5 +1,7 @@
 #[cfg(test)]
 mod tests {
+    use crate::model::level::Level;
+
     use super::*;
 
     #[test]
@@ -39,9 +41,9 @@ mod tests {
 
     #[test]
     fn test_level_param() {
-        let l1 = Level::Param("x");
-        let l2 = Level::Param("x");
-        let l3 = Level::Param("y");
+        let l1 = Level::Param("x".to_owned());
+        let l2 = Level::Param("x".to_string().to_owned());
+        let l3 = Level::Param("y".to_owned());
         assert_eq!(l1, l2);
         assert_ne!(l1, l3);
     }
@@ -58,14 +60,14 @@ mod tests {
     #[test]
     fn test_nested_levels() {
         let l1 = Level::Max(
-            Box::new(Level::Succ(Box::new(Level::Param("a")))),
+            Box::new(Level::Succ(Box::new(Level::Param("a".to_string().to_string())))),
             Box::new(Level::IMax(
                 Box::new(Level::MVar(1)),
                 Box::new(Level::Zero),
             )),
         );
         let l2 = Level::Max(
-            Box::new(Level::Succ(Box::new(Level::Param("a")))),
+            Box::new(Level::Succ(Box::new(Level::Param("a".to_string())))),
             Box::new(Level::IMax(
                 Box::new(Level::MVar(1)),
                 Box::new(Level::Zero),

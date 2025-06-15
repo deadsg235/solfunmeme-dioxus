@@ -24,8 +24,12 @@ pub mod style;
 //pub use style::*;
 
 pub mod emojis;
-//pub use emojis::*;
+//pub use emojis::*;mod binder;
+mod binder_test;
+mod constants_test;
+mod emoji_tests;
+mod level_test;
 
 pub mod parser;
-//pub use parser::*;
 
+mod view;

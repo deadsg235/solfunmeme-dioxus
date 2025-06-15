@@ -320,7 +320,7 @@ pub struct ActionButtonProps {
 }
 
 #[component]
-fn ActionButton(props: ActionButtonProps) -> Element {
+pub fn ActionButton(props: ActionButtonProps) -> Element {
     let button_class = match props.button_type {
         ButtonType::Primary => BUTTON_PRIMARY,
         ButtonType::Success => BUTTON_SUCCESS,
@@ -380,7 +380,7 @@ fn SuccessMessage(props: SuccessMessageProps) -> Element {
 
 // Validation Functions
 
-fn validate_encryption_inputs(
+pub fn validate_encryption_inputs(
     title: &str,
     message: &str,
     recipient_key: &str,
@@ -417,7 +417,7 @@ fn validate_encryption_inputs(
     Ok(())
 }
 
-fn validate_decryption_inputs(payload: &str, private_key: &str) -> Result<(), String> {
+pub fn validate_decryption_inputs(payload: &str, private_key: &str) -> Result<(), String> {
     if payload.trim().is_empty() {
         return Err("Encrypted payload is required".to_string());
     }

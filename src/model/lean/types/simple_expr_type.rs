@@ -1,6 +1,8 @@
 //use crate::{constants::*, level::Level};
 
-use crate::model::{constants::{LEVEL_U2, LEVEL_U3}, simple_expr::{levels_8, Level}};
+//use crate::model::{constants::{LEVEL_U2, LEVEL_U3}, simple_expr::{levels_8, Level}};
+
+use crate::model::level::{levels_8, Level};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SimpleExprType {

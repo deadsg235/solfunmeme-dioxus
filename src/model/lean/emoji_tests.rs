@@ -1,5 +1,8 @@
 #[cfg(test)]
 mod tests {
+    use serde_json::json;
+    use crate::model::lean::emojis::json_to_emoji;
+
     use super::*;
 
     #[test]
@@ -228,6 +231,7 @@ mod tests {
             assert!(emoji.contains("📋 ruleB (fields: 3)"));
             assert!(emoji.contains("📏 m"));
         }
+        let emoji = json_to_emoji(&json_str).unwrap();
         assert!(emoji.contains("🔖 bar [u,v]"));
     }
 

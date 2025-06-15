@@ -2,49 +2,11 @@
 //use std::collections::HashMap;
 use serde::Serialize;
 use serde::Deserialize;
+use crate::model::binder::BinderInfo;
+use crate::model::level::Level;
+use crate::model::level::*;
 //use crate::model::simple_expr;
 
-// Equivalent to Lean's Level type
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum Level {
-    Zero,
-    Succ(Box<Level>),
-    Max(Box<Level>, Box<Level>),
-    IMax(Box<Level>, Box<Level>),
-    Param(String),
-    MVar(u64),
-}
-
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct LevelDescr {
-    level: String,
-    kind: String,
-}
-
-            // Define globals for u_1 to u_8
-pub fn LEVEL_U1() -> Level { Level::Param("u_1".to_string()) }
-pub fn LEVEL_U2() -> Level { Level::Param("u_2".to_string()) }
-pub fn LEVEL_U3() -> Level { Level::Param("u_3".to_string()) }
-pub fn LEVEL_U4() -> Level { Level::Param("u_4".to_string()) }
-pub fn LEVEL_U5() -> Level { Level::Param("u_5".to_string()) }
-pub fn LEVEL_U6() -> Level { Level::Param("u_6".to_string()) }
-pub fn LEVEL_U7() -> Level { Level::Param("u_7".to_string()) }
-pub fn LEVEL_U8() -> Level { Level::Param("u_8".to_string()) }
-
-// Use a function to return the vector at runtime, since Vec and .clone() are not allowed in consts
-pub fn levels_8() -> Vec<Level> {
-    vec![
-        LEVEL_U1(),
-        LEVEL_U2(),
-        LEVEL_U3(),
-        LEVEL_U4(),
-        LEVEL_U5(),
-        LEVEL_U6(),
-        LEVEL_U7(),
-        LEVEL_U8(),
-    ]
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Forbd {
     forbndrTyp: String,
@@ -112,14 +74,7 @@ pub enum Name {
 }
 
 // Equivalent to Lean's BinderInfo
-#[derive(Debug, Clone, PartialEq)]
-pub enum BinderInfo {
-    Default,
-    Implicit,
-    StrictImplicit,
-    InstImplicit,
-    AuxDecl,
-}
+
 
 // The main SimpleExpr type (inductive type from Lean)
 #[derive(Debug, Clone, PartialEq)]
@@ -348,17 +303,6 @@ pub struct Foo2 {
     cnst_inf_b: CnstInfB, // Fixed naming
 }
 
-// Enhanced Level enum to match the JSON better
-#[derive(Debug, Clone, PartialEq)]
-pub enum LevelType {
-    Zero,
-    Succ(Box<LevelType>),
-    Max(Box<LevelType>, Box<LevelType>),
-    IMax(Box<LevelType>, Box<LevelType>),
-    Param(String),
-    MVar(u64),
-}
-
 // Enhanced SimpleExpr to match JSON structure more closely
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
@@ -404,14 +348,14 @@ pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
         forbndr_typ_b: some_box(SimpleExprType::ForallE {
             forbndr_typ: some_box(SimpleExprType::Const {
                 levels: vec![
-                    LEVEL_U1(),
-                    LEVEL_U2(),
-                    LEVEL_U3(),
-                    LEVEL_U4(),
-                    LEVEL_U5(),
-                    LEVEL_U6(),
-                    LEVEL_U7(),
-                    LEVEL_U8(),
+                    LEVEL_U1F(),
+                    LEVEL_U2F(),
+                    LEVEL_U3F(),
+                    LEVEL_U4F(),
+                    LEVEL_U5F(),
+                    LEVEL_U6F(),
+                    LEVEL_U7F(),
+                    LEVEL_U8F(),
                 ],
                 decl_name: std::borrow::Cow::Borrowed("SimpleExpr"),
             }),
@@ -435,8 +379,8 @@ pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
                     forbndr_typ: some_box(SimpleExprType::ForallE {
                         forbndr_typ: some_box(SimpleExprType::Const {
                             levels: vec![
-                                LEVEL_U2(),
-                                LEVEL_U3(),
+                                LEVEL_U2F(),
+                                LEVEL_U3F(),
                             ],
                             decl_name: std::borrow::Cow::Borrowed("Level"),
                         }),
@@ -446,14 +390,14 @@ pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
                             arg: Box::new(SimpleExprType::App {
                                 fn_expr: Box::new(SimpleExprType::Const {
                                     levels: vec![
-                                        LEVEL_U1(),
-                                        LEVEL_U2(),
-                                        LEVEL_U3(),
-                                        LEVEL_U4(),
-                                        LEVEL_U5(),
-                                        LEVEL_U6(),
-                                        LEVEL_U7(),
-                                        LEVEL_U8(),
+                                        LEVEL_U1F(),
+                                        LEVEL_U2F(),
+                                        LEVEL_U3F(),
+                                        LEVEL_U4F(),
+                                        LEVEL_U5F(),
+                                        LEVEL_U6F(),
+                                        LEVEL_U7F(),
+                                        LEVEL_U8F(),
                                     ],
                                     decl_name: std::borrow::Cow::Borrowed("SimpleExpr.sort"),
                                 }),

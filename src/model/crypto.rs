@@ -1,6 +1,5 @@
 // crypto.rs - Backend cryptography module
 use serde::{Deserialize, Serialize};
-use base64::{engine::general_purpose, Engine};
 use bs58;
 use wallet_adapter::ed25519_dalek::{SigningKey, VerifyingKey};
 use x25519_dalek::{StaticSecret,  PublicKey as X25519PublicKey};

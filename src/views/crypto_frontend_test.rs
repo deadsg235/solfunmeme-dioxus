@@ -1,6 +1,7 @@
 #[cfg(test)]
     mod tests {
-        use crate::views::crypto_frontend::{ActionButtonProps, ButtonType};
+        use crate::views::crypto_frontend::{ActionButton, ActionButtonProps, ButtonType};
+        use crate::views::crypto_frontend::{validate_encryption_inputs, validate_decryption_inputs, CardHeader, CardHeaderProps, ErrorMessage, ErrorMessageProps, SuccessMessage, SuccessMessageProps};
 
         use super::*;
         use dioxus::prelude::*;

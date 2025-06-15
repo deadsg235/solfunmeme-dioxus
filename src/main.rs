@@ -14,7 +14,6 @@ use header::*;
 mod utils;
 use utils::*;
 
-mod fetch_parser;
 use fetch_parser::*;
 
 mod svg_assets;
@@ -59,8 +58,8 @@ mod password_manager;
 use password_manager::App;
 
 
-
-
+mod dioxus_adapter;
+mod fetch_parser;
 
 fn main() {
     launch(App);

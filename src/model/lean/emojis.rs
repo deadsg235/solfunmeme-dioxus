@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use serde_json::json;
 
 use crate::model::simple_expr::SimpleExprType;
+use crate::model::lean::level::level_to_string;
 
 // Define Rust structs to match the JSON schema
 #[derive(Debug, Deserialize, Serialize)]
@@ -69,27 +70,6 @@ pub struct Rule<'a> {
     name: String,
     kind: String,
 }
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(tag = "type")]
-struct Level {
-    level: String,
-    kind: String,
-}
-
-// Helper function to convert Level to String
-fn level_to_string(level: &crate::model::simple_expr::Level) -> String {
-    use crate::model::simple_expr::Level;
-    match level {
-        Level::Zero => "0".to_string(),
-        Level::Succ(l) => format!("succ({})", level_to_string(l)),
-        Level::Max(l1, l2) => format!("max({}, {})", level_to_string(l1), level_to_string(l2)),
-        Level::IMax(l1, l2) => format!("imax({}, {})", level_to_string(l1), level_to_string(l2)),
-        Level::Param(s) => s.to_string(),
-        Level::MVar(n) => format!("?{}", n),
-    }
-}
-
 // Function to convert a Type node to an emoji string
 fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
     let indent = "  ".repeat(depth);
@@ -186,7 +166,7 @@ fn rule_to_emoji<'a>(rule: &Rule<'a>, depth: usize, emoji_map: &HashMap<&str, &s
 }
 
 // Main translation function
-fn json_to_emoji<'a>(json_str: &str) -> Result<String, Box<dyn std::error::Error>> {
+pub fn json_to_emoji<'a>(json_str: &str) -> Result<String, Box<dyn std::error::Error>> {
     // Define emoji mappings
     let mut emoji_map = HashMap::new();
     emoji_map.insert("forallE", "∀");

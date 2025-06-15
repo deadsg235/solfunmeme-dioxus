@@ -25,6 +25,8 @@ use std::collections::HashMap;
 use uuid::Uuid;
 use nalgebra::DVector;
 use serde_json;
+use crate::model::{binder::{BinderInfoData}, level::{level_to_string, Level}};
+
 
 #[derive(Clone, Copy, PartialEq)]
 pub struct Expression {
@@ -48,7 +50,7 @@ pub struct ExpressionList {
 
 #[component]
 fn ExpressionList2() -> Element {
-    let state = use_signal(AppState::default);
+    let state = use_signal(MemesAppState::default);
 
     let expression_ids = if state.read().search_query.is_empty() {
         state.read().expressions.keys().cloned().collect::<Vec<_>>()
@@ -72,7 +74,7 @@ fn ExpressionList2() -> Element {
     }
 }
 
-// Remove UseState2 and use Dioxus's built-in UseState<AppState> instead.
+// Remove UseState2 and use Dioxus's built-in UseState<MemesAppState> instead.
 
 // ============================================================================
 // MONADS - Functional Programming Core
@@ -283,9 +285,13 @@ pub struct LiftedExpression {
     pub quine: Option<Quine>,
     pub meme: Option<Meme>,
     pub lifted_at: String,
-    pub vector_representation: Vec<f64>,
+    pub vector_representation: Vec<f64>,    
+    pub expr: SimpleExpr,
+    pub name: String,
+    pub description: String,    
+    
+    pub tags: Vec<String>,
 }
-
 impl LiftedExpression {
     // pub fn from_quine(quine: from_quine) -> Self {
     //     let vector_representation = quine.vectorize().data.as_vec().clone();
@@ -305,32 +311,49 @@ impl LiftedExpression {
         LiftedExpression {
             id: Uuid::new_v4().to_string(),
             quine: None,
-            meme: Some(meme),
+            meme: Some(meme.clone()),
             lifted_at: chrono::Utc::now().to_rfc3339(),
             vector_representation,
+            expr: SimpleExpr::const_expr(Name::new("meme".to_string()), vec![]),
+            name: "Meme".to_string(),
+            description: "".to_string(),
+            tags: meme.semantic_tags.clone(),
+        }
     }
 }
-}
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum MemeExpressionType {
+    Quine,
+    Meme,
+}
 #[derive(Debug, Clone, Default)]
-pub struct AppState {
+pub struct MemesAppState {
     pub expressions: HashMap<String, LiftedExpression>,
     pub current_input: String,
     pub current_tags: String,
+    pub meme_expression_type : MemeExpressionType,
     pub expression_type: ExpressionType,
     pub search_query: String,
     pub filtered_expressions: Vec<String>,
 }
 
+
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum ExpressionType {
-    Quine,
-    Meme,
+    BVar,
+    Sort,
+    Const,
+    App,
+    Lambda,
+    Forall,
+    FromString,
 }
 
-impl Default for ExpressionType {
+impl Default for MemeExpressionType {
     fn default() -> Self {
-        ExpressionType::Meme
+        MemeExpressionType::Meme
     }
 }
 
@@ -338,11 +361,31 @@ impl Default for ExpressionType {
 // CONTROLLER - Business Logic Layer
 // ============================================================================
 
+
+
 pub struct Controller;
 
 impl Controller {
+        pub fn add_expression() {}
+        pub fn create_expression_from_type(state: &MemesAppState) -> Option<LiftedExpression> {
+        // Example logic: create a LiftedExpression based on the current expression_type and inputs
+        match state.meme_expression_type.clone() {
+            MemeExpressionType::Quine | MemeExpressionType::Meme => {
+                let content = state.current_input.trim();
+                if content.is_empty() {
+                    return None;
+                }
+                let meme = Meme::new(content.to_string(), vec![]);
+                Some(LiftedExpression::from_meme(meme))
+            }
+            // Add logic for other ExpressionType variants as needed
+            _ => None,
+        }
+    }
+    // ... other methods ...
+
     pub fn add_quine_expression(
-        state: &mut AppState,
+        state: &mut MemesAppState,
         expression: String,
     ) -> Maybe<LiftedExpression> {
         if expression.trim().is_empty() {
@@ -360,7 +403,7 @@ impl Controller {
     }
     
     pub fn add_meme_expression(
-        state: &mut AppState,
+        state: &mut MemesAppState,
         content: String,
         tags: Vec<String>,
     ) -> Maybe<LiftedExpression> {
@@ -380,7 +423,7 @@ impl Controller {
     }
     
     pub fn search_expressions(
-        state: &mut AppState,
+        state: &mut MemesAppState,
         query: String,
     ) -> Vec<String> {
         let query_lower = query.to_lowercase();
@@ -405,7 +448,7 @@ impl Controller {
         filtered
     }
     
-    pub fn propagate_meme(state: &mut AppState, expression_id: String) -> Maybe<()> {
+    pub fn propagate_meme(state: &mut MemesAppState, expression_id: String) -> Maybe<()> {
         if let Some(expr) = state.expressions.get_mut(&expression_id) {
             if let Some(ref mut meme) = expr.meme {
                 meme.propagate();
@@ -416,7 +459,7 @@ impl Controller {
         Maybe::none()
     }
     
-    pub fn delete_expression(state: &mut AppState, expression_id: String) -> Maybe<()> {
+    pub fn delete_expression(state: &mut MemesAppState, expression_id: String) -> Maybe<()> {
         match state.expressions.remove(&expression_id) {
             Some(_) => Maybe::some(()),
             None => Maybe::none(),
@@ -451,8 +494,8 @@ impl Controller {
 
 #[component]
 fn App() -> Element {
-    //let state = use_signal(cx, AppState::default);
-    //let state = use_signal2(AppState::default);
+    //let state = use_signal(cx, MemesAppState::default);
+    //let state = use_signal2(MemesAppState::default);
     // Custom use_signal2 hook for demonstration (returns the same as use_signal)
     
     rsx! {
@@ -492,13 +535,13 @@ fn Header() -> Element {
 
 //#[derive(Props)]
 //struct InputSectionProps {
-    //state: UseState<AppState>,
+    //state: UseState<MemesAppState>,
 //}
 //cx: Scope<InputSectionProps>
 #[component]
 fn InputSection() -> Element {
     //let state = &cx.props.state;
-    let mut state = use_signal(AppState::default);
+    let mut state = use_signal(MemesAppState::default);
 
     rsx! {
         section {
@@ -509,9 +552,9 @@ fn InputSection() -> Element {
                     input {
                         r#type: "radio",
                         name: "expression_type",
-                        checked: state.read().expression_type == ExpressionType::Quine,
+                        checked: state.read().meme_expression_type == MemeExpressionType::Quine,
                         onchange: move |_| {
-                            state.with_mut(|s| s.expression_type = ExpressionType::Quine);
+                            state.with_mut(|s| s.meme_expression_type = MemeExpressionType::Quine);
                         },
                     }
                     "Quine"
@@ -520,9 +563,9 @@ fn InputSection() -> Element {
                     input {
                         r#type: "radio",
                         name: "expression_type",
-                        checked: state.read().expression_type == ExpressionType::Meme,
+                        checked: state.read().meme_expression_type == MemeExpressionType::Meme,
                         onchange: move |_| {
-                            state.with_mut(|s| s.expression_type = ExpressionType::Meme);
+                            state.with_mut(|s| s.meme_expression_type = MemeExpressionType::Meme);
                         },
                     }
                     "Meme"
@@ -533,9 +576,9 @@ fn InputSection() -> Element {
                 class: "input-controls",
                 textarea {
                     class: "expression-input",
-                    placeholder: match state.read().expression_type {
-                        ExpressionType::Quine => "Enter quine expression...",
-                        ExpressionType::Meme => "Enter meme content...",
+                    placeholder: match state.read().meme_expression_type {
+                        MemeExpressionType::Quine => "Enter quine expression...",
+                        MemeExpressionType::Meme => "Enter meme content...",
                     },
                     value: state.read().current_input.clone(),
                     oninput: move |evt| {
@@ -544,7 +587,7 @@ fn InputSection() -> Element {
                 }
                 
                 { 
-                    if state.read().expression_type == ExpressionType::Meme {
+                    if state.read().meme_expression_type == MemeExpressionType::Meme {
                         
                     }
                 }
@@ -556,7 +599,7 @@ fn InputSection() -> Element {
 //pub struct Scope {}
 
 fn InputSection2() -> Element {
-    let mut  state = use_signal(AppState::default);
+    let mut  state = use_signal(MemesAppState::default);
 
     rsx! {
         section {
@@ -567,9 +610,9 @@ fn InputSection2() -> Element {
                     input {
                         r#type: "radio",
                         name: "expression_type",
-                        checked: state.read().expression_type == ExpressionType::Quine,
+                        checked: state.read().meme_expression_type == MemeExpressionType::Quine,
                         onchange: move |_| {
-                            state.write().expression_type = ExpressionType::Quine;
+                            state.write().meme_expression_type = MemeExpressionType::Quine;
                         },
                     }
                     "Quine"
@@ -578,9 +621,9 @@ fn InputSection2() -> Element {
                     input {
                         r#type: "radio",
                         name: "expression_type",
-                        checked: state.read().expression_type == ExpressionType::Meme,
+                        checked: state.read().meme_expression_type == MemeExpressionType::Meme,
                         onchange: move |_| {
-                            state.write().expression_type = ExpressionType::Meme;
+                            state.write().meme_expression_type = MemeExpressionType::Meme;
                         },
                     }
                     "Meme"
@@ -591,9 +634,9 @@ fn InputSection2() -> Element {
                 class: "input-controls",
                 textarea {
                     class: "expression-input",
-                    placeholder: match state.read().expression_type {
-                        ExpressionType::Quine => "Enter quine expression...",
-                        ExpressionType::Meme => "Enter meme content...",
+                    placeholder: match state.read().meme_expression_type {
+                        MemeExpressionType::Quine => "Enter quine expression...",
+                        MemeExpressionType::Meme => "Enter meme content...",
                     },
                     value: state.read().current_input.clone(),
                     oninput: move |evt| {
@@ -602,7 +645,7 @@ fn InputSection2() -> Element {
                 }
 
                 {
-                    if state.read().expression_type == ExpressionType::Meme {
+                    if state.read().meme_expression_type == MemeExpressionType::Meme {
                         Some(rsx! {
                             input {
                                 class: "tags-input",
@@ -621,18 +664,18 @@ fn InputSection2() -> Element {
                 button {
                     class: "add-button",
                     onclick: move |_| {
-                        let expression_type = state.read().expression_type.clone();
+                        let expression_type = state.read().meme_expression_type.clone();
                         let current_input = state.read().current_input.clone();
                         let current_tags = state.read().current_tags.clone();
 
                         let result = match expression_type {
-                            ExpressionType::Quine => {
+                            MemeExpressionType::Quine => {
                                 Controller::add_quine_expression(
                                     &mut state.write(),
                                     current_input
                                 )
                             },
-                            ExpressionType::Meme => {
+                            MemeExpressionType::Meme => {
                                 let tags: Vec<String> = current_tags
                                     .split(',')
                                     .map(|s| s.trim())
@@ -682,7 +725,7 @@ struct ExpressionCardProps {
 #[component]
 fn ExpressionCard(props: ExpressionCardProps) -> Element {
     let expr = props.expression.clone();
-    let mut state = use_signal(AppState::default);
+    let mut state = use_signal(MemesAppState::default);
     let expr_id = expr.id.clone();
 
     rsx! {
@@ -785,12 +828,12 @@ fn ExpressionCard(props: ExpressionCardProps) -> Element {
 
 // #[derive(Props)]
 // struct VectorSpaceProps<'a> {
-//     state: &'a UseState<AppState>,
+//     state: &'a UseState<MemesAppState>,
 // }
 
 #[component]
 fn VectorSpace() -> Element {
-    let state = use_signal(AppState::default);
+    let state = use_signal(MemesAppState::default);
     
     let avg_vector_dim = if state.read().expressions.is_empty() {
         "0".to_string()
@@ -903,5 +946,249 @@ mod tests {
         let json = serde_json::to_string(&meme).unwrap();
         let deserialized: Meme = serde_json::from_str(&json).unwrap();
         assert_eq!(meme, deserialized);
+    }
+}
+
+
+
+
+// from lean meme 
+
+// ============================================================================
+// CORE TYPES - Lambda Calculus Expression System
+// ============================================================================
+
+// #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+// pub struct MemeLevel {
+//     pub value: u64,
+// }
+
+// impl Level {
+//     pub fn new(value: u64) -> Self {
+//         Level { value }
+//     }
+    
+//     pub fn zero() -> Self {
+//         Level { value: 0 }
+//     }
+    
+//     pub fn succ(&self) -> Self {
+//         Level { value: self.value + 1 }
+//     }
+// }
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Name {
+    pub name: String,
+}
+
+impl Name {
+    pub fn new(name: String) -> Self {
+        Name { name }
+    }
+    
+    pub fn anonymous() -> Self {
+        Name { name: "_".to_string() }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum SimpleExpr {
+    BVar { index: u64 },
+    Sort { level: Level },
+    Const { name: Name, levels: Vec<Level> },
+    App { func: Box<SimpleExpr>, arg: Box<SimpleExpr> },
+    Lam {
+        binder_name: Name,
+        binder_type: Box<SimpleExpr>,
+        body: Box<SimpleExpr>,
+        binder_info: BinderInfoData,
+    },
+    ForallE {
+        binder_name: Name,
+        binder_type: Box<SimpleExpr>,
+        body: Box<SimpleExpr>,
+        binder_info: BinderInfoData,
+    },
+}
+
+impl SimpleExpr {
+    // Constructor methods
+    pub fn bvar(index: u64) -> Self {
+        SimpleExpr::BVar { index }
+    }
+
+    pub fn sort(level: Level) -> Self {
+        SimpleExpr::Sort { level }
+    }
+
+    pub fn const_expr(name: Name, levels: Vec<Level>) -> Self {
+        SimpleExpr::Const { name, levels }
+    }
+
+    pub fn app(func: SimpleExpr, arg: SimpleExpr) -> Self {
+        SimpleExpr::App {
+            func: Box::new(func),
+            arg: Box::new(arg),
+        }
+    }
+
+    pub fn lam(name: Name, binder_type: SimpleExpr, body: SimpleExpr, info: BinderInfoData) -> Self {
+        SimpleExpr::Lam {
+            binder_name: name,
+            binder_type: Box::new(binder_type),
+            body: Box::new(body),
+            binder_info: info,
+        }
+    }
+
+    pub fn forall_e(name: Name, binder_type: SimpleExpr, body: SimpleExpr, info: BinderInfoData) -> Self {
+        SimpleExpr::ForallE {
+            binder_name: name,
+            binder_type: Box::new(binder_type),
+            body: Box::new(body),
+            binder_info: info,
+        }
+    }
+    
+    // Display methods
+    pub fn to_string(&self) -> String {
+        match self {
+            SimpleExpr::BVar { index } => format!("#{}", index),
+            SimpleExpr::Sort { level } => format!("Sort({})", level_to_string(level)),
+            SimpleExpr::Const { name, levels } => {
+                if levels.is_empty() {
+                    name.name.clone()
+                } else {
+                    format!("{}.{{{}}}", name.name, 
+                           levels.iter().map(|l| level_to_string(l)).collect::<Vec<_>>().join(", "))
+                }
+            },
+            SimpleExpr::App { func, arg } => {
+                format!("({} {})", func.to_string(), arg.to_string())
+            },
+            SimpleExpr::Lam { binder_name, binder_type, 
+                body, 
+                binder_info 
+            } => {
+                let implicit_marker = if binder_info.implicit { "{" } else { "(" };
+                let implicit_end = if binder_info.implicit { "}" } else { ")" };
+                format!("λ {}{} : {}{} → {}", 
+                       implicit_marker, binder_name.name, binder_type.to_string(), implicit_end,
+                       body.to_string())
+            },
+            SimpleExpr::ForallE { binder_name, binder_type, body, binder_info } => {
+                let implicit_marker = if binder_info.implicit { "{" } else { "(" };
+                let implicit_end = if binder_info.implicit { "}" } else { ")" };
+                format!("∀ {}{} : {}{}, {}", 
+                       implicit_marker, binder_name.name, binder_type.to_string(), implicit_end,
+                       body.to_string())
+            }
+        }
+    }
+    
+    // Calculate complexity based on AST depth and node count
+    pub fn complexity(&self) -> f64 {
+        match self {
+            SimpleExpr::BVar { .. } | SimpleExpr::Sort { .. } | SimpleExpr::Const { .. } => 1.0,
+            SimpleExpr::App { func, arg } => 1.0 + func.complexity() + arg.complexity(),
+            SimpleExpr::Lam { binder_type, body, .. } => 2.0 + binder_type.complexity() + body.complexity(),
+            SimpleExpr::ForallE { binder_type, body, .. } => 2.0 + binder_type.complexity() + body.complexity(),
+        }
+    }
+    
+    // Vectorize expression for similarity calculations
+    pub fn vectorize(&self) -> DVector<f64> {
+        let mut features = vec![0.0; 10]; // Feature vector
+        
+        // Node type features
+        match self {
+            SimpleExpr::BVar { index } => {
+                features[0] = 1.0; // BVar indicator
+                features[5] = *index as f64; // Index value
+            },
+            SimpleExpr::Sort { level } => {
+                features[1] = 1.0; // Sort indicator
+                features[6] = level_to_int(level) as f64; // Level value
+            },
+            SimpleExpr::Const { levels, .. } => {
+                features[2] = 1.0; // Const indicator
+                features[7] = levels.len() as f64; // Number of levels
+            },
+            SimpleExpr::App { func, arg } => {
+                features[3] = 1.0; // App indicator
+                let func_complexity = func.complexity();
+                let arg_complexity = arg.complexity();
+                features[8] = func_complexity + arg_complexity;
+            },
+            SimpleExpr::Lam { binder_info, .. } => {
+                features[4] = 1.0; // Lam indicator
+                features[9] = if binder_info.implicit { 1.0 } else { 0.0 };
+            },
+            SimpleExpr::ForallE { binder_info, .. } => {
+                features[4] = 2.0; // ForallE indicator (distinct from Lam)
+                features[9] = if binder_info.implicit { 1.0 } else { 0.0 };
+            }
+        }
+        
+        DVector::from_vec(features)
+    }
+}
+
+fn level_to_int(level: &Level) -> f64 {
+    todo!()
+}
+
+// ============================================================================
+// LIFTED EXPRESSION - Wrapper for GUI Management
+// ============================================================================
+
+
+
+impl LiftedExpression {
+    pub fn new(expr: SimpleExpr, name: String, description: String, tags: Vec<String>) -> Self {
+        let vector_representation = expr.vectorize().data.as_vec().clone();
+        
+        LiftedExpression {
+            id: Uuid::new_v4().to_string(),
+            quine: None,
+            meme: None,
+            lifted_at: "2024-01-01T00:00:00Z".to_string(), // Would use chrono in real app
+            vector_representation,
+            expr,
+            name,
+            description,
+            tags,
+        }
+    }
+}
+
+// ============================================================================
+// APPLICATION STATE
+// ============================================================================
+
+#[derive(Debug, Clone, Default)]
+pub struct MemeAppState {
+    pub expressions: HashMap<String, LiftedExpression>,
+    pub current_input: String,
+    pub current_name: String,
+    pub current_description: String,
+    pub current_tags: String,
+    pub expression_type: ExpressionType,
+    pub search_query: String,
+    pub filtered_expressions: Vec<String>,
+    
+    // For building complex expressions
+    pub binder_name: String,
+    pub index_input: String,
+    pub level_input: String,
+    pub const_name: String,
+    pub implicit_binder: bool,
+}
+
+
+impl Default for ExpressionType {
+    fn default() -> Self {
+        ExpressionType::FromString
     }
 }

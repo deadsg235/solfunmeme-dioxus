@@ -1,3 +1,5 @@
+use thiserror::Error;
+
 /// Error handling enum
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Error)]
 pub enum MyWalletError {

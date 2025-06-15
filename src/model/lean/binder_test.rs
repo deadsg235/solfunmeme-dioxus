@@ -1,8 +1,10 @@
-use super::BinderInfo;
-
+//use super::BinderInfo;
 
 #[cfg(test)]
+use crate::binder::BinderInfo;
 mod tests {
+    use crate::model::binder::BinderInfo;
+
 
     #[test]
     fn test_debug_trait() {
