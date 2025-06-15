@@ -301,19 +301,22 @@ fn TextAreaField(props: TextAreaFieldProps) -> Element {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub enum ButtonType {
     Primary,
+    // Additional tests for ButtonType enum and ActionButton rendering
+
+    
     Success,
     Danger,
 }
 
 #[derive(Props, Clone, PartialEq)]
-struct ActionButtonProps {
-    text: String,
-    button_type: ButtonType,
-    disabled: bool,
-    on_click: EventHandler<()>,
+pub struct ActionButtonProps {
+    pub text: String,
+    pub button_type: ButtonType,
+    pub disabled: bool,
+    pub on_click: EventHandler<()>,
 }
 
 #[component]

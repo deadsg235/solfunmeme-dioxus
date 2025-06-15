@@ -74,3 +74,5 @@ pub use lean::*;
 
 pub mod metameme;
 //pub use metameme::*;
+pub mod crypto_test;
+pub mod cluster_store_test;
