@@ -18,23 +18,25 @@
 // //         .launch(App);
 // // }
 
+use dioxus::prelude::*;
+use crate::model::lean::style::Styles;
 
 // #[component]
-// pub fn App() -> Element {
+pub fn LeanEditorApp() -> Element {
 //     let state = use_signal(AppState::default);
     
-//     rsx! {
-//         div {
-//             class: "app-container",
-//             style: "{Styles::app_container()}",
+     rsx! {
+         div {
+             class: "app-container",
+             style: "{Styles::app_container()}",
 //             Header {}
 //             InputSection { state }
 //             ExpressionList { state }
 //             VectorSpace { state }
 //             Footer {}
-//         }
-//     }
-// }
+         }
+     }
+ }
 
 // // ============================================================================
 // // HEADER COMPONENT

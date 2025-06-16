@@ -34,7 +34,7 @@ pub(crate) use app::Route;
 //use gloo_timers::callback::Timeout;
 
 use crate::{
-    model::NotificationInfo, Footer, Header
+    model::NotificationInfo, Footer //, Header
 };
 
 //use crate::views::connections::Connections;
@@ -55,14 +55,20 @@ use crate::model::{AccountState};
 
 
 mod password_manager;
-use password_manager::App;
+//use password_manager::App;
 
 
 mod dioxus_adapter;
 mod fetch_parser;
 mod state;
 mod playground;
+//pub mod git_parser;
+//use crate::app::App;
+//use crate::crypto_frontend::App;
+//use crate::password_manager::App;
+//use crate::playground::MenuOption   
 
 fn main() {
-    launch(App);
+    // Use the memes App component from views
+  //  launch(crate::playground::App);
 }

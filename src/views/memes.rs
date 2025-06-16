@@ -1,7 +1,15 @@
+use std::collections::HashMap;
+use std::fmt;
+
 use dioxus::prelude::*;
 //use dioxus_desktop::{LaunchBuilder, Config, WindowBuilder, LogicalSize};
-use crate::meme::{ ExpressionType, LiftedExpression};
-use crate::model::memes::Controller;
+
+use crate::model::memes::Expression;
+use crate::simple_expr::SimpleExpr;
+
+
+
+//use crate::model::memes::{Controller, MemesAppState, LiftedExpression, ExpressionType};
 //use crate::controller::Controller;
 use crate::style::Styles;
 
@@ -17,23 +25,64 @@ use crate::style::Styles;
 //         ))
 //         .launch(App);
 // }
+#[derive( PartialEq, Clone)]
+pub enum ExpressionType {
+    FromString,
+    BVar,
+    Sort,
+    Const,
+    Lambda, 
+    Forall, 
+    App
+}
+#[derive(Props, PartialEq, Clone)]
+pub struct MemesAppState {
+    const_name: String,
+    binder_name: String,
+    current_name : String,
+    current_input: String,
+    current_description: String,
+    current_tags: Vec<String>,
+    search_query: String,
+    implicit_binder: bool,
+    expression_type: ExpressionType,
+    expressions: HashMap<String, Expression>,
+    filtered_expressions: Vec<String>
+}
 
-
-#[component]
-pub fn App() -> Element {
-    let state = use_signal(AppState::default);
-    
-    rsx! {
-        div {
-            class: "app-container",
-            style: "{Styles::app_container()}",
-            Header {}
-            InputSection { state }
-            ExpressionList { state }
-            VectorSpace { state }
-            Footer {}
+impl MemesAppState {
+    pub fn default() -> Self {
+        MemesAppState {
+            expressions: HashMap::new(),
+            filtered_expressions: vec![],
+            current_description: "".to_string(),
+            binder_name: "".to_string(),
+            search_query: "".to_string(),
+            const_name: "".to_string(),
+            current_input: "".to_string(),
+            current_tags: vec!["".to_string()],
+            implicit_binder: false,
+            expression_type: ExpressionType::Const,
+            current_name: "FIXME".to_string()
         }
     }
+}
+
+#[component]
+pub fn Memes() -> Element {
+     let state = use_signal(MemesAppState::default);
+    
+     rsx! {
+         div {
+             class: "app-container",
+             style: "{Styles::app_container()}",
+             Header {}
+             InputSection { state }
+             ExpressionList { state }
+             VectorSpace { state }
+             Footer {}
+         }
+     }
 }
 
 // ============================================================================
@@ -64,7 +113,7 @@ pub fn Header() -> Element {
 
 #[derive(Props, PartialEq, Clone)]
 pub struct StateProps {
-    pub state: Signal<AppState>,
+    pub state: Signal<MemesAppState>,
 }
 
 #[component]
@@ -88,6 +137,7 @@ pub fn InputSection(props: StateProps) -> Element {
         }
     }
 }
+
 
 #[component]
 fn ExpressionTypeSelector(props: StateProps) -> Element {
@@ -148,9 +198,9 @@ fn ExpressionInputs(props: StateProps) -> Element {
                     input {
                         style: "{Styles::input()}",
                         placeholder: "De Bruijn index (e.g., 0, 1, 2...)",
-                        value: state.read().index_input.clone(),
+                        value: state.read().current_input.clone(),
                         oninput: move |evt| {
-                            state.with_mut(|s| s.index_input = evt.value().clone());
+                            state.with_mut(|s| s.current_input = evt.value().clone());
                         },
                     }
                 },
@@ -158,12 +208,78 @@ fn ExpressionInputs(props: StateProps) -> Element {
                     input {
                         style: "{Styles::input()}",
                         placeholder: "Universe level (e.g., 0, 1, 2...)",
-                        value: state.read().level_input.clone(),
+                        value: state.read().current_input.clone(),
                         oninput: move |evt| {
-                            state.with_mut(|s| s.level_input = evt.value().clone());
+                            state.with_mut(|s| s.current_input = evt.value().clone());
                         },
                     }
                 },
+                ExpressionType::Const => rsx! {
+                    input {
+                        style: "{Styles::input()}",
+                        placeholder: "Constant name (e.g., Nat, Bool, f...)",
+                        value: state.read().current_input.clone(),
+                        oninput: move |evt| {
+                            state.with_mut(|s| s.current_input = evt.value().clone());
+                        },
+                    }
+                },
+                ExpressionType::App => rsx! {
+                    input {
+                        style: "{Styles::input()}",
+                        placeholder: "Function application (e.g., f x y...)",
+                        value: state.read().current_input.clone(),
+                        oninput: move |evt| {
+                            state.with_mut(|s| s.current_input = evt.value().clone());
+                        },
+                    }
+                },
+                ExpressionType::Lambda => rsx! {
+                    input {
+                        style: "{Styles::input()}",
+                        placeholder: "Lambda abstraction (e.g., λx. x)",
+                        value: state.read().current_input.clone(),
+                        oninput: move |evt| {
+                            state.with_mut(|s| s.current_input = evt.value().clone());
+                        },
+                    }
+                },
+                ExpressionType::Forall => rsx! {
+                    input {
+                        style: "{Styles::input()}",
+                        placeholder: "Forall quantification (e.g., ∀x. P x)",
+                        value: state.read().current_input.clone(),
+                        oninput: move |evt| {
+                            state.with_mut(|s| s.current_input = evt.value().clone());
+                        },
+                    }
+                },
+                ExpressionType::FromString => rsx! {
+                    input {
+                        style: "{Styles::input()}",
+                        placeholder: "Enter expression as string...",
+                        value: state.read().current_input.clone(),
+                        oninput: move |evt| {
+                            state.with_mut(|s| s.current_input = evt.value().clone());
+                        },
+                    }
+                },
+            // }}
+            //             value: state.read().current_input.clone(),
+            //             oninput: move |evt| {
+            //                 state.with_mut(|s| s.current_input = evt.value().clone());
+            //             },
+            //     },
+            //     SimpleExpr::Sort => rsx! {
+            //         input {
+            //             // style: Styles::input(),
+            //             // placeholder: "Universe level (e.g., 0, 1, 2...)",
+            //             // value: state.read().current_input.clone(),
+            //             // oninput: move |evt| {
+            //             //     state.with_mut(|s| s.level_input = evt.value().clone());
+            //             // },
+            //         }
+            //     },
                 ExpressionType::Const => rsx! {
                     input {
                         style: "{Styles::input()}",
@@ -208,10 +324,14 @@ fn ExpressionInputs(props: StateProps) -> Element {
                         },
                     }
                 }
-            }}
+            }
         }
     }
 }
+}    
+        
+    
+
 
 #[component]
 fn MetadataInputs(props: StateProps) -> Element {
@@ -242,15 +362,29 @@ fn MetadataInputs(props: StateProps) -> Element {
             input {
                 style: "{Styles::input()}",
                 placeholder: "Tags (comma-separated)...",
-                value: state.read().current_tags.clone(),
+                value: state.read().current_tags.join(","),
                 oninput: move |evt| {
-                    state.with_mut(|s| s.current_tags = evt.value().clone());
+                    state.with_mut(|s| s.current_tags = evt.value()
+                        .split(',')
+                        .map(|s| s.trim().to_string())
+                        .collect());
                 },
             }
         }
     }
 }
 
+pub struct Controller {
+
+}
+impl Controller {
+    pub fn delete_expression(state: MemesAppState, id : String )  {}
+    pub fn create_expression_from_type(state: MemesAppState) -> Option<Expression> {
+        Some(Expression {
+            astring: Signal::new("".to_string())
+        })
+    }
+}
 #[component]
 fn CreateButton(props: StateProps) -> Element {
     let mut state = props.state;
@@ -261,21 +395,19 @@ fn CreateButton(props: StateProps) -> Element {
             onclick: move |_| {
                 let current_state = state.read().clone();
                 
-                if let Some(expr) = Controller::create_expression_from_type(&current_state) {
-                    let tags: Vec<String> = current_state.current_tags
-                        .split(',')
-                        .map(|s| s.trim())
-                        .filter(|s| !s.is_empty())
-                        .map(|s| s.to_string())
-                        .collect();
-                    
-                    Controller::add_expression(
-                        &mut state.write(),
-                        expr,
-                        current_state.current_name,
-                        current_state.current_description,
-                        tags
-                    );
+                if let Some(expr) = Controller::create_expression_from_type(current_state.clone()) {
+                    // let tags: Vec<String> = current_state.current_tags
+                    //     .split(',')
+                    //     .map(|s| s.trim().to_string())
+                    //     .filter(|s| !s.is_empty())
+                    //     .collect();
+                    // Controller::add_expression(
+                    //     &mut state.write(),
+                    //     expr,
+                    //     current_state.current_name,
+                    //     current_state.current_description,
+                    //     tags
+                    // );
                 }
             },
             "🚀 Create Expression"
@@ -285,22 +417,35 @@ fn CreateButton(props: StateProps) -> Element {
 
 #[component]
 fn SearchInput(props: StateProps) -> Element {
-    let mut state = props.state;
+    //let mut state = props.state;
     
     rsx! {
         div {
-            style: "margin-top: 20px;",
-            input {
-                style: "{Styles::search_input()}",
-                placeholder: "Search expressions...",
-                value: state.read().search_query.clone(),
-                oninput: move |evt| {
-                    let query = evt.value().clone();
-                    state.with_mut(|s| s.search_query = query.clone());
-                    Controller::search_expressions(&mut state.write(), query);
-                },
-            }
+            "fixme"
         }
+    }
+    // rsx! {
+    //     div {
+    //         style: "margin-top: 20px;",
+    //         input {
+    //             style: "{Styles::search_input()}",
+    //             placeholder: "Search expressions...",
+    //             value: state.read().search_query.clone(),
+    //             oninput: move |evt| {
+    //                 let query = evt.value().clone();
+    //                 state.with_mut(|s| s.search_query = query.clone());
+    //                 Controller::search_expressions(&mut state.write(), query);
+    //             },
+    //         }
+    //     }
+    //}
+}
+pub fn liftexpression(expr: Expression) -> LiftedExpression {
+    LiftedExpression {
+        id: "expr.id".to_string(),
+        name: "expr.name".to_string(),
+        expr: expr,
+        description: "expr.expr".to_string()
     }
 }
 
@@ -329,7 +474,7 @@ pub fn ExpressionList(props: StateProps) -> Element {
                 style: "{Styles::grid_auto_fill(\"400px\")}",
                 for id in expression_ids {
                     if let Some(expr) = state.read().expressions.get(&id) {
-                        ExpressionCard { expression: expr.clone(), state }
+                        ExpressionCard { expression: liftexpression(expr.clone()), state }
                     }
                 }
             }
@@ -341,10 +486,27 @@ pub fn ExpressionList(props: StateProps) -> Element {
 // EXPRESSION CARD COMPONENT
 // ============================================================================
 
+
+//complexity
+
+// #[derive(Props, PartialEq, Clone, Debug)]
+// pub struct LiftedExpression2 {
+
+// }
+
+
+
+#[derive(Props, PartialEq, Clone, Debug)] 
+pub struct LiftedExpression {
+    id: String,
+    name: String,
+    description: String,
+    expr: Expression,
+}
 #[derive(Props, PartialEq, Clone)]
 pub struct ExpressionCardProps {
     pub expression: LiftedExpression,
-    pub state: Signal<AppState>,
+    pub state: Signal<MemesAppState>,
 }
 
 #[component]
@@ -373,15 +535,13 @@ pub struct ExpressionProps {
 #[derive(Props, PartialEq, Clone)]
 pub struct ExpressionWithStateProps {
     pub expression: LiftedExpression,
-    pub state: Signal<AppState>,
+    pub state: Signal<MemesAppState>,
 }
-
 #[component]
-public fn CardHeader(props: ExpressionWithStateProps) -> Element {
+pub fn CardHeader(props: ExpressionWithStateProps) -> Element {
     let expr = props.expression.clone();
     let mut state = props.state;
     let expr_id = expr.id.clone();
-    
     rsx! {
         div {
             style: "{Styles::flex_between()} {Styles::margin_bottom(\"15px\")}",
@@ -392,7 +552,7 @@ public fn CardHeader(props: ExpressionWithStateProps) -> Element {
             button {
                 style: "{Styles::delete_button()}",
                 onclick: move |_| {
-                    Controller::delete_expression(&mut state.write(), expr_id.clone());
+                   // Controller::delete_expression(state.write(), expr_id.clone());
                 },
                 "×"
             }
@@ -409,7 +569,7 @@ fn CodeDisplay(props: ExpressionProps) -> Element {
             style: "{Styles::margin_bottom(\"15px\")}",
             div {
                 style: "{Styles::code_block()}",
-                code { "{expr.expr.to_string()}" }
+                code { "{expr.expr:?}" }
             }
             
             if !expr.description.is_empty() {
@@ -426,32 +586,32 @@ fn CodeDisplay(props: ExpressionProps) -> Element {
 fn ExpressionMetadata(props: ExpressionProps) -> Element {
     let expr = props.expression;
     
-    rsx! {
-        div {
-            style: "display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 14px;",
-            div {
-                strong { "Type: " }
-                span {
-                    style: "{Styles::text_accent()}",
-                    {match &expr.expr {
-                        crate::model::SimpleExpr::BVar { .. } => "BVar",
-                        crate::model::SimpleExpr::Sort { .. } => "Sort",
-                        crate::model::SimpleExpr::Const { .. } => "Const", 
-                        crate::model::SimpleExpr::App { .. } => "App",
-                        crate::model::SimpleExpr::Lam { .. } => "Lambda",
-                        crate::model::SimpleExpr::ForallE { .. } => "Forall",
-                    }}
-                }
-            }
-            div {
-                strong { "Complexity: " }
-                span {
-                    style: "{Styles::text_accent()}",
-                    "{expr.expr.complexity():.1}"
-                }
-            }
-        }
-    }
+     rsx! {
+         div {
+    //         style: "display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 14px;",
+    //         div {
+    //             strong { "Type: " }
+    //             span {
+    //                 style: "{Styles::text_accent()}",
+    //                 {match &expr.expr {
+    //                     ExpressionType::BVar { .. } => "BVar",
+    //                     ExpressionType::Sort { .. } => "Sort",
+    //                     ExpressionType::Const { .. } => "Const", 
+    //                     ExpressionType::App { .. } => "App",
+    //                     ExpressionType::Lam { .. } => "Lambda",
+    //                     ExpressionType::ForallE { .. } => "Forall",
+    //                 }}
+    //             }
+    //         }
+    //         div {
+    //             strong { "Complexity: " }
+    //             span {
+    //                 style: "{Styles::text_accent()}",
+    //                 "{expr.expr.complexity():.1}"
+    //             }
+    //         }
+         }
+     }
 }
 
 #[component]
@@ -459,29 +619,32 @@ fn SimilaritySection(props: ExpressionWithStateProps) -> Element {
     let expr = props.expression;
     let state = props.state;
     
-    let similar_expressions = Controller::get_similar_expressions(&state.read(), &expr, 3);
+    //let similar_expressions = Controller::get_similar_expressions(&state.read(), &expr, 3);
     
     rsx! {
-        if !similar_expressions.is_empty() {
-            div {
-                style: "border-top: 1px solid #eee; padding-top: 15px;",
-                h4 {
-                    style: "margin: 0 0 10px 0; font-size: 14px; color: #666;",
-                    "Similar Expressions:"
-                }
-                div {
-                    style: "display: flex; flex-wrap: wrap; gap: 8px;",
-                    for (similar_id, similarity) in similar_expressions {
-                        if let Some(similar_expr) = state.read().expressions.get(&similar_id) {
-                            span {
-                                style: "background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 12px;",
-                                "{similar_expr.name} ({similarity:.2})"
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // if !similar_expressions.is_empty() {
+        //     div {
+        //         style: "border-top: 1px solid #eee; padding-top: 15px;",
+        //         h4 {
+        //             style: "margin: 0 0 10px 0; font-size: 14px; color: #666;",
+        //             "Similar Expressions:"
+        //         }
+        //         div {
+        //             style: "display: flex; flex-wrap: wrap; gap: 8px;",
+        //             //for (similar_id, similarity) in similar_expressions {
+        //                 //if let Some(similar_expr) = state.read().expressions.get(&similar_id) {
+        //                     // rsx! {
+        //                     //     span {
+        //                     //         style: "background: #f0f0f0; padding: 4px 8px; border-radius: 4px; font-size: 12px;",
+        //                     //         {similar_expr.name} ({similarity:.2})
+        //                     //     }
+        //                     // }
+        //                 //}
+        //             //}
+                     
+        //         }
+        //     }
+        // }
     }
 }
 
@@ -522,7 +685,7 @@ pub fn Footer() -> Element {
     rsx! {
         footer {
             style: "text-align: center; padding: 20px; color: rgba(255,255,255,0.7); font-size: 14px;",
-            p { "Built with 🦀 Rust & Dioxus" }
+            p { "Built with 🍄 Solfunmeme & 🦀 Rust & Dioxus" }
         }
     }
 }

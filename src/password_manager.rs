@@ -298,7 +298,7 @@ pub fn copy_to_clipboard(text: String) {
 // ============================================================================
 
 #[component]
-pub fn App() -> Element {
+pub fn PasswordApp() -> Element {
     let mut app_state = use_signal(PasswordAppState::default);
 
     rsx! {

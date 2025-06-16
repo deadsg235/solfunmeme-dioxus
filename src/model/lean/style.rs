@@ -137,6 +137,9 @@ impl Styles {
         )
     }
 
+    pub fn h2()->String {"".to_string()}
+    pub fn p()->String {"".to_string()}
+
     // Header styles
     pub fn header() -> String {
         "text-align: center; margin-bottom: 30px; color: white;".to_string()

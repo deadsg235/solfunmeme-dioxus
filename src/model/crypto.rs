@@ -72,6 +72,14 @@ impl SolanaEncryption {
 //     unimplemented!("Encryption logic")
 // }
 
+    pub fn is_valid_public_key(public_key: &str) -> bool {
+        false
+    }
+
+    pub fn is_valid_private_key(public_key: &str) -> bool {
+        false
+    }
+
     pub(crate) fn validate_private_key(private_key: &str) -> Result<(), CryptoError> {
         // TODO: Implement private key validation logic
         unimplemented!("Private key validation not implemented")

@@ -13,7 +13,8 @@ use wallet_adapter::{
 
 use crate::{model::{storage::{ACCOUNT_STATE, WALLET_ADAPTER}, use_connections, AccountState, BlockHashResponseValue, ResponseWithContext, RpcResponse, SignaturesResponse, TokenAccountResponse}, FetchReq};
 //, views::FetchReq
-
+#[cfg(feature = "bincode2")]
+use bincode::config::legacy;
 
 pub fn format_timestamp(unix_timestamp: i64) -> String {
     let timestamp_ms = unix_timestamp as f64 * 1000.0; //Convert seconds to millisconds
@@ -98,9 +99,14 @@ pub async fn send_sol_req(
     let send_sol_instruction = transfer(&pubkey, &recipient, lamports);
     let mut tx = Transaction::new_with_payer(&[send_sol_instruction], Some(&pubkey));
     let blockhash = get_blockhash().await?;
-
     tx.message.recent_blockhash = blockhash;
+    
+    //#[cfg(feature = "bincodev1")]
     let tx_bytes = bincode::serialize(&tx).map_err(|error| WalletError::Op(error.to_string()))?;
+
+    //#[cfg(feature = "bincodev2")]
+    //let tx_bytes = bincode::encode_to_vec(&tx, legacy()).map_err(|error| WalletError::Op(error.to_string()))?;
+    //let tx_bytes = tx.serialize().map_err(|error| WalletError::Op(error.to_string()))?;
 
     WALLET_ADAPTER
         .read()
