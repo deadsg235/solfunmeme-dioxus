@@ -1,4 +1,3 @@
-
 // Cargo.toml
 /*
 [package]
@@ -120,6 +119,11 @@ impl<T> Maybe<T> {
     
     pub fn is_some(&self) -> bool {
         self.value.is_some()
+    }
+
+    // Add a custom unwrap method that doesn't rely on Dioxus traits
+    pub fn unwrap_maybe(self) -> T {
+        self.value.unwrap()
     }
 }
 
@@ -946,6 +950,111 @@ mod tests {
         let json = serde_json::to_string(&meme).unwrap();
         let deserialized: Meme = serde_json::from_str(&json).unwrap();
         assert_eq!(meme, deserialized);
+    }
+
+    #[test]
+    fn test_controller_add_quine_expression() {
+        let mut state = MemesAppState::default();
+        let expression = "test quine".to_string();
+        
+        let result = Controller::add_quine_expression(&mut state, expression.clone());
+        assert!(result.is_some());
+        let lifted = result.unwrap_maybe(); // Use our custom unwrap method
+        assert_eq!(lifted.quine, None);
+        assert!(lifted.meme.is_some());
+        assert_eq!(state.expressions.len(), 1);
+        assert!(state.expressions.contains_key(&lifted.id));
+    }
+
+    #[test]
+    fn test_controller_add_meme_expression() {
+        let mut state = MemesAppState::default();
+        let content = "test meme".to_string();
+        let tags = vec!["funny".to_string(), "test".to_string()];
+        
+        let result = Controller::add_meme_expression(&mut state, content.clone(), tags.clone());
+        
+        assert!(result.is_some());
+        let lifted = result.unwrap_maybe(); // Use our custom unwrap method
+        assert!(lifted.meme.is_some());
+        let meme = lifted.meme.unwrap();
+        assert_eq!(meme.content, content);
+        assert_eq!(meme.semantic_tags, tags);
+        assert_eq!(state.expressions.len(), 1);
+        assert!(state.expressions.contains_key(&lifted.id));
+    }
+
+    #[test]
+    fn test_controller_search_expressions() {
+        let mut state = MemesAppState::default();
+        
+        // Add some test expressions
+        let meme1 = Meme::new("rust programming".to_string(), vec!["code".to_string()]);
+        let meme2 = Meme::new("functional programming".to_string(), vec!["paradigm".to_string()]);
+        
+        let lifted1 = LiftedExpression::from_meme(meme1);
+        let lifted2 = LiftedExpression::from_meme(meme2);
+        
+        state.expressions.insert(lifted1.id.clone(), lifted1);
+        state.expressions.insert(lifted2.id.clone(), lifted2);
+        
+        // Test search
+        let results = Controller::search_expressions(&mut state, "programming".to_string());
+        assert_eq!(results.len(), 2);
+        
+        let results = Controller::search_expressions(&mut state, "rust".to_string());
+        assert_eq!(results.len(), 1);
+    }
+
+    #[test]
+    fn test_controller_propagate_meme() {
+        let mut state = MemesAppState::default();
+        let meme = Meme::new("viral content".to_string(), vec!["viral".to_string()]);
+        let lifted = LiftedExpression::from_meme(meme);
+        let id = lifted.id.clone();
+        
+        state.expressions.insert(id.clone(), lifted);
+        
+        let result = Controller::propagate_meme(&mut state, id.clone());
+        assert!(result.is_some());
+        
+        let updated = state.expressions.get(&id).unwrap();
+        let meme = updated.meme.as_ref().unwrap();
+        assert_eq!(meme.propagation_count, 1);
+        assert!(meme.virality_score > 0.0);
+    }
+
+    #[test]
+    fn test_controller_delete_expression() {
+        let mut state = MemesAppState::default();
+        let meme = Meme::new("to be deleted".to_string(), vec![]);
+        let lifted = LiftedExpression::from_meme(meme);
+        let id = lifted.id.clone();
+        
+        state.expressions.insert(id.clone(), lifted);
+        assert_eq!(state.expressions.len(), 1);
+        
+        let result = Controller::delete_expression(&mut state, id.clone());
+        assert!(result.is_some());
+        assert_eq!(state.expressions.len(), 0);
+    }
+
+    #[test]
+    fn test_controller_get_vector_similarity() {
+        let meme1 = Meme::new("similar content".to_string(), vec!["tag1".to_string()]);
+        let meme2 = Meme::new("similar content".to_string(), vec!["tag1".to_string()]);
+        let meme3 = Meme::new("different content".to_string(), vec!["tag2".to_string()]);
+        
+        let lifted1 = LiftedExpression::from_meme(meme1);
+        let lifted2 = LiftedExpression::from_meme(meme2);
+        let lifted3 = LiftedExpression::from_meme(meme3);
+        
+        let similarity_same = Controller::get_vector_similarity(&lifted1, &lifted2);
+        let similarity_different = Controller::get_vector_similarity(&lifted1, &lifted3);
+        
+        assert!(similarity_same > similarity_different);
+        assert!(similarity_same <= 1.0);
+        assert!(similarity_same >= 0.0);
     }
 }
 
