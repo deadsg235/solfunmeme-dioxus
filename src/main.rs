@@ -60,6 +60,8 @@ use password_manager::App;
 
 mod dioxus_adapter;
 mod fetch_parser;
+mod state;
+mod playground;
 
 fn main() {
     launch(App);

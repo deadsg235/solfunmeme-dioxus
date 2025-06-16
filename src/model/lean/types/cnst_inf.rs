@@ -5,15 +5,15 @@ use super::{forbd::Forbd, sig::Sig};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct CnstInf {
-    levels: Vec<Level>,
-    decl_name: String,
-    forbd: Forbd,
-    binder_name: String,
-    binder_info: String,
+    pub levels: Vec<Level>,
+    pub decl_name: String,
+    pub forbd: Forbd,
+    pub binder_name: String,
+    pub binder_info: String,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct CnstInfB {
-    sig: Sig,
-    cnst_inf: CnstInf,
+    pub sig: Sig,
+    pub cnst_inf: CnstInf,
 }

@@ -34,18 +34,18 @@ pub struct Expression {
     // lam 
     // bind
     // app
-    astring: Signal<String>
+    pub astring: Signal<String>
 }   
 
 
 #[derive(Clone, Copy, PartialEq)]
 pub struct ExpressionListObj {
-    expressions: Signal<Vec<Expression>>,
+    pub expressions: Signal<Vec<Expression>>,
 }   
 
 #[derive(Clone, PartialEq)]
 pub struct ExpressionList {
-    expressions: Vec<Expression>,
+    pub expressions: Vec<Expression>,
 }   
 
 #[component]

@@ -9,8 +9,8 @@ use crate::{
 use crate::views::connections::Connections;
 //use crate::model::AdapterCluster;
 use crate::model::{AccountState};
-const FAVICON: Asset = asset!("/assets/favicon.png");
-const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
+pub const FAVICON: Asset = asset!("/assets/favicon.png");
+pub const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 pub(crate) const LOGO: Asset = asset!("/assets/logo.png");
 
 use crate::model::storage::WALLET_ADAPTER;

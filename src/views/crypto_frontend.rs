@@ -21,7 +21,7 @@ pub fn App() -> Element {
 }
 
 #[component]
-fn AppHeader() -> Element {
+pub fn AppHeader() -> Element {
     rsx! {
         h1 { class: MAIN_TITLE,
             "Solana Wallet Encryption Demo"
@@ -240,19 +240,19 @@ pub fn DecryptionForm() -> Element {
 // Reusable UI Components
 
 #[derive(Props, Clone, PartialEq)]
-struct CardHeaderProps {
+pub struct CardHeaderProps {
     title: String,
 }
 
 #[component]
-fn CardHeader(props: CardHeaderProps) -> Element {
+pub fn CardHeader(props: CardHeaderProps) -> Element {
     rsx! {
         h2 { class: CARD_TITLE, "{props.title}" }
     }
 }
 
 #[derive(Props, Clone, PartialEq)]
-struct InputFieldProps {
+pub struct InputFieldProps {
     label: String,
     placeholder: String,
     input_type: String,
@@ -261,7 +261,7 @@ struct InputFieldProps {
 }
 
 #[component]
-fn InputField(props: InputFieldProps) -> Element {
+pub fn InputField(props: InputFieldProps) -> Element {
     rsx! {
         div {
             label { class: LABEL, "{props.label}" }
@@ -277,7 +277,7 @@ fn InputField(props: InputFieldProps) -> Element {
 }
 
 #[derive(Props, Clone, PartialEq)]
-struct TextAreaFieldProps {
+pub struct TextAreaFieldProps {
     label: String,
     placeholder: String,
     rows: i32,
@@ -286,7 +286,7 @@ struct TextAreaFieldProps {
 }
 
 #[component]
-fn TextAreaField(props: TextAreaFieldProps) -> Element {
+pub fn TextAreaField(props: TextAreaFieldProps) -> Element {
     rsx! {
         div {
             label { class: LABEL, "{props.label}" }
@@ -344,12 +344,12 @@ pub fn ActionButton(props: ActionButtonProps) -> Element {
 }
 
 #[derive(Props, Clone, PartialEq)]
-struct ErrorMessageProps {
+pub struct ErrorMessageProps {
     message: String,
 }
 
 #[component]
-fn ErrorMessage(props: ErrorMessageProps) -> Element {
+pub fn ErrorMessage(props: ErrorMessageProps) -> Element {
     rsx! {
         div { class: ERROR_MESSAGE,
             "{props.message}"
@@ -358,14 +358,14 @@ fn ErrorMessage(props: ErrorMessageProps) -> Element {
 }
 
 #[derive(Props, Clone, PartialEq)]
-struct SuccessMessageProps {
+pub struct SuccessMessageProps {
     title: String,
     content: String,
     is_code: bool,
 }
 
 #[component]
-fn SuccessMessage(props: SuccessMessageProps) -> Element {
+pub fn SuccessMessage(props: SuccessMessageProps) -> Element {
     rsx! {
         div { class: SUCCESS_MESSAGE,
             h3 { class: SUCCESS_TITLE, "{props.title}" }

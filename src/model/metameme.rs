@@ -1,6 +1,7 @@
-
+use serde::{Deserialize, Serialize};
 //Ideas:
 //#1. gcc asts, metacoq, lean4 dumper and rust procedureal macros and rust syn parsers produce expressions
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum MetaMemes {
 	Gcc,
     LLVM,
@@ -13,9 +14,17 @@ pub enum MetaMemes {
     MetaMeme
 }
 //2. we can import those asts as "memes" or meta-memes. They are syntactic forms.
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Meme {
     typ : MetaMemes,
     value : &'static str
+}
+
+impl Meme {
+    pub fn get_value(&self) -> &str {
+        &self.value
+    }
 }
 
 // 3. the interpretation of the expressions as a group of memes is supported (import etc)

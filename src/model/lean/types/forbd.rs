@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, PartialEq)]
 pub struct Forbd {
-    forbndr_typ: String,
-    forbd_b: String,
+    pub forbndr_typ: String,
+    pub forbd_b: String,
 }

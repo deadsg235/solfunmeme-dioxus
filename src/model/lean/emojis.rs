@@ -71,7 +71,7 @@ pub struct Rule<'a> {
     kind: String,
 }
 // Function to convert a Type node to an emoji string
-fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
+pub fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
     let indent = "  ".repeat(depth);
     match typ {
         SimpleExprType::ForallE {
@@ -154,7 +154,7 @@ fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&str, &
 }
 
 // Function to convert a Rule to an emoji string
-fn rule_to_emoji<'a>(rule: &Rule<'a>, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
+pub fn rule_to_emoji<'a>(rule: &Rule<'a>, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
     let indent = "  ".repeat(depth);
     format!(
         "{}📋 {} (fields: {})\n{}\n",

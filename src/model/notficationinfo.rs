@@ -1,6 +1,47 @@
 
 #[derive(Debug, Clone)]
 pub struct NotificationInfo {
+    pub key : u32,
+    pub secs: u32,
+    pub message: String,
+}
+
+impl NotificationInfo {
+    pub fn new(message: impl core::fmt::Display) -> Self {
+        let key = fastrand::u32(..);
+
+        Self {
+            key,
+            secs: 2,
+            message: message.to_string(),
+        }
+    }
+
+    /// Sets default seconds to 15
+    pub fn error(message: impl core::fmt::Display) -> Self {
+        Self::new(message).set_secs(15)
+    }
+
+    pub fn set_secs(mut self, secs: u32) -> Self {
+        self.secs = secs;
+
+        self
+    }
+
+    pub fn key(&self) -> u32 {
+        self.key
+    }
+
+    pub fn secs(&self) -> u32 {
+        self.secs
+    }
+
+    pub fn message(&self) -> &str {
+        self.message.as_str()
+    }
+}
+
+
     #[cfg(test)]
     mod tests {
         use super::*;
@@ -48,41 +89,4 @@ pub struct NotificationInfo {
             assert_eq!(notif.secs(), cloned.secs());
             assert_eq!(notif.message(), cloned.message());
         }
-    }secs: u32,
-    message: String,
-}
-
-impl NotificationInfo {
-    pub fn new(message: impl core::fmt::Display) -> Self {
-        let key = fastrand::u32(..);
-
-        Self {
-            key,
-            secs: 2,
-            message: message.to_string(),
-        }
     }
-
-    /// Sets default seconds to 15
-    pub fn error(message: impl core::fmt::Display) -> Self {
-        Self::new(message).set_secs(15)
-    }
-
-    pub fn set_secs(mut self, secs: u32) -> Self {
-        self.secs = secs;
-
-        self
-    }
-
-    pub fn key(&self) -> u32 {
-        self.key
-    }
-
-    pub fn secs(&self) -> u32 {
-        self.secs
-    }
-
-    pub fn message(&self) -> &str {
-        self.message.as_str()
-    }
-}

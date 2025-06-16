@@ -16,8 +16,8 @@ pub enum LevelType<'a> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct LevelDescr {
-    level: String,
-    kind: String,
+    pub level: String,
+    pub kind: String,
 }
 
 

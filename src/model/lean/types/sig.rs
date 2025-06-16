@@ -1,7 +1,7 @@
 #[derive(Debug, Clone, PartialEq)]
 pub struct Sig {
-    atype: String,
-    forbndr_typ_b: String,
-    binder_name: String,
-    binder_info: String,
+    pub atype: String,
+    pub forbndr_typ_b: String,
+    pub binder_name: String,
+    pub binder_info: String,
 }

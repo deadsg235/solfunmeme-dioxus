@@ -1,7 +1,7 @@
-mod use_connections;
+pub mod use_connections;
 pub use use_connections::*;
 
-mod connection;
+pub mod connection;
 //pub use connection::*;
 
 
@@ -77,4 +77,4 @@ pub mod metameme;
 pub mod crypto_test;
 pub mod cluster_store_test;
 
-mod wallet_error;
+pub mod wallet_error;
