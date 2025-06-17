@@ -22,6 +22,7 @@ use dioxus::prelude::*;
 use crate::model::lean::style::Styles;
 
 // #[component]
+#[allow(dead_code)]
 pub fn LeanEditorApp() -> Element {
 //     let state = use_signal(AppState::default);
     

@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use gloo_timers::callback::Timeout;
-use crate::model::NotificationInfo;
+//use crate::model::NotificationInfo;
 use crate::model::storage::GLOBAL_MESSAGE;
 
 #[component]

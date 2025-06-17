@@ -56,7 +56,7 @@ pub fn get_crypto_component_memes() -> Vec<ComponentMeme> {
         },
     ]
 }
-
+#[allow(dead_code)]
 pub fn get_ui_component_memes() -> Vec<ComponentMeme> {
     vec![
         ComponentMeme {

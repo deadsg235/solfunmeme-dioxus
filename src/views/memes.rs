@@ -27,12 +27,19 @@ use crate::style::Styles;
 // }
 #[derive( PartialEq, Clone)]
 pub enum ExpressionType {
+    #[allow(dead_code)]
     FromString,
+    #[allow(dead_code)]
     BVar,
+    #[allow(dead_code)]
     Sort,
+    #[allow(dead_code)]
     Const,
+    #[allow(dead_code)]
     Lambda, 
+    #[allow(dead_code)]
     Forall, 
+    #[allow(dead_code)]
     App
 }
 #[derive(Props, PartialEq, Clone)]
@@ -51,6 +58,7 @@ pub struct MemesAppState {
 }
 
 impl MemesAppState {
+    #[allow(dead_code)]
     pub fn default() -> Self {
         MemesAppState {
             expressions: HashMap::new(),
@@ -118,7 +126,7 @@ pub struct StateProps {
 
 #[component]
 pub fn InputSection(props: StateProps) -> Element {
-    let mut state = props.state;
+    let state = props.state;
 
     rsx! {
         section {
@@ -378,7 +386,9 @@ pub struct Controller {
 
 }
 impl Controller {
+    #[allow(dead_code)]
     pub fn delete_expression(state: MemesAppState, id : String )  {}
+    #[allow(dead_code)]
     pub fn create_expression_from_type(state: MemesAppState) -> Option<Expression> {
         Some(Expression {
             astring: Signal::new("".to_string())
@@ -440,6 +450,7 @@ fn SearchInput(props: StateProps) -> Element {
     //     }
     //}
 }
+#[allow(dead_code)]
 pub fn liftexpression(expr: Expression) -> LiftedExpression {
     LiftedExpression {
         id: "expr.id".to_string(),

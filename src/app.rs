@@ -1,9 +1,16 @@
+
+
 use dioxus::prelude::*;
 use crate::header::Header;
+use crate::model::NotificationInfo;
+    
+    //git_parser::GitParser,
+
+
 use crate::{
-    model::NotificationInfo,
+    //model::NotificationInfo,
     views::footer::Footer,
-    views::notification::Notification as NotificationComponent,
+    views::notification::Notification ,
     views::page_not_found::PageNotFound,
     //git_parser::GitParser,
 };
@@ -62,7 +69,7 @@ pub(crate) fn MainApp() -> Element {
 
         div { class: "w-full flex min-h-screen font-[sans-serif] dark:bg-rich-black bg-white text-black dark:text-white",
 
-            NotificationComponent {}
+            Notification {}
 
 
             div { class: "flex flex-col w-full min-h-full justify-between items-center",

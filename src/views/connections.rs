@@ -8,7 +8,7 @@ use crate::{model::use_connections,
     //cluster_management_section, connection_filter, connection_list, connection_management::connection_management_section
 	    //}
 };
-
+#[allow(dead_code)]
 // Main Connections component
 pub fn Connections() -> Element {
     let connections = use_connections("solana_wallet");

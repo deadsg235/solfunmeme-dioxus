@@ -73,8 +73,11 @@ pub fn TextAreaField(props: TextAreaFieldProps) -> Element {
 
 #[derive(Clone, PartialEq, Debug)]
 pub enum ButtonType {
+    #[allow(dead_code)]
     Primary,
+    #[allow(dead_code)]
     Success,
+    #[allow(dead_code)]
     Danger,
 }
 

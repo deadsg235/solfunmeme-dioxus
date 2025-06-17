@@ -1,11 +1,19 @@
 #![allow(non_snake_case)]
 
 
+//mod views;
+//use views::*;
 mod views;
-use views::*;
-
+//use views::*;
 mod model;
 use model::*;
+
+// pub mod use_memes;
+// pub mod git_parser;
+
+// pub mod utils;
+// pub mod views;
+//use views::*;
 
 mod header;
 mod utils;
@@ -27,6 +35,15 @@ pub(crate) use app::Route;
 
 
 //use dioxus::prelude::*;
+// Remove unused import
+// use views::*;
+
+// use crate::model::*;
+// use crate::header::*;
+// use crate::utils::*;
+// use crate::fetch_parser::*;
+// use crate::svg_assets::*;
+
 //use gloo_timers::callback::Timeout;
 
 use crate::{

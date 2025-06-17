@@ -1,5 +1,4 @@
 use dioxus::prelude::*;
-use std::collections::HashMap;
 mod style;
 use style::*;
 
@@ -20,7 +19,7 @@ pub struct WorkflowMeme {
     pub test_result: String,
     pub proof_result: String,
 }
-
+#[allow(dead_code)]
 pub fn get_encryption_workflow() -> WorkflowMeme {
     WorkflowMeme {
         name: "Message Encryption Flow".to_string(),

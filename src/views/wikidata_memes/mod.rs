@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use reqwest;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+//use std::collections::HashMap;
 mod style;
 use style::*;
 
@@ -35,7 +35,7 @@ pub struct WikidataBinding {
 pub struct WikidataValue {
     pub value: String,
 }
-
+#[allow(dead_code)]
 pub async fn fetch_wikidata_memes() -> Result<Vec<WikidataMeme>, String> {
     let query = r#"
     SELECT ?item ?itemLabel ?memeID
@@ -138,6 +138,7 @@ pub fn WikidataMemeExplorer() -> Element {
 }
 
 // Function to convert Wikidata memes into workflow steps
+#[allow(dead_code)]
 pub fn meme_to_workflow_step(meme: &WikidataMeme) -> crate::views::workflow_memes::WorkflowStep {
     crate::views::workflow_memes::WorkflowStep {
         emoji: "🎭".to_string(), // Default emoji for memes
@@ -182,6 +183,7 @@ end"#,
     }
 }
 
+#[allow(dead_code)]
 // Function to create a workflow from a sequence of memes
 pub fn create_meme_workflow(memes: Vec<WikidataMeme>) -> crate::views::workflow_memes::WorkflowMeme {
     let steps: Vec<_> = memes.iter().map(meme_to_workflow_step).collect();

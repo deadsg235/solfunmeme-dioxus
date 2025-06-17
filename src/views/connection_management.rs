@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use crate::model::{use_connections, AdapterCluster, MyCluster};
-
+#[allow(dead_code)]
 pub(crate) fn connection_management_section(
     cluster_names: Vec<String>,
     mut new_connection_name: Signal<String>,

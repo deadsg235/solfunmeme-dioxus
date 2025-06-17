@@ -1,6 +1,6 @@
 use crate::crypto::SolanaEncryption;
 
-#[warn(dead_code)]
+#[allow(dead_code)]
 pub fn validate_encryption_inputs(
     title: &str,
     message: &str,
@@ -37,7 +37,7 @@ pub fn validate_encryption_inputs(
 
     Ok(())
 }
-
+#[allow(dead_code)]
 pub fn validate_decryption_inputs(
     encrypted_payload: &str,
     my_private_key: &str,
