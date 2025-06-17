@@ -232,6 +232,16 @@ fn ExpressionInputs(props: StateProps) -> Element {
                         },
                     }
                 },
+		//ExpressionType::Const => rsx! {
+                //     input {
+                //         style: "{Styles::input()}",
+                //         placeholder: "Constant name (e.g., Nat, Bool, f...)",
+                //         value: state.read().const_name.clone(),
+                //         oninput: move |evt| {
+                //             state.with_mut(|s| s.const_name = evt.value().clone());
+                //         },
+                //     }
+                // },
                 ExpressionType::App => rsx! {
                     input {
                         style: "{Styles::input()}",
@@ -252,6 +262,30 @@ fn ExpressionInputs(props: StateProps) -> Element {
                         },
                     }
                 },
+		  //               ExpressionType::Lambda | ExpressionType::Forall => rsx! {
+                //     div {
+                //         style: "display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;",
+                //         input {
+                //             style: "{Styles::input()}",
+                //             placeholder: "Binder name (e.g., x, y, z...)",
+                //             value: state.read().binder_name.clone(),
+                //             oninput: move |evt| {
+                //                 state.with_mut(|s| s.binder_name = evt.value().clone());
+                //             },
+                //         }
+                //         label {
+                //             style: "{Styles::checkbox_label()}",
+                //             input {
+                //                 r#type: "checkbox",
+                //                 checked: state.read().implicit_binder,
+                //                 onchange: move |evt| {
+                //                     state.with_mut(|s| s.implicit_binder = evt.value().parse().unwrap_or(false));
+                //                 },
+                //             }
+                //             "Implicit"
+                //         }
+                //     }
+                // },
                 ExpressionType::Forall => rsx! {
                     input {
                         style: "{Styles::input()}",
@@ -272,66 +306,18 @@ fn ExpressionInputs(props: StateProps) -> Element {
                         },
                     }
                 },
-            // }}
-            //             value: state.read().current_input.clone(),
-            //             oninput: move |evt| {
-            //                 state.with_mut(|s| s.current_input = evt.value().clone());
-            //             },
-            //     },
-            //     SimpleExpr::Sort => rsx! {
-            //         input {
-            //             // style: Styles::input(),
-            //             // placeholder: "Universe level (e.g., 0, 1, 2...)",
-            //             // value: state.read().current_input.clone(),
-            //             // oninput: move |evt| {
-            //             //     state.with_mut(|s| s.level_input = evt.value().clone());
-            //             // },
-            //         }
-            //     },
-                ExpressionType::Const => rsx! {
-                    input {
-                        style: "{Styles::input()}",
-                        placeholder: "Constant name (e.g., Nat, Bool, f...)",
-                        value: state.read().const_name.clone(),
-                        oninput: move |evt| {
-                            state.with_mut(|s| s.const_name = evt.value().clone());
-                        },
-                    }
-                },
-                ExpressionType::Lambda | ExpressionType::Forall => rsx! {
-                    div {
-                        style: "display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;",
-                        input {
-                            style: "{Styles::input()}",
-                            placeholder: "Binder name (e.g., x, y, z...)",
-                            value: state.read().binder_name.clone(),
-                            oninput: move |evt| {
-                                state.with_mut(|s| s.binder_name = evt.value().clone());
-                            },
-                        }
-                        label {
-                            style: "{Styles::checkbox_label()}",
-                            input {
-                                r#type: "checkbox",
-                                checked: state.read().implicit_binder,
-                                onchange: move |evt| {
-                                    state.with_mut(|s| s.implicit_binder = evt.value().parse().unwrap_or(false));
-                                },
-                            }
-                            "Implicit"
-                        }
-                    }
-                },
-                _ => rsx! {
-                    textarea {
-                        style: "{Styles::textarea()}",
-                        placeholder: "Expression content...",
-                        value: state.read().current_input.clone(),
-                        oninput: move |evt| {
-                            state.with_mut(|s| s.current_input = evt.value().clone());
-                        },
-                    }
-                }
+
+
+                // _ => rsx! {
+                //     textarea {
+                //         style: "{Styles::textarea()}",
+                //         placeholder: "Expression content...",
+                //         value: state.read().current_input.clone(),
+                //         oninput: move |evt| {
+                //             state.with_mut(|s| s.current_input = evt.value().clone());
+                //         },
+                //     }
+                // }
             }
         }
     }
@@ -397,7 +383,9 @@ impl Controller {
 }
 #[component]
 fn CreateButton(props: StateProps) -> Element {
-    let mut state = props.state;
+    #[allow(unused_variables)]
+    //let mut state = props.state;
+    let state = props.state;
     
     rsx! {
         button {
@@ -427,7 +415,9 @@ fn CreateButton(props: StateProps) -> Element {
 
 #[component]
 fn SearchInput(props: StateProps) -> Element {
-    let mut state = props.state;
+    #[allow(unused_variables)]
+    //let mut state = props.state;
+    let state = props.state;
     
     rsx! {
         div {
@@ -453,9 +443,9 @@ fn SearchInput(props: StateProps) -> Element {
 #[allow(dead_code)]
 pub fn liftexpression(expr: Expression) -> LiftedExpression {
     LiftedExpression {
+	expr,
         id: "expr.id".to_string(),
-        name: "expr.name".to_string(),
-        expr: expr,
+        name: "expr.name".to_string(),        
         description: "expr.expr".to_string()
     }
 }
@@ -551,8 +541,8 @@ pub struct ExpressionWithStateProps {
 #[component]
 pub fn CardHeader(props: ExpressionWithStateProps) -> Element {
     let expr = props.expression.clone();
-    let mut state = props.state;
-    let expr_id = expr.id.clone();
+    //let mut state = props.state;
+    //let expr_id = expr.id.clone();
     rsx! {
         div {
             style: "{Styles::flex_between()} {Styles::margin_bottom(\"15px\")}",
@@ -595,6 +585,7 @@ fn CodeDisplay(props: ExpressionProps) -> Element {
 
 #[component]
 fn ExpressionMetadata(props: ExpressionProps) -> Element {
+    #[allow(unused_variables)]
     let expr = props.expression;
     
      rsx! {
@@ -627,14 +618,17 @@ fn ExpressionMetadata(props: ExpressionProps) -> Element {
 
 #[component]
 fn SimilaritySection(props: ExpressionWithStateProps) -> Element {
+    #[allow(unused_variables)]
     let expr = props.expression;
+    #[allow(unused_variables)]
     let state = props.state;
     
     //let similar_expressions = Controller::get_similar_expressions(&state.read(), &expr, 3);
     
     rsx! {
+	"SimilaritySection"
         // if !similar_expressions.is_empty() {
-        //     div {
+             div {
         //         style: "border-top: 1px solid #eee; padding-top: 15px;",
         //         h4 {
         //             style: "margin: 0 0 10px 0; font-size: 14px; color: #666;",
@@ -655,7 +649,7 @@ fn SimilaritySection(props: ExpressionWithStateProps) -> Element {
                      
         //         }
         //     }
-        // }
+         }
     }
 }
 
@@ -700,3 +694,21 @@ pub fn MemesFooter() -> Element {
         }
     }
 }
+
+
+            // }}
+            //             value: state.read().current_input.clone(),
+            //             oninput: move |evt| {
+            //                 state.with_mut(|s| s.current_input = evt.value().clone());
+            //             },
+            //     },
+            //     SimpleExpr::Sort => rsx! {
+            //         input {
+            //             // style: Styles::input(),
+            //             // placeholder: "Universe level (e.g., 0, 1, 2...)",
+            //             // value: state.read().current_input.clone(),
+            //             // oninput: move |evt| {
+            //             //     state.with_mut(|s| s.level_input = evt.value().clone());
+            //             // },
+            //         }
+            //     },

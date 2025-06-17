@@ -84,7 +84,7 @@ pub fn level_to_string(level: &Level) -> String {
         Level::Max(l1, l2) => format!("max({}, {})", level_to_string(l1), level_to_string(l2)),
         Level::IMax(l1, l2) => format!("imax({}, {})", level_to_string(l1), level_to_string(l2)),
         Level::Param(s) => s.to_string(),
-        Level::MVar(n) => format!("?{}", n),
+        Level::MVar(n) => format!("?{n}"),
     }
 }
 

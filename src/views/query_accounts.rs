@@ -7,7 +7,7 @@ use crate::views::coins::QueryCoinDialog;
 // Dialog state: open/closed, input address, loading, and fetched result
 #[component]
 pub fn QueryAccountDialog(show_query_dialog: Signal<bool>) -> Element {
-    let mut input_address = use_signal(|| String::new());
+    let mut input_address = use_signal(String::new);
     let mut error_message = use_signal(|| None::<String>);
     let mut loading = use_signal(|| false);
 

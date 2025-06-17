@@ -16,12 +16,12 @@
 ///     content: "meme_content".to_string()
 /// };
 /// ```
-
 /// Container for meme-related state.
 ///
 /// # Fields
 /// * `key` - Storage key prefix for localStorage operations
 /// * `memes` - Vector containing all stored memes
+
 
 /// Main state management structure for memes.
 ///
@@ -30,6 +30,7 @@
 /// # Fields
 /// * `inner` - Signal containing the meme collection state
 /// * `active_meme` - Signal tracking the currently selected meme's ID
+
 
 /// Implementation of meme management functionality.
 ///
@@ -40,7 +41,6 @@
 /// * Getting the currently active meme
 ///
 /// All operations are automatically persisted to localStorage.
-
 /// Hook function for creating a new meme management instance.
 ///
 /// # Arguments
@@ -57,8 +57,6 @@
 ///
 /// This will create a new meme management instance with localStorage keys
 /// prefixed with "app_".
-
-
 use dioxus::prelude::*;
 use gloo_storage::{LocalStorage, Storage};
 
@@ -94,7 +92,8 @@ impl UseMemes {
 #[allow(dead_code)]
     pub fn set_active_meme(&mut self, id: String) {
         self.active_meme.set(id.clone());
-        LocalStorage::set(&format!("{}_active_meme", self.inner.read().key), &id).ok();
+	let key_name = &self.inner.read().key;
+        LocalStorage::set(format!("{key_name}_active_meme", ), &id).ok();
     }
 #[allow(dead_code)]
     pub fn active_meme(&self) -> Option<Meme> {
@@ -117,7 +116,7 @@ pub fn use_memes(key: impl ToString) -> UseMemes {
     });
 
     let active_meme = use_signal(move || {
-        LocalStorage::get(&format!("{}_active_meme", &key_for_active))
+        LocalStorage::get(format!("{key_for_active}_active_meme"))
             .ok()
             .unwrap_or_default()
     });

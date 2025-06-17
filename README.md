@@ -1,5 +1,235 @@
 ## Solfunmeme Dioxus 
 
+# Status
+
+1. setting up testing and coverage for code
+2. removing warnings
+3. removing unused code
+4. creating coverage
+
+## Functionality
+
+### Login with wallet
+#### Create secrets for access to apis
+#### Encrypt secrets locally with secondary password
+
+#### Store secrets on aws ssm parameters
+##### AWS Credentials
+##### Github
+##### Huggingface
+##### Openstreetmap
+##### Archive.org
+##### Wikidata
+##### Codeberg
+##### Gitlab
+##### Gitgud
+
+##### AI Credentials
+###### Grok
+###### Groq
+###### OpenAI
+###### Google
+###### Bedrock
+##### Solana
+##### SSH Keys
+
+#### Store public data
+##### SSH keys
+##### On solana
+##### On git 
+
+#### Interpreting data :
+
+### Formats
+#### JSON
+#### xml schema
+#### turtle/rdf
+#### Emojis
+#### Tickets
+#### Org Mode
+#### Markdown  - pandoc
+#### Wikidata
+#### Wikimedia
+#### JPG/PNG
+#### Video
+#### Trace
+#### Corefile
+#### Elf
+#### Dwarf
+#### Nix/Guix
+#### Github Actions
+
+### Languages
+#### Rust
+#### Lean
+#### ocaml
+#### coq
+#### metcoq
+#### haskell,
+#### terraform
+#### Cloudformation
+#### Bash/Shellcheck 
+#### LLVM/IR
+#### ASM
+#### GNU/mes
+#### Guile Schema
+#### Nix
+#### Dockerfile
+#### Python
+#### Mojo
+
+### Theories
+#### Category Thoery
+#### Group Thoery
+#### HOTT
+Univalent foundations
+Unimath
+Paths as proofs. 
+Rewrite transformation from one form to antother.
+lean4 <-> coq
+8 level of abstraction. 
+goedel one level number. 
+
+#### Ast
+#### Bott periodicty
+#### Vector Bundles
+#### Lie Groups
+#### Memes
+#### Semiotics
+#### Programming Language
+
+#### Open Source/Open Knowledge
+#### Biosemiotics
+#### Incompleteness
+#### Representation
+#### Complexity
+
+#### Self hosting
+#### Reproducible
+#### Secure
+#### Audited
+#### Declarative
+#### Emergent
+#### Omni Combinator
+
+### low value :
+1. pay for promotion.
+give out coins.
+calls 
+bots telegram
+twitter
+pay for meetings.
+going to conferences
+buying dinner.
+marketing - p2p - grass roots.
+
+2. communication, style. loner.
+ideosycretic. 
+old - offline. rotary phone. zk84 sinclar. 1984. 
+cassette tapes.
+trending, copying. 
+old school.
+germany - sceptical.
+
+3. old school ai
+prolog, lisp, 
+compiler ai
+emacs gnu
+
+4. worldcom- 
+fraud. 2003,2007, 
+sick hype.
+open honest
+
+5. loyal to holder. 
+long term. months and year.
+
+6. value:
+sell consulting time via our token, consult and help the holder,
+services would be provided to holders.
+longer you hold the more credits you earn , sell, swap or use those credits.
+
+7. hosting providers 
+rent ip and ports at market rate. 
+mine tokens into existence over time. 
+
+eventually we swap tokens for real solana on the rollup. 
+
+## Systems
+
+### pump fun
+### open sea
+nft marketplaces
+### githosting.
+### telegram, discord, x,
+### matrix, mastodon
+#### BBS 
+#### PDP 11, 8 bit, 128kb.
+####  Browser + server + homelab p2p2 
+
+### WIkipedia
+### Wikidata
+### Linux Project
+
+### Bittensor
+### Bitcoin
+### Solana
+### Solana- sidechains
+
+#### distribute batch vectorizing large projects
+reducing the transfer of data between node
+
+## Ideas
+
+### Value - free tier (aws), compress solana, 
+
+Other memescoins, provide service. 
+hosting providers will earn coins credits. run gpu. 
+your free tier groq, 
+social credit score. 
+
+### Artists create and swap value as solana tokens.
+Instead of revealing the art they produce zkp of the value, like a blind bag.
+public reduced quality, short clips or description.
+human + ai art critique that you can trust. 
+license usage of custom models with quality control. 
+Consumers can share if they want, or keep for themselves.
+
+### code quality
+vibe code generation with quality. 
+
+human first, ai second. 
+no ai government, dao. Ai support and help the decision making process. 
+quality controls. 
+
+Game engine. 
+dex - distributed excchnage. 
+atom swaps - prisoner exachange.
+This many tokens for that many. 
+
+## Introspection idea.
+mathlib -> lean4 -> json -> memes 
+
+#### Like 
+### Declarations are transactions, semiosis, biosemiosis
+The gut feeling, this emergent thing, never finished, self modifiying system.
+adjusting, modifying, moving foward. 
+
+Interpretion of the data in the system will evolve. 
+
+### Types are equilibrium between systems
+### Memes are recorded as chats, issues, code, git commits, 
+### Compilers compile and interpret language expressions.
+### All the data can be stored in our solana sidechain on rocksb (what solana uses internally)
+### Memes are lean4 expressions that when executed can produce text or images or other values, the evaluation.
+binding of parmeters to other memes or contract addresess to compose memes.
+### Solana sidechain can rollup into mainnet via compression, 
+storing results immutably in public and referencing the results on mainnet via zkp
+
+
+
+# Older stuff
+
 See:
 https://stackoverflow.com/questions/55912871/how-to-work-with-openssl-for-rust-within-a-windows-development-environment
 

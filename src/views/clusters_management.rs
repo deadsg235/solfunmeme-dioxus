@@ -111,7 +111,7 @@ pub fn cluster_management_section(
                                             show_cluster_form.set(false);
                                         }
                                         Err(e) => {
-                                            web_sys::console::log_1(&wasm_bindgen::JsValue::from_str(&format!("Error: {}", e)));
+                                            web_sys::console::log_1(&wasm_bindgen::JsValue::from_str(&format!("Error: {e}")));
                                         }
                                     }
                                 }

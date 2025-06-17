@@ -90,7 +90,7 @@ impl FetchReq {
 	let url = cluster.endpoint();
         //let url = CLUSTER_STORAGE            .read()            .active_cluster()            .endpoint()            .to_owned();
 
-        let request = Request::new_with_str_and_init(&url, &self.options)?;
+        let request = Request::new_with_str_and_init(url, &self.options)?;
 
         let fetch_promise = WALLET_ADAPTER.read().window().fetch_with_request(&request);
 

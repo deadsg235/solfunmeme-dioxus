@@ -8,7 +8,7 @@ use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE} ;
 #[component]
 pub fn SendSol(show_send_modal: Signal<bool>) -> Element {
     let mut loading = use_signal(|| false);
-    let mut address = use_signal(|| Option::default());
+    let mut address = use_signal(Option::default);
     let mut lamports = use_signal(|| 0u64);
 
     let mut public_key_bytes = [0u8; 32];
@@ -89,7 +89,7 @@ pub fn SendSol(show_send_modal: Signal<bool>) -> Element {
                                             public_key_bytes
                                         ).await {
                                             GLOBAL_MESSAGE.write().push_back(
-                                                NotificationInfo::error(format!("SEND SOL ERROR: {:?}", error))
+                                                NotificationInfo::error(format!("SEND SOL ERROR: {error:?}" ))
                                             );
                                         }
 

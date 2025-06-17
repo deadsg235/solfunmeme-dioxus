@@ -138,7 +138,7 @@ pub async fn request_airdrop(lamports: u64, address: &str) -> WalletResult<()> {
 pub async fn accounts_runner(address: &str) -> WalletResult<AccountState> {
     *ACCOUNT_STATE.write() = AccountState::default();
 
-    let balance = crate::get_balance(&address).await?;
+    let balance = crate::get_balance(address).await?;
 
     let token_accounts_options = jzon::object! {
         "id":1,

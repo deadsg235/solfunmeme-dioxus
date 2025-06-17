@@ -12,7 +12,7 @@ use crate::{
 pub fn Header() -> Element {
     let show_modal = use_signal(|| false);
     let show_connecting = use_signal(|| false);
-    let mut show_mobile_close_button = use_signal(|| bool::default());
+    let mut show_mobile_close_button = use_signal(bool::default);
 
     let mut shortened_address = String::default();
 
@@ -209,16 +209,16 @@ fn NavClusterItem() -> Element {
                     option {    
                         key:adapter_cluster.identifier().as_str(),
                         value: adapter_cluster.clone(),
-                        selected: active_entry_name == adapter_cluster,                     
-                       
+                        selected: active_entry_name == adapter_cluster,                                            
                         
                         { 
                              let val = adapter_cluster.clone();
-                            format!("{}", trunk_cluster_name(&val))}
+                            trunk_cluster_name(&val).to_string();
                         }
                 }
             }
         }
+    }
     }
 }
 

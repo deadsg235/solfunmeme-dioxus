@@ -211,7 +211,7 @@ pub fn TokenAccountCard(
     let connections = use_connections("solana_wallet");
     let cluster = connections.active_entry_object();
     let cluster_image = get_cluster_svg(cluster.cluster());
-    let cluster_name = trunk_cluster_name(&cluster.name());
+    let cluster_name2 = trunk_cluster_name(cluster.name());
 
     let shortened_mint_address = wallet_adapter::Utils::shorten_base58(&mint)
         .map(|address| address.to_string())
@@ -225,7 +225,7 @@ pub fn TokenAccountCard(
             div {class:"flex w-full items-center",
                 span{class:"w-[28px] pr-2", {cluster_image()}}
                 h5 { class: "flex text-2xl",
-                    {cluster_name}
+                    {cluster_name2}
                 }
             }
             div { class: "flex flex-col w-full",
@@ -286,7 +286,7 @@ fn TxCard(
 
     let cluster_image = get_cluster_svg(cluster);
 
-    let cluster_name = trunk_cluster_name(&cluster.display());
+    let cluster_name2 = trunk_cluster_name(cluster.display());
 
     let shortened_address = wallet_adapter::Utils::shorten_base58(&address)
         .map(|address| address.to_string())
@@ -303,7 +303,7 @@ fn TxCard(
             div {class:"flex items-center",
                 span{class:"w-[28px] pr-2", {cluster_image()}}
                 h5 { class: "text-2xl font-semibold tracking-tight",
-                    {cluster_name}
+                    {cluster_name2}
                 }
             }
             div { class: "flex flex-col w-full",
@@ -377,7 +377,7 @@ pub async fn fetch_account_state(
             if let Some(error_msg) = error_msg {
                 GLOBAL_MESSAGE
                     .write()
-                    .push_back(NotificationInfo::error(format!("{error_msg}: {:?}", error)));
+                    .push_back(NotificationInfo::error(format!("{error_msg}: {error:?}")));
             }
         }
     }

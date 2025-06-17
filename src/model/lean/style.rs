@@ -253,7 +253,7 @@ impl Styles {
     }
 
     pub fn flex_with_gap(gap: &str) -> String {
-        format!("display: flex; align-items: center; gap: {};", gap)
+        format!("display: flex; align-items: center; gap: {gap};" )
     }
 
     // Card styles
@@ -332,11 +332,11 @@ impl Styles {
 
     // Utility styles
     pub fn margin_bottom(size: &str) -> String {
-        format!("margin-bottom: {};", size)
+        format!("margin-bottom: {size};")
     }
 
     pub fn padding(size: &str) -> String {
-        format!("padding: {};", size)
+        format!("padding: {size};")
     }
 
     pub fn font_weight_bold() -> String {

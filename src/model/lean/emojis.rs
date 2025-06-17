@@ -104,7 +104,7 @@ pub fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&st
         SimpleExprType::Const { levels, decl_name } => {
             let levels_str = levels
                 .iter()
-                .map(|l| level_to_string(l))
+                .map(level_to_string)
                 .collect::<Vec<_>>()
                 .join(",");
             format!(

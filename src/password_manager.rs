@@ -277,7 +277,7 @@ pub fn save_password(state: &mut PasswordAppState) {
                 state.error_message.clear();
             }
             Err(e) => {
-                state.error_message = format!("Failed to save password: {}", e);
+                state.error_message = format!("Failed to save password: {e}");
             }
         }
     } else {
@@ -347,9 +347,9 @@ pub fn PasswordApp() -> Element {
 #[component]
 fn AppHeader(app_state: Signal<PasswordAppState>) -> Element {
     let handle_lock_vault = {
-        let mut app_state = app_state.clone();
+        let mut app_state2 = app_state;
         move |_| {
-            lock_vault(&mut app_state.write());
+            lock_vault(&mut app_state2.write());
         }
     };
 
@@ -391,9 +391,9 @@ fn LoginScreen(app_state: Signal<PasswordAppState>) -> Element {
     // };
 
     let handle_password_change = {
-        let mut app_state = app_state.clone();
+        let mut app_state2 = app_state;
         move |evt: FormEvent| {
-            app_state.write().master_password = evt.value();
+            app_state2.write().master_password = evt.value();
         }
     };
 
@@ -402,9 +402,9 @@ fn LoginScreen(app_state: Signal<PasswordAppState>) -> Element {
         move |e: FormEvent| {
             e.prevent_default();
             //handle_unlock(e);
-            let mut app_state = app_state.clone();
+            let mut app_state2 = app_state;
     //     move |_| {
-            unlock_vault(&mut app_state.write());
+            unlock_vault(&mut app_state2.write());
     //     }
         }
     };
@@ -471,9 +471,9 @@ fn MainInterface(app_state: Signal<PasswordAppState>) -> Element {
 #[component]
 fn PasswordList(app_state: Signal<PasswordAppState>) -> Element {
     let handle_add_new = {
-        let mut app_state = app_state.clone();
+        let mut app_state2 = app_state;
         move |_| {
-            show_add_form(&mut app_state.write());
+            show_add_form(&mut app_state2.write());
         }
     };
 
@@ -503,9 +503,9 @@ fn PasswordList(app_state: Signal<PasswordAppState>) -> Element {
                         let is_selected = app_state.read().selected_entry == Some(id.clone());
                         
                         let handle_select = {
-                            let mut app_state = app_state.clone();
+                            let mut app_state2 = app_state;
                             move |_| {
-                                select_entry(&mut app_state.write(), entry_id.clone());
+                                select_entry(&mut app_state2.write(), entry_id.clone());
                             }
                         };
                         
@@ -551,9 +551,9 @@ fn PasswordList(app_state: Signal<PasswordAppState>) -> Element {
 #[component]
 fn AddPasswordForm(app_state: Signal<PasswordAppState>) -> Element {
     let handle_cancel = {
-        let mut app_state = app_state.clone();
+        let mut app_state2 = app_state;
         move |_| {
-            hide_add_form(&mut app_state.write());
+            hide_add_form(&mut app_state2.write());
         }
     };
 
@@ -569,43 +569,45 @@ fn AddPasswordForm(app_state: Signal<PasswordAppState>) -> Element {
         move |e: FormEvent| {
             e.prevent_default();
             //handle_save.call(());
-            let mut app_state = app_state.clone();
-            save_password(&mut app_state.write());
+            let mut app_state2 = app_state;
+            save_password(&mut app_state2.write());
         }
     };
 
     let handle_title_change = {
-        let mut app_state = app_state.clone();
+        let mut app_state2 = app_state;
         move |evt: FormEvent| {
-            app_state.write().form_data.title = evt.value();
+            app_state2.write().form_data.title = evt.value();
         }
     };
 
     let handle_username_change = {
-        let mut app_state = app_state.clone();
+        let mut app_state2 = app_state;
         move |evt: FormEvent| {
-            app_state.write().form_data.username = evt.value();
+            app_state2.write().form_data.username = evt.value();
         }
     };
 
     let handle_password_change = {
-        let mut app_state = app_state.clone();
+        //let mut app_state = app_state.clone();
+	let mut app_state2 = app_state;
         move |evt: FormEvent| {
-            app_state.write().form_data.password = evt.value();
+            app_state2.write().form_data.password = evt.value();
         }
     };
 
     let handle_url_change = {
-        let mut app_state = app_state.clone();
+        //let mut app_state = app_state.clone();
+	let mut app_state2 = app_state;
         move |evt: FormEvent| {
-            app_state.write().form_data.url = evt.value();
+            app_state2.write().form_data.url = evt.value();
         }
     };
 
     let handle_notes_change = {
-        let mut app_state = app_state.clone();
+        let mut app_state2 = app_state;
         move |evt: FormEvent| {
-            app_state.write().form_data.notes = evt.value();
+            app_state2.write().form_data.notes = evt.value();
         }
     };
 
@@ -714,9 +716,9 @@ fn PasswordDetail(app_state: Signal<PasswordAppState>) -> Element {
     let entry_id = app_state.read().selected_entry.clone().unwrap();
     
     let handle_toggle_password = {
-        let mut app_state = app_state.clone();
+        let mut app_state2 = app_state;
         move |_| {
-            toggle_password_visibility(&mut app_state.write());
+            toggle_password_visibility(&mut app_state2.write());
         }
     };
 

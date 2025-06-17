@@ -24,7 +24,7 @@ pub struct Meme {
 impl Meme {
     #[allow(dead_code)]
     pub fn get_value(&self) -> &str {
-        &self.value
+        self.value
     }
 }
 

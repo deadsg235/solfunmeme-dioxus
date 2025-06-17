@@ -98,7 +98,7 @@ impl AdapterCluster {
     pub fn masked_endpoint(&self) -> String {
         let name :&  str = self.name.as_str();
         let clst : MyCluster = name.try_into()
-            .unwrap_or_else(|_| MyCluster::LocalNet); // Default to LocalNet if conversion fails     
+            .unwrap_or_else(|_|MyCluster::LocalNet); // Default to LocalNet if conversion fails     
             
         AdapterCluster {
             name: self.name.clone(),
@@ -138,7 +138,7 @@ impl AdapterCluster {
                 } else {
                     "*".repeat(token_part.len())
                 };
-                format!("{}{}{}", before_token, masked_token, rest)
+                format!("{before_token}{masked_token}{rest}")
             } else {
                 // Token is at the end of endpoint
                 let masked_token = if after_token.len() > 8 {
@@ -150,7 +150,7 @@ impl AdapterCluster {
                 } else {
                     "*".repeat(after_token.len())
                 };
-                format!("{}{}", before_token, masked_token)
+                format!("{before_token}{masked_token}")
             }
         } else if self.endpoint.contains("access_token=") {
             // Handle access_token parameter
@@ -167,7 +167,7 @@ impl AdapterCluster {
                     } else {
                         "*".repeat(token_part.len())
                     };
-                    format!("{}{}{}", before_token, masked_token, rest)
+                    format!("{before_token}{masked_token}{rest}")
                 } else {
                     let masked_token = if after_token.len() > 8 {
                         format!(
@@ -178,7 +178,7 @@ impl AdapterCluster {
                     } else {
                         "*".repeat(after_token.len())
                     };
-                    format!("{}{}", before_token, masked_token)
+                    format!("{before_token}{masked_token}")
                 }
             } else {
                 self.endpoint.clone()
@@ -189,7 +189,7 @@ impl AdapterCluster {
                 if let Some(scheme_end) = self.endpoint.find("://") {
                     let scheme_part = &self.endpoint[..scheme_end + 3];
                     let after_at = &self.endpoint[at_pos..];
-                    format!("{}***{}", scheme_part, after_at)
+                    format!("{scheme_part}***{after_at}" )
                 } else {
                     self.endpoint.clone()
                 }

@@ -54,34 +54,35 @@ pub fn simple_expr_rec_chunk1() -> SimpleExprType {
                     binder_info: String::from("implicit"),
                 }),
                 forbndr_typ_b: None,
-                forbd_b: some_box(SimpleExprType::ForallE {
-                    forbndr_typ: some_box(SimpleExprType::ForallE {
-                        forbndr_typ: some_box(SimpleExprType::Const {
-                            //levels: vec![LEVEL_U2.clone().into(), LEVEL_U3.clone().into()],
-                            decl_name: String::from("Level"),
-                            levels: todo!(),
-                        }),
-                        forbndr_typ_b: None,
-                        forbd_b: some_box(SimpleExprType::App {
-                            fn_expr: Box::new(SimpleExprType::BVar { index: None }),
-                            arg: Box::new(SimpleExprType::App {
-                                fn_expr: Box::new(SimpleExprType::Const {
-                                    levels: levels_8(),
-                                    decl_name: String::from("SimpleExpr.sort"),
-                                }),
-                                arg: Box::new(SimpleExprType::BVar { index: None }),
-                            }),
-                        }),
-                        forbd: None,
-                        binder_name: String::from("u"),
-                        binder_info: String::from("default"),
-                    }),
-                    forbndr_typ_b: None,
-                    forbd_b: None,
-                    forbd: None,
-                    binder_name: String::from("sort"),
-                    binder_info: String::from("default"),
-                }),
+		forbd_b: None,
+                // forbd_b: some_box(SimpleExprType::ForallE {
+                //     // forbndr_typ: some_box(SimpleExprType::ForallE {
+                //     //     // forbndr_typ: some_box(SimpleExprType::Const {
+                //     //     //     //levels: vec![LEVEL_U2.clone().into(), LEVEL_U3.clone().into()],
+                //     //     //     decl_name: String::from("Level"),
+                //     //     //     levels: todo!(),
+                //     //     // }),
+                //     //     // forbndr_typ_b: None,
+                //     //     // forbd_b: some_box(SimpleExprType::App {
+                //     //     //     fn_expr: Box::new(SimpleExprType::BVar { index: None }),
+                //     //     //     arg: Box::new(SimpleExprType::App {
+                //     //     //         fn_expr: Box::new(SimpleExprType::Const {
+                //     //     //             levels: levels_8(),
+                //     //     //             decl_name: String::from("SimpleExpr.sort"),
+                //     //     //         }),
+                //     //     //         arg: Box::new(SimpleExprType::BVar { index: None }),
+                //     //     //     }),
+                //     //     // }),
+                //     //     // forbd: None,
+                //     //     // binder_name: String::from("u"),
+                //     //     // binder_info: String::from("default"),
+                //     // }),
+                //     // forbndr_typ_b: None,
+                //     // forbd_b: None,
+                //     // forbd: None,
+                //     // binder_name: String::from("sort"),
+                //     // binder_info: String::from("default"),
+                // }),
                 forbd: None,
                 binder_name: String::from("bvar"),
                 binder_info: String::from("default"),

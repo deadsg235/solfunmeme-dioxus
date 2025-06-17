@@ -99,9 +99,10 @@ fn Switch(cluster_name: String, mut connections: UseConnections) -> Element {
             onclick: move |_| {
                 if let Some(_active_cluster) = connections.get_entry(&cluster_name) {
                     connections.set_active_entry(cluster_name.clone());
-                    GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("{} cluster now active!", cluster_name)));
+		    let msg = format!("{cluster_name} cluster now active!");
+                    GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(msg));
                 } else {
-                    GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("Could not find `{}` cluster!", cluster_name)));
+                    GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("Could not find `{cluster_name}` cluster!")));
                 }
             },
             title: "Switch",
@@ -124,9 +125,9 @@ fn Delete(cluster_name: String, mut connections: UseConnections) -> Element {
         div {
             onclick: move |_| {
                 if connections.remove_entry(&cluster_name).is_some() {
-                    GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("{} cluster has been removed!", cluster_name)));
+                    GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("{cluster_name} cluster has been removed!")));
                 } else {
-                    GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("Could not find `{}` cluster!", cluster_name)));
+                    GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("Could not find `{cluster_name}` cluster!", )));
                 }
             },
             title: "Delete",
@@ -145,7 +146,7 @@ fn AddClusterModal(mut show_add_entry_modal: Signal<bool>, mut connections: UseC
         network: MyCluster,
     }
 
-    let mut add_entry = use_signal(|| AddCluster::default());
+    let mut add_entry = use_signal(AddCluster::default);
     let should_show_button = !add_entry.read().name.is_empty() && !add_entry.read().endpoint.is_empty();
 
     if *show_add_entry_modal.read() {
@@ -253,12 +254,12 @@ fn AddClusterModal(mut show_add_entry_modal: Signal<bool>, mut connections: UseC
                                         let name = adapter_cluster.name().to_string();
                                         match connections.add_entry(adapter_cluster) {
                                             Ok(()) => {
-                                                GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("Added `{}` cluster!", name)));
+                                                GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("Added `{name}` cluster!")));
                                                 show_add_entry_modal.set(false);
                                                 add_entry.set(AddCluster::default());
                                             }
                                             Err(error) => {
-                                                GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("Error adding cluster: `{}`!", error)));
+                                                GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("Error adding cluster: `{error}`!")));
                                                 show_add_entry_modal.set(false);
                                                 add_entry.set(AddCluster::default());
                                             }

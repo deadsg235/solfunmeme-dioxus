@@ -7,11 +7,11 @@ use super::validation::*;
 
 #[component]
 pub fn EncryptionForm() -> Element {
-    let mut title = use_signal(|| String::new());
-    let mut message = use_signal(|| String::new());
-    let mut recipient_public_key = use_signal(|| String::new());
-    let mut my_private_key = use_signal(|| String::new());
-    let mut my_public_key = use_signal(|| String::new());
+    let mut title = use_signal(String::new);
+    let mut message = use_signal(String::new);
+    let mut recipient_public_key = use_signal(String::new);
+    let mut my_private_key = use_signal(String::new);
+    let mut my_public_key = use_signal(String::new);
     let mut encrypted_result = use_signal(|| Option::<String>::None);
     let mut error_message = use_signal(|| Option::<String>::None);
     let mut is_processing = use_signal(|| false);
@@ -126,8 +126,8 @@ pub fn EncryptionForm() -> Element {
 
 #[component]
 pub fn DecryptionForm() -> Element {
-    let mut encrypted_payload_input = use_signal(|| String::new());
-    let mut my_private_key = use_signal(|| String::new());
+    let mut encrypted_payload_input = use_signal(String::new);
+    let mut my_private_key = use_signal(String::new);
     let mut decrypted_result = use_signal(|| Option::<String>::None);
     let mut error_message = use_signal(|| Option::<String>::None);
     let mut is_processing = use_signal(|| false);
@@ -161,7 +161,7 @@ pub fn DecryptionForm() -> Element {
                     }
                 }
                 Err(e) => {
-                    error_message.set(Some(format!("Invalid encrypted payload format: {}", e)));
+                    error_message.set(Some(format!("Invalid encrypted payload format: {e}")));
                 }
             }
 

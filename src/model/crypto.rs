@@ -30,10 +30,10 @@ pub enum CryptoError {
 impl std::fmt::Display for CryptoError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            CryptoError::InvalidKey(msg) => write!(f, "Invalid key: {}", msg),
-            CryptoError::EncryptionFailed(msg) => write!(f, "Encryption failed: {}", msg),
-            CryptoError::DecryptionFailed(msg) => write!(f, "Decryption failed: {}", msg),
-            CryptoError::SerializationError(msg) => write!(f, "Serialization error: {}", msg),
+            CryptoError::InvalidKey(msg) => write!(f, "Invalid key: {msg}", ),
+            CryptoError::EncryptionFailed(msg) => write!(f, "Encryption failed: {msg}"),
+            CryptoError::DecryptionFailed(msg) => write!(f, "Decryption failed: {msg}"),
+            CryptoError::SerializationError(msg) => write!(f, "Serialization error: {msg}"),
         }
     }
 }

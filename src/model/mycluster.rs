@@ -4,6 +4,7 @@ use wallet_adapter::WalletError;
 #[derive(
     Debug, PartialEq, Eq, Default, PartialOrd, Ord, Clone, Copy, Hash, Serialize, Deserialize,
 )]
+#[allow(clippy::enum_variant_names)]
 pub enum MyCluster {
     /// Solana Mainnet cluster,  [https://api.mainnet-beta.solana.com](https://api.mainnet-beta.solana.com)
     MainNet,
