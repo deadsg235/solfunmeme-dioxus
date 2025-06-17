@@ -387,9 +387,9 @@ pub struct Controller {
 }
 impl Controller {
     #[allow(dead_code)]
-    pub fn delete_expression(state: MemesAppState, id : String )  {}
+    pub fn delete_expression(_state: MemesAppState, _id : String )  {}
     #[allow(dead_code)]
-    pub fn create_expression_from_type(state: MemesAppState) -> Option<Expression> {
+    pub fn create_expression_from_type(_state: MemesAppState) -> Option<Expression> {
         Some(Expression {
             astring: Signal::new("".to_string())
         })
@@ -402,24 +402,24 @@ fn CreateButton(props: StateProps) -> Element {
     rsx! {
         button {
             style: "{Styles::primary_button()}",
-            onclick: move |_| {
-                let current_state = state.read().clone();
+            //onclick: move |_| {
+               // let current_state = state.read().clone();
                 
-                if let Some(expr) = Controller::create_expression_from_type(current_state.clone()) {
-                    // let tags: Vec<String> = current_state.current_tags
-                    //     .split(',')
-                    //     .map(|s| s.trim().to_string())
-                    //     .filter(|s| !s.is_empty())
-                    //     .collect();
-                    // Controller::add_expression(
-                    //     &mut state.write(),
-                    //     expr,
-                    //     current_state.current_name,
-                    //     current_state.current_description,
-                    //     tags
-                    // );
-                }
-            },
+            //     if let Some(expr) = Controller::create_expression_from_type(current_state.clone()) {
+            //         // let tags: Vec<String> = current_state.current_tags
+            //         //     .split(',')
+            //         //     .map(|s| s.trim().to_string())
+            //         //     .filter(|s| !s.is_empty())
+            //         //     .collect();
+            //         // Controller::add_expression(
+            //         //     &mut state.write(),
+            //         //     expr,
+            //         //     current_state.current_name,
+            //         //     current_state.current_description,
+            //         //     tags
+            //         // );
+            //     }
+            // },
             "🚀 Create Expression"
         }
     }
@@ -427,7 +427,7 @@ fn CreateButton(props: StateProps) -> Element {
 
 #[component]
 fn SearchInput(props: StateProps) -> Element {
-    //let mut state = props.state;
+    let mut state = props.state;
     
     rsx! {
         div {
@@ -466,7 +466,7 @@ pub fn liftexpression(expr: Expression) -> LiftedExpression {
 
 #[component]
 pub fn ExpressionList(props: StateProps) -> Element {
-    let mut state = props.state;
+    let state = props.state;
 
     let expression_ids = if state.read().search_query.is_empty() {
         state.read().expressions.keys().cloned().collect::<Vec<_>>()
@@ -523,8 +523,8 @@ pub struct ExpressionCardProps {
 #[component]
 pub fn ExpressionCard(props: ExpressionCardProps) -> Element {
     let expr = props.expression.clone();
-    let mut state = props.state;
-    let expr_id = expr.id.clone();
+    let state = props.state;
+    //let expr_id = expr.id.clone();
 
     rsx! {
         div {

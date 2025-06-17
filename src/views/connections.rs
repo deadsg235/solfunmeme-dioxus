@@ -12,16 +12,16 @@ use crate::{model::use_connections,
 // Main Connections component
 pub fn Connections() -> Element {
     let connections = use_connections("solana_wallet");
-    let new_connection_name = use_signal(|| String::new());
-    let new_connection_url = use_signal(|| String::new());
-    let selected_cluster_for_connection = use_signal(|| String::new());
-    let selected_cluster_filter: Signal<String> = use_signal(|| String::from("All"));
+    // let new_connection_name = use_signal(|| String::new());
+    // let new_connection_url = use_signal(|| String::new());
+    // let selected_cluster_for_connection = use_signal(|| String::new());
+    //let selected_cluster_filter: Signal<String> = use_signal(|| String::from("All"));
 
     // Cluster management state
-    let new_cluster_name = use_signal(|| String::new());
-    let new_cluster_endpoint = use_signal(|| String::new());
-    let new_cluster_type = use_signal(|| String::from("custom"));
-    let show_cluster_form = use_signal(|| false);
+    // let new_cluster_name = use_signal(|| String::new());
+    // let new_cluster_endpoint = use_signal(|| String::new());
+    // let new_cluster_type = use_signal(|| String::from("custom"));
+    // let show_cluster_form = use_signal(|| false);
 
     // Get available clusters for dropdowns
     let cluster_names = connections.get_entry_names();
@@ -29,11 +29,11 @@ pub fn Connections() -> Element {
     filter_options.insert(0, "All".to_string());
 
     // Filter connections based on selected cluster
-    let filtered_connections = if selected_cluster_filter() == "All" {
-        connections.get_all_entries()
-    } else {
-        connections.get_entries_by_name (&selected_cluster_filter())
-    };
+    // let filtered_connections = if selected_cluster_filter() == "All" {
+    //     connections.get_all_entries()
+    // } else {
+    //     connections.get_entries_by_name (&selected_cluster_filter())
+    // };
 
     rsx! {
         div { class: "container mx-auto p-6 max-w-6xl",

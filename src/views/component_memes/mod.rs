@@ -139,21 +139,21 @@ pub fn MemeCategoryView(category: MemeCategory) -> Element {
 
 #[component]
 pub fn ComponentMemeExplorer() -> Element {
-    let crypto_memes = get_crypto_component_memes();
-    let ui_memes = get_ui_component_memes();
-    #[allow(dead_code)]
-    let categories = vec![
-        MemeCategory {
-            name: "Crypto Components".to_string(),
-            emoji: "🔐".to_string(),
-            components: crypto_memes,
-        },
-        MemeCategory {
-            name: "UI Components".to_string(),
-            emoji: "🎨".to_string(),
-            components: ui_memes,
-        },
-    ];
+    //let crypto_memes = get_crypto_component_memes();
+    //let ui_memes = get_ui_component_memes();
+    
+    // let categories = vec![
+    //     MemeCategory {
+    //         name: "Crypto Components".to_string(),
+    //         emoji: "🔐".to_string(),
+    //         components: crypto_memes,
+    //     },
+    //     MemeCategory {
+    //         name: "UI Components".to_string(),
+    //         emoji: "🎨".to_string(),
+    //         components: ui_memes,
+    //     },
+    // ];
     
     rsx! {
         div { class: MEME_EXPLORER,
