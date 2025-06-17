@@ -4,7 +4,7 @@
 mod tests {
     use crate::model::crypto::SolanaEncryption;
 
-    use super::*;
+//    use super::*;
 
     fn get_sample_keys() -> (String, String, String, String) {
         // These are dummy 32-byte base58-encoded keys for testing only.
@@ -122,7 +122,7 @@ mod tests {
 mod tests2 {
     use crate::model::crypto::SolanaEncryption;
 
-    use super::*;
+    //use super::*;
 
     fn get_fake_keys() -> (String, String, String, String) {
         // 32-byte arrays for fake keys (not valid Solana keys, but correct length)
@@ -197,7 +197,8 @@ mod tests2 {
 
     #[test]
     fn test_decrypt_with_invalid_private_key() {
-        let (sender_private, sender_public, recipient_private, recipient_public) = get_fake_keys();
+        let (sender_private, sender_public, 
+            _recipient_private, recipient_public) = get_fake_keys();
         let message = "msg";
         let payload = SolanaEncryption::encrypt_for_recipient(
             message,
@@ -238,14 +239,15 @@ mod tests3 {
     #[test]
     fn test_encryption_decryption_round_trip() {
         // Test with sample keys (you would use real Solana wallet keys)
-        let sender_private = "2QzQc7JbU4BjYJYrN5Yj7nKrWjYKB8Zj9JnVjV9UuXZzQJ8QfJ3J1JZtJr2mHsQaKjDzPjKjVjGgJgHgMrVtYi2";
-        let sender_public = "7xKjN2Hs8vYwKjJ9UzPzJtNrMsRzKjVjVjGgJgHgMrVtYi2QzQc7JbU4BjYJYrN5Yj7nKrWjYKB8Zj9JnVjV9UuXZz";
-        let recipient_public = "9MvQa1N8VrKjN2Hs8vYwKjJ9UzPzJtNrMsRzKjVjVjGgJgHgMrVtYi2QzQc7JbU4BjYJYrN5Yj7nKrWjYKB8Zj9Jn";
-        let recipient_private = "3RaVbU4BjYJYrN5Yj7nKrWjYKB8Zj9JnVjV9UuXZzQJ8QfJ3J1JZtJr2mHsQaKjDzPjKjVjGgJgHgMrVtYi2QzQc7";
+        //let sender_private = "2QzQc7JbU4BjYJYrN5Yj7nKrWjYKB8Zj9JnVjV9UuXZzQJ8QfJ3J1JZtJr2mHsQaKjDzPjKjVjGgJgHgMrVtYi2";
+        // let sender_public = "7xKjN2Hs8vYwKjJ9UzPzJtNrMsRzKjVjVjGgJgHgMrVtYi2QzQc7JbU4BjYJYrN5Yj7nKrWjYKB8Zj9JnVjV9UuXZz";
+        // let recipient_public = "9MvQa1N8VrKjN2Hs8vYwKjJ9UzPzJtNrMsRzKjVjVjGgJgHgMrVtYi2QzQc7JbU4BjYJYrN5Yj7nKrWjYKB8Zj9Jn";
+        // let recipient_private = "3RaVbU4BjYJYrN5Yj7nKrWjYKB8Zj9JnVjV9UuXZzQJ8QfJ3J1JZtJr2mHsQaKjDzPjKjVjGgJgHgMrVtYi2QzQc7";
 
-        let message = "Hello, Solana encryption!";
+        // let message = "Hello, Solana encryption!";
 
         // This test would need real Solana keys to pass
         // For now, it demonstrates the API structure
+        // #FIXME #7 implement the test
     }
 }

@@ -1,3 +1,6 @@
+// styles
+#![allow(dead_code)]
+// #[allow(dead_code)]
 pub const WORKFLOW_EXPLORER: &str = "p-4 bg-gray-100 min-h-screen";
 pub const EXPLORER_TITLE: &str = "text-3xl font-bold text-gray-900 mb-8";
 pub const WORKFLOW_MEME: &str = "bg-white rounded-lg shadow-lg p-6 mb-8";

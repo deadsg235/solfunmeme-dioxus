@@ -3,7 +3,7 @@ mod tests {
     use serde_json::json;
     use crate::model::lean::emojis::json_to_emoji;
 
-    use super::*;
+    //use super::*;
 
     #[test]
     fn test_json_to_emoji_forall_const_sort() {
@@ -53,44 +53,12 @@ mod tests {
                 "cnstInf": null
             }
         });
-        let json_str = serde_json::to_string(&json).unwrap();
-        #[test]
-        fn test_json_to_emoji_forall_with_nested_lam() {
-            let json = json!({
-                "kind": "AsyncConstB",
-                "cnstInfB": {
-                    "sig": {
-                        "type": {
-                            "type": "forallE",
-                            "forbndrTypB": null,
-                            "forbndrTyp": null,
-                            "forbdB": {
-                                "type": "lam",
-                                "lambndrTpB": null,
-                                "lambndrTp": null,
-                                "lambdB": null,
-                                "lambd": null,
-                                "binderName": "z",
-                                "binderInfo": "implicit"
-                            },
-                            "forbd": null,
-                            "binderName": "x",
-                            "binderInfo": "default"
-                        }
-                    },
-                    "name": "nested_forall_lam",
-                    "levelParams": [],
-                    "kind": { "value": "def", "kind": "constant" },
-                    "cnstInf": null
-                }
-            });
-            let json_str = serde_json::to_string(&json).unwrap();
-            let emoji = json_to_emoji(&json_str).unwrap();
-            assert!(emoji.contains("∀ x (default:"));
-            assert!(emoji.contains("λ z (implicit:"));
-        }
+    let json_str = serde_json::to_string(&json).unwrap();
+    let emoji = json_to_emoji(&json_str).unwrap();
+    assert!(emoji.contains("🔖 bar [u,v]"));
+}
 
-        #[test]
+#[test]
         fn test_json_to_emoji_const_no_levels() {
             let json = json!({
                 "kind": "AsyncConstB",
@@ -231,9 +199,6 @@ mod tests {
             assert!(emoji.contains("📋 ruleB (fields: 3)"));
             assert!(emoji.contains("📏 m"));
         }
-        let emoji = json_to_emoji(&json_str).unwrap();
-        assert!(emoji.contains("🔖 bar [u,v]"));
-    }
 
     #[test]
     fn test_json_to_emoji_sort() {
@@ -337,4 +302,44 @@ mod tests {
         assert!(emoji.contains("📋 rule1 (fields: 2)"));
         assert!(emoji.contains("📍"));
     }
-}
+      #[test]
+        fn test_json_to_emoji_forall_with_nested_lam() {
+            let json = json!({
+                "kind": "AsyncConstB",
+                "cnstInfB": {
+                    "sig": {
+                        "type": {
+                            "type": "forallE",
+                            "forbndrTypB": null,
+                            "forbndrTyp": null,
+                            "forbdB": {
+                                "type": "lam",
+                                "lambndrTpB": null,
+                                "lambndrTp": null,
+                                "lambdB": null,
+                                "lambd": null,
+                                "binderName": "z",
+                                "binderInfo": "implicit"
+                            },
+                            "forbd": null,
+                            "binderName": "x",
+                            "binderInfo": "default"
+                        }
+                    },
+                    "name": "nested_forall_lam",
+                    "levelParams": [],
+                    "kind": { "value": "def", "kind": "constant" },
+                    "cnstInf": null
+                }
+            });
+            let json_str = serde_json::to_string(&json).unwrap();
+            let emoji = json_to_emoji(&json_str).unwrap();
+            assert!(emoji.contains("∀ x (default:"));
+            assert!(emoji.contains("λ z (implicit:"));
+        }
+
+
+
+
+
+    }

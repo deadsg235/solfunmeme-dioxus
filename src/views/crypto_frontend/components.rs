@@ -3,7 +3,7 @@ use crate::views::crypto_style::*;
 
 #[derive(Props, Clone, PartialEq)]
 pub struct CardHeaderProps {
-    title: String,
+    pub(crate) title: String,
 }
 
 #[component]
@@ -12,10 +12,13 @@ pub fn CardHeader(props: CardHeaderProps) -> Element {
         h2 { class: CARD_TITLE, "{props.title}" }
     }
 }
-
+#[allow(dead_code)]
 const FORM_GROUP: &str = "mb-4";
+#[allow(dead_code)]
 const FORM_LABEL: &str = "block text-sm font-medium text-gray-700 mb-1";
+#[allow(dead_code)]
 const FORM_INPUT: &str = "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500";
+#[allow(dead_code)]
 const FORM_TEXTAREA: &str = "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500";
 
 #[derive(Props, Clone, PartialEq)]
@@ -103,7 +106,7 @@ pub fn ActionButton(props: ActionButtonProps) -> Element {
 
 #[derive(Props, Clone, PartialEq)]
 pub struct ErrorMessageProps {
-    message: String,
+    pub message: String,
 }
 
 #[component]
@@ -117,9 +120,9 @@ pub fn ErrorMessage(props: ErrorMessageProps) -> Element {
 
 #[derive(Props, Clone, PartialEq)]
 pub struct SuccessMessageProps {
-    title: String,
-    content: String,
-    is_code: bool,
+    pub title: String,
+    pub content: String,
+    pub is_code: bool,
 }
 
 #[component]

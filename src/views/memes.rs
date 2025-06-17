@@ -1,11 +1,11 @@
 use std::collections::HashMap;
-use std::fmt;
+//use std::fmt;
 
 use dioxus::prelude::*;
 //use dioxus_desktop::{LaunchBuilder, Config, WindowBuilder, LogicalSize};
 
 use crate::model::memes::Expression;
-use crate::simple_expr::SimpleExpr;
+//use crate::simple_expr::SimpleExpr;
 
 
 
@@ -80,7 +80,7 @@ pub fn Memes() -> Element {
              InputSection { state }
              ExpressionList { state }
              VectorSpace { state }
-             Footer {}
+             MemesFooter {}
          }
      }
 }
@@ -681,7 +681,7 @@ pub fn VectorSpace(props: StateProps) -> Element {
 // ============================================================================
 
 #[component]
-pub fn Footer() -> Element {
+pub fn MemesFooter() -> Element {
     rsx! {
         footer {
             style: "text-align: center; padding: 20px; color: rgba(255,255,255,0.7); font-size: 14px;",

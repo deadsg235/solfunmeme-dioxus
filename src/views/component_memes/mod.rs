@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use std::collections::HashMap;
+//use std::collections::HashMap;
 mod style;
 use style::*;
 
@@ -18,7 +18,7 @@ pub struct MemeCategory {
     pub emoji: String,
     pub components: Vec<ComponentMeme>,
 }
-
+#[allow(dead_code)]
 pub fn get_crypto_component_memes() -> Vec<ComponentMeme> {
     vec![
         ComponentMeme {
@@ -141,7 +141,7 @@ pub fn MemeCategoryView(category: MemeCategory) -> Element {
 pub fn ComponentMemeExplorer() -> Element {
     let crypto_memes = get_crypto_component_memes();
     let ui_memes = get_ui_component_memes();
-    
+    #[allow(dead_code)]
     let categories = vec![
         MemeCategory {
             name: "Crypto Components".to_string(),

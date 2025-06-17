@@ -4,7 +4,8 @@ use super::{forbd::Forbd, sig::Sig};
 //use crate::level::Level;
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct CnstInf {
+#[allow(dead_code)]
+pub struct  CnstInf{
     pub levels: Vec<Level>,
     pub decl_name: String,
     pub forbd: Forbd,
@@ -13,6 +14,7 @@ pub struct CnstInf {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct CnstInfB {
     pub sig: Sig,
     pub cnst_inf: CnstInf,

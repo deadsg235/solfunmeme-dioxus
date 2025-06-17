@@ -17,12 +17,10 @@ wasm-bindgen = "0.2"
 */
 
 use dioxus::prelude::*;
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use uuid::Uuid;
-use nalgebra::DVector;
-use serde_json;
-use crate::model::{binder::{BinderInfoData}, level::{level_to_string, Level}};
+//use uuid::Uuid;
+//use nalgebra::DVector;
+//use serde_json;
+//use crate::model::{binder::{BinderInfoData}, level::{level_to_string, Level}};
 
 // ... existing code ...
 
@@ -32,17 +30,20 @@ pub struct Expression {
 }   
 
 impl  Expression {
+    #[allow(dead_code)]
    pub fn complexity () -> i32 {1}
     
 }
 
 
 #[derive(Clone, Copy, PartialEq)]
+#[allow(dead_code)]
 pub struct ExpressionListObj {
     pub expressions: Signal<Vec<Expression>>,
 }   
 
 #[derive(Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct ExpressionList {
     pub expressions: Vec<Expression>,
 }   
@@ -52,6 +53,7 @@ pub struct ExpressionList {
 // ============================================================================
 
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct Maybe<T> {
     value: Option<T>,
 }

@@ -5,6 +5,7 @@ use serde::{Serialize, Deserialize};
 
 
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub enum LevelType<'a> {
     Zero,
     //Succ(Box<LevelType>),
@@ -15,6 +16,7 @@ pub enum LevelType<'a> {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct LevelDescr {
     pub level: String,
     pub kind: String,
@@ -33,16 +35,25 @@ pub enum Level {
 }
 
             // Define globals for u_1 to u_8
+            #[allow(dead_code)]
 pub fn LEVEL_U1F() -> Level { Level::Param("u_1".to_string()) }
+#[allow(dead_code)]
 pub fn LEVEL_U2F() -> Level { Level::Param("u_2".to_string()) }
+#[allow(dead_code)]
 pub fn LEVEL_U3F() -> Level { Level::Param("u_3".to_string()) }
+#[allow(dead_code)]
 pub fn LEVEL_U4F() -> Level { Level::Param("u_4".to_string()) }
+#[allow(dead_code)]
 pub fn LEVEL_U5F() -> Level { Level::Param("u_5".to_string()) }
+#[allow(dead_code)]
 pub fn LEVEL_U6F() -> Level { Level::Param("u_6".to_string()) }
+#[allow(dead_code)]
 pub fn LEVEL_U7F() -> Level { Level::Param("u_7".to_string()) }
+#[allow(dead_code)]
 pub fn LEVEL_U8F() -> Level { Level::Param("u_8".to_string()) }
 
 // Use a function to return the vector at runtime, since Vec and .clone() are not allowed in consts
+#[allow(dead_code)]
 pub fn levels_8() -> Vec<Level> {
     vec![
         LEVEL_U1F(),
@@ -93,15 +104,23 @@ pub fn level_to_string(level: &Level) -> String {
 //use super::level::Level;
 //use crate::model::lean::LevelType;
 //use crate::level::LevelType;
+#[allow(dead_code)]
 pub const LEVEL_U1: LevelType = LevelType::Param("u_1");
+#[allow(dead_code)]
 pub const LEVEL_U2: LevelType = LevelType::Param("u_2");
+#[allow(dead_code)]
 pub const LEVEL_U3: LevelType = LevelType::Param("u_3");
+#[allow(dead_code)]
 pub const LEVEL_U4: LevelType = LevelType::Param("u_4");
+#[allow(dead_code)]
 pub const LEVEL_U5: LevelType = LevelType::Param("u_5");
+#[allow(dead_code)]
 pub const LEVEL_U6: LevelType = LevelType::Param("u_6");
+#[allow(dead_code)]
 pub const LEVEL_U7: LevelType = LevelType::Param("u_7");
+#[allow(dead_code)]
 pub const LEVEL_U8: LevelType = LevelType::Param("u_8");
-
+#[allow(dead_code)]
 pub fn levels_8f() -> Vec<LevelType<'static>> {
     vec![
         LEVEL_U1,

@@ -3,7 +3,7 @@
 //use std::collections::HashMap;
 use serde::Serialize;
 use serde::Deserialize;
-use crate::model::binder::BinderInfo;
+//use crate::model::binder::BinderInfo;
 use crate::model::binder::BinderInfoData;
 use crate::model::level::Level;
 use crate::model::level::*;
@@ -11,6 +11,7 @@ use crate::model::level::*;
 
 /// Represents a bound variable in Lean 4 expressions
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct Forbd {
     pub forbndrTyp: String,
     pub forbdB: String,
@@ -18,6 +19,7 @@ pub struct Forbd {
 
 /// Represents a bound variable with snake_case naming
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct Forbd2 {
     pub forbndr_typ: String,
     pub forbd_b: String,
@@ -25,6 +27,7 @@ pub struct Forbd2 {
 
 /// Represents constant information in Lean 4 expressions
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct CnstInf {
     pub levels: Vec<Level>,
     pub declName: String,
@@ -35,6 +38,7 @@ pub struct CnstInf {
 
 /// Represents constant information with snake_case naming
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct CnstInf2 {
     pub levels: Vec<Level>,
     pub decl_name: String,
@@ -45,6 +49,7 @@ pub struct CnstInf2 {
 
 /// Represents a signature in Lean 4 expressions
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct Sig {
     pub atype: String,
     pub forbndrTypB: String,
@@ -54,6 +59,7 @@ pub struct Sig {
 
 /// Represents a signature with snake_case naming
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct Sig2 {
     pub atype: String,
     pub forbndr_typ_b: String,
@@ -63,6 +69,7 @@ pub struct Sig2 {
 
 /// Represents a kind in Lean 4 expressions
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct Foo {
     pub akind: String,
     pub cnstInfB: CnstInfB,
@@ -75,6 +82,7 @@ pub struct Foo {
 
 // Equivalent to Lean's Name type
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[allow(dead_code)]
 pub enum Name {
     Anonymous,
     Str(Box<Name>, String),
@@ -86,6 +94,7 @@ pub enum Name {
 
 // The main SimpleExpr type (inductive type from Lean)
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub enum SimpleExpr {
     // Bound variable with de Bruijn index
     BVar {
@@ -96,7 +105,7 @@ pub enum SimpleExpr {
     Sort {
         level: Level,
     },
-    
+    #[allow(dead_code)]
     // Constant with name and universe levels
     Const {
         name: Name,
@@ -128,6 +137,7 @@ pub enum SimpleExpr {
 
 impl SimpleExpr {
     // Recursor implementation - pattern matching with continuation-passing style
+    #[allow(dead_code)]
     pub fn rec<T, F1, F2, F3, F4, F5, F6>(
         &self,
         bvar_case: F1,
@@ -184,7 +194,7 @@ impl SimpleExpr {
             }
         }
     }
-    
+    #[allow(dead_code)]
     // Helper method for simple pattern matching without recursion
     pub fn match_expr<T, F1, F2, F3, F4, F5, F6>(
         &self,
@@ -220,21 +230,22 @@ impl SimpleExpr {
 
 // Example usage and helper functions
 impl SimpleExpr {
+    #[allow(dead_code)]
     // Create a bound variable
     pub fn bvar(index: u64) -> Self {
         SimpleExpr::BVar { index }
     }
-    
+    #[allow(dead_code)]
     // Create a sort
     pub fn sort(level: Level) -> Self {
         SimpleExpr::Sort { level }
     }
-    
+    #[allow(dead_code)]
     // Create a constant
     pub fn const_expr(name: Name, levels: Vec<Level>) -> Self {
         SimpleExpr::Const { name, levels }
     }
-    
+    #[allow(dead_code)]
     // Create an application
     pub fn app(func: SimpleExpr, arg: SimpleExpr) -> Self {
         SimpleExpr::App {
@@ -242,7 +253,7 @@ impl SimpleExpr {
             arg: Box::new(arg),
         }
     }
-    
+    #[allow(dead_code)]
     // Create a lambda
     pub fn lam(name: Name, binder_type: SimpleExpr, body: SimpleExpr, info: BinderInfoData) -> Self {
         SimpleExpr::Lam {
@@ -252,7 +263,7 @@ impl SimpleExpr {
             binder_info: info,
         }
     }
-    
+    #[allow(dead_code)]
     // Create a forall (Pi type)
     pub fn forall_e(name: Name, binder_type: SimpleExpr, body: SimpleExpr, info: BinderInfoData) -> Self {
         SimpleExpr::ForallE {
@@ -262,7 +273,7 @@ impl SimpleExpr {
             binder_info: info,
         }
     }
-
+#[allow(dead_code)]
     // Helper method to create a simple function type
     pub fn arrow(domain: SimpleExpr, codomain: SimpleExpr) -> Self {
         Self::forall_e(
@@ -272,7 +283,7 @@ impl SimpleExpr {
             BinderInfoData { implicit: false, strict: false },
         )
     }
-
+#[allow(dead_code)]
     // Helper method to create a simple lambda with anonymous binder
     pub fn lambda(binder_type: SimpleExpr, body: SimpleExpr) -> Self {
         Self::lam(
@@ -321,12 +332,14 @@ pub struct CnstInfB {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct CnstInfB2 {
     pub sig: Sig,
     pub cnstInf: CnstInf,
 }
 
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct Foo2 {
     pub akind: String,
     pub cnst_inf_b: CnstInfB, // Fixed naming
@@ -366,12 +379,13 @@ pub enum SimpleExprType<'a> {
     },
 }
 impl<'a> SimpleExprType<'a> {
+    #[allow(dead_code)]
     pub fn bzero() -> Self {
         SimpleExprType::BVar { index: Some(0) }
     }
 }
     
-
+#[allow(dead_code)]
 // Convert the JSON chunk 1 into a Rust value at runtime (not a const)
 pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
     // Helper to box and Some
@@ -481,12 +495,14 @@ mod tests2 {
     }
 }
 
-fn main() {
+#[allow(dead_code)]
+fn maintest() {
     println!("Chunk 1 converted to Rust structure");
     println!("Structure depth: Very deep nested ForallE expressions");
 }
 
 impl Forbd {
+    #[allow(dead_code)]
     pub fn new(forbndr_typ: String, forbd_b: String) -> Self {
         Self {
             forbndrTyp: forbndr_typ,
@@ -496,6 +512,7 @@ impl Forbd {
 }
 
 impl Forbd2 {
+    #[allow(dead_code)]
     pub fn new(forbndr_typ: String, forbd_b: String) -> Self {
         Self {
             forbndr_typ,
@@ -505,6 +522,7 @@ impl Forbd2 {
 }
 
 impl CnstInf {
+    #[allow(dead_code)]
     pub fn new(levels: Vec<Level>, decl_name: String, forbd: Forbd, binder_name: String, binder_info: String) -> Self {
         Self {
             levels,
@@ -517,6 +535,7 @@ impl CnstInf {
 }
 
 impl CnstInf2 {
+    #[allow(dead_code)]
     pub fn new(levels: Vec<Level>, decl_name: String, forbd: Forbd, binder_name: String, binder_info: String) -> Self {
         Self {
             levels,
@@ -529,6 +548,7 @@ impl CnstInf2 {
 }
 
 impl Sig {
+    #[allow(dead_code)]
     pub fn new(atype: String, forbndr_typ_b: String, binder_name: String, binder_info: String) -> Self {
         Self {
             atype,
@@ -540,6 +560,7 @@ impl Sig {
 }
 
 impl Sig2 {
+    #[allow(dead_code)]
     pub fn new(atype: String, forbndr_typ_b: String, binder_name: String, binder_info: String) -> Self {
         Self {
             atype,
@@ -551,6 +572,7 @@ impl Sig2 {
 }
 
 impl Foo {
+    #[allow(dead_code)]
     pub fn new(akind: String, cnst_inf_b: CnstInfB) -> Self {
         Self {
             akind,
@@ -560,6 +582,7 @@ impl Foo {
 }
 
 impl CnstInfB {
+    #[allow(dead_code)]
     pub fn new(sig: Sig, cnst_inf: CnstInf) -> Self {
         Self {
             sig,
@@ -569,6 +592,7 @@ impl CnstInfB {
 }
 
 impl CnstInfB2 {
+    #[allow(dead_code)]
     pub fn new(sig: Sig, cnst_inf: CnstInf) -> Self {
         Self {
             sig,
@@ -578,6 +602,7 @@ impl CnstInfB2 {
 }
 
 impl Foo2 {
+    #[allow(dead_code)]
     pub fn new(akind: String, cnst_inf_b: CnstInfB) -> Self {
         Self {
             akind,
@@ -587,32 +612,36 @@ impl Foo2 {
 }
 
 impl Name {
+    #[allow(dead_code)]
     pub fn anonymous() -> Self {
         Self::Anonymous
     }
-
+#[allow(dead_code)]
     pub fn str(name: Name, string: String) -> Self {
         Self::Str(Box::new(name), string)
     }
-
+#[allow(dead_code)]
     pub fn num(name: Name, num: u64) -> Self {
         Self::Num(Box::new(name), num)
     }
-
+#[allow(dead_code)]
     pub fn from_string(s: String) -> Self {
         Self::Str(Box::new(Self::Anonymous), s)
     }
 }
 
 impl<'a> SimpleExprType<'a> {
+    #[allow(dead_code)]
     pub fn bvar(index: Option<u64>) -> SimpleExprType<'static> {
         SimpleExprType::BVar { index }
     }
 
+    #[allow(dead_code)]
     pub fn sort(level: Level) -> SimpleExprType<'static> {
         SimpleExprType::Sort { level }
     }
 
+    #[allow(dead_code)]
     pub fn const_expr(levels: Vec<Level>, decl_name: String) -> SimpleExprType<'static> {
         SimpleExprType::Const {
             levels,
@@ -620,6 +649,7 @@ impl<'a> SimpleExprType<'a> {
         }
     }
 
+    #[allow(dead_code)]
     pub fn app(fn_expr: SimpleExprType<'a>, arg: SimpleExprType<'a>) -> SimpleExprType<'a> {
         SimpleExprType::App {
             fn_expr: Box::new(fn_expr),
@@ -627,6 +657,7 @@ impl<'a> SimpleExprType<'a> {
         }
     }
 
+    #[allow(dead_code)]
     pub fn forall_e(
         forbndr_typ: Option<SimpleExprType<'a>>,
         forbndr_typ_b: Option<SimpleExprType<'a>>,
@@ -644,7 +675,7 @@ impl<'a> SimpleExprType<'a> {
             binder_info: std::borrow::Cow::Borrowed(binder_info),
         }
     }
-
+#[allow(dead_code)]
     pub fn lam(
         binder_name: &'a str,
         binder_type: SimpleExprType<'a>,

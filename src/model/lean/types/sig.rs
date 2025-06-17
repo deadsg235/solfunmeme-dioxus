@@ -1,4 +1,5 @@
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub struct Sig {
     pub atype: String,
     pub forbndr_typ_b: String,

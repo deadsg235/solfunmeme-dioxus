@@ -17,6 +17,7 @@ impl UseConnections {
         self.inner.read().entries.clone()
     }
 
+    #[allow(dead_code)]
     // Get entries by name (replaces get_connections_by_cluster)
     pub fn get_entries_by_name(&self, name: &str) -> Vec<AdapterCluster> {
         self.inner

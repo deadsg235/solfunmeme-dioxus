@@ -2,6 +2,7 @@
 // STYLE MODULE - CSS Styles and Theme Constants
 // ============================================================================
 
+#![allow(dead_code)]
 pub struct Theme {
     // Colors
     pub primary_gradient: &'static str,
@@ -18,6 +19,7 @@ pub struct Theme {
     pub spacing_xs: &'static str,
     pub spacing_sm: &'static str,
     pub spacing_md: &'static str,
+    #[allow(dead_code)]
     pub spacing_lg: &'static str,
     pub spacing_xl: &'static str,
     

@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+// STY:ES!
 pub const MEME_EXPLORER: &str = "p-4 bg-gray-100 min-h-screen";
 pub const CATEGORIES: &str = "space-y-8";
 pub const MEME_CATEGORY: &str = "bg-white rounded-lg shadow-lg p-6";

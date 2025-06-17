@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+#[allow(dead_code)]
 pub fn connection_filter(
     filter_options: Vec<String>,
     //filtered_connections: Vec<Connection>,

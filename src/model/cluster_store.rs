@@ -14,11 +14,12 @@ impl ClusterStore {
         }
     }
 
+    #[allow(dead_code)]
     pub fn get_clusters(&self) -> &[AdapterCluster] {
         &self.clusters
     }
 
-   
+   #[allow(dead_code)]
     pub fn add_cluster(&mut self, cluster: AdapterCluster) -> Result<&mut Self, String> {
         let cluster_exists = self.clusters.iter().any(|inner_cluster| {
             inner_cluster.name().as_bytes() == cluster.name().as_bytes()
@@ -34,7 +35,7 @@ impl ClusterStore {
             Ok(self)
         }
     }
-
+#[allow(dead_code)]
     pub fn set_active_cluster(&mut self, cluster: AdapterCluster) -> &mut Self {
         self.active_cluster = cluster;
         self
@@ -43,14 +44,14 @@ impl ClusterStore {
     pub fn active_cluster(&self) -> &AdapterCluster {
         &self.active_cluster
     }
-
+#[allow(dead_code)]
     pub fn add_clusters(&mut self, clusters: Vec<AdapterCluster>) -> Result<(), String> {
         clusters.into_iter().try_for_each(|cluster| {
             self.add_cluster(cluster)?;
             Ok::<(), String>(())
         })
     }
-
+#[allow(dead_code)]
     pub fn get_cluster(&self, name: &str) -> Option<&AdapterCluster> {
         self.clusters.iter().find(|cluster| cluster.name() == name)
     }

@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 use crate::model::lean::style::{Styles, THEME};
 use crate::app::{FAVICON, TAILWIND_CSS};
 use crate::model::NotificationInfo;
-use crate::password_manager::DecryptedEntry;
+//use crate::password_manager::DecryptedEntry;
 use crate::views::{
     send_sol::SendSol,
     receive_sol::ReceiveSol,
@@ -26,25 +26,45 @@ use crate::views::{
 
 #[derive(PartialEq, Clone)]
 pub enum MenuOption {
+    #[allow(dead_code)]
     MemeManagement,
+    #[allow(dead_code)]
     ExpressionParsing,
+    #[allow(dead_code)]
     Encryption,
+    #[allow(dead_code)]
     MetaMemeOperations,
+    #[allow(dead_code)]
     StylingAndEmojis,
+    #[allow(dead_code)]
     CryptoFrontend,
+    #[allow(dead_code)]
     Memes,
+    #[allow(dead_code)]
     Lean,
+    #[allow(dead_code)]
     ConnectionManagement,
+    #[allow(dead_code)]
     ConnectionList,
+    #[allow(dead_code)]
     SendSol,
+    #[allow(dead_code)]
     ReceiveSol,
+    #[allow(dead_code)]
     QueryAccounts,
+    #[allow(dead_code)]
     Dashboard,
+    #[allow(dead_code)]
     Connections,
+    #[allow(dead_code)]
     ClustersManagement,
+    #[allow(dead_code)]
     Clusters,
+    #[allow(dead_code)]
     Airdrop,
+    #[allow(dead_code)]
     Accounts,
+    #[allow(dead_code)]
     ComponentMemes,
 }
 

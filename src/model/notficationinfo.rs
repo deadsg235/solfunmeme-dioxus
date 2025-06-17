@@ -1,8 +1,10 @@
 
 #[derive(Debug, Clone)]
 pub struct NotificationInfo {
+    #[allow(dead_code)]
     pub key : u32,
     pub secs: u32,
+    #[allow(dead_code)]
     pub message: String,
 }
 
@@ -27,15 +29,15 @@ impl NotificationInfo {
 
         self
     }
-
+#[allow(dead_code)]
     pub fn key(&self) -> u32 {
         self.key
     }
-
+#[allow(dead_code)]
     pub fn secs(&self) -> u32 {
         self.secs
     }
-
+#[allow(dead_code)]
     pub fn message(&self) -> &str {
         self.message.as_str()
     }

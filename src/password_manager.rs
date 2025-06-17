@@ -30,6 +30,7 @@ pub struct PasswordEntry {
 }
 
 #[derive(Clone, Debug)]
+#[allow(dead_code)]
 pub struct DecryptedEntry {
     pub id: String,
     pub title: String,
@@ -43,10 +44,15 @@ pub struct DecryptedEntry {
 
 #[derive(Clone, Debug)]
 pub struct NewPasswordForm {
+    #[allow(dead_code)]
     pub title: String,
+    #[allow(dead_code)]
     pub username: String,
+    #[allow(dead_code)]
     pub password: String,
+    #[allow(dead_code)]
     pub url: String,
+    #[allow(dead_code)]
     pub notes: String,
 }
 
@@ -67,10 +73,12 @@ impl Default for NewPasswordForm {
 // ============================================================================
 
 pub struct CryptoManager {
+    #[allow(dead_code)]
     cipher: Aes256Gcm,
 }
 
 impl CryptoManager {
+    #[allow(dead_code)]
     pub fn new(master_password: &str) -> Self {
         // Derive key from master password using SHA256 (in production, use PBKDF2 or Argon2)
         let mut hasher = Sha256::new();
@@ -81,7 +89,7 @@ impl CryptoManager {
         
         Self { cipher }
     }
-
+#[allow(dead_code)]
     pub fn encrypt(&self, plaintext: &str) -> Result<(Vec<u8>, Vec<u8>), String> {
         let nonce = Aes256Gcm::generate_nonce(&mut OsRng);
         match self.cipher.encrypt(&nonce, plaintext.as_bytes()) {
@@ -89,7 +97,7 @@ impl CryptoManager {
             Err(_) => Err("Encryption failed".to_string()),
         }
     }
-
+#[allow(dead_code)]
     pub fn decrypt(&self, ciphertext: &[u8], nonce: &[u8]) -> Result<String, String> {
         let nonce = Nonce::from_slice(nonce);
         match self.cipher.decrypt(nonce, ciphertext) {
@@ -100,16 +108,18 @@ impl CryptoManager {
 }
 
 pub struct PasswordStore {
+    #[allow(dead_code)]
     entries: HashMap<String, PasswordEntry>,
 }
 
 impl PasswordStore {
+    #[allow(dead_code)]
     pub fn new() -> Self {
         Self {
             entries: HashMap::new(),
         }
     }
-
+#[allow(dead_code)]
     pub fn add_entry(&mut self, form: NewPasswordForm, crypto: &CryptoManager) -> Result<String, String> {
         if form.title.is_empty() || form.username.is_empty() || form.password.is_empty() {
             return Err("Please fill in all required fields".to_string());
@@ -135,23 +145,23 @@ impl PasswordStore {
         console::log_1(&"Password saved successfully".into());
         Ok(id)
     }
-
+#[allow(dead_code)]
     pub fn get_entry(&self, id: &str) -> Option<&PasswordEntry> {
         self.entries.get(id)
     }
-
+#[allow(dead_code)]
     pub fn get_all_entries(&self) -> Vec<(String, PasswordEntry)> {
         self.entries.iter().map(|(k, v)| (k.clone(), v.clone())).collect()
     }
-
+#[allow(dead_code)]
     pub fn len(&self) -> usize {
         self.entries.len()
     }
-
+#[allow(dead_code)]
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
     }
-
+#[allow(dead_code)]
     pub fn decrypt_entry(&self, id: &str, crypto: &CryptoManager) -> Result<DecryptedEntry, String> {
         let entry = self.get_entry(id).ok_or("Entry not found".to_string())?;
         let password = crypto.decrypt(&entry.encrypted_password, &entry.nonce)?;
@@ -170,15 +180,25 @@ impl PasswordStore {
 }
 
 pub struct PasswordAppState {
+    #[allow(dead_code)]
     pub is_locked: bool,
+    #[allow(dead_code)]
     pub master_password: String,
+    #[allow(dead_code)]
     pub crypto_manager: Option<CryptoManager>,
+    #[allow(dead_code)]
     pub password_store: PasswordStore,
+    #[allow(dead_code)]
     pub show_add_form: bool,
+    #[allow(dead_code)]
     pub selected_entry: Option<String>,
+    #[allow(dead_code)]
     pub error_message: String,
+    #[allow(dead_code)]
     pub form_data: NewPasswordForm,
+    #[allow(dead_code)]
     pub show_password: bool,
+    #[allow(dead_code)]
     pub decrypted_password: String,
 }
 
@@ -202,7 +222,7 @@ impl Default for PasswordAppState {
 // ============================================================================
 // BUSINESS LOGIC ACTIONS
 // ============================================================================
-
+#[allow(dead_code)]
 pub fn unlock_vault(state: &mut PasswordAppState) {
     if state.master_password.is_empty() {
         state.error_message = "Please enter master password".to_string();
@@ -217,7 +237,7 @@ pub fn unlock_vault(state: &mut PasswordAppState) {
     state.error_message.clear();
     console::log_1(&"Vault unlocked".into());
 }
-
+#[allow(dead_code)]
 pub fn lock_vault(state: &mut PasswordAppState) {
     state.is_locked = true;
     state.master_password.clear();
@@ -228,26 +248,26 @@ pub fn lock_vault(state: &mut PasswordAppState) {
     state.decrypted_password.clear();
     console::log_1(&"Vault locked".into());
 }
-
+#[allow(dead_code)]
 pub fn show_add_form(state: &mut PasswordAppState) {
     state.show_add_form = true;
     state.selected_entry = None;
     state.form_data = NewPasswordForm::default();
 }
-
+#[allow(dead_code)]
 pub fn hide_add_form(state: &mut PasswordAppState) {
     state.show_add_form = false;
     state.form_data = NewPasswordForm::default();
     state.error_message.clear();
 }
-
+#[allow(dead_code)]
 pub fn select_entry(state: &mut PasswordAppState, entry_id: String) {
     state.selected_entry = Some(entry_id);
     state.show_add_form = false;
     state.show_password = false;
     state.decrypted_password.clear();
 }
-
+#[allow(dead_code)]
 pub fn save_password(state: &mut PasswordAppState) {
     if let Some(crypto) = &state.crypto_manager {
         match state.password_store.add_entry(state.form_data.clone(), crypto) {
@@ -264,7 +284,7 @@ pub fn save_password(state: &mut PasswordAppState) {
         state.error_message = "Crypto manager not available".to_string();
     }
 }
-
+#[allow(dead_code)]
 pub fn toggle_password_visibility(state: &mut PasswordAppState) {
     if !state.show_password {
         if let (Some(crypto), Some(entry_id)) = (&state.crypto_manager, &state.selected_entry) {
@@ -283,14 +303,15 @@ pub fn toggle_password_visibility(state: &mut PasswordAppState) {
         state.decrypted_password.clear();
     }
 }
-
-pub fn copy_to_clipboard(text: String) {
+#[allow(dead_code)]
+pub fn copy_to_clipboard(_text: String) {
     let _ = web_sys::window()
         .unwrap()
         .navigator()
         .clipboard();
  //       .unwrap()
         //.write_text(&text);
+       // #FIXME clipboard.write_text(&text);
 }
 
 // ============================================================================
@@ -299,7 +320,7 @@ pub fn copy_to_clipboard(text: String) {
 
 #[component]
 pub fn PasswordApp() -> Element {
-    let mut app_state = use_signal(PasswordAppState::default);
+    let app_state = use_signal(PasswordAppState::default);
 
     rsx! {
         div {

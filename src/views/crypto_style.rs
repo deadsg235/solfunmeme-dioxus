@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 // styles.rs - Centralized styling constants
 // All CSS classes are defined here for easy maintenance and consistency
 

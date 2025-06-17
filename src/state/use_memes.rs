@@ -81,27 +81,30 @@ pub struct UseMemes {
 }
 
 impl UseMemes {
+    #[allow(dead_code)]
     pub fn get_all_memes(&self) -> Vec<Meme> {
         self.inner.read().memes.clone()
     }
-
+#[allow(dead_code)]
     pub fn add_meme(&mut self, meme: Meme) {
         let mut inner = self.inner.write();
         inner.memes.push(meme.clone());
        // LocalStorage::set(&format!("{}_memes", inner.key), &inner.memes).ok();
     }
-
+#[allow(dead_code)]
     pub fn set_active_meme(&mut self, id: String) {
         self.active_meme.set(id.clone());
         LocalStorage::set(&format!("{}_active_meme", self.inner.read().key), &id).ok();
     }
-
+#[allow(dead_code)]
     pub fn active_meme(&self) -> Option<Meme> {
         let id = self.active_meme.read().clone();
         self.inner.read().memes.iter().find(|m| m.id == id).cloned()
     }
 }
 
+#[allow(dead_code)]
+// FIXME : exercize
 pub fn use_memes(key: impl ToString) -> UseMemes {
     let key = key.to_string();
     let key_for_state = key.clone();

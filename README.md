@@ -105,6 +105,13 @@ Createing json  using https://github.com/meta-introspector/syn-serde-rust.git
 #### Threading of dimensions
 #### Area or surface of points of the spaces.
 #### connecting solana code to memes to llms
+#### read git history
+sample source code into rust
+be able to read git repor (store older git objects or pack files into exec.
+
+# remove 
+unimplemented
+"#FIXME"
 
 # code coverage
 ```

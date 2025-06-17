@@ -3,10 +3,11 @@
     mod tests {
         use crate::model::{cluster_store::ClusterStore, AdapterCluster};
 
-        use super::*;
+        //use super::*;
 
-        fn make_cluster(name: &str, endpoint: &str) -> AdapterCluster {
+        fn make_cluster(_name: &str, _endpoint: &str) -> AdapterCluster {
             AdapterCluster::new()
+            //#FIXME #6 add name and endpoint
             //name.to_string(), endpoint.to_string()
         }
 

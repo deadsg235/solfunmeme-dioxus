@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+use crate::utils::address_qrcode;
 use crate::{
     utils::copied_address, CopySvg, NotificationInfo, ReceiveSvg
 };
@@ -20,7 +21,7 @@ pub fn ReceiveSol(show_receive_modal: Signal<bool>) -> Element {
             .to_string();
     }
 
-    let qrcode = if let Ok(qr) = crate::address_qrcode(&address) {
+    let qrcode = if let Ok(qr) = address_qrcode(&address) {
         qr
     } else {
         rsx! {

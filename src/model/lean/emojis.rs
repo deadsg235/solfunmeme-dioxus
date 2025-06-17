@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::collections::HashMap;
-use serde_json::json;
 
 use crate::model::simple_expr::SimpleExprType;
 use crate::model::lean::level::level_to_string;
@@ -71,6 +70,7 @@ pub struct Rule<'a> {
     kind: String,
 }
 // Function to convert a Type node to an emoji string
+#[allow(dead_code)]
 pub fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
     let indent = "  ".repeat(depth);
     match typ {
@@ -154,6 +154,7 @@ pub fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&st
 }
 
 // Function to convert a Rule to an emoji string
+#[allow(dead_code)]
 pub fn rule_to_emoji<'a>(rule: &Rule<'a>, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
     let indent = "  ".repeat(depth);
     format!(
@@ -166,6 +167,7 @@ pub fn rule_to_emoji<'a>(rule: &Rule<'a>, depth: usize, emoji_map: &HashMap<&str
 }
 
 // Main translation function
+#[allow(dead_code)]
 pub fn json_to_emoji<'a>(json_str: &str) -> Result<String, Box<dyn std::error::Error>> {
     // Define emoji mappings
     let mut emoji_map = HashMap::new();

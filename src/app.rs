@@ -1,5 +1,4 @@
 use dioxus::prelude::*;
-use gloo_timers::callback::Timeout;
 use crate::header::Header;
 use crate::{
     model::NotificationInfo,
@@ -11,8 +10,11 @@ use crate::{
 
 use crate::views::connections::Connections;
 use crate::model::{AccountState};
+#[allow(dead_code)]
 pub const FAVICON: Asset = asset!("/assets/favicon.png");
+#[allow(dead_code)]
 pub const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
+
 pub(crate) const LOGO: Asset = asset!("/assets/logo.png");
 
 use crate::model::storage::WALLET_ADAPTER;
@@ -51,8 +53,8 @@ pub(crate) fn MainApp() -> Element {
                 .push_back(NotificationInfo::new(wallet_event));
         }
     });
-    let fi = FAVICON;
-    let tw = TAILWIND_CSS;
+    let fi = FAVICON.to_string();
+    let tw = TAILWIND_CSS.to_string();
     rsx! {
         document::Link { rel: "icon", href: fi }
         document::Link { rel: "stylesheet", href: tw }

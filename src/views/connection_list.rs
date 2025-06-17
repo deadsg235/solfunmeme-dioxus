@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use crate::model::{use_connections};
-
+#[allow(dead_code)]
 fn list_connections(
     // connections: &UseConnections,
     //filtered_connections: &Vec<Connection>, //, connections: &UseConnections

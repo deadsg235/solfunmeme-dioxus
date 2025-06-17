@@ -3,6 +3,7 @@ use wallet_adapter::Cluster;
 
 
 use crate::model::{AdapterCluster, MyCluster, UseConnections};
+#[allow(dead_code)]
 pub fn cluster_management_section(
     mut new_cluster_name: Signal<String>,
     mut new_cluster_type: Signal<String>,

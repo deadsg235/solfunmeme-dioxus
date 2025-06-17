@@ -2,7 +2,7 @@
 mod tests {
     use crate::model::level::Level;
 
-    use super::*;
+    
 
     #[test]
     fn test_level_zero_equality() {

@@ -1,7 +1,7 @@
 //use super::BinderInfo;
 
 #[cfg(test)]
-use crate::binder::BinderInfo;
+//use crate::binder::BinderInfo;
 mod tests {
     use crate::model::binder::BinderInfo;
 

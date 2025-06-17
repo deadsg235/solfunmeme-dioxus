@@ -5,6 +5,7 @@
 use crate::model::level::{levels_8, Level};
 
 #[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub enum SimpleExprType {
     BVar { index: Option<u64> },
     Sort { level: Level },
@@ -25,7 +26,7 @@ pub enum SimpleExprType {
         binder_info: String,
     },
 }
-
+#[allow(dead_code)]
 pub fn simple_expr_rec_chunk1() -> SimpleExprType {
     fn some_box(expr: SimpleExprType) -> Option<Box<SimpleExprType>> {
         Some(Box::new(expr))

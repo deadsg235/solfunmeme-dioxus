@@ -1,6 +1,5 @@
 #![allow(non_snake_case)]
 
-use dioxus::prelude::*;
 
 mod views;
 use views::*;
@@ -9,10 +8,7 @@ mod model;
 use model::*;
 
 mod header;
-use header::*;
-
 mod utils;
-use utils::*;
 
 use fetch_parser::*;
 
@@ -34,12 +30,9 @@ pub(crate) use app::Route;
 //use gloo_timers::callback::Timeout;
 
 use crate::{
-    model::NotificationInfo, Footer //, Header
+    model::NotificationInfo //, Header
 };
 
-//use crate::views::connections::Connections;
-//use crate::model::AdapterCluster;
-use crate::model::{AccountState};
 //const FAVICON: Asset = asset!("/assets/favicon.png");
 //const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 //pub(crate) const LOGO: Asset = asset!("/assets/logo.png");

@@ -17,13 +17,14 @@ pub struct BinderInfoData {
 }
 
 impl BinderInfoData {
+    #[allow(dead_code)]
     pub fn default() -> Self {
         BinderInfoData {
             implicit: false,
             strict: false,
         }
     }
-    
+    #[allow(dead_code)]
     pub fn implicit() -> Self {
         BinderInfoData {
             implicit: true,
