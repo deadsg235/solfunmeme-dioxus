@@ -1,14 +1,19 @@
 
  #[cfg(test)]
     mod tests {
-        use crate::model::{cluster_store::ClusterStore, AdapterCluster};
+        use crate::model::{cluster_store::ClusterStore, AdapterCluster, MyCluster};        
 
-        //use super::*;
-
-        fn make_cluster(_name: &str, _endpoint: &str) -> AdapterCluster {
-            AdapterCluster::new()
-            //#FIXME #6 add name and endpoint
-            //name.to_string(), endpoint.to_string()
+        fn make_cluster(name: &str, endpoint: &str) -> AdapterCluster {
+    
+            AdapterCluster {
+                name: name.to_string(),
+                cluster: MyCluster::default(), // Assumes MyCluster implements Default
+                endpoint: endpoint.to_string(),
+        }
+    
+    //        let ac = AdapterCluster::new();
+            //ac.add_name(name).add_endpoint(endpoint);
+            //return ac;
         }
 
         #[test]
