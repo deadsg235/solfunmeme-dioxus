@@ -358,9 +358,10 @@ unimplemented
 # code coverage
 ```
 RUSTFLAGS="-C instrument-coverage" cargo build
-```
-
-```
 $env:RUSTFLAGS="-C instrument-coverage"
+set RUSTFLAGS="-C instrument-coverage" 
 ```
 
+
+cargo tarpauline
+cargo llvm-cov

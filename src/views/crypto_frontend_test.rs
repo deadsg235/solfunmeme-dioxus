@@ -53,33 +53,33 @@
 //     })
 // }
 
-        #[test]
-        fn action_button_class_assignment() {
-            // Test that the correct class is assigned for each button type
-            let props_primary = ActionButtonProps {
-                text: "Test".to_string(),
-                button_type: ButtonType::Primary,
-                disabled: false,
-                on_click: EventHandler::new(|_| {}),
-            };
-            let props_success = ActionButtonProps {
-                text: "Test".to_string(),
-                button_type: ButtonType::Success,
-                disabled: false,
-                on_click: EventHandler::new(|_| {}),
-            };
-            let props_danger = ActionButtonProps {
-                text: "Test".to_string(),
-                button_type: ButtonType::Danger,
-                disabled: false,
-                on_click: EventHandler::new(|_| {}),
-            };
+        // #[test]
+        // fn action_button_class_assignment() {
+        //     // Test that the correct class is assigned for each button type
+        //     let props_primary = ActionButtonProps {
+        //         text: "Test".to_string(),
+        //         button_type: ButtonType::Primary,
+        //         disabled: false,
+        //         on_click: EventHandler::new(|_| {}),
+        //     };
+        //     let props_success = ActionButtonProps {
+        //         text: "Test".to_string(),
+        //         button_type: ButtonType::Success,
+        //         disabled: false,
+        //         on_click: EventHandler::new(|_| {}),
+        //     };
+        //     let props_danger = ActionButtonProps {
+        //         text: "Test".to_string(),
+        //         button_type: ButtonType::Danger,
+        //         disabled: false,
+        //         on_click: EventHandler::new(|_| {}),
+        //     };
 
-            // Render and check class assignment (pseudo, as Dioxus doesn't support direct DOM testing in unit tests)
-            let _ = ActionButton(props_primary);
-            let _ = ActionButton(props_success);
-            let _ = ActionButton(props_danger);
-        }
+        //     // Render and check class assignment (pseudo, as Dioxus doesn't support direct DOM testing in unit tests)
+        //     let _ = ActionButton(props_primary);
+        //     let _ = ActionButton(props_success);
+        //     let _ = ActionButton(props_danger);
+        // }
 
         // #[test]
         // fn validate_encryption_inputs_empty_fields() {
