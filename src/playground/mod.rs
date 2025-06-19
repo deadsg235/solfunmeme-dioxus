@@ -16,4 +16,5 @@ mod app;
 pub use app::MenuOption;
 
 mod test_app;
+mod coverage_app;
 //pub use test_app::*;
