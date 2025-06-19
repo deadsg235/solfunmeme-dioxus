@@ -121,6 +121,7 @@ pub enum SimpleExpr {
     // Lambda abstraction
     Lam {
         binder_name: Name,
+	//#[serde(rename = "binderType")]
         binder_type: Box<SimpleExpr>,
         body: Box<SimpleExpr>,
         binder_info: BinderInfoData,
@@ -129,6 +130,7 @@ pub enum SimpleExpr {
     // Dependent product (Pi type / forall)
     ForallE {
         binder_name: Name,
+//	#[serde(rename = "binderType")]
         binder_type: Box<SimpleExpr>,
         body: Box<SimpleExpr>,
         binder_info: BinderInfoData,
@@ -357,9 +359,11 @@ pub enum SimpleExprType<'a> {
     },
     Const {
         levels: Vec<Level>,
+	#[serde(rename = "declName")]
         decl_name: std::borrow::Cow<'a, str>,
     },
     App {
+	#[serde(rename = "fn")]
         fn_expr: Box<SimpleExprType<'a>>,
         arg: Box<SimpleExprType<'a>>,
     },
@@ -368,13 +372,22 @@ pub enum SimpleExprType<'a> {
         forbndr_typ_b: Option<Box<SimpleExprType<'a>>>,
         forbd_b: Option<Box<SimpleExprType<'a>>>,
         forbd: Option<Box<SimpleExprType<'a>>>,
-        binder_name: std::borrow::Cow<'a, str>,
+
+	#[serde(rename = "binderName")]
+	binder_name: std::borrow::Cow<'a, str>,
+
+	#[serde(rename = "binderInfo")]
         binder_info: std::borrow::Cow<'a, str>,
     },
     Lam {
+	#[serde(rename = "binderName")]
         binder_name: std::borrow::Cow<'a, str>,
+
+	#[serde(rename = "binderType")]
         binder_type: Box<SimpleExprType<'a>>,
         body: Box<SimpleExprType<'a>>,
+
+	#[serde(rename = "binderInfo")]
         binder_info: std::borrow::Cow<'a, str>,
     },
 }
@@ -576,6 +589,7 @@ impl Foo {
     pub fn new(akind: String, cnst_inf_b: CnstInfB) -> Self {
         Self {
             akind,
+            //cnst_inf_b: cnst_inf_b,
             cnstInfB: cnst_inf_b,
         }
     }

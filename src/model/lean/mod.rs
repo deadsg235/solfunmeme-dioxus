@@ -2,7 +2,7 @@ pub mod binder;
 pub mod constants;
 pub mod level;
 pub mod name;
-pub mod simple_expr;
+
 pub mod types;
 pub mod meme;
 pub mod style;

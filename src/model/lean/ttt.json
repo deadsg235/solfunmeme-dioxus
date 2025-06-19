@@ -1,0 +1,2 @@
+{"cnstInfB":{"cnstInf":null,"kind":{"kind":"constant","value":"def"},"levelParams":[],"name":"lam_with_type","sig":{"type":{"Lam":{"binderInfo":"default","binderName":"a","binderType":{},"lambd":{},"lambdB":{"Bvar":{}},"lambndrTpB":{"Sort":{"level":{"Param":"l"}}}}}}},"kind":"AsyncConstB"}
+

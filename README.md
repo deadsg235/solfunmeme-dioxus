@@ -339,6 +339,18 @@ Createing json  using https://github.com/meta-introspector/syn-serde-rust.git
 sample source code into rust
 be able to read git repor (store older git objects or pack files into exec.
 
+
+# More ideas
+game engine 
+simulation engine
+vector of code 
+vector -> code 
+make each possible value a valid program, no invalid program states possible.
+encode program state into a vector.
+
+
+solana 
+
 # remove 
 unimplemented
 "#FIXME"
@@ -351,3 +363,4 @@ RUSTFLAGS="-C instrument-coverage" cargo build
 ```
 $env:RUSTFLAGS="-C instrument-coverage"
 ```
+
