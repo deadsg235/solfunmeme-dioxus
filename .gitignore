@@ -61,3 +61,5 @@ flycheck_*.el
 
 .vercel
 *.profraw
+/src/model/math/
+/tarpaulin-report.html
