@@ -13,4 +13,7 @@ mod app;
 // pub use styling_and_emojis::StylingAndEmojis;
 
 // Re-export common types
-pub use app::MenuOption; 
+pub use app::MenuOption;
+
+mod test_app;
+//pub use test_app::*;

@@ -1,11 +1,9 @@
 #[cfg(test)]
     mod tests {
-        use crate::views::crypto_frontend::{ActionButton, ActionButtonProps, ButtonType};
+        use crate::views::crypto_frontend::ButtonType;
         use crate::views::crypto_frontend::{ validate_decryption_inputs, CardHeader, CardHeaderProps, ErrorMessage, ErrorMessageProps, SuccessMessage, SuccessMessageProps};
         //validate_encryption_inputs,
 
-        //use super::*;
-        use dioxus::prelude::*;
 
         #[test]
         fn button_type_enum_variants() {
