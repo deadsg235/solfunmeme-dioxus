@@ -5,6 +5,11 @@ use crate::playground::MenuOption;
 #[component]
 pub fn CoreButtons(on_menu_change: EventHandler<MenuOption>) -> Element {
     rsx! {
+	button {
+            class: "{Styles::primary_button()}",
+            onclick: move |_| on_menu_change.call(MenuOption::Embedding),
+            "Embedding Operations"
+        }
         button {
             class: "{Styles::primary_button()}",
             onclick: move |_| on_menu_change.call(MenuOption::MemeManagement),

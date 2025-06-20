@@ -23,9 +23,12 @@ use crate::views::{
     encryption::Encryption,
     component_memes::ComponentMemeExplorer,
 };
+//pub mod embedding;
+use crate::playground::embedding::EmbeddingApp;
 
 #[derive(PartialEq, Clone)]
 pub enum MenuOption {
+    Embedding,
     #[allow(dead_code)]
     MemeManagement,
     #[allow(dead_code)]
@@ -70,32 +73,42 @@ pub enum MenuOption {
 
 #[component]
 pub fn PlaygroundApp() -> Element {
-    let mut menu_option = use_signal(|| MenuOption::MemeManagement);
+    //    let mut menu_option = use_signal(|| MenuOption::MemeManagement);
+        let mut menu_option = use_signal(|| MenuOption::Embedding);
     let notifications = use_signal(|| vec![NotificationInfo {
         key: 1,
         secs: 5,
-        message: "Welcome to Meme App!".to_string(),
+        message: "Welcome to SOLFUNMEME App!".to_string(),
     }]);
 
     rsx! {
-        link { rel: "stylesheet", href: "{TAILWIND_CSS}" }
-        link { rel: "icon", href: "{FAVICON}" }
+        link { rel: "stylesheet", href: TAILWIND_CSS }
+        link { rel: "icon", href: FAVICON }
         div {
-            style: "background: {THEME.background_color}; padding: {THEME.spacing_md}; font-family: {THEME.font_family_sans}",
+            style: format!(
+                "background: {}; padding: {}; font-family: {}",
+                THEME.background_color, THEME.spacing_md, THEME.font_family_sans
+            ),
             nav {
+                // The change here is to fix the code block so that the `div` element is properly closed.
+                // Previously, the `div` was not closed before the next sibling element, which would cause a syntax or rendering error.
+                // Now, the `div` wraps only the intended button components and is closed before the next elements in the parent `nav`.
                 class: "{Styles::header()}",
                 div {
                     class: "{Styles::flex_between()}",
                     style: "flex-wrap: wrap; gap: 0.5rem;",
                     CoreButtons { on_menu_change: move |opt| menu_option.set(opt) }
                     CryptoButtons { on_menu_change: move |opt| menu_option.set(opt) }
-                    ConnectionButtons { on_menu_change: move |opt| menu_option.set(opt) }
+                    ConnectionButtons { on_menu_change: move |opt| menu_option.set(opt) }                
+                }
+                div {
                     TransactionButtons { on_menu_change: move |opt| menu_option.set(opt) }
                     ManagementButtons { on_menu_change: move |opt| menu_option.set(opt) }
                 }
             }
             div {
                 class: "{Styles::section()}",
+
                 {
                     notifications.read().iter().map(|notif| rsx! {
                         div {
@@ -129,7 +142,7 @@ pub fn PlaygroundApp() -> Element {
                     MenuOption::Airdrop => rsx! { Airdrop { show_airdrop_modal: use_signal(|| true) } },
                     MenuOption::Accounts => rsx! { Accounts {} },
                     MenuOption::ComponentMemes => rsx! { ComponentMemeExplorer {} },
-
+		    MenuOption::Embedding => rsx! { EmbeddingApp {} },
                     _ => rsx! { div { "TODO"}}
                 }
             }
