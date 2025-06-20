@@ -1,4 +1,4 @@
-mod app;
+pub mod app;
 // mod meme_management;
 // mod expression_parsing;
 // mod encryption;
@@ -15,7 +15,7 @@ mod app;
 // Re-export common types
 pub use app::MenuOption;
 
-mod test_app;
-mod coverage_app;
-mod test_emojis;
+pub mod test_app;
+pub mod coverage_app;
+pub mod test_emojis;
 //pub use test_app::*;

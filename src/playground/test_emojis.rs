@@ -1,81 +1,86 @@
 use dioxus::prelude::*;
-use dioxus_router::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use crate::password_manager::PasswordAppState;
+//use crate::password_manager::PasswordAppState;
 use crate::views::component_memes::MemeCategory;
 use crate::views::wikidata_memes::WikidataMeme;
 use crate::views::workflow_memes::WorkflowMeme;
 
-use crate::Route;
+//use crate::Route;
 use crate::header::Header;
 //use crate::playground::test_emojis::ComponentName::Header;
 //use crate::views::memes::Header;
 //use crate::header::ConnectWalletModalModal;
-use crate::playground::test_emojis::ComponentName::ConnectWalletModalModal;
-use crate::playground::test_emojis::ComponentName::NavWalletItem;
+//use crate::playground::test_emojis::ComponentName::ConnectWalletModalModal;
+//use crate::playground::test_emojis::ComponentName::NavWalletItem;
 //use crate::header::ActiveAccountDropDown;
-use crate::playground::test_emojis::ComponentName::ActiveAccountDropDown;
+//use crate::playground::test_emojis::ComponentName::ActiveAccountDropDown;
 use crate::playground::test_emojis::ComponentName::PingCluster;
 //use crate::password_manager::PasswordApp;
-use crate::playground::test_emojis::ComponentName::PasswordApp;
-use crate::playground::test_emojis::ComponentName::PasswordAppHeader;
-use crate::playground::test_emojis::ComponentName::PasswordErrorMessage;
-use crate::playground::test_emojis::ComponentName::LoginScreen;
-use crate::playground::test_emojis::ComponentName::PasswordMainInterface;
-use crate::playground::test_emojis::ComponentName::PasswordList;
-use crate::playground::test_emojis::ComponentName::AddPasswordForm;
-use crate::playground::test_emojis::ComponentName::PasswordDetail;
-use crate::playground::test_emojis::ComponentName::WelcomeScreen;
-use crate::playground::test_emojis::ComponentName::GitParser2;
+//use crate::playground::test_emojis::ComponentName::PasswordApp;
+//use crate::playground::test_emojis::ComponentName::PasswordAppHeader;
+// use crate::playground::test_emojis::ComponentName::PasswordErrorMessage;
+// use crate::playground::test_emojis::ComponentName::LoginScreen;
+// use crate::playground::test_emojis::ComponentName::PasswordMainInterface;
+// use crate::playground::test_emojis::ComponentName::PasswordList;
+// use crate::playground::test_emojis::ComponentName::AddPasswordForm;
+// use crate::playground::test_emojis::ComponentName::PasswordDetail;
+// use crate::playground::test_emojis::ComponentName::WelcomeScreen;
+// use crate::playground::test_emojis::ComponentName::GitParser2;
 
 //use crate::model::meme_types::{ComponentMeme, MemeCategory, WikidataMeme, WorkflowMeme, WorkflowStep};
 //use crate::model::password_manager::PasswordAppState;
 use crate::views::{
-    accounts::{Accounts, ClusterSuccess, TokenAccountCard, TxCard},
-    airdrop::Airdrop,
-    clusters::{AddClusterModal, ClusterInfo, Clusters},
-    coins::QueryCoinDialog,
-    component_memes::{ComponentMemeExplorer, ComponentMemeView, MemeCategoryView},
-    connect_first::ConnectWalletFirst,
-    connection_buttons::ConnectionButtons,
-    core_buttons::CoreButtons,
-    crypto_buttons::CryptoButtons,
-    crypto_frontend::{
-        app::{AppHeader as CryptoAppHeader, CryptoFrontendApp},
-        components::{ActionButton, CardHeader, ErrorMessage as CryptoErrorMessage, InputField, SuccessMessage, TextAreaField},
-        forms::{DecryptionForm, EncryptionForm},
-    },
-    dashboard::Dashboard,
-    encryption::Encryption,
-    expression_parsing::ExpressionParsing,
-    extras::Extras,
-    extras_views::{sign_message::SignMessage, sign_tx::SignTx, siws::SignInWithSolana},
-    footer::Footer,
-    //ogit::GitParser2,
-    //header::{ActiveAccountDropDown, ConnectWalletModalModal, Header, NavWalletItem, PingCluster},
-    management_buttons::ManagementButtons,
-    meme_management::MemeManagement,
-    memes::{
-        CardHeader as MemeCardHeader, CodeDisplay, CreateButton, ExpressionCard, ExpressionInputs, ExpressionList,
-        ExpressionMetadata, ExpressionTypeSelector, InputSection, Memes, MemesFooter, MetadataInputs, SearchInput,
-        SimilaritySection, VectorSpace,
-    },
-    meta_meme_operations::MetaMemeOperations,
-    notification::{Notification, Notification2},
-    page_not_found::PageNotFound,
+    accounts::{Accounts},
+        //ClusterSuccess, TokenAccountCard, TxCard},
+    //airdrop::Airdrop,
+    clusters::{
+        //AddClusterModal, ClusterInfo,
+         Clusters},
+    coins::QueryCoinDialog
+    
+    };
+
+    // component_memes::{ComponentMemeExplorer, ComponentMemeView, MemeCategoryView},
+    // connect_first::ConnectWalletFirst,
+    // connection_buttons::ConnectionButtons,
+    // core_buttons::CoreButtons,
+    // crypto_buttons::CryptoButtons,
+    // crypto_frontend::{
+    //     app::{AppHeader as CryptoAppHeader, CryptoFrontendApp},
+    //     components::{ActionButton, CardHeader, ErrorMessage as CryptoErrorMessage, InputField, SuccessMessage, TextAreaField},
+    //     forms::{DecryptionForm, EncryptionForm},
+    // },
+    // dashboard::Dashboard,
+    // encryption::Encryption,
+    // expression_parsing::ExpressionParsing,
+    // extras::Extras,
+    // extras_views::{sign_message::SignMessage, sign_tx::SignTx, siws::SignInWithSolana},
+    // footer::Footer,
+    // //ogit::GitParser2,
+    // //header::{ActiveAccountDropDown, ConnectWalletModalModal, Header, NavWalletItem, PingCluster},
+    // management_buttons::ManagementButtons,
+    // meme_management::MemeManagement,
+    // memes::{
+    //     CardHeader as MemeCardHeader, CodeDisplay, CreateButton, ExpressionCard, ExpressionInputs, ExpressionList,
+    //     ExpressionMetadata, ExpressionTypeSelector, InputSection, Memes, MemesFooter, MetadataInputs, SearchInput,
+    //     SimilaritySection, VectorSpace,
+    // },
+    // meta_meme_operations::MetaMemeOperations,
+    // notification::{Notification, Notification2},
+    // page_not_found::PageNotFound,
     //password_manager::{
     //AddPasswordForm, AppHeader as PasswordAppHeader, ErrorMessage as PasswordErrorMessage, LoginScreen, MainInterface as PasswordMainInterface,
     //PasswordApp, PasswordDetail, PasswordList, WelcomeScreen,
     //},
-    query_accounts::QueryAccountDialog,
-    receive_sol::ReceiveSol,
-    send_sol::SendSol,
-    styling_and_emojis::StylingAndEmojis,
-    transaction_buttons::TransactionButtons,
-    wikidata_memes::{WikidataMemeExplorer, WikidataMemeView},
-    workflow_memes::{WorkflowMemeExplorer, WorkflowMemeView, WorkflowStepView},
-};
+    // query_accounts::QueryAccountDialog,
+    // receive_sol::ReceiveSol,
+    // send_sol::SendSol,
+    // styling_and_emojis::StylingAndEmojis,
+    // transaction_buttons::TransactionButtons,
+    // wikidata_memes::{WikidataMemeExplorer, WikidataMemeView},
+    // workflow_memes::{WorkflowMemeExplorer, WorkflowMemeView, WorkflowStepView},
+
 //use crate::{MenuOption, UseConnections};
 use crate::views::component_memes::ComponentMeme;
 

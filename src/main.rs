@@ -1,6 +1,7 @@
 #![allow(non_snake_case)]
 
-
+use dioxus::launch;
+use crate::playground::app::PlaygroundApp;
 //mod views;
 //use views::*;
 mod views;
@@ -73,6 +74,8 @@ mod fetch_parser;
 mod state;
 mod playground;
 //pub mod git_parser;
+
+
 //use crate::app::App;
 //use crate::crypto_frontend::App;
 //use crate::password_manager::App;
@@ -80,5 +83,5 @@ mod playground;
 
 fn main() {
     // Use the memes App component from views
-  //  launch(crate::playground::App);
+    launch(PlaygroundApp);
 }

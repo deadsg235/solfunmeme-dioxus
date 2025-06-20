@@ -67,7 +67,11 @@ nom = "8.0.0"
 syn = "2.0.103"
 solana-system-interface = "1.0.0"
 ring-compat = "0.8.0"
+#ring = "0.17.14"
 # backend only sqlx = { version="0.8.3", features = [ "sqlite", "runtime-tokio", "tls-native-tls" ], optional = true}
+
+#[dependencies]
+ring = { version = "0.17.14", features = ["wasm32_unknown_unknown_js"] }
 
 [dependencies.x25519-dalek  ]
 version = "2.0.1"
@@ -78,6 +82,7 @@ version = "1.17.0"
 # Lets you generate random UUIDs
 features = [
     "v4",
+    "js","rng-getrandom","rng-rand"
 ]
 
 [features]
@@ -86,19 +91,19 @@ web = ["dioxus/web"]
 bincodev2 = []
 bincodev1 = []
 
-[profile]
+# [profile]
 
-[profile.wasm-dev]
-inherits = "dev"
-opt-level = 1
+# [profile.wasm-dev]
+# inherits = "dev"
+# opt-level = 1
 
-[profile.server-dev]
-inherits = "dev"
+# [profile.server-dev]
+# inherits = "dev"
 
-[profile.android-dev]
-inherits = "dev"
+# [profile.android-dev]
+# inherits = "dev"
 
-git2 = "0.18.3"
-syn = { version = "2.0", features = ["full", "extra-traits"] }
-quote = "1.0"
-proc-macro2 = "1.0"
+# git2 = "0.18.3"
+# syn = { version = "2.0", features = ["full", "extra-traits"] }
+# quote = "1.0"
+# proc-macro2 = "1.0"
