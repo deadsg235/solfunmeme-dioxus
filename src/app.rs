@@ -91,6 +91,8 @@ pub enum Route {
         Dashboard(),
         #[route("/accounts")]
         Accounts(),
+    //#[route("/test")]
+        //TestMenuApp(),
         #[route("/clusters")]
         Clusters(),
         #[route("/extras")]

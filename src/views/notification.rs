@@ -68,7 +68,7 @@ pub fn Notification() -> Element {
 
 
 #[component]
-fn Notification2() -> Element {
+pub fn Notification2() -> Element {
     if GLOBAL_MESSAGE.read().is_empty() {
         return rsx! {};
     }

@@ -2,8 +2,9 @@ use dioxus::prelude::*;
 //use std::collections::HashMap;
 mod style;
 use style::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize,Deserialize)]
 pub struct ComponentMeme {
     pub name: String,
     pub emoji: String,
@@ -12,7 +13,8 @@ pub struct ComponentMeme {
     pub matrix_representation: Vec<Vec<f64>>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+
+#[derive(Debug, Clone, PartialEq, Serialize,Deserialize)]
 pub struct MemeCategory {
     pub name: String,
     pub emoji: String,

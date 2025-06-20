@@ -16,7 +16,7 @@ use aes_gcm::{
 // DATA MODELS
 // ============================================================================
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PasswordEntry {
     pub id: String,
     pub title: String,
@@ -42,7 +42,7 @@ pub struct DecryptedEntry {
     pub updated_at: String,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct NewPasswordForm {
     #[allow(dead_code)]
     pub title: String,
@@ -72,10 +72,26 @@ impl Default for NewPasswordForm {
 // BUSINESS LOGIC LAYER
 // ============================================================================
 
+//, PartialEq
+#[derive(Clone,  Serialize,
+	 //Deserialize
+)]
 pub struct CryptoManager {
     #[allow(dead_code)]
+    #[serde(skip)]    
     cipher: Aes256Gcm,
 }
+
+
+// impl<'de> Deserialize<'de> for CryptoManager {
+//     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+//     where
+//         D: Deserialize<'de>,
+//     {
+//         //deserializer.deserialize_i32(I32Visitor)
+//     }
+// }
+
 
 impl CryptoManager {
     #[allow(dead_code)]
@@ -107,6 +123,7 @@ impl CryptoManager {
     }
 }
 
+#[derive(Clone, PartialEq, Serialize, Deserialize)]
 pub struct PasswordStore {
     #[allow(dead_code)]
     entries: HashMap<String, PasswordEntry>,
@@ -179,6 +196,8 @@ impl PasswordStore {
     }
 }
 
+//#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone)]
 pub struct PasswordAppState {
     #[allow(dead_code)]
     pub is_locked: bool,

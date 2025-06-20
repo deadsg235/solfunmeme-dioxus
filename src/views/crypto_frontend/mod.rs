@@ -1,7 +1,7 @@
-mod app;
-mod forms;
-mod components;
-mod validation;
+pub mod app;
+pub mod forms;
+pub mod components;
+pub mod validation;
 
 #[cfg(test)]
 mod tests;

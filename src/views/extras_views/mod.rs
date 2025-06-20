@@ -1,10 +1,10 @@
-mod siws;
+pub mod siws;
 pub use siws::*;
 
-mod sign_message;
+pub mod sign_message;
 pub use sign_message::*;
 
-mod sign_tx;
+pub mod sign_tx;
 pub use sign_tx::*;
 
 

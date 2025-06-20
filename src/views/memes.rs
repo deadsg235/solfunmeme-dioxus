@@ -148,7 +148,7 @@ pub fn InputSection(props: StateProps) -> Element {
 
 
 #[component]
-fn ExpressionTypeSelector(props: StateProps) -> Element {
+pub fn ExpressionTypeSelector(props: StateProps) -> Element {
     let mut state = props.state;
     
     rsx! {
@@ -193,7 +193,7 @@ fn ExpressionTypeSelector(props: StateProps) -> Element {
 }
 
 #[component]
-fn ExpressionInputs(props: StateProps) -> Element {
+pub fn ExpressionInputs(props: StateProps) -> Element {
     let mut state = props.state;
     
     rsx! {
@@ -328,7 +328,7 @@ fn ExpressionInputs(props: StateProps) -> Element {
 
 
 #[component]
-fn MetadataInputs(props: StateProps) -> Element {
+pub fn MetadataInputs(props: StateProps) -> Element {
     let mut state = props.state;
     
     rsx! {
@@ -382,7 +382,7 @@ impl Controller {
     }
 }
 #[component]
-fn CreateButton(props: StateProps) -> Element {
+pub fn CreateButton(props: StateProps) -> Element {
     #[allow(unused_variables)]
     //let mut state = props.state;
     let state = props.state;
@@ -414,7 +414,7 @@ fn CreateButton(props: StateProps) -> Element {
 }
 
 #[component]
-fn SearchInput(props: StateProps) -> Element {
+pub fn SearchInput(props: StateProps) -> Element {
     #[allow(unused_variables)]
     //let mut state = props.state;
     let state = props.state;
@@ -562,7 +562,7 @@ pub fn CardHeader(props: ExpressionWithStateProps) -> Element {
 }
 
 #[component]
-fn CodeDisplay(props: ExpressionProps) -> Element {
+pub fn CodeDisplay(props: ExpressionProps) -> Element {
     let expr = props.expression;
     
     rsx! {
@@ -584,7 +584,7 @@ fn CodeDisplay(props: ExpressionProps) -> Element {
 }
 
 #[component]
-fn ExpressionMetadata(props: ExpressionProps) -> Element {
+pub fn ExpressionMetadata(props: ExpressionProps) -> Element {
     #[allow(unused_variables)]
     let expr = props.expression;
     
@@ -617,7 +617,7 @@ fn ExpressionMetadata(props: ExpressionProps) -> Element {
 }
 
 #[component]
-fn SimilaritySection(props: ExpressionWithStateProps) -> Element {
+pub fn SimilaritySection(props: ExpressionWithStateProps) -> Element {
     #[allow(unused_variables)]
     let expr = props.expression;
     #[allow(unused_variables)]

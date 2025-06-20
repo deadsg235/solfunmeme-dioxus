@@ -138,7 +138,7 @@ fn Delete(cluster_name: String, mut connections: UseConnections) -> Element {
 }
 
 #[component]
-fn AddClusterModal(mut show_add_entry_modal: Signal<bool>, mut connections: UseConnections) -> Element {
+pub fn AddClusterModal(mut show_add_entry_modal: Signal<bool>, mut connections: UseConnections) -> Element {
     #[derive(Debug, Default)]
     struct AddCluster {
         name: String,

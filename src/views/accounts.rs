@@ -46,7 +46,7 @@ pub fn Accounts() -> Element {
 }
 
 #[component]
-fn ClusterSuccess(
+pub fn ClusterSuccess(
     address: String,
     shortened_address: String,
     public_key_bytes: [u8; 32],
@@ -272,7 +272,7 @@ pub fn TokenAccountCard(
 }
 
 #[component]
-fn TxCard(
+pub fn TxCard(
     tx: String,
     timestamp: Option<i64>,
     state: Option<String>,

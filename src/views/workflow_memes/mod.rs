@@ -1,8 +1,9 @@
 use dioxus::prelude::*;
 mod style;
 use style::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowStep {
     pub emoji: String,
     pub component: String,
@@ -11,7 +12,7 @@ pub struct WorkflowStep {
     pub lean_proof: String,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowMeme {
     pub name: String,
     pub emoji_sequence: String,

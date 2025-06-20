@@ -17,4 +17,5 @@ pub use app::MenuOption;
 
 mod test_app;
 mod coverage_app;
+mod test_emojis;
 //pub use test_app::*;

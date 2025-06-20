@@ -97,7 +97,7 @@ pub fn TestMenuApp() -> Element {
     let mut selected_category = use_signal(|| TestCategory::CryptoOperations);
     let mut test_results = use_signal(|| Vec::<(String, Result<String, String>)>::new());
     let mut show_results = use_signal(|| false);
-    let mut test_cases = use_signal(|| get_test_cases());
+    let test_cases = use_signal(|| get_test_cases());
 
     // Use use_memo to cache filtered test cases
     let filtered_cases = use_memo(move || {
@@ -453,7 +453,7 @@ pub fn TestMenuApp2() -> Element {
     let mut selected_category = use_signal(|| TestCategory::CryptoOperations);
     let mut test_results = use_signal(|| Vec::<(String, Result<String, String>)>::new());
     let mut show_results = use_signal(|| false);
-    let mut test_cases = get_test_cases();
+    let test_cases = get_test_cases();
 
     // Collect filtered test cases into a Vec
     let filtered_cases: Vec<TestCase> = test_cases

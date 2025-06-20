@@ -29,10 +29,10 @@ enum SortDirection {
 pub fn CoverageApp() -> Element {
     let mut filter_text = use_signal(|| String::new());
     let mut show_low_coverage = use_signal(|| false);
-    let mut sort_column = use_signal(|| SortColumn::Filename);
-    let mut sort_direction = use_signal(|| SortDirection::Ascending);
+    let sort_column = use_signal(|| SortColumn::Filename);
+    let sort_direction = use_signal(|| SortDirection::Ascending);
 
-    let mut coverage_data = use_memo(move || {
+    let coverage_data = use_memo(move || {
         let mut entries = get_coverage_data();
         // Apply filter
         entries.retain(|entry| {
