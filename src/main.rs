@@ -69,10 +69,10 @@ mod password_manager;
 //use password_manager::App;
 
 
-mod dioxus_adapter;
-mod fetch_parser;
-mod state;
-mod playground;
+pub mod dioxus_adapter;
+pub mod fetch_parser;
+pub mod state;
+pub mod playground;
 //pub mod git_parser;
 
 

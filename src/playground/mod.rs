@@ -16,7 +16,9 @@ pub mod app;
 pub use app::MenuOption;
 
 pub mod test_app;
-pub mod coverage_app;
+pub mod test_components;
 pub mod test_emojis;
+pub mod doc_cleaner;
+pub mod coverage_app;
 pub mod embedding;
 //pub use test_app::*;

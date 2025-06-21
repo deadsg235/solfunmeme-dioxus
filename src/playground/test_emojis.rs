@@ -15,7 +15,7 @@ use crate::header::Header;
 //use crate::playground::test_emojis::ComponentName::NavWalletItem;
 //use crate::header::ActiveAccountDropDown;
 //use crate::playground::test_emojis::ComponentName::ActiveAccountDropDown;
-use crate::playground::test_emojis::ComponentName::PingCluster;
+//use crate::playground::test_emojis::ComponentName::PingCluster;
 //use crate::password_manager::PasswordApp;
 //use crate::playground::test_emojis::ComponentName::PasswordApp;
 //use crate::playground::test_emojis::ComponentName::PasswordAppHeader;
