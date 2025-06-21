@@ -25,10 +25,12 @@ use crate::views::{
 };
 //pub mod embedding;
 use crate::playground::embedding::EmbeddingApp;
+use crate::playground::performance_charts::PerformanceCharts;
 
 #[derive(PartialEq, Clone)]
 pub enum MenuOption {
     Embedding,
+    PerformanceCharts,
     #[allow(dead_code)]
     MemeManagement,
     #[allow(dead_code)]
@@ -143,6 +145,7 @@ pub fn PlaygroundApp() -> Element {
                     MenuOption::Accounts => rsx! { Accounts {} },
                     MenuOption::ComponentMemes => rsx! { ComponentMemeExplorer {} },
 		    MenuOption::Embedding => rsx! { EmbeddingApp {} },
+                    MenuOption::PerformanceCharts => rsx! { PerformanceCharts {} },
                     _ => rsx! { div { "TODO"}}
                 }
             }

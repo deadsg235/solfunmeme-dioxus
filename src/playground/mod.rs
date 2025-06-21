@@ -21,4 +21,5 @@ pub mod test_emojis;
 pub mod doc_cleaner;
 pub mod coverage_app;
 pub mod embedding;
+pub mod performance_charts;
 //pub use test_app::*;

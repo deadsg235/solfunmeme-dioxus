@@ -12,6 +12,11 @@ pub fn CoreButtons(on_menu_change: EventHandler<MenuOption>) -> Element {
         }
         button {
             class: "{Styles::primary_button()}",
+            onclick: move |_| on_menu_change.call(MenuOption::PerformanceCharts),
+            "Performance Charts"
+        }
+        button {
+            class: "{Styles::primary_button()}",
             onclick: move |_| on_menu_change.call(MenuOption::MemeManagement),
             "Meme Management"
         }
