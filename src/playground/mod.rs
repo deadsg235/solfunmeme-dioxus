@@ -25,4 +25,6 @@ pub mod performance_charts;
 pub mod bert_test;
 pub mod rust_parser;
 pub mod monster_meta_meme;
+pub mod solfunmeme;
+pub mod solfunnice;
 //pub use test_app::*;

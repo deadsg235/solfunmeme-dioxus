@@ -50,5 +50,15 @@ pub fn CoreButtons(on_menu_change: EventHandler<MenuOption>) -> Element {
             onclick: move |_| on_menu_change.call(MenuOption::StylingAndEmojis),
             "Styling & Emojis"
         }
+        button {
+            class: "{Styles::primary_button()}",
+            onclick: move |_| on_menu_change.call(MenuOption::MonsterMetaMeme),
+            "🧬 Monster Meta-Meme"
+        }
+        button {
+            class: "{Styles::primary_button()}",
+            onclick: move |_| on_menu_change.call(MenuOption::SolFunMeme),
+            "🧬 SOLFUNMEME"
+        }
     }
 } 

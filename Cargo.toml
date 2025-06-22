@@ -75,7 +75,7 @@ solana-system-interface = "1.0.0"
 solana-sdk = { version = "2.3.0" }
 solana-transaction-error = { version = "3.0.0-canary.7040146", features=["serde"] }
 
-
+easer = "0.3.0"
 syn = "2.0.103"		 
 syn-serde = { git = "https://github.com/meta-introspector/syn-serde-rust", features = ["json"] }
 thiserror = { version = "2.0.12" }
@@ -95,6 +95,7 @@ web-sys = { version = "0.3.69", features = [
     "HtmlInputElement",
     "KeyboardEvent",
 ] }
+dioxus-motion = "0.3.1"
 
 [dependencies.x25519-dalek  ]
 version = "2.0.1"

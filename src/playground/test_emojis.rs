@@ -167,6 +167,7 @@ enum ComponentName {
     WorkflowStepView,
     WorkflowMemeView,
     WorkflowMemeExplorer,
+    
 }
 
 #[derive(Clone, PartialEq, Serialize, Deserialize)]

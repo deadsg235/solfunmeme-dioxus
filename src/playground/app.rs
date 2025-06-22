@@ -2,6 +2,7 @@ use dioxus::prelude::*;
 use crate::model::lean::style::{Styles, THEME};
 use crate::app::{FAVICON, TAILWIND_CSS};
 use crate::model::NotificationInfo;
+use crate::playground::solfunnice::SolFunNiceApp;
 //use crate::password_manager::DecryptedEntry;
 use crate::views::{
     send_sol::SendSol,
@@ -78,6 +79,8 @@ pub enum MenuOption {
     ComponentMemes,
     #[allow(dead_code)]
     MonsterMetaMeme,
+    #[allow(dead_code)]
+    SolFunMeme,
 }
 
 #[component]
@@ -159,6 +162,8 @@ pub fn PlaygroundApp() -> Element {
                     MenuOption::BertTest => rsx!(BertTestApp {}),
                     MenuOption::RustParser => rsx!(RustParserApp {}),
                     MenuOption::MonsterMetaMeme => rsx!(MonsterMetaMemeApp {}),
+		    //                    MenuOption::SolFunMeme => rsx!(SolFunMemeApp {}),
+		    MenuOption::SolFunMeme => rsx!(SolFunNiceApp {}),
                     _ => rsx!(div { "TODO"})
                 }
             }
