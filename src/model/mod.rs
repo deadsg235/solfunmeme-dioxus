@@ -78,3 +78,7 @@ pub mod crypto_test;
 pub mod cluster_store_test;
 
 pub mod wallet_error;
+
+// WASM-compatible BERT-like functionality
+pub mod wasm_bert;
+pub use wasm_bert::*;

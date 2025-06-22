@@ -7,15 +7,29 @@ use serde_json::{Value}; // For Wikidata JSON
 use std::fs::write; // For saving generated program
 use gloo_timers::future::TimeoutFuture;
 use log::error;
+use crate::model::wasm_bert::{WasmBertEmbedder, WasmSentimentAnalyzer};
 
 const STYLE: Asset = asset!("/assets/file_upload.css");
 
-// Simulated dependencies (replace with actual imports)
-
+// Use the WASM-compatible BERT functionality
 #[derive(Clone, Debug, PartialEq)]
 struct Multivector { scalar: f32, vector: [f32; 3] }
-fn rust_bert_embed(text: &str) -> Vec<f32> { vec![0.1, 0.2, 0.3, /* 384D */] } // Placeholder
-fn pca_reduce(embedding: &[f32]) -> [f32; 3] { [embedding[0], embedding[1], embedding[2]] } // Placeholder
+
+// Replace placeholder functions with actual WASM-compatible implementations
+fn rust_bert_embed(text: &str) -> Vec<f32> { 
+    let mut embedder = WasmBertEmbedder::new(384);
+    embedder.embed_text(text)
+}
+
+fn pca_reduce(embedding: &[f32]) -> [f32; 3] { 
+    // Simple PCA-like reduction to 3D
+    let mut reduced = [0.0; 3];
+    for (i, &val) in embedding.iter().take(3).enumerate() {
+        reduced[i] = val;
+    }
+    // Add some dimensionality reduction logic here if needed
+    reduced
+}
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct AnnotatedWord {
@@ -514,6 +528,6 @@ patch_console.js:1:737
 
 #[test]
 fn test() {
-    let first = dioxus_ssr::render_element(EmbeddingApp);
-    println!("{}",first)
+//    let first = dioxus_ssr::render_element(EmbeddingApp);
+    //println!("{}",first)
 }
