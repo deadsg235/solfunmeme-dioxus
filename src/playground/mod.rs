@@ -24,4 +24,5 @@ pub mod embedding;
 pub mod performance_charts;
 pub mod bert_test;
 pub mod rust_parser;
+pub mod monster_meta_meme;
 //pub use test_app::*;

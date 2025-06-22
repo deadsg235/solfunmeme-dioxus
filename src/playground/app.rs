@@ -28,6 +28,7 @@ use crate::playground::embedding::EmbeddingApp;
 use crate::playground::performance_charts::PerformanceCharts;
 use crate::playground::bert_test::BertTestApp;
 use crate::playground::rust_parser::RustParserApp;
+use crate::playground::monster_meta_meme::MonsterMetaMemeApp;
 
 #[derive(PartialEq, Clone)]
 pub enum MenuOption {
@@ -75,6 +76,8 @@ pub enum MenuOption {
     Accounts,
     #[allow(dead_code)]
     ComponentMemes,
+    #[allow(dead_code)]
+    MonsterMetaMeme,
 }
 
 #[component]
@@ -86,6 +89,9 @@ pub fn PlaygroundApp() -> Element {
         secs: 5,
         message: "Welcome to SOLFUNMEME App!".to_string(),
     }]);
+    let show_send_modal = use_signal(|| false);
+    let show_receive_modal = use_signal(|| false);
+    let show_airdrop_modal = use_signal(|| false);
 
     rsx! {
         link { rel: "stylesheet", href: TAILWIND_CSS }
@@ -128,31 +134,32 @@ pub fn PlaygroundApp() -> Element {
             div {
                 class: "{Styles::app_container()}",
                 match *menu_option.read() {
-                    MenuOption::MemeManagement => rsx! { MemeManagement {} },
-                    MenuOption::Memes => rsx! { MemeManagement {} },
-                    MenuOption::ExpressionParsing => rsx! { ExpressionParsing {} },
-                    MenuOption::Encryption => rsx! { Encryption {} },
-                    MenuOption::MetaMemeOperations => rsx! { MetaMemeOperations {} },
-                    MenuOption::StylingAndEmojis => rsx! { StylingAndEmojis {} },
-                    //MenuOption::CryptoFrontend => rsx! { CryptoFrontendApp {} },
-                    //MenuOption::Lean => rsx! { LeanEditor {} },
-                    //MenuOption::ConnectionManagement => rsx! { ConnectionManagement {} },
-                    //MenuOption::ConnectionList => rsx! { ConnectionList {} },
-                    MenuOption::SendSol => rsx! { SendSol { show_send_modal: use_signal(|| true) } },
-                    MenuOption::ReceiveSol => rsx! { ReceiveSol { show_receive_modal: use_signal(|| true) } },
-                    //MenuOption::QueryAccounts => rsx! { QueryAccounts {} },
-                    MenuOption::Dashboard => rsx! { Dashboard {} },
-                    MenuOption::Connections => rsx! { Connections {} },
-                    //MenuOption::ClustersManagement => rsx! { ClustersManagement {} },
-                    MenuOption::Clusters => rsx! { Clusters {} },
-                    MenuOption::Airdrop => rsx! { Airdrop { show_airdrop_modal: use_signal(|| true) } },
-                    MenuOption::Accounts => rsx! { Accounts {} },
-                    MenuOption::ComponentMemes => rsx! { ComponentMemeExplorer {} },
-		    MenuOption::Embedding => rsx! { EmbeddingApp {} },
-                    MenuOption::PerformanceCharts => rsx! { PerformanceCharts {} },
-                    MenuOption::BertTest => rsx! { BertTestApp {} },
-                    MenuOption::RustParser => rsx! { RustParserApp {} },
-                    _ => rsx! { div { "TODO"}}
+                    MenuOption::MemeManagement => rsx!(MemeManagement {}),
+                    MenuOption::Memes => rsx!(MemeManagement {}),
+                    MenuOption::ExpressionParsing => rsx!(ExpressionParsing {}),
+                    MenuOption::Encryption => rsx!(Encryption {}),
+                    MenuOption::MetaMemeOperations => rsx!(MetaMemeOperations {}),
+                    MenuOption::StylingAndEmojis => rsx!(StylingAndEmojis {}),
+                    //MenuOption::CryptoFrontend => rsx!(CryptoFrontendApp {}),
+                    //MenuOption::Lean => rsx!(LeanEditor {}),
+                    //MenuOption::ConnectionManagement => rsx!(ConnectionManagement {}),
+                    //MenuOption::ConnectionList => rsx!(ConnectionList {}),
+                    MenuOption::SendSol => rsx!(SendSol { show_send_modal: show_send_modal }),
+                    MenuOption::ReceiveSol => rsx!(ReceiveSol { show_receive_modal: show_receive_modal }),
+                    //MenuOption::QueryAccounts => rsx!(QueryAccounts {}),
+                    MenuOption::Dashboard => rsx!(Dashboard {}),
+                    MenuOption::Connections => rsx!(Connections {}),
+                    //MenuOption::ClustersManagement => rsx!(ClustersManagement {}),
+                    MenuOption::Clusters => rsx!(Clusters {}),
+                    MenuOption::Airdrop => rsx!(Airdrop { show_airdrop_modal: show_airdrop_modal }),
+                    MenuOption::Accounts => rsx!(Accounts {}),
+                    MenuOption::ComponentMemes => rsx!(ComponentMemeExplorer {}),
+                    MenuOption::Embedding => rsx!(EmbeddingApp {}),
+                    MenuOption::PerformanceCharts => rsx!(PerformanceCharts {}),
+                    MenuOption::BertTest => rsx!(BertTestApp {}),
+                    MenuOption::RustParser => rsx!(RustParserApp {}),
+                    MenuOption::MonsterMetaMeme => rsx!(MonsterMetaMemeApp {}),
+                    _ => rsx!(div { "TODO"})
                 }
             }
         }
