@@ -27,8 +27,11 @@ impl Default for RustParserState {
 pub fn RustParserApp() -> Element {
     let mut state = use_signal(|| RustParserState::default());
 
-    let mut parse_rust_code = move |code: &str, pretty: bool| {
-        match syn::parse_str::<syn::File>(code) {
+    let handle_parse = move |_| {
+        let code = state.read().input_code.clone();
+        let pretty = state.read().is_pretty;
+        
+        match syn::parse_str::<syn::File>(&code) {
             Ok(ast) => {
                 let json_str = if pretty {
                     json::to_string_pretty(&ast)
@@ -43,12 +46,6 @@ pub fn RustParserApp() -> Element {
                 state.write().parsed_ast = None;
             }
         }
-    };
-
-    let handle_parse = move |_| {
-        let code = state.read().input_code.clone();
-        let pretty = state.read().is_pretty;
-        parse_rust_code(&code, pretty);
     };
 
     let handle_input_change = move |evt: Event<FormData>| {
@@ -67,8 +64,26 @@ pub fn RustParserApp() -> Element {
     };
 
     let load_example = move |example: &str| {
+        // First, update the input code
         state.write().input_code = example.to_string();
-        parse_rust_code(example, state.read().is_pretty);
+        
+        // Then parse the code in a separate operation
+        let pretty = state.read().is_pretty;
+        match syn::parse_str::<syn::File>(example) {
+            Ok(ast) => {
+                let json_str = if pretty {
+                    json::to_string_pretty(&ast)
+                } else {
+                    json::to_string(&ast)
+                };
+                state.write().parsed_ast = Some(json_str);
+                state.write().error_message = None;
+            }
+            Err(e) => {
+                state.write().error_message = Some(format!("Parse error: {}", e));
+                state.write().parsed_ast = None;
+            }
+        }
     };
 
     rsx! {
@@ -137,19 +152,19 @@ fn RustParserControls(
             
             button {
                 class: "px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors",
-                onclick: move |_| on_load_example.call(EXAMPLE_FUNCTION),
+                onclick: move |_| on_load_example.call(EXAMPLE_FUNCTION_CODE),
                 "Load Function Example"
             }
             
             button {
                 class: "px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors",
-                onclick: move |_| on_load_example.call(EXAMPLE_STRUCT),
+                onclick: move |_| on_load_example.call(EXAMPLE_STRUCT_CODE),
                 "Load Struct Example"
             }
             
             button {
                 class: "px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors",
-                onclick: move |_| on_load_example.call(EXAMPLE_TRAIT),
+                onclick: move |_| on_load_example.call(EXAMPLE_TRAIT_CODE),
                 "Load Trait Example"
             }
             
@@ -249,11 +264,18 @@ fn RustAstOutput(
     }
 }
 
+// Example code strings for the RustParserExamples cards
+const EXAMPLE_SIMPLE_FUNCTION_CODE: &str = r#"fn greet(name: &str) { println!("Hello, {}!", name); }"#;
+const EXAMPLE_ENUM_CODE: &str = r#"enum Color { Red, Green, Blue }"#;
+const EXAMPLE_MODULE_CODE: &str = r#"use std::collections::HashMap; mod utils {{ pub fn helper() -> i32 {{ 42 }}}}"#;
+const EXAMPLE_MAIN_RS_LABEL: &str = "Click to load main.rs";
+const EXAMPLE_APP_RS_LABEL: &str = "Click to load app.rs";
+const EXAMPLE_HEADER_RS_LABEL: &str = "Click to load header.rs";
+const EXAMPLE_UTILS_RS_LABEL: &str = "Click to load utils.rs";
+const EXAMPLE_FETCH_PARSER_RS_LABEL: &str = "Click to load fetch_parser.rs";
+
 #[component]
 fn RustParserExamples(on_load_example: EventHandler<&'static str>) -> Element {
-    //    on_load: move |_| on_load_example.call(EXAMPLE_SIMPLE_FUNCTION),
-    //                code: r#"fn greet(name: &str) {   println!("Hello, {}!", name);}"#,
-    let code =          r#"fn greet(name: &str) { println!("Hello, {}!", name); }"#;
     rsx! {
         div {
             class: "mt-8 p-6 bg-gray-50 rounded-lg",
@@ -261,78 +283,60 @@ fn RustParserExamples(on_load_example: EventHandler<&'static str>) -> Element {
                 class: "text-lg font-semibold text-gray-800 mb-4",
                 "Quick Examples"
             }
-            
             div {
-                class: "grid grid-cols-1 md:grid-cols-3 gap-4",
-                
+                class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
                 ExampleCard {
                     title: "Simple Function",
-		    code: {code} ,
+                    code: EXAMPLE_SIMPLE_FUNCTION_CODE,
                     button_class: "bg-blue-100 text-blue-700 hover:bg-blue-200",
-                    on_load: move |_| on_load_example.call(EXAMPLE_SIMPLE_FUNCTION),
-                }
-            }
-        }
-    }
-}
-
-
-#[component]
-fn RustParserExamples2(on_load_example: EventHandler<&'static str>) -> Element {
-    //code: r#"enum Color {    Red,    Green,    Blue,}"#,
-    let code= r#"enum Color {    Red,    Green,    Blue,}"#;
-    rsx! {
-        div {
-            class: "mt-8 p-6 bg-gray-50 rounded-lg",
-            h3 {
-                class: "text-lg font-semibold text-gray-800 mb-4",
-                "Quick Examples"
-            }
-            
-            div {
-                class: "grid grid-cols-1 md:grid-cols-3 gap-4",
+                    on_load: move |_| on_load_example.call(EXAMPLE_SIMPLE_FUNCTION_CODE),
+                },
                 ExampleCard {
                     title: "Enum Definition",
-                    code: code,
+                    code: EXAMPLE_ENUM_CODE,
                     button_class: "bg-green-100 text-green-700 hover:bg-green-200",
-                    on_load: move |_| on_load_example.call(EXAMPLE_ENUM),
+                    on_load: move |_| on_load_example.call(EXAMPLE_ENUM_CODE),
                 },
-                
+                ExampleCard {
+                    title: "Module with Imports",
+                    code: EXAMPLE_MODULE_CODE,
+                    button_class: "bg-purple-100 text-purple-700 hover:bg-purple-200",
+                    on_load: move |_| on_load_example.call(EXAMPLE_MODULE_CODE),
+                },
+                ExampleCard {
+                    title: "Main.rs (Self-Parse)",
+                    code: EXAMPLE_MAIN_RS_LABEL,
+                    button_class: "bg-red-100 text-red-700 hover:bg-red-200",
+                    on_load: move |_| on_load_example.call(EMBEDDED_MAIN_RS),
+                },
+                ExampleCard {
+                    title: "App.rs (Self-Parse)",
+                    code: EXAMPLE_APP_RS_LABEL,
+                    button_class: "bg-orange-100 text-orange-700 hover:bg-orange-200",
+                    on_load: move |_| on_load_example.call(EMBEDDED_APP_RS),
+                },
+                ExampleCard {
+                    title: "Header.rs (Self-Parse)",
+                    code: EXAMPLE_HEADER_RS_LABEL,
+                    button_class: "bg-indigo-100 text-indigo-700 hover:bg-indigo-200",
+                    on_load: move |_| on_load_example.call(EMBEDDED_HEADER_RS),
+                },
+                ExampleCard {
+                    title: "Utils.rs (Self-Parse)",
+                    code: EXAMPLE_UTILS_RS_LABEL,
+                    button_class: "bg-teal-100 text-teal-700 hover:bg-teal-200",
+                    on_load: move |_| on_load_example.call(EMBEDDED_UTILS_RS),
+                },
+                ExampleCard {
+                    title: "Fetch Parser (Self-Parse)",
+                    code: EXAMPLE_FETCH_PARSER_RS_LABEL,
+                    button_class: "bg-pink-100 text-pink-700 hover:bg-pink-200",
+                    on_load: move |_| on_load_example.call(EMBEDDED_FETCH_PARSER_RS),
+                },
             }
         }
     }
 }
-
-#[component]
-fn RustParserExamples3(on_load_example: EventHandler<&'static str>) -> Element {
-    rsx! {
-        div {
-                
-                ExampleCard {
-                    title: "Module with Imports",
-                    code: r#"let x = 1"#,
-                    button_class: "bg-purple-100 text-purple-700 hover:bg-purple-200",
-                    on_load: move |_| on_load_example.call(EXAMPLE_MODULE)
-                }
-            }
-        }
-    }
-
-#[component]
-fn RustParserExamples34(on_load_example: EventHandler<&'static str>) -> Element {
-    rsx! {
-        div {
-                
-                ExampleCard {
-                    title: "Module with Imports",
-                    code: r#"use std::collections::HashMap; mod utils {{ pub fn helper() -> i32 {{ 42  }}}}"#,
-                    button_class: "bg-purple-100 text-purple-700 hover:bg-purple-200",
-                    on_load: move |_| on_load_example.call(EXAMPLE_MODULE)
-                }
-            }
-        }
-    }
-
 
 #[component]
 fn ExampleCard(
@@ -361,7 +365,7 @@ fn ExampleCard(
     }
 }
 
-const EXAMPLE_FUNCTION: &str = r#"fn fibonacci(n: u32) -> u32 {
+const EXAMPLE_FUNCTION_CODE: &str = r#"fn fibonacci(n: u32) -> u32 {
     match n {
         0 => 0,
         1 => 1,
@@ -369,7 +373,7 @@ const EXAMPLE_FUNCTION: &str = r#"fn fibonacci(n: u32) -> u32 {
     }
 }"#;
 
-const EXAMPLE_STRUCT: &str = r#"#[derive(Debug, Clone)]
+const EXAMPLE_STRUCT_CODE: &str = r#"#[derive(Debug, Clone)]
 pub struct Person {
     pub name: String,
     pub age: u32,
@@ -391,7 +395,7 @@ impl Person {
     }
 }"#;
 
-const EXAMPLE_TRAIT: &str = r#"trait Drawable {
+const EXAMPLE_TRAIT_CODE: &str = r#"trait Drawable {
     fn draw(&self);
     fn area(&self) -> f64;
 }
@@ -410,20 +414,16 @@ impl Drawable for Circle {
     }
 }"#;
 
-const EXAMPLE_SIMPLE_FUNCTION: &str = r#"fn greet(name: &str) {
-    println!("Hello, {}!", name);
-}"#;
+// Embedded source code of the project for self-parsing demonstration
+const EMBEDDED_MAIN_RS: &str = include_str!("../main.rs");
 
-const EXAMPLE_ENUM: &str = r#"enum Color {
-    Red,
-    Green,
-    Blue,
-}"#;
+const EMBEDDED_APP_RS: &str = include_str!("../app.rs");
 
-const EXAMPLE_MODULE: &str = r#"use std::collections::HashMap;
+// Note: We can't include rust_parser.rs itself due to circular dependency
+// Instead, we'll include a different source file
+const EMBEDDED_HEADER_RS: &str = include_str!("../header.rs");
 
-mod utils {
-    pub fn helper() -> i32 {
-        42
-    }
-}"#; 
+// Add some other interesting source files
+const EMBEDDED_UTILS_RS: &str = include_str!("../utils.rs");
+
+const EMBEDDED_FETCH_PARSER_RS: &str = include_str!("../fetch_parser.rs"); 
