@@ -27,12 +27,14 @@ use crate::views::{
 use crate::playground::embedding::EmbeddingApp;
 use crate::playground::performance_charts::PerformanceCharts;
 use crate::playground::bert_test::BertTestApp;
+use crate::playground::rust_parser::RustParserApp;
 
 #[derive(PartialEq, Clone)]
 pub enum MenuOption {
     Embedding,
     PerformanceCharts,
     BertTest,
+    RustParser,
     #[allow(dead_code)]
     MemeManagement,
     #[allow(dead_code)]
@@ -149,6 +151,7 @@ pub fn PlaygroundApp() -> Element {
 		    MenuOption::Embedding => rsx! { EmbeddingApp {} },
                     MenuOption::PerformanceCharts => rsx! { PerformanceCharts {} },
                     MenuOption::BertTest => rsx! { BertTestApp {} },
+                    MenuOption::RustParser => rsx! { RustParserApp {} },
                     _ => rsx! { div { "TODO"}}
                 }
             }

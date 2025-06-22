@@ -23,4 +23,5 @@ pub mod coverage_app;
 pub mod embedding;
 pub mod performance_charts;
 pub mod bert_test;
+pub mod rust_parser;
 //pub use test_app::*;
