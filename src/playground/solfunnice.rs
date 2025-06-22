@@ -15,13 +15,328 @@ use dioxus_motion::animations::utils::LoopMode;
 //fn main() {
 //    dioxus::launch(App);
 //}
+const STYLES: &str = r#"
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(45deg, #000000, #1a0033, #330066, #6600ff);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .zos-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pump-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            text-align: center;
+            background: rgba(102, 0, 255, 0.1);
+            border: 3px solid #00ff00;
+            border-radius: 50px;
+            padding: 40px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.5);
+            animation: hyperPump 2s ease-in-out infinite;
+        }
+
+        @keyframes hyperPump {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                box-shadow: 0 0 50px rgba(0, 255, 0, 0.5);
+            }
+            25% { 
+                transform: translate(-50%, -50%) scale(1.1) rotate(2deg);
+                box-shadow: 0 0 80px rgba(255, 0, 255, 0.7);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+                box-shadow: 0 0 100px rgba(0, 255, 255, 0.8);
+            }
+            75% { 
+                transform: translate(-50%, -50%) scale(1.1) rotate(-2deg);
+                box-shadow: 0 0 80px rgba(255, 255, 0, 0.7);
+            }
+        }
+
+        .title {
+            font-size: 2.5em;
+            color: #00ff00;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #00ff00;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 20px #00ff00; }
+            to { text-shadow: 0 0 40px #00ff00, 0 0 60px #00ff00; }
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #ff00ff;
+            margin-bottom: 20px;
+            animation: rainbow 4s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff00ff; }
+            16% { color: #ff0080; }
+            33% { color: #ff0000; }
+            50% { color: #ff8000; }
+            66% { color: #ffff00; }
+            83% { color: #00ff00; }
+            100% { color: #00ffff; }
+        }
+
+        .emoji-engine {
+            font-size: 3em;
+            margin: 20px 0;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+
+        .meme-orbits {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 2px solid rgba(0, 255, 0, 0.3);
+            border-radius: 50%;
+            animation: spin 10s linear infinite;
+        }
+
+        .orbit-1 {
+            width: 300px;
+            height: 300px;
+            margin: -150px 0 0 -150px;
+            animation-duration: 8s;
+        }
+
+        .orbit-2 {
+            width: 500px;
+            height: 500px;
+            margin: -250px 0 0 -250px;
+            animation-duration: 12s;
+            animation-direction: reverse;
+        }
+
+        .orbit-3 {
+            width: 700px;
+            height: 700px;
+            margin: -350px 0 0 -350px;
+            animation-duration: 16s;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .meme-node {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 255, 0.8);
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .meme-node:hover {
+            transform: scale(1.5) !important;
+            box-shadow: 0 0 30px currentColor;
+            z-index: 10;
+        }
+
+        .node-1 { top: -30px; left: 120px; background: rgba(255, 0, 0, 0.8); }
+        .node-2 { top: 120px; left: 220px; background: rgba(255, 255, 0, 0.8); }
+        .node-3 { top: 220px; left: 120px; background: rgba(0, 255, 255, 0.8); }
+        .node-4 { top: 120px; left: 20px; background: rgba(255, 0, 255, 0.8); }
+
+        .node-5 { top: -30px; left: 220px; background: rgba(0, 255, 0, 0.8); }
+        .node-6 { top: 220px; left: 420px; background: rgba(255, 128, 0, 0.8); }
+        .node-7 { top: 420px; left: 220px; background: rgba(128, 255, 0, 0.8); }
+        .node-8 { top: 220px; left: 20px; background: rgba(255, 0, 128, 0.8); }
+
+        .node-9 { top: -30px; left: 320px; background: rgba(128, 0, 255, 0.8); }
+        .node-10 { top: 320px; left: 620px; background: rgba(0, 128, 255, 0.8); }
+        .node-11 { top: 620px; left: 320px; background: rgba(255, 255, 128, 0.8); }
+        .node-12 { top: 320px; left: 20px; background: rgba(128, 255, 255, 0.8); }
+
+        .features-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #00ff00;
+            max-width: 350px;
+            z-index: 15;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 0.9em;
+            animation: fadeIn 2s ease-in;
+        }
+
+        .feature-emoji {
+            font-size: 1.5em;
+            margin-right: 10px;
+            animation: wiggle 3s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .consensus-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(102, 0, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #ff00ff;
+            max-width: 300px;
+            z-index: 15;
+        }
+
+        .workflow-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #ffff00;
+            max-width: 300px;
+            z-index: 15;
+        }
+
+        .workflow-step {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 0, 0.1);
+            border-radius: 8px;
+            font-size: 0.85em;
+        }
+
+        .pump-metrics {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #00ffff;
+            z-index: 15;
+        }
+
+        .metric {
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .metric-value {
+            color: #00ff00;
+            font-weight: bold;
+            animation: flicker 2s linear infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px currentColor;
+        }
+"#;
 
 // The root component that sets up our cheerful application
 #[component]
 pub fn SolFunNiceApp() -> Element {
     rsx! {
         // Link our vibrant CSS styles
-        // document::Link { rel: "stylesheet", href: asset!("./assets/style.css") }
+	//        document::Link { rel: "stylesheet", href: asset!("./assets/solfunmeme.css") }
+	style { "{STYLES}" }
         div { 
             class: "zos-container",
             // The core of our fun system
