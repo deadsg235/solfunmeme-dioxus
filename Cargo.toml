@@ -103,6 +103,13 @@ dioxus = { version = "0.6.3", features = ["router"] }
 #dioxus = { git = "https://github.com/dioxusLabs/dioxus.git", branch="main" }
 dioxus-router = "0.6.3"
 dioxus-web = "0.6.3"
+#ndarray = "0.16.1"
+ndarray = "0.15.6"
+tclifford = "0.1.0"
+rust-bert = "0.23.0"
+linfa = "0.7.1"
+linfa-preprocessing = "0.7.1"
+linfa-reduction = "0.7.1"
 #dioxus-charts = { path = "../dioxus-charts" }
 
 [dependencies.x25519-dalek  ]
