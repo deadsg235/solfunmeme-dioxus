@@ -35,8 +35,6 @@ chrono = "0.4.41"
 #ed25519-dalek = { version = "2.1.1", features = ["rand_core"] }
 console_log = "1.0.0"
 
-fastrand = "2.3.0"
-getrandom = { version = "0.2.14", features = ["js"] }
 gloo = "0.11.0"
 gloo-net = "0.5.0"
 gloo-storage = "0.3.0"
@@ -51,8 +49,6 @@ nom = "8.0.0"
 percent-encoding = "2.3.1"
 pulldown-cmark = "0.13.0"
 qrcodegen = "1.8.0"
-rand = "0.9.1"
-rand_core = { version = "0.6.4", features = ["std"] }
 regex = "1.10.4"
 reqwasm = "0.5.0"
 reqwest = { version = "0.12.2", features = ["blocking", "json"] }
@@ -106,11 +102,22 @@ dioxus-web = "0.6.3"
 #ndarray = "0.16.1"
 ndarray = "0.15.6"
 tclifford = "0.1.0"
-rust-bert = "0.23.0"
+#rust-bert = "0.23.0"
 linfa = "0.7.1"
 linfa-preprocessing = "0.7.1"
 linfa-reduction = "0.7.1"
 #dioxus-charts = { path = "../dioxus-charts" }
+
+
+
+fastrand = "*"
+#getrandom = { version = "0.2.14", features = ["js"] }
+#getrandom = { version = "0.2.14", features = ["js"] }
+#getrandom = { version = "0.2.14", features = ["wasm_js"] }
+rand = "0.8.5"
+rand_core = { version = "0.6.4", features = ["std"] }
+getrandom = { version = "0.3.3", features = ["wasm_js"] }
+#rand_core = { version = "*", features = ["std"] }
 
 [dependencies.x25519-dalek  ]
 version = "2.0.1"
@@ -121,7 +128,9 @@ version = "1.17.0"
 # Lets you generate random UUIDs
 features = [
     "v4",
-    "js","rng-getrandom","rng-rand"
+    "js",
+    "rng-getrandom",
+    "rng-rand"
 ]
 
 [features]
@@ -132,3 +141,11 @@ bincodev1 = []
 
 
 
+# Server-side dependencies (excluded from WASM)
+#[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+#rust-bert = "0.23" # Only include rust-bert for non-WASM targets
+#axum = "0.7" # Example server framework
+#tokio = { version = "1.0", features = ["full"] } # For async runtime
+
+#[patch.crates-io]
+#getrandom = { version = "0.3.3", features = ["wasm_js"] }

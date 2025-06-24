@@ -355,7 +355,7 @@ fn ZeroOntologySystem() -> Element {
     let mut agreement = use_signal(|| 99.7);
     let mut excitement_level = use_signal(|| "MAXIMUM".to_string());
     let mut current_emoji_sequence = use_signal(|| 0);
-
+    let mut particles = use_signal(|| Vec::<ParticleState>::new());
     // Keep metrics fresh with periodic updates
     use_effect(move || {
         spawn(async move {
@@ -378,7 +378,7 @@ fn ZeroOntologySystem() -> Element {
 
     rsx! {
         // Twinkling particle effects
-        ParticleSystem {}
+        ParticleSystem { particles: particles.clone() }
         
         // Enchanting orbital theme network
         ThemeOrbitalNetwork {}
@@ -403,14 +403,14 @@ fn ZeroOntologySystem() -> Element {
         
         // Handle global keyboard events
         GlobalEventHandlers { 
-            on_space_pressed: move |_| trigger_mega_boost(&mut boost_active)
+            on_space_pressed: move |_| trigger_mega_boost_with_particles(&mut boost_active, &mut particles)
         }
     }
 }
 
 // A sparkling particle system for visual delight
 #[component]
-fn ParticleSystem() -> Element {
+fn ParticleSystem(particles: Signal<Vec<ParticleState>>) -> Element {
     let mut particles = use_signal(|| Vec::<ParticleState>::new());
 
     // Continuously spawn new particles
@@ -454,6 +454,7 @@ fn Particle(x: f64, y: f64, color: String, duration: u32) -> Element {
 			   0.0),
             AnimationConfig::new(AnimationMode::Tween(Tween {
                 duration: Duration::from_millis(duration as u64),
+                easing: easer::functions::Linear::ease_in_out,
                 ..Default::default()
             })),
         );
@@ -461,25 +462,26 @@ fn Particle(x: f64, y: f64, color: String, duration: u32) -> Element {
             0.0,
             AnimationConfig::new(AnimationMode::Tween(Tween {
                 duration: Duration::from_millis(duration as u64),
+                easing: easer::functions::Linear::ease_in_out,
                 ..Default::default()
             })),
         );
     });
 
     let opac = opacity.get_value();
+    let transform = motion.get_value();
     let style = format!(
-	"left: {x}%; background-color: {color}; opacity: {opac}; transform: translate({}px, {}px) scale({}) rotate({}deg);",
-	motion.get_value().x,
-	motion.get_value().y,
-	motion.get_value().scale,
-	motion.get_value().rotation
+        "left: {x}%; background-color: {color}; opacity: {opac}; transform: translate({}px, {}px) scale({}) rotate({}deg);",
+        transform.x,
+        transform.y,
+        transform.scale,
+        transform.rotation
     );
     
     rsx! {
         div { 
             class: "particle",
-            //style: "left: {x}%; background-color: {color}; opacity: {opacity.get_value()}; transform: {motion.get_value().to_css()};",
-	    style: {style}
+            style: {style}
         }
     }
 
@@ -530,20 +532,22 @@ fn ThemeOrbit(
     on_node_click: EventHandler<usize>
 ) -> Element {
     let mut orbit_motion = use_motion(Transform::identity());
+    console::log_1(&format!("Initialized orbit_motion: {:?}", orbit_motion.get_value()).into());
 
     use_effect(move || {
-        let rotation_direction = if reverse { -360.0 } else { 360.0 };
-        let target_transform = Transform::new(0.0, 0.0, 1.0, rotation_direction);
-        orbit_motion.animate_to(
+	let rotation_direction = if reverse { -360.0 } else { 360.0 };
+	console::log_1(&format!("rotation_direction: {}, duration: {}", rotation_direction, duration).into());
+	let target_transform = Transform::new(0.0, 0.0, 1.0, rotation_direction);
+	console::log_1(&format!("Target transform: {:?}", target_transform).into());
+	orbit_motion.animate_to(
             target_transform,
             AnimationConfig {
-                mode: AnimationMode::Tween(Tween {
-		    duration: Duration::from_secs(duration as u64),
-		    easing: easer::functions::Linear::ease_in_out, 
-		}), // Smooth animation
-                loop_mode: Some(LoopMode::Infinite), // Continuous looping
-                
-                ..Default::default()
+		mode: AnimationMode::Tween(Tween {
+                    duration: Duration::from_secs(duration as u64),
+                    easing: easer::functions::Linear::ease_in_out,
+		}),
+		loop_mode: Some(LoopMode::Infinite),
+		..Default::default()
             },
         );
     });
@@ -586,13 +590,17 @@ fn ThemeOrbit(
 // );
     
 
-    let radius2 = {radius/2};
-    let style = format!("width: {radius}px; height: {radius}px; margin: -{radius2}px 0 0 -{radius2}px; transform: translate({}px, {}px) rotate({}deg) scale({});",
-			orbit_motion.get_value().x,  
-			orbit_motion.get_value().y,   
-			orbit_motion.get_value().rotation,  
-			orbit_motion.get_value().scale);
+    let rotation = orbit_motion.get_value().rotation;
+    console::log_1(&format!("Orbit motion rotation: {}", rotation).into());
+    let radius2 = radius / 2;
+    let style = format!(
+	"width: {radius}px; height: {radius}px; margin: -{radius2}px 0 0 -{radius2}px; transform: rotate({rotation}deg);"
+    );
     
+    if nodes.is_empty() {
+	console::log_1(&"No nodes provided to ThemeOrbit".into());
+	return rsx! { div { class: "orbit", style } };
+    }
     rsx! {
         div { 
             class: "orbit",
@@ -713,6 +721,7 @@ fn SparkParticleComponent(emoji: String, particle: SparkParticle) -> Element {
             ),
             AnimationConfig::new(AnimationMode::Tween(Tween {
                 duration: Duration::from_millis(1000),
+                easing: easer::functions::Linear::ease_in_out,
                 ..Default::default()
             })),
         );
@@ -720,20 +729,22 @@ fn SparkParticleComponent(emoji: String, particle: SparkParticle) -> Element {
             0.0,
             AnimationConfig::new(AnimationMode::Tween(Tween {
                 duration: Duration::from_millis(1000),
+		easing: easer::functions::Linear::ease_in_out,
                 ..Default::default()
             })),
         );
     });
 
-    let transform = format!(
-	"translate({}px, {}px) scale({}) rotate({}deg);",
-	motion.get_value().x,
-	motion.get_value().y,
-	motion.get_value().scale,
-	motion.get_value().rotation
-    );
+    let transform = motion.get_value();
     let opac = opacity.get_value();
-    let style = format!("position: absolute; font-size: 2em; pointer-events: none; transform: {transform}; opacity: {opac};");
+    let style = format!(
+        "position: absolute; font-size: 2em; pointer-events: none; transform: translate({}px, {}px) scale({}) rotate({}deg); opacity: {opac};",
+        transform.x,
+        transform.y,
+        transform.scale,
+        transform.rotation
+    );
+    
     rsx! {
         div {
             class: "spark-particle",
@@ -752,12 +763,9 @@ fn BoostCore(
 ) -> Element {
     let mut scale = use_motion(1.0f32);
     let emoji_sequences = get_emoji_sequences();
-
-
-    
+    let mut rotation = use_motion(0.0f32);   
     let easing = easer::functions::Elastic::ease_out;
-	
-    
+	    
     // Animate boost effect when active
     //use_effect(move || {
     //        if boost_active {
@@ -778,6 +786,75 @@ fn BoostCore(
             scale.animate_sequence(sequence);  
 	}  
     });
+        // Animate boost effect when active - matches HTML hyperPump keyframes
+    use_effect(move || {
+        if boost_active {
+            console::log_1(&"🚀 BOOST ANIMATION TRIGGERED! 🚀".into());
+            let sequence = AnimationSequence::new()
+                .then(
+                    1.1,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing: easer::functions::Elastic::ease_out,
+                    })),
+                )
+                .then(
+                    1.2,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing: easer::functions::Elastic::ease_out,
+                    })),
+                )
+                .then(
+                    1.1,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing: easer::functions::Elastic::ease_out,
+                    })),
+                )
+                .then(
+                    1.0,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing: easer::functions::Elastic::ease_out,
+                    })),
+                );
+            scale.animate_sequence(sequence);
+
+            // Add rotation animation
+            let rotation_sequence = AnimationSequence::new()
+                .then(
+                    2.0,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing: easer::functions::Elastic::ease_out,
+                    })),
+                )
+                .then(
+                    0.0,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing: easer::functions::Elastic::ease_out,
+                    })),
+                )
+                .then(
+                    -2.0,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing: easer::functions::Elastic::ease_out,
+                    })),
+                )
+                .then(
+                    0.0,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing: easer::functions::Elastic::ease_out,
+                    })),
+                );
+            rotation.animate_sequence(rotation_sequence);
+        }
+    });
+
     // use_effect(move || {  
     // 	if boost_active {  
     //         let sequence = AnimationSequence::new()  
@@ -799,7 +876,7 @@ fn BoostCore(
     rsx! {
         div { 
             class: "boost-core",
-            style: "transform: scale({scale.get_value()})",
+            style: "transform: scale({scale.get_value()}) rotate({rotation.get_value()}deg)",
             onclick: move |_| on_boost.call(()),
             
             h1 { class: "title", "SOLFUNTHEME" }
@@ -841,17 +918,18 @@ fn FeaturesPanel() -> Element {
 fn FeatureItem(emoji: String, text: String) -> Element {
     let mut rotation = use_motion(0.0f32);
 
-    // Gentle wiggle animation  
-    use_effect(move || {  
-        rotation.animate_to(  
-            5.0,  // target value  
-            AnimationConfig::new(AnimationMode::Tween(Tween {  
-                duration: Duration::from_millis(3000),  
-                easing: easer::functions::Cubic::ease_in_out,  
-            }))  
+    // Gentle wiggle animation - matches HTML wiggle with ping-pong effect
+    use_effect(move || {
+        rotation.animate_to(
+            5.0,
+            AnimationConfig::new(AnimationMode::Tween(Tween {
+                duration: Duration::from_millis(1500),
+                easing: easer::functions::Cubic::ease_in_out,
+            }))
+	        .with_loop(LoopMode::Infinite)  // back-and-forth animation
 	    //            .with_loop(LoopMode::Alternate)  // back-and-forth animation
-		.with_loop(LoopMode::Infinite)  // back-and-forth animation  
-        );  
+		//loop_mode: Some(LoopMode::Infinite),
+        );
     });
     
     // // Gentle wiggle animation
@@ -1013,7 +1091,7 @@ fn GlobalEventHandlers(on_space_pressed: EventHandler<()>) -> Element {
             }
         }) as Box<dyn FnMut(_)>);
         
-//        window.add_event_listener_with_callback("keydown", closure.as_ref().unchecked_into()).unwrap();
+        window.add_event_listener_with_callback("keydown", closure.as_ref().unchecked_ref()).unwrap();
         closure.forget();
     });
 
@@ -1216,6 +1294,46 @@ fn trigger_super_boost(boost_active: &mut Signal<bool>) {
     });
 }
 
+fn trigger_mega_boost_with_particles(boost_active: &mut Signal<bool>, particles: &mut Signal<Vec<ParticleState>>) {
+    boost_active.set(true);
+    console::log_1(&"🚀 MEGA BOOST ACTIVATED! 🚀".into());
+    
+    // Spawn particles for mega boost effect
+    for _ in 0..50 {
+        spawn_particle(particles);
+    }
+    
+    // Create screen flash effect
+    if let Some(body) = web_sys::window()
+        .and_then(|w| w.document())
+        .and_then(|d| d.body()) 
+    {
+        let _ = body.style().set_property(
+            "background",
+            "linear-gradient(45deg, #ff0000, #ff00ff, #00ffff, #00ff00)"
+        );
+        let _ = body.style().set_property("background-size", "800% 800%");
+        
+        // Reset after mega boost
+        let body_clone = body.clone();
+        spawn(async move {
+            TimeoutFuture::new(2_000).await;
+            let _ = body_clone.style().set_property(
+                "background",
+                "linear-gradient(45deg, #000000, #1a0033, #330066, #6600ff)"
+            );
+            let _ = body_clone.style().set_property("background-size", "400% 400%");
+        });
+    }
+    
+    // Reset boost state
+    let mut boost_active_clone = boost_active.clone();
+    spawn(async move {
+        TimeoutFuture::new(2_000).await;
+        boost_active_clone.set(false);
+    });
+}
+
 fn trigger_mega_boost(boost_active: &mut Signal<bool>) {
     boost_active.set(true);
     console::log_1(&"🚀 MEGA BOOST ACTIVATED! 🚀".into());
@@ -1225,15 +1343,21 @@ fn trigger_mega_boost(boost_active: &mut Signal<bool>) {
         .and_then(|w| w.document())
         .and_then(|d| d.body()) 
     {
-        let _ = body.style().set_property("background", 
-            "linear-gradient(45deg, #ff0000, #ff00ff, #00ffff, #00ff00)");
+        let _ = body.style().set_property(
+            "background",
+            "linear-gradient(45deg, #ff0000, #ff00ff, #00ffff, #00ff00)"
+        );
+        let _ = body.style().set_property("background-size", "800% 800%");
         
         // Reset after mega boost
         let body_clone = body.clone();
         spawn(async move {
             TimeoutFuture::new(2_000).await;
-            let _ = body_clone.style().set_property("background", 
-                "linear-gradient(45deg, #000000, #1a0033, #330066, #6600ff)");
+            let _ = body_clone.style().set_property(
+                "background",
+                "linear-gradient(45deg, #000000, #1a0033, #330066, #6600ff)"
+            );
+            let _ = body_clone.style().set_property("background-size", "400% 400%");
         });
     }
     
@@ -1251,9 +1375,28 @@ fn update_boost_metrics(metrics: &mut Signal<Vec<MetricData>>) {
     
     // Update Fun coefficient
     for metric in &mut current_metrics {
-        if metric.label == "Fun Coefficient:" {
-            let new_value = 1.0 + rng.gen_range(0.0..1.0);
-            metric.value = format!("{:.3}", new_value);
+        match metric.label.as_str() {
+            "Fun Coefficient:" => {
+                let new_value = 1.0 + rng.gen_range(0.0..0.5);
+                metric.value = format!("{:.3}", new_value);
+            }
+            "Theme Strength:" => {
+                let strengths = ["SUPER RARE", "ULTRA RARE", "LEGENDARY", "MYTHIC"];
+                metric.value = strengths[rng.gen_range(0..strengths.len())].to_string();
+            }
+            "Boost Factor:" => {
+                let factors = ["∞x", "∞∞x", "∞∞∞x", "MAX BOOST"];
+                metric.value = factors[rng.gen_range(0..factors.len())].to_string();
+            }
+            "Theme Level:" => {
+                let levels = ["ITERATIVE", "ADAPTIVE", "EVOLVING", "TRANSCENDENT"];
+                metric.value = levels[rng.gen_range(0..levels.len())].to_string();
+            }
+            "Status:" => {
+                let statuses = ["BOOSTING", "POWERING UP", "MAXIMUM FUN", "OVERDRIVE"];
+                metric.value = statuses[rng.gen_range(0..statuses.len())].to_string();
+            }
+            _ => {}
         }
     }
     
