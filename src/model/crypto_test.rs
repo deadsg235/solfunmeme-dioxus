@@ -1,6 +1,6 @@
 //crypto_test.rs
 // test
-#[cfg(test)]
+//#[cfg(test)]
 mod tests {
     use crate::model::crypto::SolanaEncryption;
 
@@ -119,7 +119,7 @@ mod tests {
 }
 
 
-#[cfg(test)]
+//#[cfg(test)]
 mod tests2 {
     use crate::model::crypto::SolanaEncryption;
 
@@ -231,7 +231,7 @@ mod tests2 {
     }
 }
 
-#[cfg(test)]
+//#[cfg(test)]
 mod tests3 {
     //use super::*;
 

@@ -345,7 +345,7 @@ pub fn analyze_sentiment_wasm(text: &str) -> f32 {
     analyzer.analyze_sentiment(text)
 }
 
-#[cfg(test)]
+//#[cfg(test)]
 mod tests {
     use super::*;
     

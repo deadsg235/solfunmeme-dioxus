@@ -51,7 +51,13 @@ pub fn reduce_bert_to_8d(embeddings: Array2<f64>) -> Vec<ThemeNode> {
         .collect()
 }
 
-#[cfg(test)]
+fn convert_embeddings(embeddings: Array1<[f64; 768]>) -> Array2<f64> {
+    let n = embeddings.len();
+    Array2::from_shape_vec((n, 768), embeddings.into_iter().flatten().collect())
+        .expect("Failed to reshape embeddings")
+}
+
+//#[cfg(test)]
 mod tests {
     use super::*;
     use ndarray::array;
@@ -68,7 +74,7 @@ mod tests {
             [0.7; 768],
             [0.8; 768],
         ];
-        let nodes = reduce_bert_to_8d(embeddings);
+        let nodes = reduce_bert_to_8d(convert_embeddings(embeddings));
         assert_eq!(nodes.len(), 8);
         for node in nodes {
             assert_eq!(node.dim_values.len(), 8);
@@ -81,7 +87,7 @@ mod tests {
             [0.1; 768],
             [0.2; 768],
         ];
-        let nodes = reduce_bert_to_8d(embeddings);
+        let nodes = reduce_bert_to_8d(convert_embeddings(embeddings));
         assert_eq!(nodes[0].emoji, "🚀");
         assert_eq!(nodes[1].emoji, "📜");
         assert_eq!(nodes[0].color, "rgba(255, 0, 0, 0.8)");

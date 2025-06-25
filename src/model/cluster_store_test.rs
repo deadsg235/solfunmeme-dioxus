@@ -1,5 +1,5 @@
 
- #[cfg(test)]
+// #[cfg(test)]
     mod tests {
         use crate::model::{cluster_store::ClusterStore, AdapterCluster, MyCluster};        
 

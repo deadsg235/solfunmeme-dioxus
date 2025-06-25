@@ -297,7 +297,7 @@ impl SimpleExpr {
     }
 }
 
-#[cfg(test)]
+//#[cfg(test)]
 mod tests {
     use super::*;
     
@@ -491,7 +491,7 @@ pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
     }
 }
 
-#[cfg(test)]
+//#[cfg(test)]
 mod tests2 {
     use super::*;
     
