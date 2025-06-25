@@ -29,3 +29,5 @@ pub mod solfunmeme;
 pub mod solfunnice;
 //pub use test_app::*;
 pub mod orbits;
+pub mod wikidata;
+pub mod markdown_processor;

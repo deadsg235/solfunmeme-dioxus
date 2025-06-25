@@ -1,422 +1,407 @@
 use dioxus::prelude::*;
 use std::sync::Arc;
 use dioxus::{html::HasFileData, prelude::dioxus_elements::FileEngine};
-//use serde_json::{Value, json}; // For Wikidata JSON
-use serde_json::{Value}; // For Wikidata JSON
-//use plotters::prelude::*; // For visualization
-
-#[cfg(not(target_arch = "wasm32"))]
-use std::fs::write; // For saving generated program
-
+use serde_json::Value;
 use gloo_timers::future::TimeoutFuture;
 use log::error;
-use crate::model::wasm_bert::{WasmBertEmbedder, WasmSentimentAnalyzer};
+use zip::write::{FileOptions, ZipWriter};
+use wasm_bindgen::JsValue;
+use web_sys::{window, Blob, BlobPropertyBag, Url, HtmlAnchorElement, Request, RequestInit, RequestMode, Response};
+use js_sys::Array;
+use wasm_bindgen_futures::JsFuture;
+//use serde_wasm_bindgen;
+use urlencoding::encode;
+use crate::playground::markdown_processor::{ConversationTurn, CodeSnippet, DocumentSummary, extract_code_snippets, test_code_snippet};
+//use crate::playground::duplicate_checker::{DuplicateReport, check_duplicates};
+//use crate::playground::wikidata_annotator::{WikidataAnnotator, AnnotatedWord};
+//use crate::playground::bert_embedder::{rust_bert_embed_with_context, pca_reduce};
+//use crate::playground::sentiment_analyzer::WasmSentimentAnalyzer;
+use crate::playground::wikidata::*;
+//use crate::playground::multivector::Multivector;
 
-const STYLE: Asset = asset!("/assets/file_upload.css");
-
-// Use the WASM-compatible BERT functionality
-#[derive(Clone, Debug, PartialEq)]
-struct Multivector { scalar: f32, vector: [f32; 3] }
-
-// Replace placeholder functions with actual WASM-compatible implementations
-fn rust_bert_embed(text: &str) -> Vec<f32> { 
-    let mut embedder = WasmBertEmbedder::new(384);
-    embedder.embed_text(text)
-}
-
-fn pca_reduce(embedding: &[f32]) -> [f32; 3] { 
-    // Simple PCA-like reduction to 3D
-    let mut reduced = [0.0; 3];
-    for (i, &val) in embedding.iter().take(3).enumerate() {
-        reduced[i] = val;
-    }
-    // Add some dimensionality reduction logic here if needed
-    reduced
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct AnnotatedWord {
-    word: String,
-    primary_emoji: String,
-    secondary_emoji: String,
-    wikidata: Option<String>,
-    embedding: Vec<f32>,
-    multivector: Multivector,
-}
+const STYLE: &str = "";
+    //include_str!("/assets/file_upload.css");
 
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct ProcessingFile {
     name: String,
     contents: String,
-    annotations: Vec<AnnotatedWord>,
+//    annotations: Vec<AnnotatedWord>,
     progress: usize,
     total_lines: usize,
+    summary: Option<DocumentSummary>,
+//    duplicate_report: Option<DuplicateReport>,
+//    code_annotations: Vec<AnnotatedWord>,
 }
 
-pub  struct UploadedFile {
+pub struct UploadedFile {
     name: String,
     contents: String,
-    annotations: Vec<AnnotatedWord>,
+//    annotations: Vec<AnnotatedWord>,
     generated_program: String,
+    summary: Option<DocumentSummary>,
+//    duplicate_report: Option<DuplicateReport>,
+    zip_url: Option<String>,
+//    code_annotations: Vec<AnnotatedWord>,
 }
 
-//fn main() {
-//    dioxus::launch(app);
-//}
 
 pub fn EmbeddingApp() -> Element {
     let mut enable_directory_upload = use_signal(|| false);
     let mut files_uploaded = use_signal(|| Vec::new() as Vec<UploadedFile>);
     let mut hovered = use_signal(|| false);
-    let mut visualize_trigger = use_signal(|| false);
     let mut currently_processing_file = use_signal::<Option<ProcessingFile>>(|| None);
+    let mut enable_wikidata = use_signal(|| false);
+    let mut enable_sentiment = use_signal(|| false);
+    let mut enable_embedding = use_signal(|| false);
+    let wikidata_data = use_signal::<Option<Value>>(|| None);
 
-    // Emoji DFA and Wikidata annotation
-    let annotate_word = |word: &str, wikidata_data: &Value| -> AnnotatedWord {
-	let (primary, secondary, description, wikidata) = match word.to_lowercase().as_str() {
-	    "incredible" => ("😊", "❤️", "adjective, positive sentiment", Some("Q21168966 (incredible, skos:altLabel: unbelievable)")),
-	    "awesome" => ("😊", "❤️", "adjective, positive sentiment", Some("Q107027826 (awesome, instance of: single)")),
-	    "explorer" => ("🧑‍🚀", "🏠", "noun, concrete entity", Some("Q11900058 (explorer, instance of: profession)")),
-	    "journey" => ("🧑‍🚀", "🌌", "noun, abstract concept", Some("Q607862 (journey, instance of: travel)")),
-	    "inspiration" => ("🧑‍🚀", "🌌", "noun, abstract concept", Some("Q1751856 (inspiration, instance of: mental state)")),
-	    _ => ("🌟", "✨", "other, general modifier", None),
-	};
-	let wikidata_text = wikidata.map(|wd| {
-	    wikidata_data["results"]["bindings"]
-		.as_array()
-		.unwrap()
-		.iter()
-		.filter(|b| b["item"]["value"].as_str().unwrap().contains(&wd[..8]))
-		.map(|b| format!(
-		    "{}: {}",
-		    b["propertyLabel"]["value"].as_str().unwrap(),
-		    b["valueLabel"]["value"].as_str().unwrap()
-		))
-		.collect::<Vec<_>>()
-		.join("; ")
-	}).unwrap_or_default();
-	let embedding = rust_bert_embed(&format!("{} {}", word, wikidata_text)); // Embed word + Wikidata
-	let reduced = pca_reduce(&embedding);
-	let multivector = Multivector {
-	    scalar: embedding[0] * if primary == "😊" && secondary == "❤️" { 1.6 } else { 1.0 },
-	    vector: if wikidata.as_deref().map(|wd| wd.contains("Q21168966")).unwrap_or(false) {
-		[reduced[0], reduced[1], reduced[2] * 1.3]
-	    } else {
-		reduced
-	    },
-	};
-	AnnotatedWord {
-	    word: word.to_string(),
-	    primary_emoji: primary.to_string(),
-	    secondary_emoji: secondary.to_string(),
-	    wikidata: wikidata.map(|s| s.to_string()),
-	    embedding,
-	    multivector,
-	}
-    };
+//    use_effect(move || {
+//        if *enable_wikidata.read() {
+//            spawn(async move {
+//                match fetch_wikidata_graph().await {
+//                    Ok(data) => wikidata_data.set(Some(data)),
+//                    Err(e) => error!("Wikidata fetch failed: {}", e),
+//                }
+//            });
+//        }
+//    });
 
-    // Generate Rust program from annotations
-    let generate_program = |annotations: &[AnnotatedWord]| -> String {
-	let struct_defs = r#"
-#[derive(Debug)]
-struct Annotation {
-    word: String,
-    primary_emoji: String,
-    secondary_emoji: String,
-    wikidata: Option<String>,
-}
-"#;
-	let data = annotations.iter().map(|anno| format!(
-	    r#"Annotation {{
-		word: "{}".to_string(),
-		primary_emoji: "{}".to_string(),
-		secondary_emoji: "{}".to_string(),
-		wikidata: {},"#,
-	    anno.word,
-	    anno.primary_emoji,
-	    anno.secondary_emoji,
-	    anno.wikidata.as_ref().map(|wd| format!("Some(\"{}\".to_string())", wd)).unwrap_or("None".to_string())
-	)).collect::<Vec<_>>().join("\n    ");
-	let main_fn = format!(
-	    r#"
-fn main() {{
-    let annotations = vec![    {{}}
-    ];
-    for anno in annotations {{
-	println!("{:?}", anno);
-    }}
-}}
-"#,
-	    data
-	);
-	format!("{}\n{}", struct_defs, main_fn)
-    };
+//    let mut annotator = WikidataAnnotator::new();
 
-    // Wikidata SPARQL query
-    let fetch_wikidata_graph = move || async move {
-	let query = r#"
-	    SELECT ?item ?itemLabel ?property ?propertyLabel ?value ?valueLabel WHERE {
-		VALUES ?item { wd:Q21168966 wd:Q107027826 wd:Q11900058 wd:Q607862 wd:Q1751856 }
-		?item ?prop ?value .
-		?property wikibase:directClaim ?prop .
-		SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-	    }
-	    LIMIT 50
-	"#;
-	let client = reqwest::Client::new();
-	client
-	    .get("https://query.wikidata.org/sparql")
-	    .query(&[("query", query), ("format", "json")])
-	    .send()
-	    .await
-	    .unwrap()
-	    .json::<Value>()
-	    .await
-	    .unwrap()
-    };
+    // let annotate_word = move |word: &str| -> AnnotatedWord {
+    //     let embedding = if *enable_embedding.read() {
+    //         rust_bert_embed_with_context(word, None)
+    //     } else {
+    //         vec![0.0; 384]
+    //     };
+    //     let reduced = pca_reduce(&embedding, 3);
+    //     let sentiment = if *enable_sentiment.read() {
+    //         WasmSentimentAnalyzer::new().analyze(word)
+    //     } else {
+    //         0.0
+    //     };
+    //     let multivector = Multivector::from_vector(reduced.try_into().unwrap_or([0.0; 3]));
+        
+    //     if *enable_wikidata.read() {
+    //         if let Some(data) = wikidata_data.read().as_ref() {
+    //             return annotator.annotate_word(word, data);
+    //         }
+    //     }
+        
+    //     AnnotatedWord {
+    //         word: word.to_string(),
+    //         primary_emoji: "🌟".to_string(),
+    //         secondary_emoji: "✨".to_string(),
+    //         wikidata: None,
+    //         embedding,
+    //         multivector,
+    //         sentiment,
+    //     }
+    // };
 
-    // Visualize multivectors
-    let visualize_multivectors = move |annotations: &[AnnotatedWord]| {
-	// let root = BitMapBackend::new("output.png", (800, 600)).into_drawing_area();
-	// let mut chart = ChartBuilder::on(&root)
-	//     .build_cartesian_3d(-1.0..1.0, -1.0..1.0, -1.0..1.0)
-	//     .unwrap();
-	// chart.draw_series(annotations.iter().map(|anno| {
-	//     let color = match (anno.primary_emoji.as_str(), anno.secondary_emoji.as_str(), anno.wikidata.as_deref()) {
-	//         ("😊", "❤️", Some(wd)) if wd.contains("Q21168966") => RED,
-	//         ("😊", "❤️", Some(wd)) if wd.contains("Q107027826") => PURPLE,
-	//         ("🧑‍🚀", "🏠", Some(wd)) if wd.contains("Q11900058") => BLUE,
-	//         ("🧑‍🚀", "🌌", Some(wd)) if wd.contains("Q607862") => GREEN,
-	//         ("🧑‍🚀", "🌌", Some(wd)) if wd.contains("Q1751856") => CYAN,
-	//         _ => BLACK,
-	//     };
-	//     Circle::new(
-	//         (anno.multivector.vector[0], anno.multivector.vector[1], anno.multivector.vector[2]),
-	//         5,
-	//         color.filled(),
-	//     )
-	// })).unwrap();
-	// root.present().unwrap();
-    };
+    // let annotate_code_snippet = move |snippet: &CodeSnippet| -> AnnotatedWord {
+    //     let embedding = if *enable_embedding.read() {
+    //         rust_bert_embed_with_context(&snippet.content, None)
+    //     } else {
+    //         vec![0.0; 384]
+    //     };
+    //     let reduced = pca_reduce(&embedding, 3);
+    //     let sentiment = if *enable_sentiment.read() {
+    //         WasmSentimentAnalyzer::new().analyze(&snippet.content)
+    //     } else {
+    //         0.0
+    //     };
+    //     let multivector = Multivector::from_vector(reduced.try_into().unwrap_or([0.0; 3]));
+        
+    //     if *enable_wikidata.read() {
+    //         if let Some(data) = wikidata_data.read().as_ref() {
+    //             return annotator.annotate_word(&snippet.content, data);
+    //         }
+    //     }
+        
+    //     AnnotatedWord {
+    //         word: snippet.content.clone(),
+    //         primary_emoji: "💻".to_string(),
+    //         secondary_emoji: "🔍".to_string(),
+    //         wikidata: None,
+    //         embedding,
+    //         multivector,
+    //         sentiment,
+    //     }
+    // };
+
+//     let generate_program = |annotations: &[AnnotatedWord]| -> String {
+//         let struct_defs = r#"
+// #[derive(Debug)]
+// struct Annotation {
+//     word: String,
+//     primary_emoji: String,
+//     secondary_emoji: String,
+// }
+// "#;
+//         let data = annotations.iter().map(|anno| format!(
+//             r#"Annotation {{
+//                 word: "{}".to_string(),
+//                 primary_emoji: "{}".to_string(),
+//                 secondary_emoji: "{}".to_string(),
+//             }}"#,
+//             anno.word, anno.primary_emoji, anno.secondary_emoji
+//         )).collect::<Vec<_>>().join(",\n    ");
+//         format!(
+//             //"{}\nfn main() {{\n    let annotations = vec![{}];\n    for anno in annotations {{\n        println!(\"{:?}\", anno);\n    }}\n}}",
+// 	    "debug {:?}  {:?} ",
+//             struct_defs, data
+//         )
+//     };
 
     let read_files = move |file_engine: Arc<dyn FileEngine>| async move {
-	let wikidata_data = fetch_wikidata_graph().await;
-	let files = file_engine.files();
-	for file_name in &files {
-	    // Set initial processing state
-	    currently_processing_file.set(Some(ProcessingFile {
-		name: file_name.clone(),
-		..Default::default()
-	    }));
+        let files = file_engine.files();
+        for file_name in &files {
+            currently_processing_file.set(Some(ProcessingFile {
+                name: file_name.clone(),
+                ..Default::default()
+            }));
+            TimeoutFuture::new(1).await;
 
-	    // Yield to allow UI to update
-	    TimeoutFuture::new(1).await;
+            if let Some(contents) = file_engine.read_file_to_string(file_name).await {
+                let lines: Vec<&str> = contents.lines().collect();
+                let total_lines = lines.len();
 
-	    if let Some(contents) = file_engine.read_file_to_string(file_name).await {
-		let lines: Vec<&str> = contents.lines().collect();
-		let total_lines = lines.len();
+                if let Some(mut p) = currently_processing_file.write().as_mut() {
+                    p.total_lines = total_lines;
+                }
 
-		// Update processing state with total lines
-		if let Some(mut p) = currently_processing_file.write().as_mut() {
-		    p.total_lines = total_lines;
-		}
+                let mut snippets = Vec::new();
+                //let mut code_annotations = Vec::new();
 
-		for (i, line) in lines.iter().enumerate() {
-		    let words = line.split_whitespace().collect::<Vec<_>>();
+                if file_name.ends_with(".md") {
+                    match extract_code_snippets(&contents) {
+                        Ok(mut md_snippets) => {
+                            for snippet in &mut md_snippets {
+                                test_code_snippet(snippet);
+                                //code_annotations.push(annotate_code_snippet(snippet));
+                            }
+                            snippets.extend(md_snippets);
+                        }
+                        Err(e) => error!("Markdown parsing error: {}", e),
+                    }
+                }
 
-		    if let Some(mut p) = currently_processing_file.write().as_mut() {
-			let line_annotations = words.iter().map(|&w| annotate_word(w, &wikidata_data)).collect::<Vec<_>>();
-			p.annotations.extend(line_annotations);
-			p.contents.push_str(line);
-			p.contents.push('\n');
-			p.progress = i + 1;
-		    }
+                for (i, line) in lines.iter().enumerate() {
+                    let words = line.split_whitespace().collect::<Vec<_>>();
+                    if let Some(mut p) = currently_processing_file.write().as_mut() {
+                       //let line_annotations = words.iter().map(|&w| annotate_word(w)).collect::<Vec<_>>();
+                        //p.annotations.extend(line_annotations);
+                        p.contents.push_str(line);
+                        p.contents.push('\n');
+                        p.progress = i + 1;
+                    }
+                    if i % 10 == 0 || i == total_lines - 1 {
+                        TimeoutFuture::new(1).await;
+                    }
+                }
 
-		    // Yield every 10 lines to allow UI updates
-		    if i % 10 == 0 || i == total_lines - 1 {
-			TimeoutFuture::new(1).await;
-		    }
-		}
+                let summary = DocumentSummary {
+                    total_turns: 1,
+                    total_code_snippets: snippets.len(),
+                    total_tokens: snippets.iter().map(|s| s.token_count).sum(),
+                    languages_found: snippets.iter().map(|s| s.language.clone()).collect::<std::collections::HashSet<_>>().into_iter().collect(),
+                    content_hashes: snippets.iter().map(|s| s.content_hash.clone()).collect(),
+                };
 
-		// Processing complete - move to uploaded files
-		if let Some(p_file) = currently_processing_file.take() {
-		    let generated_program = generate_program(&p_file.annotations);
+                //let duplicate_report = check_duplicates(snippets.clone());
+//                let zip_url = create_zip(&duplicate_report.unique_snippets).unwrap_or_else(|e| {
+//                    error!("ZIP creation failed: {:?}", e);
+//                    String::new()
+//                });
 
-		    #[cfg(not(target_arch = "wasm32"))]
-		    {
-			if let Err(e) = write("generated.rs", &generated_program) {
-			    error!("Failed to write generated.rs: {}", e);
-			}
-		    }
+                if let Some(mut p_file) = currently_processing_file.take() {
+                    p_file.summary = Some(summary);
+                    //p_file.duplicate_report = Some(duplicate_report);
+                    //p_file.code_annotations = code_annotations;
+                    let generated_program = "FIXME";//generate_program(&p_file.annotations);
 
-		    visualize_multivectors(&p_file.annotations);
-		    visualize_trigger.set(true);
-
-		    files_uploaded.write().push(UploadedFile {
-			name: file_name.clone(),
-			contents: contents.clone(),
-			annotations: p_file.annotations,
-			generated_program,
-		    });
-		}
-	    }
-	}
+                    files_uploaded.write().push(UploadedFile {
+                        name: file_name.clone(),
+                        contents: contents.clone(),
+                        //annotations: p_file.annotations,
+                        generated_program: generated_program.to_string(),
+                        summary: p_file.summary,
+                        //duplicate_report: p_file.duplicate_report,
+			zip_url : Some("FIXME".to_string()),
+			//                        zip_url: if zip_url.is_empty() { None } else { Some(zip_url) },
+                        //code_annotations: p_file.code_annotations,
+                    });
+                }
+            }
+        }
     };
 
     let upload_files = move |evt: FormEvent| async move {
-	if let Some(file_engine) = evt.files() {
-	    read_files(file_engine).await;
-	}
+        if let Some(file_engine) = evt.files() {
+            read_files(file_engine).await;
+        }
     };
 
     rsx! {
-	document::Link { rel: "stylesheet", href: STYLE }
+        style { "{STYLE}" }
+        h1 { "Semantic Hyperspace File Upload" }
+        p { "Upload a .md file (e.g., exported Grok chat) to extract and analyze code snippets" }
+        button { onclick: move |_| files_uploaded.write().clear(), "Clear files" }
 
-	h1 { "Semantic Hyperspace File Upload" }
-	p { "Drop a .txt, .md, .rs, or .js file to process for semantic hyperspace" }
-	button { onclick: move |_| files_uploaded.write().clear(), "Clear files" }
-	button { onclick: move |_| visualize_trigger.set(true), "Refresh Visualization" }
+        div {
+            h3 { "Processing Pipeline" }
+            div {
+                label { r#for: "wikidata", "Enable Wikidata Annotation" }
+                input {
+                    r#type: "checkbox",
+                    id: "wikidata",
+                    checked: enable_wikidata,
+                    oninput: move |evt| enable_wikidata.set(evt.checked()),
+                }
+            }
+            div {
+                label { r#for: "sentiment", "Enable Sentiment Analysis" }
+                input {
+                    r#type: "checkbox",
+                    id: "sentiment",
+                    checked: enable_sentiment,
+                    oninput: move |evt| enable_sentiment.set(evt.checked()),
+                }
+            }
+            div {
+                label { r#for: "embedding", "Enable BERT Embedding" }
+                input {
+                    r#type: "checkbox",
+                    id: "embedding",
+                    checked: enable_embedding,
+                    oninput: move |evt| enable_embedding.set(evt.checked()),
+                }
+            }
+        }
 
-	div {
-	    label { r#for: "directory-upload", "Enable directory upload" }
-	    input {
-		r#type: "checkbox",
-		id: "directory-upload",
-		checked: enable_directory_upload,
-		oninput: move |evt| enable_directory_upload.set(evt.checked()),
-	    }
-	}
+        div {
+            label { r#for: "directory-upload", "Enable directory upload" }
+            input {
+                r#type: "checkbox",
+                id: "directory-upload",
+                checked: enable_directory_upload,
+                oninput: move |evt| enable_directory_upload.set(evt.checked()),
+            }
+        }
 
-	div {
-	    label { r#for: "textreader", "Upload text files for semantic analysis" }
-	    input {
-		r#type: "file",
-		accept: ".txt,.md,.rs,.js",
-		multiple: true,
-		name: "textreader",
-		directory: enable_directory_upload,
-		onchange: upload_files,
-	    }
-	}
+        div {
+            label { r#for: "textreader", "Upload markdown or text files" }
+            input {
+                r#type: "file",
+                accept: ".md,.txt",
+                multiple: true,
+                name: "textreader",
+                directory: enable_directory_upload,
+                onchange: upload_files,
+            }
+        }
 
-	div {
-	    id: "drop-zone",
-	    background_color: if hovered() { "lightblue" } else { "lightgray" },
-	    ondragover: move |evt| {
-		evt.prevent_default();
-		hovered.set(true)
-	    },
-	    ondragleave: move |_| hovered.set(false),
-	    ondrop: move |evt| async move {
-		evt.prevent_default();
-		hovered.set(false);
-		if let Some(file_engine) = evt.files() {
-		    read_files(file_engine).await;
-		}
-	    },
-	    "Drop files here"
-	}
+        div {
+            id: "drop-zone",
+            background_color: if hovered() { "lightblue" } else { "lightgray" },
+            ondragover: move |evt| {
+                evt.prevent_default();
+                hovered.set(true)
+            },
+            ondragleave: move |_| hovered.set(false),
+            ondrop: move |evt| async move {
+                evt.prevent_default();
+                hovered.set(false);
+                if let Some(file_engine) = evt.files() {
+                    read_files(file_engine).await;
+                }
+            },
+            "Drop files here"
+        }
 
-	// Show currently processing file with progress
-	if let Some(file) = currently_processing_file() {
-	    div {
-		div {
-		    style: "border: 2px solid #007bff; padding: 15px; margin: 10px 0; border-radius: 5px; background-color: #f8f9fa;",
-		    h3 { "🔄 Processing: {file.name}" }
+        if let Some(file) = currently_processing_file() {
+            div {
+                style: "border: 2px solid #007bff; padding: 15px; margin: 10px 0; border-radius: 5px; background-color: #f8f9fa;",
+                h3 { "🔄 Processing: {file.name}" }
+                if file.total_lines > 0 {
+                    div {
+                        div {
+                            style: "margin: 10px 0;",
+                            "Progress: {file.progress} / {file.total_lines} lines ({((file.progress as f32 / file.total_lines as f32) * 100.0) as i32}%)"
+                        }
+                        div {
+                            style: "width: 100%; background-color: #e9ecef; border-radius: 10px; overflow: hidden;",
+                            div {
+                                style: "width: {((file.progress as f32 / file.total_lines as f32) * 100.0) as i32}%; height: 20px; background-color: #007bff; transition: width 0.3s ease;",
+                            }
+                        }
+                    }
+                }
+                div {
+                    style: "max-height: 200px; overflow-y: auto; border: 1px solid #dee2e6; padding: 10px; background-color: white;",
+                    pre { "{file.contents}" }
+                }
+            }
+        }
 
-		    if file.total_lines > 0 {
-			div {
-			    div {
-				style: "margin: 10px 0;",
-				"Progress: {file.progress} / {file.total_lines} lines ({((file.progress as f32 / file.total_lines as f32) * 100.0) as i32}%)"
-			    }
-			    div {
-				style: "width: 100%; background-color: #e9ecef; border-radius: 10px; overflow: hidden;",
-				div {
-				    style: "width: {((file.progress as f32 / file.total_lines as f32) * 100.0) as i32}%; height: 20px; background-color: #007bff; transition: width 0.3s ease;",
-				}
-			    }
-			}
-		    }
-
-		    div {
-			style: "max-height: 200px; overflow-y: auto; border: 1px solid #dee2e6; padding: 10px; background-color: white;",
-			pre { "{file.contents}" }
-		    }
-
-		    if !file.annotations.is_empty() {
-			div {
-			    h4 { "Annotations so far:" }
-			    div {
-				style: "max-height: 150px; overflow-y: auto;",
-				ul {
-				    for anno in file.annotations.iter().take(20) {
-					li {
-					    style: "margin: 2px 0;",
-					    span { "{anno.word} {anno.primary_emoji}{anno.secondary_emoji}" }
-					    {
-						if let Some(wd) = &anno.wikidata {
-						    rsx! { span { " | Wikidata: {wd}" } }
-						} else {
-						    rsx! {}
-						}
-					    }
-					}
-				    }
-				}
-				if file.annotations.len() > 20 {
-				    div { p { "... and {file.annotations.len() - 20} more annotations" } }
-				}
-			    }
-			}
-		    }
-		}
-	    }
-	}
-
-	div {
-	    if visualize_trigger() {
-		img { src: "output.png", alt: "Semantic Hyperspace Visualization" }
-	    }
-	}
-
-	ul {
-	    for file in files_uploaded.read().iter().rev() {
-		li {
-		    span { "{file.name}" }
-		    pre { "{file.contents}" }
-		    ul {
-			for anno in file.annotations.iter() {
-			    li {
-				span { "{anno.word} {anno.primary_emoji}{anno.secondary_emoji}" }
-				{
-				    if let Some(wd) = &anno.wikidata {
-					rsx! { span { " | Wikidata: {wd}" } }
-				    } else {
-					rsx! {}
-				    }
-				}
-				//				anno.wikidata.as_ref().map(|wd| rsx! {
-				//    span { " | Wikidata: {wd}" }
-				//}).unwrap_or_default()
-
-				//                                anno.wikidata.as_ref().map(|wd| rsx! {
-				//                                    span { " | Wikidata: {wd}" }
-				//                                })
-			    }
-			}
-		    }
-		    h3 { "Generated Program" }
-		    pre { "{file.generated_program}" }
-		}
-	    }
-	}
+        ul {
+            for file in files_uploaded.read().iter().rev() {
+                li {
+                    span { "{file.name}" }
+                    pre { "{file.contents}" }
+                    if let Some(summary) = &file.summary {
+                        div {
+                            h3 { "Document Summary" }
+                            p { "Total code snippets: {summary.total_code_snippets}" }
+                            p { "Total tokens: {summary.total_tokens}" }
+                            p { "Languages: {summary.languages_found.join(\", \")}" }
+                        }
+                    }
+                    // if let Some(report) = &file.duplicate_report {
+                    //     div {
+                    //         h3 { "Duplicate Report" }
+                    //         p { "Unique snippets: {report.unique_snippets.len()}" }
+                    //         if !report.duplicates.is_empty() {
+                    //             ul {
+                    //                 for (dup, indices) in &report.duplicates {
+                    //                     li { "Duplicate snippet (at indices {indices:?}): {dup.content}" }
+                    //                 }
+                    //             }
+                    //         } else {
+                    //             p { "No duplicates found." }
+                    //         }
+                    //     }
+                    // }
+                    // if !file.code_annotations.is_empty() {
+                    //     div {
+                    //         h3 { "Code Snippet Annotations" }
+                    //         ul {
+                    //             for anno in file.code_annotations.iter() {
+                    //                 li {
+                    //                     span { "{anno.word} {anno.primary_emoji}{anno.secondary_emoji}" }
+                    //                     span { " Sentiment: {anno.sentiment:.2}" }
+                    //                     if let Some(wd) = &anno.wikidata {
+                    //                         span { " | Wikidata: {wd}" }
+                    //                     }
+                    //                     span { " | Vector: [{anno.multivector.vector[0]:.2}, {anno.multivector.vector[1]:.2}, {anno.multivector.vector[2]:.2}]" }
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                    if let Some(zip_url) = &file.zip_url {
+                        a {
+                            href: "{zip_url}",
+                            download: "{file.name}.zip",
+                            "Download Unique Code Snippets as ZIP"
+                        }
+                    }
+                    h3 { "Generated Program" }
+                    pre { "{file.generated_program}" }
+                }
+            }
+        }
     }
-}
-
-
-#[test]
-fn test() {
-//    let first = dioxus_ssr::render_element(EmbeddingApp);
-    //println!("{}",first)
 }
