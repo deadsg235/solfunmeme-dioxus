@@ -29,6 +29,7 @@ use crate::playground::embedding::EmbeddingApp;
 use crate::playground::performance_charts::PerformanceCharts;
 use crate::playground::bert_test::BertTestApp;
 use crate::playground::rust_parser::RustParserApp;
+use crate::playground::extractor::MarkdownCodeExtractor;
 use crate::playground::monster_meta_meme::MonsterMetaMemeApp;
 
 #[derive(PartialEq, Clone)]
@@ -81,6 +82,8 @@ pub enum MenuOption {
     MonsterMetaMeme,
     #[allow(dead_code)]
     SolFunMeme,
+    #[allow(dead_code)]
+    Extractor,
 }
 
 #[component]
@@ -164,6 +167,7 @@ pub fn PlaygroundApp() -> Element {
                     MenuOption::MonsterMetaMeme => rsx!(MonsterMetaMemeApp {}),
 		    //                    MenuOption::SolFunMeme => rsx!(SolFunMemeApp {}),
 		    MenuOption::SolFunMeme => rsx!(SolFunNiceApp {}),
+		    MenuOption::Extractor => rsx!(MarkdownCodeExtractor {}),
                     _ => rsx!(div { "TODO"})
                 }
             }

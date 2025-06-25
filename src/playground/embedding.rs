@@ -16,7 +16,8 @@ use crate::playground::markdown_processor::{ConversationTurn, CodeSnippet, Docum
 //use crate::playground::wikidata_annotator::{WikidataAnnotator, AnnotatedWord};
 //use crate::playground::bert_embedder::{rust_bert_embed_with_context, pca_reduce};
 //use crate::playground::sentiment_analyzer::WasmSentimentAnalyzer;
-use crate::playground::wikidata::*;
+//use crate::playground::wikidata::*;
+use crate::playground::extractor::*;
 //use crate::playground::multivector::Multivector;
 
 const STYLE: &str = "";

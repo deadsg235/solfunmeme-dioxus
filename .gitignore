@@ -63,3 +63,5 @@ flycheck_*.el
 *.profraw
 /src/model/math/
 /tarpaulin-report.html
+/test_orbits_2d_projection.csv
+/tree.txt
