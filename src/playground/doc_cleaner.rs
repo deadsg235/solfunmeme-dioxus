@@ -669,3 +669,161 @@ mod tests {
         println!("Content hashes: {:?}", summary.content_hashes);
     }
 } 
+// new code
+
+#[test]
+fn test_extract_code_snippets() {
+    let text = r#"Here's some Rust code:
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+And some JavaScript:
+```javascript
+function hello() {
+    console.log("Hello, world!");
+}
+```
+"#;
+    
+    let snippets = extract_code_snippets(text);
+    println!("{:?}", text);
+    for (i, m) in snippets.iter().enumerate() {
+        println!("SNIP {} {:?}", i, m);
+    }
+    println!("{:?}", snippets);
+    
+    // Now the assertions should work
+    // assert_eq!(snippets.len(), 2);
+    // assert_eq!(snippets[0].language, "rust");
+    // assert_eq!(snippets[1].language, "javascript");
+    // assert!(snippets[0].content.contains("fn main"));
+    // assert!(snippets[1].content.contains("function hello"));
+}
+
+#[test]
+fn test_extract_code_snippets_with_inline() {
+    let text = r#"Here's some code: `let x = 42; println!("{}", x);` and more text.
+Also a code block:
+```python
+def hello():
+    print("Hello!")
+```
+"#;
+    
+    let snippets = extract_code_snippets(text).unwrap();
+    
+    // Should find both the inline code and the block
+    assert!(snippets.len() >= 2);
+    
+    // Check for the Python block
+    let python_snippet = snippets.iter().find(|s| s.language == "python");
+    assert!(python_snippet.is_some());
+    assert!(python_snippet.unwrap().content.contains("def hello"));
+    
+    // Check for the inline code (if it's substantial enough)
+    let inline_snippet = snippets.iter().find(|s| s.language == "inline");
+    if inline_snippet.is_some() {
+        assert!(inline_snippet.unwrap().content.contains("let x = 42"));
+    }
+}
+
+#[test]
+fn test_extract_empty_code_blocks() {
+    let text = r#"Empty block:
+```rust
+```
+Non-empty block:
+```javascript
+console.log("test");
+```
+"#;
+    
+    let snippets = extract_code_snippets(text).unwrap();
+    
+    // Should only find the non-empty block
+    assert_eq!(snippets.len(), 1);
+    assert_eq!(snippets[0].language, "javascript");
+    assert!(snippets[0].content.contains("console.log"));
+}
+
+
+
+/// newest
+#[test]
+fn test_extract_code_snippets_new() {
+    let text = r#"Here's some Rust code:
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+And some JavaScript:
+```javascript
+function hello() {
+    console.log("Hello, world!");
+}
+```
+"#;
+    
+    let snippets = extract_code_snippets(text).unwrap();
+    println!("{:?}", text);
+    for (i, m) in snippets.iter().enumerate() {
+        println!("SNIP {} {:?}", i, m);
+    }
+    println!("{:?}", snippets);
+    
+    // Now the assertions should work
+    assert_eq!(snippets.len(), 2);
+    assert_eq!(snippets[0].language, "rust");
+    assert_eq!(snippets[1].language, "javascript");
+    assert!(snippets[0].content.contains("fn main"));
+    assert!(snippets[1].content.contains("function hello"));
+}
+
+#[test]
+fn test_extract_code_snippets_with_inline2() {
+    let text = r#"Here's some code: `let x = 42; println!("{}", x);` and more text.
+Also a code block:
+```python
+def hello():
+    print("Hello!")
+```
+"#;
+    
+    let snippets = extract_code_snippets(text).unwrap();
+    
+    // Should find both the inline code and the block
+    assert!(snippets.len() >= 2);
+    
+    // Check for the Python block
+    let python_snippet = snippets.iter().find(|s| s.language == "python");
+    assert!(python_snippet.is_some());
+    assert!(python_snippet.unwrap().content.contains("def hello"));
+    
+    // Check for the inline code (if it's substantial enough)
+    let inline_snippet = snippets.iter().find(|s| s.language == "inline");
+    if inline_snippet.is_some() {
+        assert!(inline_snippet.unwrap().content.contains("let x = 42"));
+    }
+}
+
+#[test]
+fn test_extract_empty_code_blocks2() {
+    let text = r#"Empty block:
+```rust
+```
+Non-empty block:
+```javascript
+console.log("test");
+```
+"#;
+    
+    let snippets = extract_code_snippets(text).unwrap();
+    
+    // Should only find the non-empty block
+    assert_eq!(snippets.len(), 1);
+    assert_eq!(snippets[0].language, "javascript");
+    assert!(snippets[0].content.contains("console.log"));
+}
