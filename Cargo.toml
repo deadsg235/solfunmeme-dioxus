@@ -117,6 +117,7 @@ fastrand = "*"
 rand = "0.8.5"
 rand_core = { version = "0.6.4", features = ["std"] }
 getrandom = { version = "0.3.3", features = ["wasm_js"] }
+emojis = "0.7.0"
 #rand_core = { version = "*", features = ["std"] }
 
 [dependencies.x25519-dalek  ]

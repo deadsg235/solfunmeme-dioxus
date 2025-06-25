@@ -133,6 +133,7 @@ const STYLES: &str = r#"
 
         .orbit {
             position: absolute;
+            background: transparent;
             border: 2px solid rgba(0, 255, 0, 0.3);
             border-radius: 50%;
             animation: spin 10s linear infinite;
@@ -311,8 +312,8 @@ const STYLES: &str = r#"
 
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 16px;
+            height: 16px;
             background: #00ff00;
             border-radius: 50%;
             animation: float 6s linear infinite;
@@ -532,69 +533,39 @@ fn ThemeOrbit(
     on_node_click: EventHandler<usize>
 ) -> Element {
     let mut orbit_motion = use_motion(Transform::identity());
-    console::log_1(&format!("Initialized orbit_motion: {:?}", orbit_motion.get_value()).into());
+    //console::log_1(&format!("Initialized orbit_motion: {:?}", orbit_motion.get_value()).into());
 
-    use_effect(move || {
-	let rotation_direction = if reverse { -360.0 } else { 360.0 };
-	console::log_1(&format!("rotation_direction: {}, duration: {}", rotation_direction, duration).into());
-	let target_transform = Transform::new(0.0, 0.0, 1.0, rotation_direction);
-	console::log_1(&format!("Target transform: {:?}", target_transform).into());
-	orbit_motion.animate_to(
-            target_transform,
-            AnimationConfig {
-		mode: AnimationMode::Tween(Tween {
-                    duration: Duration::from_secs(duration as u64),
-                    easing: easer::functions::Linear::ease_in_out,
-		}),
-		loop_mode: Some(LoopMode::Infinite),
-		..Default::default()
-            },
-        );
-    });
-    // use_effect(move || {
-    //     let rotation_direction = if reverse { -360.0 } else { 360.0 };
-    //     // Assuming Transform supports rotation (e.g., via a rotation matrix or angle)
-    //     let target_transform = Transform::from_rotation(rotation_direction); // Adjust based on actual Transform API
-    //     orbit_motion.animate_to(
-    //         target_transform,
-    //         AnimationConfig {
-    //             mode: AnimationMode::Tween(Tween::default()), // Use Tween for smooth animation
-    //             loop_mode: LoopMode::Infinite, // Continuous looping
-    //             duration: Duration::from_secs(duration as u64),
-    //             ..Default::default()
-    //         },
-    //     );
-    // });
+    let orbit_paused = true;
+
     
-    // // Set up continuous rotation
-    // use_effect(move || {
-    //     let rotation_direction = if reverse { -360.0 } else { 360.0 };
-    //     orbit_motion.animate_loop(AnimationConfig {
-    //         to: Transform::new_rotate(rotation_direction),
-    //         duration: Duration::from_secs(duration as u64),
-    //         loop_type: AnimationLoopMode::Repeat,
-    //         ..Default::default()
-    //     });
-    // });
-
-    // orbit_motion.animate_to(  
-//     target_value,  
-//     AnimationConfig::new(AnimationMode::Spring(Spring::default()))  
-//         .with_loop(LoopMode::Infinite)  // or other loop modes  
-// );  
-  
-// rotation.animate_to(  
-//     target_value,  
-//     AnimationConfig::new(AnimationMode::Tween(Tween::default()))  
-//         .with_loop(LoopMode::Alternate)  
-// );
+    use_effect(move || {
+	if !orbit_paused {
+	    let rotation_direction = if reverse { -360.0 } else { 360.0 };
+	    //	console::log_1(&format!("rotation_direction: {}, duration: {}", rotation_direction, duration).into());
+	    let target_transform = Transform::new(0.0, 0.0, 1.0, rotation_direction);
+	    //	console::log_1(&format!("Target transform: {:?}", target_transform).into());
+	    orbit_motion.animate_to(
+		target_transform,
+		AnimationConfig {
+		    mode: AnimationMode::Tween(Tween {
+			duration: Duration::from_secs(duration as u64),
+			easing: easer::functions::Linear::ease_in_out,
+		    }),
+		    loop_mode: Some(LoopMode::Infinite),
+		    ..Default::default()
+		},
+            );
+	}
+    });
     
 
     let rotation = orbit_motion.get_value().rotation;
-    console::log_1(&format!("Orbit motion rotation: {}", rotation).into());
+//    console::log_1(&format!("Orbit motion rotation: {}", rotation).into());
     let radius2 = radius / 2;
+    let width = radius;
+    let height = radius;
     let style = format!(
-	"width: {radius}px; height: {radius}px; margin: -{radius2}px 0 0 -{radius2}px; transform: rotate({rotation}deg);"
+	"width: {width}px; height: {height}px; margin: -{radius2}px 0 0 -{radius2}px; transform: rotate({rotation}deg);"
     );
     
     if nodes.is_empty() {
@@ -766,12 +737,7 @@ fn BoostCore(
     let mut rotation = use_motion(0.0f32);   
     let easing = easer::functions::Elastic::ease_out;
 	    
-    // Animate boost effect when active
-    //use_effect(move || {
-    //        if boost_active {
-    //            scale.animate_sequence(sequence);
-    //        }
-    //    });
+
     use_effect(move || {  
 	if boost_active {  
             let sequence = AnimationSequence::new()    
@@ -855,23 +821,6 @@ fn BoostCore(
         }
     });
 
-    // use_effect(move || {  
-    // 	if boost_active {  
-    //         let sequence = AnimationSequence::new()  
-    // 		.then(/* your animation steps */);  
-    //         scale.animate_sequence(sequence);  
-    // 	}  
-    // });
-
-    // // Animate boost effect when active
-    // use_effect(move || {
-    //     if boost_active {
-    //         scale.animate_sequence(AnimationSequence::new(vec![
-    //             AnimationStep::new(1.3, Duration::from_millis(500)),
-    //             AnimationStep::new(1.0, Duration::from_millis(500)),
-    //         ]));
-    //     }
-    // });
 
     rsx! {
         div { 
@@ -932,27 +881,6 @@ fn FeatureItem(emoji: String, text: String) -> Element {
         );
     });
     
-    // // Gentle wiggle animation
-    // use_effect(move || {
-    //     rotation.animate_loop(AnimationConfig {
-    //         to: 5.0,
-    //         duration: Duration::from_millis(3000),
-    //         loop_type: AnimationLoopMode::PingPong,
-    //         ..Default::default()
-    //     });
-    // });
-//     orbit_motion.animate_to(  
-//     target_value,  
-//     AnimationConfig::new(AnimationMode::Spring(Spring::default()))  
-//         .with_loop(LoopMode::Infinite)  // or other loop modes  
-// );  
-  
-// rotation.animate_to(  
-//     target_value,  
-//     AnimationConfig::new(AnimationMode::Tween(Tween::default()))  
-//         .with_loop(LoopMode::Alternate)  
-// );
-
     rsx! {
         div { class: "feature",
             span { 
