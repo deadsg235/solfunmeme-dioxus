@@ -4,7 +4,10 @@ use dioxus::{html::HasFileData, prelude::dioxus_elements::FileEngine};
 //use serde_json::{Value, json}; // For Wikidata JSON
 use serde_json::{Value}; // For Wikidata JSON
 //use plotters::prelude::*; // For visualization
+
+#[cfg(not(target_arch = "wasm32"))]
 use std::fs::write; // For saving generated program
+
 use gloo_timers::future::TimeoutFuture;
 use log::error;
 use crate::model::wasm_bert::{WasmBertEmbedder, WasmSentimentAnalyzer};
@@ -410,120 +413,6 @@ fn main() {{
 	}
     }
 }
-
-
-/*
-
-panicked at src\playground\embedding.rs:184:59:
-called `Result::unwrap()` on an `Err` value: Error { kind: Unsupported, message: "operation not supported on this platform" }
-
-Stack:
-
-__wbg_get_imports/imports.wbg.__wbg_new_8a6f238a6ece86ea/<@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:2156:21
-logError@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:89:18
-__wbg_get_imports/imports.wbg.__wbg_new_8a6f238a6ece86ea@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:2155:66
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.__wbg_new_8a6f238a6ece86ea externref shim@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[31306]:0x9173fd
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.console_error_panic_hook::Error::new::h8fd2edbe98e06cd1@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[17508]:0x83ebc6
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.console_error_panic_hook::hook_impl::h77cf582950d9cd9a@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[5042]:0x5f0325
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.console_error_panic_hook::hook::h0ab20291ffe33955@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[27968]:0x8f4ee5
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.core::ops::function::Fn::call::h1ca563c1039484d9@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[23466]:0x8b54f8
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.std::panicking::rust_panic_with_hook::h885a2e0f7cb6094c@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[9255]:0x7171dc
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.std::panicking::begin_panic_handler::{{closure}}::hf631a5b49e1d8742@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[12230]:0x79dcea
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.std::sys::backtrace::__rust_end_short_backtrace::h055708a75b60b26d@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[31787]:0x918caa
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.__rustc[90fd524071601a38]::rust_begin_unwind@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[29682]:0x909e28
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.core::panicking::panic_fmt::h3b9ae52b0e452a99@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[29683]:0x909e55
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.core::result::unwrap_failed::h4997b33bfd193b1e@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[14368]:0x7e7729
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.solfunmeme_dioxus::playground::embedding::EmbeddingApp::{{closure}}::{{closure}}::hc2e21a74df566889@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[540]:0x1e551a
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.solfunmeme_dioxus::playground::embedding::EmbeddingApp::{{closure}}::{{closure}}::hf5c04643e3598636@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[2001]:0x442cb9
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<F as dioxus_core::events::SpawnIfAsync<dioxus_core::events::AsyncMarker>>::spawn::{{closure}}::hd7ee48db4fb81d1b@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[3827]:0x56c1e1
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::tasks::<impl dioxus_core::runtime::Runtime>::handle_task_wakeup::{{closure}}::h2d01714c68bce8ea@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[2295]:0x47debd
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::runtime::Runtime::with_scope_on_stack::hccd6ac0a01822a88@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[16693]:0x829504
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::tasks::<impl dioxus_core::runtime::Runtime>::handle_task_wakeup::h490d8ea0acaae079@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[1846]:0x4216f0
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::virtual_dom::VirtualDom::poll_tasks::hadbe31ce12026b80@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[534]:0x1dfc40
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::virtual_dom::VirtualDom::process_events::h040450ae91a4d672@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[738]:0x27e39e
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::virtual_dom::VirtualDom::wait_for_work::{{closure}}::{{closure}}::h1c46ba05bb5a708a@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[3165]:0x512d65
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::virtual_dom::VirtualDom::wait_for_work::{{closure}}::h4d643fdcee6c5d1f@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[800]:0x2a60a7
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<futures_util::future::future::fuse::Fuse<Fut> as core::future::future::Future>::poll::hc0da195f6e64fc2b@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[6969]:0x68c4df
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<core::pin::Pin<P> as core::future::future::Future>::poll::hadf2c52ddefaad9e@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[17700]:0x843778
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<core::pin::Pin<P> as core::future::future::Future>::poll::h562b42a9de4244e7@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[17693]:0x8434db
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_util::future::future::FutureExt::poll_unpin::hcfb9c82339b44eb7@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[19526]:0x86c96a
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_web::run::{{closure}}::{{closure}}::{{closure}}::hf003091e11f912c3@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[5094]:0x5f53d1
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.core::ops::function::impls::<impl core::ops::function::FnMut<A> for &mut F>::call_mut::h6e9852333d87fe76@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[18308]:0x851fa4
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_web::run::{{closure}}::{{closure}}::h66004d6db5b7b838@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[1266]:0x37e413
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<futures_util::future::poll_fn::PollFn<F> as core::future::future::Future>::poll::h80de519d6eebcbb5@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[19204]:0x865ce7
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_web::run::{{closure}}::h0a9eed6897b591b7@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[484]:0x1a83cc
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_web::launch::launch_virtual_dom::{{closure}}::h41798842f442b82a@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[2542]:0x4ac7fe
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::task::singlethread::Task::run::h13ecf366154bc9f0@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[3433]:0x539209
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::queue::QueueState::run_all::h70f14342fe4233ff@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[3145]:0x50fea8
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::queue::Queue::new::{{closure}}::h560a93fd1e9870d2@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[16652]:0x8283aa
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<dyn core::ops::function::FnMut<(A,)>+Output = R as wasm_bindgen::closure::WasmClosure>::describe::invoke::hd78e7de9b3f87e79@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[10719]:0x75f300
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.closure1784 externref shim@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[31206]:0x916b91
-__wbg_adapter_78@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:365:10
-real@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:187:20
-VoidFunction*__wbg_get_imports/imports.wbg.__wbg_queueMicrotask_97d92b4fcc8a61c5/<@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:2316:23
-logError@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:89:18
-__wbg_get_imports/imports.wbg.__wbg_queueMicrotask_97d92b4fcc8a61c5@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:2315:77
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.__wbg_queueMicrotask_97d92b4fcc8a61c5 externref shim@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[31797]:0x918d09
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::queue::queueMicrotask::hc5abcc71589e7094@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[21008]:0x88a8e1
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::queue::Queue::schedule_task::h611ccb5a25c86fe7@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[5230]:0x60231a
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::queue::Queue::push_task::h8a13acd7498c4911@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[24617]:0x8c7624
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::task::singlethread::Task::force_wake::{{closure}}::h72aa79143235a2c1@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[24618]:0x8c7661
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::queue::Queue::with::h485020ac8fadb8ac@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[23418]:0x8b488c
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::task::singlethread::Task::force_wake::h70af2b8b00c80936@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[27847]:0x8f35dc
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::task::singlethread::Task::wake::h505af3cc2e417564@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[10572]:0x75893a
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::task::singlethread::Task::into_raw_waker::raw_wake::h06ef41bca13a0c41@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[23420]:0x8b4916
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.core::task::wake::Waker::wake::h26f801928613f7e3@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[14358]:0x7e7219
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_core::task::__internal::atomic_waker::AtomicWaker::wake::h377f9e5f6be63292@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[6573]:0x670453
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_channel::mpsc::UnboundedSenderInner<T>::queue_push_and_signal::haf8db4a3d6fd6914@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[19714]:0x870813
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_channel::mpsc::UnboundedSender<T>::do_send_nb::hd32d811b4c6c0887@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[5581]:0x621c51
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_channel::mpsc::UnboundedSender<T>::unbounded_send::hdfaf01d3fe5fbf5f@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[25746]:0x8d7b22
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<dioxus_core::tasks::LocalTaskHandle as futures_task::arc_wake::ArcWake>::wake_by_ref::h4c457ee2c7a80c61@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[13143]:0x7beaf2
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_task::arc_wake::ArcWake::wake::h73dd946f71743640@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[18222]:0x8500c7
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_task::waker::wake_arc_raw::he134ab3428f84b10@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[21679]:0x89722b
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.core::task::wake::Waker::wake::hc3d9fa88c42b1f65@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[14273]:0x7e469c
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_channel::oneshot::Inner<T>::drop_tx::hb31b9ee74101f764@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[1715]:0x402776
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<futures_channel::oneshot::Sender<T> as core::ops::drop::Drop>::drop::hc1471c1d04f96cb4@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[24839]:0x8cab0d
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.core::ptr::drop_in_place<futures_channel::oneshot::Sender<core::result::Result<wasm_bindgen::JsValue,wasm_bindgen::JsValue>>>::hd5181360cafc3e24@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[25315]:0x8d18b9
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_channel::oneshot::Sender<T>::send::hdad7ecb7fcaa3dd4@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[12566]:0x7aa28e
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<dioxus_web::file_engine::WebFileEngine as dioxus_html::file_data::FileEngine>::read_file_to_string::{{closure}}::{{closure}}::h6589c88017a16e22@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[9547]:0x726673
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<dyn core::ops::function::FnMut<()>+Output = R as wasm_bindgen::closure::WasmClosure>::describe::invoke::h673fc5d5691b3c85@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[12190]:0x79c498
-__wbg_adapter_63@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:335:10
-real@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:187:20
-EventHandlerNonNull*__wbg_get_imports/imports.wbg.__wbg_setonload_1302417ca59f658b/<@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:2534:9
-logError@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:89:18
-__wbg_get_imports/imports.wbg.__wbg_setonload_1302417ca59f658b@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus.js:2533:72
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.__wbg_setonload_1302417ca59f658b externref shim@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[31444]:0x917ca3
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.web_sys::features::gen_FileReader::FileReader::set_onload::h103e01240f31bd92@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[15885]:0x813971
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<dioxus_web::file_engine::WebFileEngine as dioxus_html::file_data::FileEngine>::read_file_to_string::{{closure}}::h87d551daf2946dc7@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[910]:0x2e2ff8
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<core::pin::Pin<P> as core::future::future::Future>::poll::h2267a6ead59ccaca@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[16101]:0x819970
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.solfunmeme_dioxus::playground::embedding::EmbeddingApp::{{closure}}::{{closure}}::hc2e21a74df566889@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[540]:0x1e4fd1
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.solfunmeme_dioxus::playground::embedding::EmbeddingApp::{{closure}}::{{closure}}::hf5c04643e3598636@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[2001]:0x442cb9
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<F as dioxus_core::events::SpawnIfAsync<dioxus_core::events::AsyncMarker>>::spawn::{{closure}}::hd7ee48db4fb81d1b@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[3827]:0x56c1e1
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::tasks::<impl dioxus_core::runtime::Runtime>::handle_task_wakeup::{{closure}}::h2d01714c68bce8ea@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[2295]:0x47debd
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::runtime::Runtime::with_scope_on_stack::hccd6ac0a01822a88@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[16693]:0x829504
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::tasks::<impl dioxus_core::runtime::Runtime>::handle_task_wakeup::h490d8ea0acaae079@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[1846]:0x4216f0
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::virtual_dom::VirtualDom::poll_tasks::hadbe31ce12026b80@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[534]:0x1dfc40
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::virtual_dom::VirtualDom::process_events::h040450ae91a4d672@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[738]:0x27e39e
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::virtual_dom::VirtualDom::wait_for_work::{{closure}}::{{closure}}::h1c46ba05bb5a708a@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[3165]:0x512d65
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_core::virtual_dom::VirtualDom::wait_for_work::{{closure}}::h4d643fdcee6c5d1f@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[800]:0x2a60a7
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<futures_util::future::future::fuse::Fuse<Fut> as core::future::future::Future>::poll::hc0da195f6e64fc2b@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[6969]:0x68c4df
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<core::pin::Pin<P> as core::future::future::Future>::poll::hadf2c52ddefaad9e@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[17700]:0x843778
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<core::pin::Pin<P> as core::future::future::Future>::poll::h562b42a9de4244e7@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[17693]:0x8434db
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.futures_util::future::future::FutureExt::poll_unpin::hcfb9c82339b44eb7@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[19526]:0x86c96a
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_web::run::{{closure}}::{{closure}}::{{closure}}::hf003091e11f912c3@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[5094]:0x5f53d1
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.core::ops::function::impls::<impl core::ops::function::FnMut<A> for &mut F>::call_mut::h6e9852333d87fe76@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[18308]:0x851fa4
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_web::run::{{closure}}::{{closure}}::h66004d6db5b7b838@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[1266]:0x37e413
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.<futures_util::future::poll_fn::PollFn<F> as core::future::future::Future>::poll::h80de519d6eebcbb5@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[19204]:0x865ce7
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_web::run::{{closure}}::h0a9eed6897b591b7@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[484]:0x1a83cc
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.dioxus_web::launch::launch_virtual_dom::{{closure}}::h41798842f442b82a@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[2542]:0x4ac7fe
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::task::singlethread::Task::run::h13ecf366154bc9f0@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[3433]:0x539209
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::queue::QueueState::run_all::h70f14342fe4233ff@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[3145]:0x50fea8
-solfunmeme_dioxus-e2950b5a8ecdfd23.wasm.wasm_bindgen_futures::queue::Queue::new::{{closure}}::h560a93fd1e9870d2@http://192.168.1.82:8080/assets/dioxus/solfunmeme-dioxus_bg.wasm:wasm-function[16652]:0x8283aa
-
-
-patch_console.js:1:737
-
-*/
 
 
 #[test]

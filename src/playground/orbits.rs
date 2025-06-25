@@ -1,3 +1,4 @@
+
 use dioxus::prelude::*;
 use dioxus_motion::prelude::*;
 use gloo_timers::future::TimeoutFuture;
@@ -12,6 +13,7 @@ type Vector8<T> = SVector<T, 8>;
 type State = Vector8<f64>;
 use emojis;
 use nalgebra::ArrayStorage;
+
 // To modify the Dioxus application so that each node in the ThemeOrbitalNetwork has its own mass, position, and velocity, and moves along its own unique 4D orbit (projected to 2D), we’ll extend the existing system. This aligns with your previous request to give each object its own orbit with dynamic calculations (from June 24, 2025, 10:03). We’ll:
 // Update ThemeNode: Add mass, position, and velocity fields to support individual 4D orbits.
 // Modify Simulation: Simulate each node’s 4D orbit independently, using its mass in the gravitational force 
@@ -161,7 +163,7 @@ fn simulate_orbit(t_span: (f64, f64), n_steps: usize, initial_state: State, k: f
 // Each node’s orbit is computed separately, rendered as an SVG path, and the node is animated along its path using dioxus-motion. We’ll normalize all orbits to fit the 800x800 SVG canvas and animate nodes to move cyclically.
 // rust
 #[component]
-fn ThemeOrbitalNetwork2() -> Element {
+pub fn ThemeOrbitalNetwork2() -> Element {
     let mut selected_node = use_signal(|| None::<usize>);
     let k = 1.0; // Force constant
     let t_span = (0.0, 10.0);
@@ -382,7 +384,7 @@ fn generate_node_elements2(
 }
 
 #[component]
-fn ThemeOrbitalNetwork() -> Element {
+pub fn ThemeOrbitalNetwork4() -> Element {
     let mut selected_node = use_signal(|| None::<usize>);
     let k = 1.0;
     let t_span = (0.0, 10.0);
@@ -929,7 +931,7 @@ fn get_orbit_nodes3(count: usize) -> Vec<ThemeNode> {
 }
 
 #[component]
-fn ThemeOrbitalNetwork3() -> Element {
+pub fn ThemeOrbitalNetwork3() -> Element {
     let mut selected_node = use_signal(|| None::<usize>);
     let k = 1.0;
     let t_span = (0.0, 10.0);

@@ -7,7 +7,7 @@ use wasm_bindgen::JsCast;
 use web_sys::{console, window};
 //use dioxus_motion::AnimationStep;
 use easer::functions::Easing;
-
+use crate::playground::orbits::*;
 use dioxus_motion::animations::utils::LoopMode;
 
 // Welcome to the SOLFUNTHEME Zero Ontology System (ZOS)!
@@ -382,7 +382,10 @@ fn ZeroOntologySystem() -> Element {
         ParticleSystem { particles: particles.clone() }
         
         // Enchanting orbital theme network
-        ThemeOrbitalNetwork {}
+//        ThemeOrbitalNetwork {}
+	ThemeOrbitalNetwork2 {}
+//	ThemeOrbitalNetwork3 {}
+//	ThemeOrbitalNetwork4 {}
         
         // The exciting boost core
         BoostCore { 
