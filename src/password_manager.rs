@@ -336,6 +336,7 @@ pub fn copy_to_clipboard(_text: String) {
 // ============================================================================
 // PRESENTATION LAYER
 // ============================================================================
+//use crate::extractor::components::appheader::ractorAppHeader;
 
 #[component]
 pub fn PasswordApp() -> Element {
@@ -347,7 +348,7 @@ pub fn PasswordApp() -> Element {
             div {
                 class: "max-w-4xl mx-auto",
                 
-                AppHeader { app_state }
+                PasswordAppHeader { app_state }
                 
                 if !app_state.read().error_message.is_empty() {
                     ErrorMessage { message: app_state.read().error_message.clone() }
@@ -364,7 +365,7 @@ pub fn PasswordApp() -> Element {
 }
 
 #[component]
-fn AppHeader(app_state: Signal<PasswordAppState>) -> Element {
+pub fn PasswordAppHeader(app_state: Signal<PasswordAppState>) -> Element {
     let handle_lock_vault = {
         let mut app_state2 = app_state;
         move |_| {

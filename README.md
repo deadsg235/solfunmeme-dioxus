@@ -1,6 +1,14 @@
 ## Solfunmeme Dioxus 
 
 # todo 
+
+### Idea
+
+split each declaration to own file
+vectorize 
+look for duplicates
+cannonical directories
+
 ### auto populate menu
 ### embed code in app
 ### embed json version of code in app

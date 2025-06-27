@@ -1,63 +1,63 @@
-use dioxus::prelude::*;
+pub use dioxus::prelude::*;
 
-use crate::playground::MenuOption::Airdrop;
-use crate::playground::MenuOption::Memes;
-use crate::playground::MenuOption::MemeManagement;
-use crate::playground::MenuOption::MetaMemeOperations;
-use crate::playground::MenuOption::ReceiveSol;
-use crate::playground::MenuOption::SendSol;
-use crate::playground::MenuOption::StylingAndEmojis;
-use crate::playground::test_components::ComponentName::ActionButton;
-use crate::playground::test_components::ComponentName::AddClusterModal;
-use crate::playground::test_components::ComponentName::CardHeader;
-use crate::playground::test_components::ComponentName::ClusterInfo;
-use crate::playground::test_components::ComponentName::CodeDisplay;
-use crate::playground::test_components::ComponentName::ConnectWalletFirst;
-use crate::playground::test_components::ComponentName::ConnectionButtons;
-use crate::playground::test_components::ComponentName::CoreButtons;
-use crate::playground::test_components::ComponentName::CreateButton;
-use crate::playground::test_components::ComponentName::CryptoAppHeader;
-use crate::playground::test_components::ComponentName::CryptoButtons;
-use crate::playground::test_components::ComponentName::CryptoErrorMessage;
-use crate::playground::test_components::ComponentName::CryptoFrontendApp;
-use crate::playground::test_components::ComponentName::DecryptionForm;
-use crate::playground::test_components::ComponentName::EncryptionForm;
-use crate::playground::test_components::ComponentName::ExpressionCard;
-use crate::playground::test_components::ComponentName::ExpressionInputs;
-use crate::playground::test_components::ComponentName::ExpressionList;
-use crate::playground::test_components::ComponentName::ExpressionMetadata;
-use crate::playground::test_components::ComponentName::ExpressionTypeSelector;
-use crate::playground::test_components::ComponentName::Footer;
-use crate::playground::test_components::ComponentName::InputField;
-use crate::playground::test_components::ComponentName::InputSection;
-use crate::playground::test_components::ComponentName::ManagementButtons;
-use crate::playground::test_components::ComponentName::MemeCardHeader;
-use crate::playground::test_components::ComponentName::MemesFooter;
-use crate::playground::test_components::ComponentName::MetadataInputs;
-use crate::playground::test_components::ComponentName::Notification;
-use crate::playground::test_components::ComponentName::Notification2;
-use crate::playground::test_components::ComponentName::PageNotFound;
-use crate::playground::test_components::ComponentName::QueryAccountDialog;
-use crate::playground::test_components::ComponentName::QueryCoinDialog;
-use crate::playground::test_components::ComponentName::SearchInput;
-use crate::playground::test_components::ComponentName::SignInWithSolana;
-use crate::playground::test_components::ComponentName::SignMessage;
-use crate::playground::test_components::ComponentName::SignTx;
-use crate::playground::test_components::ComponentName::SimilaritySection;
-use crate::playground::test_components::ComponentName::SuccessMessage;
-use crate::playground::test_components::ComponentName::TextAreaField;
-use crate::playground::test_components::ComponentName::TransactionButtons;
-use crate::playground::test_components::ComponentName::VectorSpace;
-use crate::playground::test_components::ComponentName::WikidataMemeExplorer;
-use crate::playground::test_components::ComponentName::WikidataMemeView;
-use crate::playground::test_components::ComponentName::WorkflowMemeExplorer;
-use crate::playground::test_components::ComponentName::WorkflowMemeView;
-use crate::playground::test_components::ComponentName::WorkflowStepView;
-use crate::Route::Clusters;
-//use crate::Route::TestMenuApp;
+pub use crate::playground::MenuOption::Airdrop;
+pub use crate::playground::MenuOption::Memes;
+pub use crate::playground::MenuOption::MemeManagement;
+pub use crate::playground::MenuOption::MetaMemeOperations;
+pub use crate::playground::MenuOption::ReceiveSol;
+pub use crate::playground::MenuOption::SendSol;
+pub use crate::playground::MenuOption::StylingAndEmojis;
+pub use crate::playground::test_components::ComponentName::ActionButton;
+pub use crate::playground::test_components::ComponentName::AddClusterModal;
+pub use crate::playground::test_components::ComponentName::CardHeader;
+pub use crate::playground::test_components::ComponentName::ClusterInfo;
+pub use crate::playground::test_components::ComponentName::CodeDisplay;
+pub use crate::playground::test_components::ComponentName::ConnectWalletFirst;
+pub use crate::playground::test_components::ComponentName::ConnectionButtons;
+pub use crate::playground::test_components::ComponentName::CoreButtons;
+pub use crate::playground::test_components::ComponentName::CreateButton;
+pub use crate::playground::test_components::ComponentName::CryptoAppHeader;
+pub use crate::playground::test_components::ComponentName::CryptoButtons;
+pub use crate::playground::test_components::ComponentName::CryptoErrorMessage;
+pub use crate::playground::test_components::ComponentName::CryptoFrontendApp;
+pub use crate::playground::test_components::ComponentName::DecryptionForm;
+pub use crate::playground::test_components::ComponentName::EncryptionForm;
+pub use crate::playground::test_components::ComponentName::ExpressionCard;
+pub use crate::playground::test_components::ComponentName::ExpressionInputs;
+pub use crate::playground::test_components::ComponentName::ExpressionList;
+pub use crate::playground::test_components::ComponentName::ExpressionMetadata;
+pub use crate::playground::test_components::ComponentName::ExpressionTypeSelector;
+pub use crate::playground::test_components::ComponentName::Footer;
+pub use crate::playground::test_components::ComponentName::InputField;
+pub use crate::playground::test_components::ComponentName::InputSection;
+pub use crate::playground::test_components::ComponentName::ManagementButtons;
+pub use crate::playground::test_components::ComponentName::MemeCardHeader;
+pub use crate::playground::test_components::ComponentName::MemesFooter;
+pub use crate::playground::test_components::ComponentName::MetadataInputs;
+pub use crate::playground::test_components::ComponentName::Notification;
+pub use crate::playground::test_components::ComponentName::Notification2;
+pub use crate::playground::test_components::ComponentName::PageNotFound;
+pub use crate::playground::test_components::ComponentName::QueryAccountDialog;
+pub use crate::playground::test_components::ComponentName::QueryCoinDialog;
+pub use crate::playground::test_components::ComponentName::SearchInput;
+pub use crate::playground::test_components::ComponentName::SignInWithSolana;
+pub use crate::playground::test_components::ComponentName::SignMessage;
+pub use crate::playground::test_components::ComponentName::SignTx;
+pub use crate::playground::test_components::ComponentName::SimilaritySection;
+pub use crate::playground::test_components::ComponentName::SuccessMessage;
+pub use crate::playground::test_components::ComponentName::TextAreaField;
+pub use crate::playground::test_components::ComponentName::TransactionButtons;
+pub use crate::playground::test_components::ComponentName::VectorSpace;
+pub use crate::playground::test_components::ComponentName::WikidataMemeExplorer;
+pub use crate::playground::test_components::ComponentName::WikidataMemeView;
+pub use crate::playground::test_components::ComponentName::WorkflowMemeExplorer;
+pub use crate::playground::test_components::ComponentName::WorkflowMemeView;
+pub use crate::playground::test_components::ComponentName::WorkflowStepView;
+pub use crate::Route::Clusters;
+//pub use crate::Route::TestMenuApp;
 //crate::playground::test_app::TestMenuApp_completions::Component::TestMenuApp
-use crate::Route::Dashboard;
-use crate::Route::Extras;
+pub use crate::Route::Dashboard;
+pub use crate::Route::Extras;
 //     airdrop::Airdrop,
 //     clusters::{AddClusterModal, ClusterInfo, Clusters},
 //     coins::QueryCoinDialog,
@@ -101,47 +101,47 @@ use crate::Route::Extras;
 //     wikidata_memes::{WikidataMemeExplorer, WikidataMemeView},
 //     workflow_memes::{WorkflowMemeExplorer, WorkflowMemeView, WorkflowStepView},
 // }};
-// //use crate::{MenuOption, UseConnections};
+// //pub use crate::{MenuOption, pub useConnections};
 
 // Component metadata
 
-//use dioxus_router::prelude::*;
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use crate::views::component_memes::MemeCategory;
-use crate::views::wikidata_memes::WikidataMeme;
-use crate::views::workflow_memes::WorkflowMeme;
-use crate::views::component_memes::ComponentMeme;
-use crate::playground::MenuOption;
-use crate::playground::test_components::ComponentName::GitParser2;
-use crate::playground::test_components::ComponentName::ComponentMemeExplorer;
-use crate::playground::test_components::ComponentName::MemeCategoryView;
-use crate::playground::test_components::ComponentName::ComponentMemeView;
-use crate::playground::test_components::ComponentName::WelcomeScreen;
-use crate::playground::test_components::ComponentName::PasswordDetail;
-use crate::playground::test_components::ComponentName::AddPasswordForm;
-use crate::playground::test_components::ComponentName::PasswordList;
-use crate::playground::test_components::ComponentName::PasswordMainApp;
-use crate::playground::test_components::ComponentName::LoginScreen;
-use crate::playground::test_components::ComponentName::PasswordErrorMessage;
-use crate::playground::test_components::ComponentName::PasswordAppHeader;
-use crate::password_manager::PasswordApp;
-use crate::playground::test_components::ComponentName::PingCluster;
-use crate::header::ActiveAccountDropDown;
-use crate::playground::test_components::ComponentName::NavWalletItem;
-use crate::header::ConnectWalletModalModal;
-use crate::header::Header;
-use crate::model::UseConnections;
-use crate::views::workflow_memes::WorkflowStep;
-use crate::password_manager::PasswordAppState;
-use crate::views::accounts::Accounts;
-use crate::views::accounts::ClusterSuccess;
-use crate::views::accounts::TokenAccountCard;
-use crate::views::accounts::TxCard;
+//pub use dioxus_router::prelude::*;
+pub use serde::{Deserialize, Serialize};
+pub use std::collections::HashMap;
+pub use crate::views::component_memes::MemeCategory;
+pub use crate::views::wikidata_memes::WikidataMeme;
+pub use crate::views::workflow_memes::WorkflowMeme;
+pub use crate::views::component_memes::ComponentMeme;
+pub use crate::playground::MenuOption;
+pub use crate::playground::test_components::ComponentName::GitParser2;
+pub use crate::playground::test_components::ComponentName::ComponentMemeExplorer;
+pub use crate::playground::test_components::ComponentName::MemeCategoryView;
+pub use crate::playground::test_components::ComponentName::ComponentMemeView;
+pub use crate::playground::test_components::ComponentName::WelcomeScreen;
+pub use crate::playground::test_components::ComponentName::PasswordDetail;
+pub use crate::playground::test_components::ComponentName::AddPasswordForm;
+pub use crate::playground::test_components::ComponentName::PasswordList;
+pub use crate::playground::test_components::ComponentName::PasswordMainApp;
+pub use crate::playground::test_components::ComponentName::LoginScreen;
+pub use crate::playground::test_components::ComponentName::PasswordErrorMessage;
+pub use crate::playground::test_components::ComponentName::PasswordAppHeader;
+pub use crate::password_manager::PasswordApp;
+pub use crate::playground::test_components::ComponentName::PingCluster;
+pub use crate::header::ActiveAccountDropDown;
+pub use crate::playground::test_components::ComponentName::NavWalletItem;
+pub use crate::header::ConnectWalletModalModal;
+pub use crate::header::Header;
+//pub use crate::model::useConnections;
+pub use crate::views::workflow_memes::WorkflowStep;
+pub use crate::password_manager::PasswordAppState;
+pub use crate::views::accounts::Accounts;
+pub use crate::views::accounts::ClusterSuccess;
+pub use crate::views::accounts::TokenAccountCard;
+pub use crate::views::accounts::TxCard;
 //let food =1;
 
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
-enum ComponentName {
+pub enum ComponentName {
     Header,
     ConnectWalletModalModal,
     NavWalletItem,
@@ -223,13 +223,13 @@ enum ComponentName {
 }
 
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
-struct ComponentInstance {
-    name: ComponentName,
-    props: HashMap<String, PropValue>,
-    id: u32,
+pub struct ComponentInstance {
+    pub name: ComponentName,
+    pub props: HashMap<String, PropValue>,
+    pub id: u32,
 }
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
-enum PropValue {
+pub enum PropValue {
     Bool(bool),
     String(String),
     //SignalBool(Signal<bool>),
@@ -240,14 +240,14 @@ enum PropValue {
     WikidataMeme(WikidataMeme),
     WorkflowMeme(WorkflowMeme),
     WorkflowStep(WorkflowStep),
-//    UseConnections(UseConnections),
+//    pub useConnections(pub useConnections),
 //    MenuOptionHandler(EventHandler<MenuOption>),
     StringVec(Vec<String>),
 }
 
 #[component]
 pub fn ComponentBuilderApp() -> Element {
-    let selected_component = use_signal(|| None::<ComponentName>);
+    let selected_component =  use_signal(|| None::<ComponentName>);
     let mut components = use_signal(|| vec![] as Vec<ComponentInstance>);
     let next_id = use_signal(|| 0u32);
     let mut props_config = use_signal(|| HashMap::<String, PropValue>::new());
@@ -542,7 +542,7 @@ fn RenderComponent(instance: ComponentInstance) -> Element {
 //         ComponentName::Clusters => rsx! { Clusters {} },
 //         ComponentName::ClusterInfo => {
 //             let connections = instance.props.get("connections").and_then(|v| match v {
-//                 PropValue::UseConnections(c) => Some(c.clone()),
+//                 PropValue::pub useConnections(c) => Some(c.clone()),
 //                 _ => None,
 //             }).unwrap_or_default();
 //             rsx! { ClusterInfo { connections } }
@@ -553,7 +553,7 @@ fn RenderComponent(instance: ComponentInstance) -> Element {
 //                 _ => None,
 //             }).unwrap_or_default();
 //             let connections = instance.props.get("connections").and_then(|v| match v {
-//                 PropValue::UseConnections(c) => Some(c.clone()),
+//                 PropValue::pub useConnections(c) => Some(c.clone()),
 //                 _ => None,
 //             }).unwrap_or_default();
 //             rsx! { AddClusterModal { show_add_entry_modal, connections } }
@@ -1050,10 +1050,10 @@ fn get_component_props(component: &ComponentName) -> Vec<(&'static str, &'static
             ("timestamp", "string"),
         ],
         ComponentName::Airdrop => vec![("show_airdrop_modal", "bool")],
-        ComponentName::ClusterInfo => vec![("connections", "use_connections")],
+        ComponentName::ClusterInfo => vec![("connections", "pub use_connections")],
         ComponentName::AddClusterModal => vec![
             ("show_add_entry_modal", "bool"),
-            ("connections", "use_connections"),
+            ("connections", "pub use_connections"),
         ],
         ComponentName::ComponentMemeView => vec![("component_meme", "component_meme")],
         ComponentName::MemeCategoryView => vec![("category", "meme_category")],
