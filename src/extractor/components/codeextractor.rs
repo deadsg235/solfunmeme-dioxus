@@ -15,7 +15,6 @@ use crate::extractor::components::welcome::WelcomeMessage;
 use crate::extractor::components::appheader::ExtractorAppHeader;
 use crate::extractor::system::files::process_files;
 use crate::extractor::system::clipboard::copy_to_clipboard;
-use crate::extractor::system::clipboard::copy_all_snippets;
 //use crate::extractor::system::extract::extract_code_snippets;
 use crate::extractor::types::ExtractedFile;
 use crate::extractor::types::ProcessingFile;
@@ -43,7 +42,6 @@ use crate::extractor::model::extract::process_file_engine;
 use crate::extractor::model::token_count::estimate_token_count;
 use crate::extractor::styles::STYLE;
 use crate::extractor::system::clipboard::copy_all_snippets_combined;
-use crate::extractor::system::clipboard::copy_text_to_clipboard;
 use crate::extractor::system::clipboard::create_copy_handler;
 use crate::extractor::system::files::create_download_filename;
 use crate::extractor::system::files::create_file_reader;
@@ -162,7 +160,7 @@ fn CodeExtractor() -> Element {
     };
     
     let copy_all_snippets_handler = move |snippets: Vec<CodeSnippet>| {
-        copy_all_snippets(snippets, copied_snippets);
+        copy_all_snippets_combined(snippets, copied_snippets);
     };
 
     files.with(|files_vec| {

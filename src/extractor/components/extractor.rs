@@ -18,7 +18,7 @@ use crate::extractor::model::extract::process_file_engine;
 use crate::extractor::model::token_count::estimate_token_count;
 use crate::extractor::styles::STYLE;
 use crate::extractor::system::clipboard::copy_all_snippets_combined;
-use crate::extractor::system::clipboard::copy_text_to_clipboard;
+use crate::extractor::system::clipboard::copy_to_clipboard;
 use crate::extractor::system::clipboard::create_copy_handler;
 use crate::extractor::system::files::create_download_filename;
 use crate::extractor::system::files::create_file_reader;
@@ -66,7 +66,7 @@ pub fn MarkdownCodeExtractor() -> Element {
 
     // Clipboard handlers
     let copy_to_clipboard = move |(text, snippet_id): (String, String)| {
-        copy_text_to_clipboard(text, snippet_id, copied_snippets);
+        copy_to_clipboard(text, snippet_id, copied_snippets);
     };
 
     let copy_all_snippets = move |snippets: Vec<CodeSnippet>| {
