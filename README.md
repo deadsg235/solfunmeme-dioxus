@@ -5,7 +5,9 @@
 ### Idea
 
 split each declaration to own file
-vectorize 
+vectorize -> emit code from vector
+vector = code = binary 
+executable vectors
 look for duplicates
 cannonical directories
 

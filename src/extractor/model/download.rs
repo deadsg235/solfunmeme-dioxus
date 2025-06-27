@@ -69,26 +69,26 @@ pub fn create_download_handler() -> impl FnMut((Vec<CodeSnippet>, String))  {
 
 #[cfg(target_arch = "wasm32")]
 fn download_web(content: &str, filename: &str) {
-    if let Some(window) = window() {
-        if let Ok(blob) = Blob::new_with_str_sequence_and_options(
-            &Array::from_iter([content.into()]),
-            BlobPropertyBag::new().type_("text/plain")
-        ) {
-            if let Ok(url) = Url::create_object_url_with_blob(&blob) {
-                if let Some(document) = window.document() {
-                    if let Ok(anchor) = document.create_element("a") {
-                        let anchor = anchor.dyn_into::<HtmlAnchorElement>().unwrap();
-                        anchor.set_href(&url);
-                        anchor.set_download(filename);
-                        let _ = document.body().unwrap().append_child(&anchor);
-                        anchor.click();
-                        let _ = document.body().unwrap().remove_child(&anchor);
-                        let _ = Url::revoke_object_url(&url);
-                    }
-                }
-            }
-        }
-    }
+    // if let Some(window) = window() {
+    //     if let Ok(blob) = Blob::new_with_str_sequence_and_options(
+    //         &Array::from_iter([content.into()]),
+    //         BlobPropertyBag::new().type_("text/plain")
+    //     ) {
+    //         if let Ok(url) = Url::create_object_url_with_blob(&blob) {
+    //             if let Some(document) = window.document() {
+    //                 if let Ok(anchor) = document.create_element("a") {
+    //                     let anchor = anchor.dyn_into::<HtmlAnchorElement>().unwrap();
+    //                     anchor.set_href(&url);
+    //                     anchor.set_download(filename);
+    //                     let _ = document.body().unwrap().append_child(&anchor);
+    //                     anchor.click();
+    //                     let _ = document.body().unwrap().remove_child(&anchor);
+    //                     let _ = Url::revoke_object_url(&url);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 #[cfg(not(target_arch = "wasm32"))]
