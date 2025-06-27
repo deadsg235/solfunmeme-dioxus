@@ -1,11 +1,13 @@
 use std::sync::Arc;
 use dioxus::prelude::*;
-
 use dioxus::html::FileEngine;
 use gloo_timers::future::TimeoutFuture;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
-use crate::extractor::types::{CodeSnippet, ExtractedFile, ProcessingFile};
+use crate::extractor::types::{CodeSnippet, ExtractedFile, ProcessingFile, TestResult, DocumentSummary};
 
+/// Extract code snippets from markdown content
 pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
     let mut snippets = Vec::new();
     let lines: Vec<&str> = content.lines().collect();
@@ -19,17 +21,13 @@ pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
             if in_code_block {
                 // End of code block
                 if !current_content.trim().is_empty() {
-                    snippets.push(CodeSnippet {
-                        language: current_language.clone(),
-                        content: current_content.clone(),
-                        line_start: start_line,
-                        line_end: i,
-                        content_hash: todo!(),
-                        token_count: todo!(),
-                        line_count: todo!(),
-                        char_count: todo!(),
-                        test_result: todo!(),
-                    });
+                    let snippet = create_code_snippet(
+                        current_language.clone(),
+                        current_content.clone(),
+                        start_line,
+                        i
+                    );
+                    snippets.push(snippet);
                 }
                 current_content.clear();
                 in_code_block = false;
@@ -53,102 +51,104 @@ pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
     
     // Handle unclosed code block
     if in_code_block && !current_content.trim().is_empty() {
-        snippets.push(CodeSnippet {
-            language: current_language,
-            content: current_content,
-            line_start: start_line,
-            line_end: lines.len(),
-            content_hash: todo!(),
-            token_count: todo!(),
-            line_count: todo!(),
-            char_count: todo!(),
-            test_result: todo!(),
-        });
+        let snippet = create_code_snippet(
+            current_language,
+            current_content,
+            start_line,
+            lines.len()
+        );
+        snippets.push(snippet);
     }
     
     snippets
 }
 
-fn extract_code_snippets_from_content(content: &str) -> Vec<CodeSnippet> {
-    let mut snippets = Vec::new();
-    let lines: Vec<&str> = content.lines().collect();
-    let mut in_code_block = false;
-    let mut current_language = String::new();
-    let mut current_content = String::new();
-    let mut start_line = 0;
-
-    for (i, line) in lines.iter().enumerate() {
-        if line.starts_with("```") {
-            if in_code_block {
-                // End of code block
-                if !current_content.trim().is_empty() {
-                    snippets.push(CodeSnippet {
-                        language: current_language.clone(),
-                        content: current_content.clone(),
-                        line_start: start_line,
-                        line_end: i,
-                        content_hash: todo!(),
-                        token_count: todo!(),
-                        line_count: todo!(),
-                        char_count: todo!(),
-                        test_result: todo!(),
-                    });
-                }
-                current_content.clear();
-                in_code_block = false;
-            } else {
-                // Start of code block
-                current_language = line[3..].trim().to_string();
-                if current_language.is_empty() {
-                    current_language = "text".to_string();
-                }
-                current_content.clear();
-                start_line = i + 1;
-                in_code_block = true;
-            }
-        } else if in_code_block {
-            if !current_content.is_empty() {
-                current_content.push('\n');
-            }
-            current_content.push_str(line);
-        }
+/// Create a complete CodeSnippet with all fields populated
+fn create_code_snippet(
+    language: String, 
+    content: String, 
+    line_start: usize, 
+    line_end: usize
+) -> CodeSnippet {
+    let content_hash = generate_content_hash(&content);
+    let token_count = estimate_token_count(&content);
+    let line_count = content.lines().count();
+    let char_count = content.chars().count();
+    let test_result = Some(create_default_test_result());
+    
+    CodeSnippet {
+        language,
+        content,
+        line_start,
+        line_end,
+        content_hash,
+        token_count,
+        line_count,
+        char_count,
+        test_result,
     }
-
-    // Handle unclosed code block
-    if in_code_block && !current_content.trim().is_empty() {
-        snippets.push(CodeSnippet {
-            language: current_language,
-            content: current_content,
-            line_start: start_line,
-            line_end: lines.len(),
-            content_hash: todo!(),
-                        token_count: todo!(),
-                        line_count: todo!(),
-                        char_count: todo!(),
-                        test_result: todo!(),
-        });
-    }
-
-    snippets
 }
 
+/// Generate a simple hash for content deduplication
+fn generate_content_hash(content: &str) -> String {
+    let mut hasher = DefaultHasher::new();
+    content.hash(&mut hasher);
+    format!("{:x}", hasher.finish())
+}
 
+/// Estimate token count (rough approximation)
+fn estimate_token_count(content: &str) -> usize {
+    // Simple estimation: split by whitespace and common delimiters
+    content
+        .split_whitespace()
+        .map(|word| {
+            // Count punctuation and operators as separate tokens
+            let punctuation_count = word.chars()
+                .filter(|c| c.is_ascii_punctuation())
+                .count();
+            1 + punctuation_count
+        })
+        .sum()
+}
 
-// ### 5. File Processing Function
-// ```rust
+/// Create a default test result
+fn create_default_test_result() -> TestResult {
+    TestResult {
+        passed: false,
+        error_message: None,
+        execution_time: None,
+        output: None,
+    }
+}
+
+/// Process files from FileEngine and extract code snippets
 pub async fn process_file_engine(
     file_engine: Arc<dyn FileEngine>,
     mut files: Signal<Vec<ExtractedFile>>,
     mut processing_file: Signal<Option<ProcessingFile>>
 ) {
     let file_names = file_engine.files();
-    
+
+
     for file_name in &file_names {
+
+	let summary = Some(DocumentSummary{
+	    total_turns: 9,  
+	    total_code_snippets: 0,  
+	    total_tokens: 0,  
+	    languages_found: [].to_vec(),  
+	    content_hashes: [].to_vec(),  	    
+	});
+        // Start processing this file
         processing_file.set(Some(ProcessingFile {
             name: file_name.clone(),
-            ..Default::default()
+            progress: 0,
+            total_lines: 0,
+            current_content: String::new(),
+	    summary,
         }));
         
+        // Small delay for UI responsiveness
         TimeoutFuture::new(50).await;
 
         if let Some(content) = file_engine.read_file_to_string(file_name).await {
@@ -162,17 +162,18 @@ pub async fn process_file_engine(
             }
 
             // Simulate progress for visual feedback
-            for i in 0..=total_lines {
+            let progress_steps = (total_lines / 100).max(1);
+            for i in (0..=total_lines).step_by(progress_steps) {
                 if let Some(mut pf) = processing_file.write().as_mut() {
-                    pf.progress = i;
+                    pf.progress = i.min(total_lines);
                 }
-                if i % 100 == 0 || i == total_lines {
-                    TimeoutFuture::new(10).await;
-                }
+                TimeoutFuture::new(10).await;
             }
 
-            let snippets = extract_code_snippets_from_content(&content);
+            // Extract code snippets
+            let snippets = extract_code_snippets(&content);
             
+            // Add to files list
             files.write().push(ExtractedFile {
                 name: file_name.clone(),
                 snippets,
@@ -181,12 +182,42 @@ pub async fn process_file_engine(
         }
     }
     
+    // Clear processing state
     processing_file.set(None);
 }
-// ```
 
-// ### 6. Utility Function
-// ```rust
-fn generate_snippet_id(file_name: &str, snippet_idx: usize) -> String {
+/// Generate unique identifier for a code snippet
+pub fn generate_snippet_id(file_name: &str, snippet_idx: usize) -> String {
     format!("{}_{}", file_name, snippet_idx)
+}
+
+/// Validate if content appears to be a markdown file
+pub fn is_markdown_file(file_name: &str) -> bool {
+    let lower_name = file_name.to_lowercase();
+    lower_name.ends_with(".md") || 
+    lower_name.ends_with(".markdown") || 
+    lower_name.ends_with(".mdown")
+}
+
+/// Get language-specific file extension for downloaded snippets
+pub fn get_file_extension(language: &str) -> &'static str {
+    match language.to_lowercase().as_str() {
+        "rust" | "rs" => "rs",
+        "javascript" | "js" => "js",
+        "typescript" | "ts" => "ts",
+        "python" | "py" => "py",
+        "java" => "java",
+        "cpp" | "c++" => "cpp",
+        "c" => "c",
+        "html" => "html",
+        "css" => "css",
+        "json" => "json",
+        "xml" => "xml",
+        "yaml" | "yml" => "yml",
+        "toml" => "toml",
+        "sql" => "sql",
+        "bash" | "sh" => "sh",
+        "powershell" | "ps1" => "ps1",
+        _ => "txt",
+    }
 }

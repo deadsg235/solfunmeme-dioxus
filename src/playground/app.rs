@@ -5,19 +5,6 @@ use crate::model::NotificationInfo;
 use crate::playground::solfunnice::SolFunNiceApp;
 use crate::extractor::components::app::EmbeddingApp;
 use crate::extractor::system::files::create_file_reader;
-//use crate::extractor::model::clipboard::copy_text_to_clipboard;
-//use crate::extractor::CodeSnippet;
-//use crate::extractor::Arc;
-//use crate::extractor::FileEngine;
-// use crate::extractor::model::extract::process_file_engine;
-// use crate::views::crypto_frontend::AppHeader;
-// use crate::extractor::components::clearbutton::ClearButton;
-// use crate::extractor::components::fileinput::FileInput;
-// use crate::extractor::components::dropzone::DropZone;
-// use crate::extractor::components::filedisplay::FileDisplay;
-// use crate::extractor::system::clipboard::copy_text_to_clipboard;
-//use crate::extractor::CodeSnippet;
-//use extractor::types::CodeSnippet;
 use crate::extractor::system::clipboard::copy_all_snippets_combined;
 //ouse crate::extractor::error;
 use log::error;
@@ -47,7 +34,7 @@ use crate::views::{
 use crate::playground::performance_charts::PerformanceCharts;
 use crate::playground::bert_test::BertTestApp;
 use crate::playground::rust_parser::RustParserApp;
-//use crate::playground::extractor::MarkdownCodeExtractor;
+
 use crate::playground::monster_meta_meme::MonsterMetaMemeApp;
 use crate::extractor::components::extractor::MarkdownCodeExtractor;
 
