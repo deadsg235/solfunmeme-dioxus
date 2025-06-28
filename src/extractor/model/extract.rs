@@ -4,7 +4,7 @@ use dioxus::html::FileEngine;
 use gloo_timers::future::TimeoutFuture;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
-
+use crate::extractor::model::extract_html::extract_code_snippets_from_html;
 use crate::extractor::types::{CodeSnippet, ExtractedFile, ProcessingFile, TestResult, DocumentSummary};
 
 // /// Extract code snippets from markdown content
@@ -184,11 +184,19 @@ pub async fn process_file_engine(
 
             // Extract code snippets
             let snippets = extract_code_snippets(&content);
-            
+
+	    // and from html
+	    let snippets2 = extract_code_snippets_from_html(&content);
+
             // Add to files list
             files.write().push(ExtractedFile {
                 name: file_name.clone(),
                 snippets,
+                total_lines,
+            });
+	    files.write().push(ExtractedFile {
+                name: file_name.clone(),
+                snippets: snippets2,
                 total_lines,
             });
         }
