@@ -6,6 +6,8 @@ use dioxus::signals::Writable;
 use gloo_timers::future::TimeoutFuture;
 use crate::extractor::{model::extract::extract_code_snippets, types::{ExtractedFile, ProcessingFile}};
 use std::pin::Pin;
+use crate::extractor::model::extract_html::extract_code_snippets_from_html;
+
 async fn process_file_engine_with_callbacks<F, P>(
     file_engine: Arc<dyn FileEngine>,
     mut on_file_start: F,
@@ -38,6 +40,13 @@ where
             extracted_files.push(ExtractedFile {
                 name: file_name.clone(),
                 snippets,
+                total_lines,
+            });
+
+	    let snippets2 = extract_code_snippets_from_html(&content);
+            extracted_files.push(ExtractedFile {
+                name: file_name.clone(),
+                snippets: snippets2,
                 total_lines,
             });
         }

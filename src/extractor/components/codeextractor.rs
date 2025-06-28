@@ -1,55 +1,34 @@
 use dioxus::prelude::*;
-use crate::extractor::components::clearbutton::ClearButton;
-use crate::extractor::components::fileinput::FileInput;
-use crate::extractor::components::dropzone::DropZone;
-use crate::extractor::components::progress::ProcessingIndicator;
-use crate::extractor::components::filedisplay::FileDisplay;
-use crate::extractor::components::welcome::WelcomeMessage;
-
-//use std::collections::HashSet;
-//use crate::extractor::Arc;
-//use crate::extractor::FileEngine;
-//use crate::extractor::ExtractedFile;
-
-//use crate::extractor::ProcessingFile;
-use crate::extractor::components::appheader::ExtractorAppHeader;
-use crate::extractor::system::files::process_files;
-use crate::extractor::system::clipboard::copy_to_clipboard;
-//use crate::extractor::system::extract::extract_code_snippets;
-use crate::extractor::types::ExtractedFile;
-use crate::extractor::types::ProcessingFile;
-use std::sync::Arc;
 
 use crate::Route::Clusters;
 use crate::Route::Dashboard;
 use crate::Route::Extras;
-//use crate::extractor::components::app::dioxus_elements::FileEngine;
-//use crate::extractor::components::appheader::ExtractorAppHeader;
-//use crate::extractor::components::clearbutton::ClearButton;
+use crate::extractor::components::appheader::ExtractorAppHeader;
+use crate::extractor::components::clearbutton::ClearButton;
 use crate::extractor::components::codeextractor::dioxus_elements::FileEngine;
-//use crate::extractor::components::dropzone::DropZone;
-//use crate::extractor::components::dropzone::dioxus_elements::FileEngine;
-//use crate::extractor::components::filedisplay::FileDisplay;
-//use crate::extractor::components::fileinput::FileInput;
+use crate::extractor::components::dropzone::DropZone;
+use crate::extractor::components::filedisplay::FileDisplay;
+use crate::extractor::components::fileinput::FileInput;
 use crate::extractor::components::fileresult::FileResults;
 use crate::extractor::components::filesummary::FileSummary;
-//use crate::extractor::components::progress::ProcessingIndicator;
+use crate::extractor::components::progress::ProcessingIndicator;
 use crate::extractor::components::upload::FileUploadArea;
-//use //crate::extractor::components::welcome::WelcomeMessage;
+use crate::extractor::components::welcome::WelcomeMessage;
 use crate::extractor::model::content_hash::create_content_hash;
 use crate::extractor::model::download::create_download_handler;
 use crate::extractor::model::extract::process_file_engine;
 use crate::extractor::model::token_count::estimate_token_count;
 use crate::extractor::styles::STYLE;
 use crate::extractor::system::clipboard::copy_all_snippets_combined;
+use crate::extractor::system::clipboard::copy_to_clipboard;
 use crate::extractor::system::clipboard::create_copy_handler;
-use crate::extractor::system::files::create_download_filename;
-use crate::extractor::system::files::create_file_reader;
-//use crate::extractor::system::process_file::process_file;
+use crate::extractor::model::files::create_download_filename;
+use crate::extractor::model::files::create_file_reader;
+use crate::extractor::model::files::process_files;
 use crate::extractor::system::test_code::test_code_snippet;
 use crate::extractor::types::CodeSnippet;
-//use crate::extractor::types::ExtractedFile;
-////use crate::extractor::types::ProcessingFile;
+use crate::extractor::types::ExtractedFile;
+use crate::extractor::types::ProcessingFile;
 use crate::extractor::types::TestResult;
 use crate::header::ActiveAccountDropDown;
 use crate::header::ConnectWalletModalModal;
@@ -129,11 +108,10 @@ use crate::views::accounts::Accounts;
 use crate::views::accounts::ClusterSuccess;
 use crate::views::accounts::TokenAccountCard;
 use crate::views::accounts::TxCard;
-//use crate::views::crypto_frontend::AppHeader;
 use dioxus::prelude::*;
 use dioxus_clipboard::prelude::use_clipboard;
-
 use dioxus_logger::tracing::{Level, info};
+use std::sync::Arc;
 
 #[component]
 fn CodeExtractor() -> Element {

@@ -3,7 +3,7 @@ use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{Blob, BlobPropertyBag, Url, HtmlAnchorElement};
 use js_sys::Array;
 
-use crate::extractor::{system::files::create_download_filename, types::CodeSnippet};
+use crate::extractor::{model::files::create_download_filename, types::CodeSnippet};
 //use crate::extractor::CodeSnippet;
 pub fn download_rust_snippets_as_file(snippets: &[CodeSnippet]) {
     let rust_snippets: Vec<_> = snippets.iter()

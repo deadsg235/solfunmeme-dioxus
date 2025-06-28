@@ -7,7 +7,19 @@ use std::hash::{Hash, Hasher};
 
 use crate::extractor::types::{CodeSnippet, ExtractedFile, ProcessingFile, TestResult, DocumentSummary};
 
-/// Extract code snippets from markdown content
+// /// Extract code snippets from markdown content
+// src/extractor/model/extract.rs
+//  11:pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
+// 174:            let snippets = extract_code_snippets(&content);
+// src/extractor/system/files.rs
+//   7:use crate::extractor::{model::extract::extract_code_snippets, types::{ExtractedFile, ProcessingFile}};
+//  37:            let snippets = extract_code_snippets(&content);
+// 100:            let snippets = extract_code_snippets(&content);
+// 152:                let snippets = extract_code_snippets(&content);
+// src/extractor/system/process_file.rs
+// 6:use crate::extractor::model::extract::extract_code_snippets;
+
+     
 pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
     let mut snippets = Vec::new();
     let lines: Vec<&str> = content.lines().collect();

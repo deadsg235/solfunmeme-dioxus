@@ -1,10 +1,7 @@
-//use crate::Route::Extras;
-//use crate::extractor::components::app::dioxus_elements::FileEngine;
+use dioxus::prelude::*;
 use crate::extractor::components::appheader::ExtractorAppHeader;
 use crate::extractor::components::clearbutton::ClearButton;
-//use crate::extractor::components::codeextractor::dioxus_elements::FileEngine;
 use crate::extractor::components::dropzone::DropZone;
-//use crate::extractor::components::dropzone::dioxus_elements::FileEngine;
 use crate::extractor::components::filedisplay::FileDisplay;
 use crate::extractor::components::fileinput::FileInput;
 use crate::extractor::components::fileresult::FileResults;
@@ -14,15 +11,16 @@ use crate::extractor::components::upload::FileUploadArea;
 use crate::extractor::components::welcome::WelcomeMessage;
 use crate::extractor::model::content_hash::create_content_hash;
 use crate::extractor::model::download::create_download_handler;
+use crate::extractor::model::drag::create_drop_handler;
+use crate::extractor::model::drag::create_upload_handler;
 use crate::extractor::model::extract::process_file_engine;
+use crate::extractor::model::files::create_download_filename;
+use crate::extractor::model::files::create_file_reader;
 use crate::extractor::model::token_count::estimate_token_count;
 use crate::extractor::styles::STYLE;
 use crate::extractor::system::clipboard::copy_all_snippets_combined;
 use crate::extractor::system::clipboard::copy_to_clipboard;
 use crate::extractor::system::clipboard::create_copy_handler;
-use crate::extractor::system::files::create_download_filename;
-use crate::extractor::system::files::create_file_reader;
-//use crate::extractor::system::process_file::process_file;
 use crate::extractor::system::test_code::test_code_snippet;
 use crate::extractor::types::CodeSnippet;
 use crate::extractor::types::ExtractedFile;
@@ -49,13 +47,10 @@ use crate::views::accounts::TokenAccountCard;
 use crate::views::accounts::TxCard;
 use crate::views::crypto_frontend::AppHeader;
 use dioxus::html::FileEngine;
-use dioxus::prelude::*;
+
 use dioxus_clipboard::prelude::use_clipboard;
-use std::sync::Arc;
-//use dioxus::dioxus_html::HasFileData;
 use dioxus_html::HasFileData;
-use crate::extractor::model::drag::create_upload_handler;
-use crate::extractor::model::drag::create_drop_handler;
+use std::sync::Arc;
 
 #[component]
 pub fn MarkdownCodeExtractor() -> Element {
