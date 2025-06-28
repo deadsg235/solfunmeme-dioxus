@@ -81,6 +81,7 @@ pub mod extractor;
 //use crate::crypto_frontend::App;
 //use crate::password_manager::App;
 //use crate::playground::MenuOption   
+use dioxus_logger::tracing::{Level, trace};
 
 fn main() {
     // Use the memes App component from views

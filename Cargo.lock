@@ -6718,6 +6718,7 @@ dependencies = [
  "dioxus-charts",
  "dioxus-clipboard",
  "dioxus-html",
+ "dioxus-logger",
  "dioxus-motion",
  "dioxus-router",
  "dioxus-web",

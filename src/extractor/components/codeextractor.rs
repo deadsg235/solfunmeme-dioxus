@@ -133,7 +133,7 @@ use crate::views::accounts::TxCard;
 use dioxus::prelude::*;
 use dioxus_clipboard::prelude::use_clipboard;
 
-
+use dioxus_logger::tracing::{Level, info};
 
 #[component]
 fn CodeExtractor() -> Element {
@@ -152,14 +152,18 @@ fn CodeExtractor() -> Element {
         }
     };
 
+    
     //let copy_to_clipboard_handler = move |text: String, snippet_id: String| {
     //copy_to_clipboard(text, snippet_id, copied_snippets);
 //    };
-    let copy_to_clipboard_handler = move |(text, snippet_id): (String, String)| {  
+    let copy_to_clipboard_handler = move |(text, snippet_id): (String, String)| {
+	info!("going to copy to clipboard: {:?}", text);
+	info!("going to copy to clipboard: {:?}", text);
 	copy_to_clipboard(text, snippet_id, copied_snippets);  
     };
     
     let copy_all_snippets_handler = move |snippets: Vec<CodeSnippet>| {
+	info!("going to copy all to clipboard: {:?} {:?}", snippets, copied_snippets);
         copy_all_snippets_combined(snippets, copied_snippets);
     };
 
