@@ -4811,6 +4811,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "rrust_kontekst"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.104",
+]
+
+[[package]]
+name = "rrust_kontekst_base"
+version = "0.1.0"
+dependencies = [
+ "serde_json",
+]
+
+[[package]]
 name = "rust-bert"
 version = "0.23.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6976,6 +6992,8 @@ dependencies = [
  "reqwest 0.12.20",
  "ring",
  "ring-compat",
+ "rrust_kontekst",
+ "rrust_kontekst_base",
  "rust-bert",
  "scraper",
  "serde",

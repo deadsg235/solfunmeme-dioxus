@@ -1,5 +1,5 @@
 [package]
-name = "mcp_lib"
+name =  "rrust_kontekst"
 version = "0.1.0"
 edition = "2024"
 
@@ -8,7 +8,7 @@ proc-macro2 = "1.0.95"
 quote = "1.0.40"
 syn = "2.0.104"
 
-[lib]
+
 [lib]
 name = "rrust_kontekst"
 path = "src/lib.rs"

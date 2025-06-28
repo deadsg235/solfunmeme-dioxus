@@ -1,3 +1,4 @@
+// fixme unused
 use dioxus::prelude::*;
 
 use crate::extractor::components::appheader::ExtractorAppHeader;
@@ -20,7 +21,7 @@ use dioxus_logger::tracing::info;
 use std::sync::Arc;
 
 #[component]
-fn CodeExtractor() -> Element {
+fn UnusedCodeExtractor() -> Element {
     let files = use_signal(|| Vec::new() as Vec<ExtractedFile>);
     let processing_file = use_signal::<Option<ProcessingFile>>(|| None);
     let hovered = use_signal(|| false);

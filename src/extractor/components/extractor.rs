@@ -19,6 +19,10 @@ use dioxus::html::FileEngine;
 use dioxus_html::HasFileData;
 use std::sync::Arc;
 
+//src/playground/app.rs
+// 37:use crate::extractor::components::extractor::MarkdownCodeExtractor;
+//174:		    MenuOption::Extractor => rsx!(MarkdownCodeExtractor {}),
+
 #[component]
 pub fn MarkdownCodeExtractor() -> Element {
     let files = use_signal(|| Vec::new() as Vec<ExtractedFile>);
