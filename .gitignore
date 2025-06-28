@@ -61,7 +61,7 @@ flycheck_*.el
 
 .vercel
 *.profraw
-/src/model/math/
 /tarpaulin-report.html
 /test_orbits_2d_projection.csv
 /tree.txt
+/rrust_kontekst/target/
