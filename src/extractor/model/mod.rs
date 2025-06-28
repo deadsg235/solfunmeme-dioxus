@@ -4,6 +4,7 @@ pub mod content_hash;
 pub mod download;
 pub mod drag;
 pub mod extract;
+pub mod extract_html;
 //pub mod save_summary;
 pub mod snippets;
 pub mod token_count;
