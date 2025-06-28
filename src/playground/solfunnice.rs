@@ -352,9 +352,9 @@ fn ZeroOntologySystem() -> Element {
     // State signals for dynamic metrics
     let mut boost_active = use_signal(|| false);
     let mut fun_score = use_signal(|| 847.3);
-    let mut theme_speed = use_signal(|| "∞ boosts/sec".to_string());
+    let theme_speed = use_signal(|| "∞ boosts/sec".to_string());
     let mut agreement = use_signal(|| 99.7);
-    let mut excitement_level = use_signal(|| "MAXIMUM".to_string());
+    let excitement_level = use_signal(|| "MAXIMUM".to_string());
     let mut current_emoji_sequence = use_signal(|| 0);
     let mut particles = use_signal(|| Vec::<ParticleState>::new());
     // Keep metrics fresh with periodic updates
@@ -485,7 +485,7 @@ fn Particle(x: f64, y: f64, color: String, duration: u32) -> Element {
     rsx! {
         div { 
             class: "particle",
-            style: {style}
+            style: style
         }
     }
 

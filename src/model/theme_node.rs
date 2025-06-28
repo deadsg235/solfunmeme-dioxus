@@ -1,6 +1,6 @@
 use linfa::prelude::*;
 use linfa_reduction::Pca;
-use ndarray::{array, Array2, Array1};
+use ndarray::{Array2, Array1};
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

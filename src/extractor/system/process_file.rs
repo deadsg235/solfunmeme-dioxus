@@ -1,11 +1,3 @@
-use std::path::Path;
-use std::io::ErrorKind;
-use crate::extractor::types::ConversationTurn;
-use std::error::Error;
-use crate::extractor::system::test_code::test_code_snippet;
-use crate::extractor::model::extract::extract_code_snippets;
-use crate::extractor::types::DocumentSummary;
-use std::fs;
 // FIXME
 //use std::io::ErrorKind;
 //use std::error::Error;

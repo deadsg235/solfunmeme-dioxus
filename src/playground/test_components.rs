@@ -248,7 +248,7 @@ pub enum PropValue {
 #[component]
 pub fn ComponentBuilderApp() -> Element {
     let selected_component =  use_signal(|| None::<ComponentName>);
-    let mut components = use_signal(|| vec![] as Vec<ComponentInstance>);
+    let components = use_signal(|| vec![] as Vec<ComponentInstance>);
     let next_id = use_signal(|| 0u32);
     let mut props_config = use_signal(|| HashMap::<String, PropValue>::new());
 

@@ -180,7 +180,7 @@ fn clear_state(state: &mut RustParserState) {
 pub fn RustParserApp() -> Element {
     let mut state = use_signal(RustParserState::default);
 
-    let mut handle_parse = {
+    let handle_parse = {
         let mut state = state.clone();
         move || {
             let mut state_w = state.write();
@@ -188,21 +188,21 @@ pub fn RustParserApp() -> Element {
         }
     };
     
-    let mut handle_clear = move || {
+    let handle_clear = move || {
         let mut state_w = state.write();
         clear_state(&mut state_w);
     };
 
-    let mut handle_load_example = {
+    let handle_load_example = {
         let mut state = use_signal(RustParserState::default);
         let mut handle_parse = {
             let mut state = state.clone();
             move || {
                 let mut state_w = state.write();
-                let mut code = state_w.input_code.clone();
+                let code = state_w.input_code.clone();
                 match syn::parse_file(&code) {
                     Ok(file) => {
-                        let mut  json_str_result = if state_w.is_pretty {
+                        let json_str_result = if state_w.is_pretty {
                             json::to_string_pretty(&file)
                         } else {
                             json::to_string(&file)
@@ -229,7 +229,7 @@ pub fn RustParserApp() -> Element {
         }
     };
 
-    let mut on_input_change = {
+    let on_input_change = {
         let mut state = use_signal(RustParserState::default);
         move |evt: Event<FormData>| {
             state.write().input_code = evt.value();
@@ -237,7 +237,7 @@ pub fn RustParserApp() -> Element {
     };
     
 
-    let mut on_toggle_pretty = {
+    let on_toggle_pretty = {
         let mut state = state.clone();
         let mut handle_parse = handle_parse.clone();
         move |_| {
@@ -262,27 +262,27 @@ pub fn RustParserApp() -> Element {
         }
     };
 
-    let mut on_toggle_expand = move |path: Vec<usize>| {
+    let on_toggle_expand = move |path: Vec<usize>| {
         if let Some(node) = get_node_mut(&mut state.write().ast_nodes, &path) {
             node.is_expanded = !node.is_expanded;
         }
     };
 
-    let mut on_edit = move |(path, new_value): (Vec<usize>, String)| {
+    let on_edit = move |(path, new_value): (Vec<usize>, String)| {
         if let Some(node) = get_node_mut(&mut state.write().ast_nodes, &path) {
             node.is_editing = !node.is_editing;
             node.edited_value = new_value;
         }
     };
 
-    let mut on_save_edit = move |(path, value): (Vec<usize>, String)| {
+    let on_save_edit = move |(path, value): (Vec<usize>, String)| {
          if let Some(node) = get_node_mut(&mut state.write().ast_nodes, &path) {
             node.is_editing = false;
             node.value = value;
         }
     };
 
-    let mut on_emoji_map_change = move |(key, value): (String, String)| {
+    let on_emoji_map_change = move |(key, value): (String, String)| {
         state.write().emoji_map.insert(key, value);
     };
 
@@ -437,7 +437,7 @@ fn RustAstSwitcher(
 
 #[component]
 fn RustParserMainArea(props: RustParserMainAreaProps) -> Element {
-    let mut state = props.state.clone();
+    let state = props.state.clone();
     rsx! {
         div { class: "flex flex-col gap-4",
             RustCodeInput {

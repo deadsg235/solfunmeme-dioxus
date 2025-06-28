@@ -299,7 +299,7 @@ impl SimpleExpr {
 
 //#[cfg(test)]
 mod tests {
-    use super::*;
+    
     
     #[test]
     fn test_simple_expr_construction() {
@@ -493,7 +493,7 @@ pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
 
 //#[cfg(test)]
 mod tests2 {
-    use super::*;
+    
     
     #[test]
     fn test_chunk1_structure() {

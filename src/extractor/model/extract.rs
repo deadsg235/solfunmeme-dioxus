@@ -168,7 +168,7 @@ pub async fn process_file_engine(
             let total_lines = lines.len();
 
             // Update processing status
-            if let Some(mut pf) = processing_file.write().as_mut() {
+            if let Some(pf) = processing_file.write().as_mut() {
                 pf.total_lines = total_lines;
                 pf.current_content = content.clone();
             }
@@ -176,7 +176,7 @@ pub async fn process_file_engine(
             // Simulate progress for visual feedback
             let progress_steps = (total_lines / 100).max(1);
             for i in (0..=total_lines).step_by(progress_steps) {
-                if let Some(mut pf) = processing_file.write().as_mut() {
+                if let Some(pf) = processing_file.write().as_mut() {
                     pf.progress = i.min(total_lines);
                 }
                 TimeoutFuture::new(10).await;

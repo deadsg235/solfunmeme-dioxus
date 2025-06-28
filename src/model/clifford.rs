@@ -1,7 +1,5 @@
 use tclifford::{declare_algebra, Multivector};
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use tclifford::MultivectorBase;
 
 // BERT Configuration matching your provided config
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -95,7 +93,7 @@ impl BertCliffordEncoder {
         }
 
         // Create multivector using the dense representation
-        let mut multivector = BertMultivector::default();
+        let multivector = BertMultivector::default();
 
         // Method 1: Simple encoding - use generators as vector components
         // This creates a grade-1 multivector (pure vector)
@@ -279,7 +277,7 @@ impl CliffordBertLayer {
 
 //#[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_clifford_encoding() {

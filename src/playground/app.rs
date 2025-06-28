@@ -4,10 +4,8 @@ use crate::app::{FAVICON, TAILWIND_CSS};
 use crate::model::NotificationInfo;
 use crate::playground::solfunnice::SolFunNiceApp;
 use crate::extractor::components::app::EmbeddingApp;
-use crate::extractor::model::files::create_file_reader;
 //use crate::extractor::system::clipboard::copy_all_snippets_combined;
 //ouse crate::extractor::error;
-use log::error;
 //use crate::password_manager::DecryptedEntry;
 use crate::views::{
     send_sol::SendSol,

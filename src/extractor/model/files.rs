@@ -91,14 +91,14 @@ pub async fn process_files(
             let total_lines = lines.len();
             
             // Update processing status
-            if let Some(mut pf) = processing_file.write().as_mut() {
+            if let Some(pf) = processing_file.write().as_mut() {
                 pf.total_lines = total_lines;
                 pf.current_content = content.clone();
             }
             
             // Simulate progress for visual feedback
             for i in 0..=total_lines {
-                if let Some(mut pf) = processing_file.write().as_mut() {
+                if let Some(pf) = processing_file.write().as_mut() {
                     pf.progress = i;
                 }
                 if i % 100 == 0 || i == total_lines {
@@ -143,14 +143,14 @@ pub fn create_file_reader(
                 let total_lines = lines.len();
 
                 // Update processing status
-                if let Some(mut pf) = processing_file.write().as_mut() {
+                if let Some(pf) = processing_file.write().as_mut() {
                     pf.total_lines = total_lines;
                     pf.current_content = content.clone();
                 }
 
                 // Simulate progress for visual feedback
                 for i in 0..=total_lines {
-                    if let Some(mut pf) = processing_file.write().as_mut() {
+                    if let Some(pf) = processing_file.write().as_mut() {
                         pf.progress = i;
                     }
                     if i % 100 == 0 || i == total_lines {

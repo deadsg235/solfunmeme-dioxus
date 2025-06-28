@@ -3,7 +3,7 @@ use crate::model::wasm_bert::{WasmBertEmbedder, WasmSentimentAnalyzer, WasmTextC
 
 pub fn BertTestApp() -> Element {
     let mut input_text = use_signal(|| String::from("Hello world! This is an amazing test of the WASM-compatible BERT functionality."));
-    let mut input_text2 = input_text.clone();
+    let input_text2 = input_text.clone();
     let mut results = use_signal(|| String::new());
     let mut is_processing = use_signal(|| false);
 

@@ -84,6 +84,5 @@ pub mod wasm_bert;
 pub use wasm_bert::*;
 
 pub mod theme_node;
-pub use theme_node::*;
 
 pub mod clifford;

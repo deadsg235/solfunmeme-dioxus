@@ -1,5 +1,4 @@
 use wasm_bindgen::prelude::*;
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use web_sys::console;
 
@@ -347,7 +346,7 @@ pub fn analyze_sentiment_wasm(text: &str) -> f32 {
 
 //#[cfg(test)]
 mod tests {
-    use super::*;
+    
     
     #[test]
     fn test_embedding() {

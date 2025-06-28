@@ -2,7 +2,7 @@
 // test
 //#[cfg(test)]
 mod tests {
-    use crate::model::crypto::SolanaEncryption;
+    
 
 //    use super::*;
 

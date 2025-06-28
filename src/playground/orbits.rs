@@ -2,17 +2,10 @@
 use dioxus::prelude::*;
 use dioxus_motion::prelude::*;
 use gloo_timers::future::TimeoutFuture;
-use rand::Rng;
-use std::time::Duration;
-use wasm_bindgen::JsCast;
-use web_sys::{console, window};
-use easer::functions::Easing;
-use dioxus_motion::animations::utils::LoopMode;
-use nalgebra::{Vector4, SVector,vector};
+use nalgebra::{SVector,vector};
 type Vector8<T> = SVector<T, 8>;
 type State = Vector8<f64>;
 use emojis;
-use nalgebra::ArrayStorage;
 
 // To modify the Dioxus application so that each node in the ThemeOrbitalNetwork has its own mass, position, and velocity, and moves along its own unique 4D orbit (projected to 2D), we’ll extend the existing system. This aligns with your previous request to give each object its own orbit with dynamic calculations (from June 24, 2025, 10:03). We’ll:
 // Update ThemeNode: Add mass, position, and velocity fields to support individual 4D orbits.
@@ -164,7 +157,7 @@ fn simulate_orbit(t_span: (f64, f64), n_steps: usize, initial_state: State, k: f
 // rust
 #[component]
 pub fn ThemeOrbitalNetwork2() -> Element {
-    let mut selected_node = use_signal(|| None::<usize>);
+    let selected_node = use_signal(|| None::<usize>);
     let k = 1.0; // Force constant
     let t_span = (0.0, 10.0);
     let n_steps = 1000;
@@ -510,9 +503,9 @@ const STYLES2: &str = r#"
 // rust
 //#[cfg(test)]
 mod tests2 {
-    use super::*;
-    use std::fs::File;
-    use csv::Writer;
+    
+    
+    
 
     #[test]
     fn test_4d_orbit_simulation() {
@@ -932,7 +925,7 @@ fn get_orbit_nodes3(count: usize) -> Vec<ThemeNode> {
 
 #[component]
 pub fn ThemeOrbitalNetwork3() -> Element {
-    let mut selected_node = use_signal(|| None::<usize>);
+    let selected_node = use_signal(|| None::<usize>);
     let k = 1.0;
     let t_span = (0.0, 10.0);
     let n_steps = 1000;
@@ -1017,9 +1010,9 @@ pub fn ThemeOrbitalNetwork3() -> Element {
 
 //#[cfg(test)]
 mod tests {
-    use super::*;
-    use std::fs::File;
-    use csv::Writer;
+    
+    
+    
 
     #[test]
     fn test_4d_orbit_simulation() {

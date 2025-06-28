@@ -1,11 +1,8 @@
 use dioxus::prelude::*;
-use web_sys::window;
-use gloo_timers::future::TimeoutFuture;
 use dioxus_clipboard::prelude::*;
 use std::collections::HashSet;
-use wasm_bindgen::JsCast;
 use crate::extractor::types::CodeSnippet;
-use dioxus_logger::tracing::{Level, info,warn};
+use dioxus_logger::tracing::info;
 use wasm_bindgen_futures::spawn_local;
 pub fn copy_all_snippets_combined(snippets: Vec<CodeSnippet>, copied_snippets: Signal<HashSet<String>>) {
     let combined = snippets.iter()
@@ -21,9 +18,9 @@ pub fn copy_all_snippets_combined(snippets: Vec<CodeSnippet>, copied_snippets: S
 pub fn copy_to_clipboard(
     text: String, 
     snippet_id: String, 
-    mut copied_snippets: Signal<HashSet<String>>
+    copied_snippets: Signal<HashSet<String>>
 ) {
-    let mut clipboard = use_clipboard();
+    let clipboard = use_clipboard();
 
     info!("going to save: {:?}", text);
 

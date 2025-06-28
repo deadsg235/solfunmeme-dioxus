@@ -10,7 +10,6 @@ use crate::extractor::styles::STYLE;
 //use crate::extractor::ProcessingFile;
 use crate::extractor::types::UploadedFile;
 //use serde_json::Value;
-use crate::extractor::system::test_code::test_code_snippet;
 //use crate::extractor::Arc;
 //use crate::extractor::FileEngine;
 //use crate::extractor::TimeoutFuture;
@@ -21,9 +20,8 @@ use crate::extractor::types::DocumentSummary;
 use crate::extractor::types::ProcessingFile;
 use crate::extractor::types::CodeSnippet;
 use crate::extractor::types::AnnotatedWord;
-use crate::extractor::model::annotate_code::annotate_code_snippet;
 
-async fn read_files(file_engine: Arc<dyn FileEngine>,  mut currently_processing_file : &mut Signal<Option<ProcessingFile>>, files_uploaded: &mut Signal<Vec<UploadedFile>>) {
+async fn read_files(file_engine: Arc<dyn FileEngine>,  currently_processing_file : &mut Signal<Option<ProcessingFile>>, files_uploaded: &mut Signal<Vec<UploadedFile>>) {
         let files = file_engine.files();
         for file_name in &files {
             currently_processing_file.set(Some(ProcessingFile {
@@ -36,12 +34,12 @@ async fn read_files(file_engine: Arc<dyn FileEngine>,  mut currently_processing_
                 let lines: Vec<&str> = contents.lines().collect();
                 let total_lines = lines.len();
 
-                if let Some(mut p) = currently_processing_file.write().as_mut() {
+                if let Some(p) = currently_processing_file.write().as_mut() {
                     p.total_lines = total_lines;
                 }
 
-                let mut snippet: Vec<CodeSnippet> = [].to_vec();
-		let mut code_annotations : Vec<AnnotatedWord>  = [].to_vec();
+                let snippet: Vec<CodeSnippet> = [].to_vec();
+		let code_annotations : Vec<AnnotatedWord>  = [].to_vec();
 
                 // if file_name.ends_with(".md") {
                 //     let snippets = extract_code_snippets(&contents);
@@ -58,7 +56,7 @@ async fn read_files(file_engine: Arc<dyn FileEngine>,  mut currently_processing_
 
                 for (i, line) in lines.iter().enumerate() {
                     let words = line.split_whitespace().collect::<Vec<_>>();
-                    if let Some(mut p) = currently_processing_file.write().as_mut() {
+                    if let Some(p) = currently_processing_file.write().as_mut() {
                        //let line_annotations = words.iter().map(|&w| annotate_word(w)).collect::<Vec<_>>();
                         //p.annotations.extend(line_annotations);
                         p.current_content.push_str(line);

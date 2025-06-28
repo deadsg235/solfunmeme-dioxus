@@ -1,4 +1,4 @@
-use crate::extractor::types::{CodeSnippet, TestResult, DocumentSummary};
+use crate::extractor::types::{CodeSnippet, TestResult};
 
 /// Tests a code snippet by attempting to compile/execute it.
 pub fn test_code_snippet_old(snippet: &mut CodeSnippet) {

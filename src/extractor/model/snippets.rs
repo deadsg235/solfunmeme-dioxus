@@ -14,7 +14,7 @@ use crate::extractor::types::CodeSnippet;
 /// Extracts code snippets from text using regex patterns.
 pub fn extract_code_snippets_old(text: &str) -> Vec<CodeSnippet> {
     let mut snippets = Vec::new();
-    let mut excluded_ranges = Vec::new();
+    let excluded_ranges = Vec::new();
 
     // Pattern for code blocks with language specification
     let code_block_re = Regex::new(r"```(\w+)?\s*\n(.*?)\n```").unwrap();

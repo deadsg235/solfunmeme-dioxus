@@ -1,8 +1,5 @@
-use crate::extractor::types::AnnotatedWord;
 use crate::extractor::types::CodeSnippet;
-use crate::extractor::types::Multivector;
 //use tclifford::Multivector
-use crate::WasmSentimentAnalyzer;
 
 pub fn annotate_code_snippet(snippet: &CodeSnippet)  {}
 // pub fn annotate_code_snippet(snippet: &CodeSnippet) -> AnnotatedWord {

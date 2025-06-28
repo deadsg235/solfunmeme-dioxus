@@ -309,7 +309,7 @@ impl SolanaEncryption {
 
 //#[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_keypair_generation() {
