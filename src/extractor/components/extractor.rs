@@ -41,7 +41,7 @@ pub fn MarkdownCodeExtractor() -> Element {
 
     // File processing handlers
     let read_files = move |file_engine: Arc<dyn FileEngine>| async move {
-        process_file_engine(file_engine, files, processing_file).await;
+        process_file_engine(file_engine, files, processing_file).await; // also extract snippets
     };
 
     let upload_files = move |evt: FormEvent| async move {
