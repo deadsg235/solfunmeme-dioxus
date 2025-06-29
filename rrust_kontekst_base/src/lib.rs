@@ -10,7 +10,7 @@ type McpHandler = fn(Value) -> Pin<Box<dyn Future<Output = Result<Value, McpErro
 
 static MCP_REGISTRY: OnceLock<HashMap<&'static str, (McpToolInfo, McpHandler)>> = OnceLock::new();
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub struct McpToolInfo {
     pub component_name: &'static str,
     pub tool_name: &'static str,
@@ -25,7 +25,7 @@ pub struct McpToolInfo {
     pub returns: &'static str,
 }
 
-#[derive(Debug)]
+#[derive(Debug,PartialEq)]
 pub enum McpError {
     InvalidParams,
     ExecutionError(String),

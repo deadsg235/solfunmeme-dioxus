@@ -33,3 +33,4 @@ pub mod wikidata;
 pub mod markdown_processor;
 pub mod extractor;
 //pub mod newcode; delete
+pub mod mcp;

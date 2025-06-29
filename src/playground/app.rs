@@ -3,7 +3,7 @@ use crate::model::lean::style::{Styles, THEME};
 use crate::app::{FAVICON, TAILWIND_CSS};
 use crate::model::NotificationInfo;
 use crate::playground::solfunnice::SolFunNiceApp;
-use crate::extractor::components::app::EmbeddingApp;
+//use crate::extractor::components::app::EmbeddingApp;
 //use crate::extractor::system::clipboard::copy_all_snippets_combined;
 //ouse crate::extractor::error;
 //use crate::password_manager::DecryptedEntry;
@@ -164,7 +164,7 @@ pub fn PlaygroundApp() -> Element {
                     MenuOption::Airdrop => rsx!(Airdrop { show_airdrop_modal: show_airdrop_modal }),
                     MenuOption::Accounts => rsx!(Accounts {}),
                     MenuOption::ComponentMemes => rsx!(ComponentMemeExplorer {}),
-                    MenuOption::Embedding => rsx!(EmbeddingApp {}),
+//                    MenuOption::Embedding => rsx!(EmbeddingApp {}),
                     MenuOption::PerformanceCharts => rsx!(PerformanceCharts {}),
                     MenuOption::BertTest => rsx!(BertTestApp {}),
                     MenuOption::RustParser => rsx!(RustParserApp {}),

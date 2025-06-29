@@ -258,7 +258,8 @@ use syn::{parse_macro_input, AttributeArgs, ItemFn, Lit, Meta, NestedMeta, parse
 #[proc_macro_attribute]
 pub fn menu_component(args: TokenStream, input: TokenSPerfect! Now you have a powerful #[menu_component] macro that completely eliminates repetition. Here's how it works:
 Usage Example:
-rust#[menu_component(
+rust
+#[menu_component(
     menu = "core",
     label = "Embedding Operations", 
     emoji = "🔗",

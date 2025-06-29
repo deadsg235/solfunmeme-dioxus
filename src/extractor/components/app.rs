@@ -20,6 +20,7 @@ use crate::extractor::types::DocumentSummary;
 use crate::extractor::types::ProcessingFile;
 use crate::extractor::types::CodeSnippet;
 use crate::extractor::types::AnnotatedWord;
+use rrust_kontekst::mcp_component;
 
 async fn read_files(file_engine: Arc<dyn FileEngine>,  currently_processing_file : &mut Signal<Option<ProcessingFile>>, files_uploaded: &mut Signal<Vec<UploadedFile>>) {
         let files = file_engine.files();
@@ -118,7 +119,14 @@ async fn upload_files( evt: FormEvent, currently_processing_file: &mut Signal<Op
         }
     }
 
-
+#[mcp_component(
+    menu = "core",
+    label = "Embedding App", 
+    emoji = "🔗",
+    description = "Manage Embeddings",
+    visible = true,
+    order = 1
+)]
 pub fn EmbeddingApp() -> Element {
     let mut enable_directory_upload = use_signal(|| false);
     let mut files_uploaded = use_signal(|| Vec::new() as Vec<UploadedFile>);
