@@ -34,21 +34,16 @@ where
                 if i % 100 == 0 || i == total_lines {
                     TimeoutFuture::new(10).await;
                 }
-            }
-            
-            let snippets = extract_code_snippets(&content);
-            extracted_files.push(ExtractedFile {
-                name: file_name.clone(),
-                snippets,
-                total_lines,
-            });
-
-	    let snippets2 = extract_code_snippets_from_html(&content);
-            extracted_files.push(ExtractedFile {
-                name: file_name.clone(),
-                snippets: snippets2,
-                total_lines,
-            });
+            }            
+	    let snippets = extract_code_snippets(&content);
+	    let mut all_snippets = snippets;
+	    all_snippets.extend(extract_code_snippets_from_html(&content));
+	    // Finally push one combined ExtractedFile
+	    extracted_files.push(ExtractedFile {
+	        name: file_name.clone(),
+	        snippets: all_snippets,
+	        total_lines,
+	    });
         }
     }
     

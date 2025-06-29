@@ -183,22 +183,18 @@ pub async fn process_file_engine(
             }
 
             // Extract code snippets
-            let snippets = extract_code_snippets(&content);
-
-	    // and from html
-	    let snippets2 = extract_code_snippets_from_html(&content);
-
-            // Add to files list
-            files.write().push(ExtractedFile {
-                name: file_name.clone(),
-                snippets,
-                total_lines,
-            });
+	    // FIXME why are we doing the same thing twice?
+	    let snippets = extract_code_snippets(&content);
+	    // …then append any HTML‐based snippets
+	    let mut all_snippets = snippets;
+	    all_snippets.extend(extract_code_snippets_from_html(&content));
+	    // Finally push one combined ExtractedFile
 	    files.write().push(ExtractedFile {
-                name: file_name.clone(),
-                snippets: snippets2,
-                total_lines,
-            });
+	        name: file_name.clone(),
+	        snippets: all_snippets,
+	        total_lines,
+	    });
+
         }
     }
     
