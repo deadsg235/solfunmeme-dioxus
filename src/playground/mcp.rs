@@ -808,7 +808,7 @@ fn QueryInputForm(query_input: Signal<String>, mcp_queries: Signal<Vec<McpQuery>
 // }
 
 #[component]
-pub fn PlaygroundApp() -> Element {
+pub fn MCPPlaygroundApp() -> Element {
     let mut mode = use_signal(|| PlaygroundMode::Hybrid);
     let mut active_tool = use_signal(|| None::<String>);
     let mut mcp_queries = use_signal(|| Vec::<McpQuery>::new());
@@ -818,7 +818,10 @@ pub fn PlaygroundApp() -> Element {
     
     rsx! {
         div { class: "playground-container min-h-screen bg-gray-900 text-white p-6",
-            
+
+	       h1 {
+		   "HELLO",
+	       },
             ModeSelector { mode: mode }
             
             div { class: "grid grid-cols-1 lg:grid-cols-2 gap-6",

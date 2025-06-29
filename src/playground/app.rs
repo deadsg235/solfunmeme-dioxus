@@ -35,6 +35,7 @@ use crate::playground::rust_parser::RustParserApp;
 
 use crate::playground::monster_meta_meme::MonsterMetaMemeApp;
 use crate::extractor::components::extractor::MarkdownCodeExtractor;
+use crate::playground::mcp::MCPPlaygroundApp;
 
 #[derive(PartialEq, Clone)]
 pub enum MenuOption {
@@ -90,6 +91,7 @@ pub enum MenuOption {
     Extractor,
 }
 
+
 #[component]
 pub fn PlaygroundApp() -> Element {
     //    let mut menu_option = use_signal(|| MenuOption::MemeManagement);
@@ -104,6 +106,7 @@ pub fn PlaygroundApp() -> Element {
     let show_airdrop_modal = use_signal(|| false);
 
     rsx! {
+	
         link { rel: "stylesheet", href: TAILWIND_CSS }
         link { rel: "icon", href: FAVICON }
         div {
@@ -176,5 +179,7 @@ pub fn PlaygroundApp() -> Element {
                 }
             }
         }
-    }
+
+	MCPPlaygroundApp {}
+    }// rsx
 } 
