@@ -6,7 +6,7 @@ use std::future::Future;
 use std::pin::Pin;
 use serde_json::Value;
 use serde::Serialize;
-
+use dioxus_logger::tracing::info;
 // Type alias for MCP handlers
 type McpHandler = fn(Value) -> Pin<Box<dyn Future<Output = Result<Value, McpError>> + Send>>;
 
@@ -56,12 +56,16 @@ fn get_or_init_registry() -> &'static RwLock<HashMap<String, (McpToolInfo, McpHa
 
 /// Register an MCP tool with thread safety
 pub fn register_mcp_tool(info: &'static McpToolInfo, handler: McpHandler) -> Result<(), McpError> {
+
+    info!("Register MCP tool: {} -> {}", info.tool_name, info.description);
+    
     let registry = get_or_init_registry();
     
     match registry.write() {
         Ok(mut map) => {
             map.insert(info.tool_name.to_string(), (info.clone(), handler));
-            println!("Registered MCP tool: {} -> {}", info.tool_name, info.description);
+            info!("Registered MCP tool: {} -> {}", info.tool_name, info.description);
+
             Ok(())
         }
         Err(_) => Err(McpError::RegistryLocked)
@@ -122,7 +126,8 @@ pub fn get_mcp_tools_schema(menu_type: &str) -> Result<Value, McpError> {
             })
         })
         .collect();
-    
+
+    info!("schema: {:?}", tool_schemas);
     Ok(serde_json::json!({
         "tools": tool_schemas
     }))

@@ -6,7 +6,7 @@ use syn::ItemFn;
 use syn::parse::Parser;
 // Re-export the McpConfig from the mcp module
 use rrust_kontekst_base::McpConfig;
-
+use dioxus_logger::tracing::info;
 use syn::{self, parse_macro_input, meta::ParseNestedMeta, Error};
 
 /// Parse a string literal value from meta
@@ -131,8 +131,11 @@ fn generate_registration(
     quote! {
         // Auto-registration function
         #[allow(non_snake_case)]
+	#[ctor::ctor]  
         fn #register_fn_name() {
             use rrust_kontekst_base::{McpToolInfo, register_mcp_tool};
+	    use dioxus_logger::tracing::info;
+	    info!("register: {:?}", #fn_name_str,);
             
             static TOOL_INFO :  McpToolInfo = McpToolInfo {
                 component_name: #fn_name_str,
@@ -151,6 +154,12 @@ fn generate_registration(
             if let Err(e) = register_mcp_tool(&TOOL_INFO, #mcp_handler_name) {
                 eprintln!("Failed to register MCP tool '{}': {}", #tool_name, e);
             }
+
+	    // Use inventory to auto-call registration
+            //inventory::submit! {
+	    //inventory::Registry::new(#tool_name, #register_fn_name)
+            //}
+
         }
     }
 }
@@ -193,7 +202,8 @@ pub fn mcp_component(args: TokenStream, input: TokenStream) -> TokenStream {
     let input_fn = parse_macro_input!(input as ItemFn);
     let fn_name = &input_fn.sig.ident;
     let fn_name_str = fn_name.to_string();
-    
+
+    info!("got namel: {:?}", fn_name);
     // Parse the macro arguments
     let mut config = match parse_macro_args_helper(args) {
         Ok(config) => config,

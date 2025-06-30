@@ -99,6 +99,7 @@ dioxus-logger = "0.6.2"
 scraper = "0.23.1"
 rrust_kontekst = {path = "rrust_kontekst"}
 rrust_kontekst_base = {path = "rrust_kontekst_base"}
+ctor = "0.4.2"
 
 #rand_core = { version = "*", features = ["std"] }
 
