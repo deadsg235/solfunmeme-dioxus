@@ -16,6 +16,73 @@ use rrust_kontekst_base::get_mcp_tools_schema;
 use rrust_kontekst_base::McpError;
 
 
+// mod Comp0 {
+
+//     pub async fn embedding_component() -> Result < String, Box < dyn std :: error
+// 								 :: Error > > { Ok("Test component executed successfully".to_string()) } fn
+// 	embedding_component_mcp_handler(params : serde_json :: Value) -> std :: pin ::
+//     Pin < Box < dyn std :: future :: Future < Output = Result < serde_json ::
+// 								Value, rrust_kontekst_base :: McpError >> + Send >>
+//     {
+// 	Box ::
+// 	pin(async move
+// 	    {
+// 		match embedding_component().await
+// 		{
+// 		    Ok(result) =>
+// 		    {
+// 			Ok(serde_json :: json!
+// 			   ({
+// 			       "content" :
+// 			       [{
+// 				   "type" : "text", "text" : format!
+// 				       ("Component '{}' executed successfully",
+// 					"Embedding Generator")
+// 			       }], "result" : result, "isError" : false
+// 			   }))
+// 		    }, Err(e) =>
+// 		    {
+// 			Err(rrust_kontekst_base :: McpError ::
+// 			    ExecutionError(format!
+// 					   ("Component '{}' failed: {}", "Embedding Generator", e)))
+// 		    }
+// 		}
+// 	    })
+//     } #[allow(non_snake_case)] fn register_embedding_component()
+//     {
+// 	use rrust_kontekst_base :: { McpToolInfo, register_mcp_tool }; let
+// 	    tool_info = McpToolInfo
+// 	{
+//             component_name : "embedding_component", tool_name : "embedding_",
+//             menu_type : "core", label : "Embedding Generator", emoji : "🔤",
+//             description : "Generate embeddings for text input", visible : true,
+//             order : 1i32, mcp_enabled : true, parameters : & [], returns :
+//             "Operation completed",
+// 	}; if let Err(e) =
+// 	    register_mcp_tool(& tool_info, embedding_component_mcp_handler)
+// 	{ eprintln! ("Failed to register MCP tool '{}': {}", "embedding_", e); }
+//     } #[allow(non_upper_case_globals)] pub static EMBEDDING_COMPONENT_METADATA :
+//     std :: sync :: OnceLock < serde_json :: Value > = std :: sync :: OnceLock ::
+//     new(); pub fn get_metadata() -> & 'static serde_json :: Value
+//     {
+// 	EMBEDDING_COMPONENT_METADATA.get_or_init(||
+// 						 {
+// 						     serde_json :: json!
+// 							 ({
+// 							     "component_name" : "embedding_component", "tool_name" :
+// 							     "embedding_", "description" :
+// 							     "Generate embeddings for text input", "function_signature" :
+// 							     stringify!
+// 								 (pub async fn embedding_component() -> Result < String, Box < dyn
+// 								  std :: error :: Error > >
+// 								  { Ok("Test component executed successfully".to_string()) }),
+// 							     "generated_at_compile_time" : true
+// 							 })
+// 						 })
+//     }
+        
+// }
+
 mod Comp1 {
     //use rrust_kontekst::mcp_component;
 // Example 1: Simple component
