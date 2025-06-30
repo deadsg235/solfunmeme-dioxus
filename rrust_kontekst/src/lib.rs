@@ -131,12 +131,18 @@ fn generate_registration(
     quote! {
         // Auto-registration function
         #[allow(non_snake_case)]
-	#[ctor::ctor]  
-        fn #register_fn_name() {
+//	#[ctor::ctor]  
+        pub fn #register_fn_name() {
             use rrust_kontekst_base::{McpToolInfo, register_mcp_tool};
 	    use dioxus_logger::tracing::info;
-	    info!("register: {:?}", #fn_name_str,);
-            
+//	    use std::sync::Once;  
+//            static INIT: Once = Once::new();  
+              
+            //INIT.call_once(|| {
+//		eprintln!("register MCP tool '{:?}':", #fn_name_str,);
+//		info!("register: {:?}", #fn_name_str,);
+//	    });
+//            
             static TOOL_INFO :  McpToolInfo = McpToolInfo {
                 component_name: #fn_name_str,
                 tool_name: #tool_name,
@@ -158,10 +164,9 @@ fn generate_registration(
 	    // Use inventory to auto-call registration
             //inventory::submit! {
 	    //inventory::Registry::new(#tool_name, #register_fn_name)
-            //}
+            }
 
-        }
-    }
+        }//quote    
 }
 
 /// Generate component metadata for introspection
@@ -203,7 +208,7 @@ pub fn mcp_component(args: TokenStream, input: TokenStream) -> TokenStream {
     let fn_name = &input_fn.sig.ident;
     let fn_name_str = fn_name.to_string();
 
-    info!("got namel: {:?}", fn_name);
+    //info!("got namel: {:?}", fn_name);
     // Parse the macro arguments
     let mut config = match parse_macro_args_helper(args) {
         Ok(config) => config,

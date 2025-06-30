@@ -91,9 +91,12 @@ pub enum MenuOption {
     Extractor,
 }
 
-
+use crate::extractor::components::example::register_all_components;
 #[component]
 pub fn PlaygroundApp() -> Element {
+
+    register_all_components();
+	
     //    let mut menu_option = use_signal(|| MenuOption::MemeManagement);
         let mut menu_option = use_signal(|| MenuOption::Embedding);
     let notifications = use_signal(|| vec![NotificationInfo {

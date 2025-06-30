@@ -57,14 +57,14 @@ fn get_or_init_registry() -> &'static RwLock<HashMap<String, (McpToolInfo, McpHa
 /// Register an MCP tool with thread safety
 pub fn register_mcp_tool(info: &'static McpToolInfo, handler: McpHandler) -> Result<(), McpError> {
 
-    info!("Register MCP tool: {} -> {}", info.tool_name, info.description);
+    //info!("Register MCP tool: {} -> {}", info.tool_name, info.description);
     
     let registry = get_or_init_registry();
     
     match registry.write() {
         Ok(mut map) => {
             map.insert(info.tool_name.to_string(), (info.clone(), handler));
-            info!("Registered MCP tool: {} -> {}", info.tool_name, info.description);
+      //      info!("Registered MCP tool: {} -> {}", info.tool_name, info.description);
 
             Ok(())
         }

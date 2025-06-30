@@ -169,3 +169,17 @@ mod tests {
 //     println!("Application completed successfully!");
 //     Ok(())
 // }
+
+use crate::extractor::components::example::Comp1::register_embedding_component;
+use crate::extractor::components::example::Comp2::register_bert_test_component;
+use crate::extractor::components::example::Comp4::register_experimental_component;
+use crate::extractor::components::example::Comp5::register_text_processor_component;
+
+pub fn register_all_components() {
+    register_embedding_component() ;
+    register_bert_test_component();
+    register_experimental_component();
+    register_text_processor_component();
+}
+
+		    
