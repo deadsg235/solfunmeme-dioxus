@@ -20,7 +20,6 @@ use crate::extractor::types::DocumentSummary;
 use crate::extractor::types::ProcessingFile;
 use crate::extractor::types::CodeSnippet;
 use crate::extractor::types::AnnotatedWord;
-use rrust_kontekst::mcp_component;
 
 async fn read_files(file_engine: Arc<dyn FileEngine>,  currently_processing_file : &mut Signal<Option<ProcessingFile>>, files_uploaded: &mut Signal<Vec<UploadedFile>>) {
         let files = file_engine.files();

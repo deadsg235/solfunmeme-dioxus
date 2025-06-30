@@ -1,8 +1,6 @@
 // lib.rs - Complete usage example
-use dioxus_logger::tracing::info;
 use serde_json::json;
 use std::error::Error;
-use rrust_kontekst::mcp_component;
 use rrust_kontekst_base::invoke_mcp_tool;
 use rrust_kontekst_base::get_mcp_tools_schema;
 use rrust_kontekst_base::McpError;

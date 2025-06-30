@@ -818,10 +818,10 @@ fn QueryInputForm(query_input: Signal<String>, mcp_queries: Signal<Vec<McpQuery>
 
 #[component]
 pub fn MCPPlaygroundApp() -> Element {
-    let mut mode = use_signal(|| PlaygroundMode::Hybrid);
-    let mut active_tool = use_signal(|| None::<String>);
-    let mut mcp_queries = use_signal(|| Vec::<McpQuery>::new());
-    let mut query_input = use_signal(|| String::new());
+    let mode = use_signal(|| PlaygroundMode::Hybrid);
+    let active_tool = use_signal(|| None::<String>);
+    let mcp_queries = use_signal(|| Vec::<McpQuery>::new());
+    let query_input = use_signal(|| String::new());
     
     let mcp_tools = get_mcp_tools("core")?;
     
