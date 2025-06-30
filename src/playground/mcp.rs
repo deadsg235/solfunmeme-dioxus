@@ -109,7 +109,8 @@ fn SchemaExportButton() -> Element {
             button {
                 class: "{Styles::primary_button()} text-sm",
                 onclick: move |_| {
-                    let schema = get_mcp_tools_schema();
+		    let some_str =  "Test";
+                    let schema = get_mcp_tools_schema(some_str);
                     println!("MCP Schema: {}", serde_json::to_string_pretty(&schema).unwrap());
                 },
                 "📋 Export MCP Schema"
@@ -711,7 +712,8 @@ fn parse_query(query: &str) -> Option<(String, Value)> {
 #[component]
 fn SchemaExportButtonNew() -> Element {
     let mut show_schema = use_signal(|| false);
-    let schema = serde_json::to_string_pretty(&get_mcp_tools_schema()).unwrap_or_default();
+    let some_str =  "Test";
+    let schema = serde_json::to_string_pretty(&get_mcp_tools_schema(some_str)).unwrap_or_default();
     
     rsx! {
         div { class: "mb-4",
@@ -821,7 +823,7 @@ pub fn MCPPlaygroundApp() -> Element {
     let mut mcp_queries = use_signal(|| Vec::<McpQuery>::new());
     let mut query_input = use_signal(|| String::new());
     
-    let mcp_tools = get_mcp_tools("core");
+    let mcp_tools = get_mcp_tools("core")?;
     
     rsx! {
         div { class: "playground-container min-h-screen bg-gray-900 text-white p-6",

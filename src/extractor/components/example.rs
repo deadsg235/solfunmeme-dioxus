@@ -6,14 +6,16 @@
 //pub use mcp::*;
 //pub use r#macro::mcp_component;
 use serde_json::json;
-use serde::ser::Error;
-//use std::error::Error;
+//use serde::ser::Error;
+use std::error::Error;
+
 //use rrust_kontekst::*;
 use rrust_kontekst::mcp_component;
 use rrust_kontekst_base::invoke_mcp_tool;
 use rrust_kontekst_base::get_mcp_tools_schema;
 use rrust_kontekst_base::McpError;
-//use serde::ser::Error;
+
+
 mod Comp1 {
     //use rrust_kontekst::mcp_component;
 // Example 1: Simple component
@@ -24,10 +26,11 @@ mod Comp1 {
     description = "Generate embeddings for text input",
     order = 1
 )]
- pub async fn embedding_component()  {
-     // Simulate embedding generation
- }
- }
+    // pub async fn embedding_component( name: & str, name2: & str)  -> Result<String, Box<dyn std::error::Error>> {
+    pub async fn embedding_component()  -> Result<String, Box<dyn std::error::Error>> {
+	Ok("Test component executed successfully".to_string())
+}
+}
 
 mod Comp2{
     use rrust_kontekst::mcp_component;
@@ -42,9 +45,10 @@ mod Comp2{
     order = 2,
     returns = "BERT model predictions and confidence scores"
 )]
-    pub async fn bert_test_component()  {
-
+    pub async fn bert_test_component()     -> Result<String, Box<dyn std::error::Error>> {
+	Ok("Test component executed successfully".to_string())
     }
+
 }
 
 mod Comp4{
@@ -58,8 +62,9 @@ use rrust_kontekst::mcp_component;
     visible = false,
     mcp = false
 )]
-pub async fn experimental_component()  {
-}
+    pub async fn experimental_component()  -> Result<String, Box<dyn std::error::Error>> {
+	Ok("Test component executed successfully".to_string())
+    }
 
 }
 
@@ -73,8 +78,9 @@ mod Comp5 {
     description = "Process and analyze text content",
     order = -1  // Higher priority (negative numbers come first)
 )]
-pub async fn text_processor_component()  {
-}
+    pub async fn text_processor_component()  -> Result<String, Box<dyn std::error::Error>> {
+	Ok("Test component executed successfully".to_string())
+    }
 }
 
 /// Initialize all MCP components

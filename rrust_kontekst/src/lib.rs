@@ -2,6 +2,7 @@
 use proc_macro::TokenStream;
 use proc_macro2;
 use quote::quote;
+use syn::ItemFn;
 //use syn::{parse_macro_input, ItemFn, Error};
 use syn::parse::Parser;
 // Re-export the McpConfig from the mcp module
@@ -11,7 +12,8 @@ use rrust_kontekst_base::McpConfig;
 //use syn::meta::ParseNestedMeta;
 //use std::error::Error;
 
-use syn::{self, parse_macro_input, meta::ParseNestedMeta,Error,ItemFn};
+use syn::{self, parse_macro_input, meta::ParseNestedMeta,Error};
+//ItemFn
 
 /// Parse a string literal value from meta
 fn parse_string_value(meta: syn::meta::ParseNestedMeta, target: &mut String) -> Result<(),Error>{
@@ -170,9 +172,9 @@ fn generate_registration(
         }
         
         // Use inventory to auto-call registration
-        inventory::submit! {
-            inventory::Registry::new(#tool_name, #register_fn_name)
-        }
+        //inventory::submit! {
+            //inventory::Registry::new(#tool_name, #register_fn_name)
+    //}
     }
 }
 
@@ -270,18 +272,21 @@ pub fn mcp_component(args: TokenStream, input: TokenStream) -> TokenStream {
 fn parse_macro_args_helper(args: TokenStream) -> syn::Result<McpConfig> {  
     let mut config = McpConfig::default();  
     
-    let parser = syn::meta::parser(|meta: ParseNestedMeta| {  
-        match meta.path.get_ident().map(|i| i.to_string()).as_deref() {  
-            Some("menu") => parse_string_value(meta, &mut config.menu_type),  
-            Some("label") => parse_string_value(meta, &mut config.label),  
-            Some("emoji") => parse_string_value(meta, &mut config.emoji),  
-            Some("description") => parse_string_value(meta, &mut config.description),  
-            Some("tool_name") => parse_string_value(meta, &mut config.tool_name),  
-            Some("returns") => parse_string_value(meta, &mut config.returns),  
-            Some("visible") => parse_bool_value(meta, &mut config.visible),  
-            Some("mcp") => parse_bool_value(meta, &mut config.mcp_enabled),  
-            Some("order") => parse_int_value(meta, &mut config.order),  
-            Some("params") => parse_params_array(meta, &mut config.parameters),  
+    let parser = syn::meta::parser(|meta: ParseNestedMeta| {
+
+		
+let path_str = meta.path.get_ident().map(|i| i.to_string()).unwrap_or_default();
+	match path_str.as_str() {    
+            "menu" => parse_string_value(meta, &mut config.menu_type),  
+            "label" => parse_string_value(meta, &mut config.label),  
+            "emoji" => parse_string_value(meta, &mut config.emoji),  
+            "description" => parse_string_value(meta, &mut config.description),  
+            "tool_name" => parse_string_value(meta, &mut config.tool_name),  
+            "returns" => parse_string_value(meta, &mut config.returns),  
+            "visible" => parse_bool_value(meta, &mut config.visible),  
+            "mcp" => parse_bool_value(meta, &mut config.mcp_enabled),  
+            "order" => parse_int_value(meta, &mut config.order),  
+            "params" => parse_params_array(meta, &mut config.parameters),  
             _ => Ok(()), // Ignore unknown attributes  
         }  
     });  

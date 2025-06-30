@@ -5,6 +5,7 @@ use std::sync::{OnceLock, RwLock};
 use std::future::Future;
 use std::pin::Pin;
 use serde_json::Value;
+use serde::Serialize;
 
 // Type alias for MCP handlers
 type McpHandler = fn(Value) -> Pin<Box<dyn Future<Output = Result<Value, McpError>> + Send>>;
@@ -12,7 +13,7 @@ type McpHandler = fn(Value) -> Pin<Box<dyn Future<Output = Result<Value, McpErro
 // Thread-safe registry for MCP tools
 static MCP_REGISTRY: OnceLock<RwLock<HashMap<String, (McpToolInfo, McpHandler)>>> = OnceLock::new();
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct McpToolInfo {
     pub component_name: &'static str,
     pub tool_name: &'static str,
@@ -27,7 +28,7 @@ pub struct McpToolInfo {
     pub returns: &'static str,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Clone)]
 pub enum McpError {
     InvalidParams,
     ExecutionError(String),
@@ -158,7 +159,7 @@ pub fn list_all_tools() -> Result<Vec<String>, McpError> {
 }
 
 /// Configuration for the MCP component (used by the macro)
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct McpConfig {
     pub menu_type: String,
     pub label: String,
