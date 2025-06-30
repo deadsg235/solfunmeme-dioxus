@@ -1,7 +1,7 @@
 use markdown::mdast::Node;
-
+use crate::extractor::model::extract::estimate_token_count;
 use crate::extractor::model::content_hash::create_content_hash;
-use crate::extractor::model::token_count::estimate_token_count;
+//use crate::extractor::model::token_count::estimate_token_count;
 use crate::extractor::types::CodeSnippet;
 
 /// Recursively walks the AST to find code snippets.  

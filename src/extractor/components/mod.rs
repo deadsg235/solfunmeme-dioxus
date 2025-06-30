@@ -14,3 +14,5 @@ pub mod welcome;
 pub mod app;
 pub mod upload;
 pub mod fileresult;
+
+pub mod example;

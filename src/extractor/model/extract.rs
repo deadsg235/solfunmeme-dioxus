@@ -109,7 +109,7 @@ fn generate_content_hash(content: &str) -> String {
 }
 
 /// Estimate token count (rough approximation)
-fn estimate_token_count(content: &str) -> usize {
+pub fn estimate_token_count(content: &str) -> usize {
     // Simple estimation: split by whitespace and common delimiters
     content
         .split_whitespace()

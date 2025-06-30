@@ -119,14 +119,14 @@ async fn upload_files( evt: FormEvent, currently_processing_file: &mut Signal<Op
         }
     }
 
-#[mcp_component(
-    menu = "core",
-    label = "Embedding App", 
-    emoji = "🔗",
-    description = "Manage Embeddings",
-    visible = true,
-    order = 1
-)]
+// #[mcp_component(
+//     menu = "core",
+//     label = "Embedding App", 
+//     emoji = "🔗",
+//     description = "Manage Embeddings",
+//     visible = true,
+//     order = 1
+// )]
 pub fn EmbeddingApp() -> Element {
     let mut enable_directory_upload = use_signal(|| false);
     let mut files_uploaded = use_signal(|| Vec::new() as Vec<UploadedFile>);

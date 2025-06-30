@@ -3128,6 +3128,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "inventory"
+version = "0.3.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ab08d7cd2c5897f2c949e5383ea7c7db03fb19130ffcfbf7eda795137ae3cb83"
+dependencies = [
+ "rustversion",
+]
+
+[[package]]
 name = "ipnet"
 version = "2.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4816,6 +4825,7 @@ version = "0.1.0"
 dependencies = [
  "proc-macro2",
  "quote",
+ "rrust_kontekst_base",
  "syn 2.0.104",
 ]
 
@@ -4823,6 +4833,7 @@ dependencies = [
 name = "rrust_kontekst_base"
 version = "0.1.0"
 dependencies = [
+ "inventory",
  "serde_json",
 ]
 
@@ -6971,6 +6982,7 @@ dependencies = [
  "gloo-storage",
  "gloo-timers",
  "gloo-utils 0.2.0",
+ "inventory",
  "js-sys",
  "jzon",
  "linfa",

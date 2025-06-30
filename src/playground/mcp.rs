@@ -649,7 +649,14 @@ fn ExecuteButton(on_execute: EventHandler<String>) -> Element {
 pub async fn handle_mcp_request(request: Value) -> Value {
     match request.get("method").and_then(|m| m.as_str()) {
         Some("tools/list") => {
-            get_mcp_tools_schema()
+	    let some_str =  "Test";
+            let res = get_mcp_tools_schema(some_str);
+	    match res {
+		Ok(res) => res,
+		Err(e) => serde_json::json!({
+                    "error": {"code": -1, "message": format!("{:?}", e)}
+                })
+	    }		
         }
         Some("tools/call") => {
             let tool_name = request["params"]["name"].as_str().unwrap_or("");

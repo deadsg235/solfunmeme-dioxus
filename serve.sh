@@ -1,3 +1,4 @@
+#!/bin/bash
 set -x
 
 #dx serve --verbose --hot-reload true --trace  --platform web

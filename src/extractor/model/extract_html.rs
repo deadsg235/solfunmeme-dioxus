@@ -2,7 +2,7 @@ use scraper::{Html, Selector};
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use crate::extractor::types::{CodeSnippet, TestResult};
-
+use crate::extractor::model::extract::estimate_token_count;
 /// Extract code snippets from HTML content containing markdown code blocks
 pub fn extract_code_snippets_from_html(content: &str) -> Vec<CodeSnippet> {
     let mut snippets = Vec::new();
@@ -88,18 +88,18 @@ fn generate_content_hash(content: &str) -> String {
     format!("{:x}", hasher.finish())
 }
 
-/// Estimate token count (reusing your existing function)
-fn estimate_token_count(content: &str) -> usize {
-    content
-        .split_whitespace()
-        .map(|word| {
-            let punctuation_count = word.chars()
-                .filter(|c| c.is_ascii_punctuation())
-                .count();
-            1 + punctuation_count
-        })
-        .sum()
-}
+// /// Estimate token count (reusing your existing function)
+// fn estimate_token_count(content: &str) -> usize {
+//     content
+//         .split_whitespace()
+//         .map(|word| {
+//             let punctuation_count = word.chars()
+//                 .filter(|c| c.is_ascii_punctuation())
+//                 .count();
+//             1 + punctuation_count
+//         })
+//         .sum()
+// }
 
 /// Create a default test result (reusing your existing function)
 fn create_default_test_result() -> TestResult {

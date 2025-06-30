@@ -16,7 +16,7 @@ pub(crate) use app::LOGO;
 pub(crate) use app::Route;
 use crate::{    model::NotificationInfo };
 mod password_manager;
-pub mod dioxus_adapter;
+
 pub mod fetch_parser;
 pub mod state;
 pub mod playground;
