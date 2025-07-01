@@ -18,7 +18,7 @@ struct OurSourceExtractorComponents;
 
 #[derive(Embed)]
 #[folder = "src/extractor/model"]
-struct OurSourceExtractorMdoel;
+struct OurSourceExtractorModel;
 
 #[derive(Embed)]
 #[folder = "src/extractor/system"]

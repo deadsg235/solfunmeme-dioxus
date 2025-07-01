@@ -1,9 +1,7 @@
 use dioxus::prelude::*;
 
-use crate::utils::address_qrcode;
-use crate::{
-    utils::copied_address, CopySvg, NotificationInfo, ReceiveSvg
-};
+//use crate::utils::address_qrcode;
+//use crate::{    utils::copied_address, CopySvg, NotificationInfo, ReceiveSvg};
 use crate::model::storage::ACTIVE_CONNECTION;
 use crate::model::storage::{GLOBAL_MESSAGE};
 

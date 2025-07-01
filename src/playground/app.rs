@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use crate::model::lean::style::{Styles, THEME};
-use crate::app::{FAVICON, TAILWIND_CSS};
+//use crate::app::{FAVICON, TAILWIND_CSS};
 use crate::model::NotificationInfo;
 use crate::playground::solfunnice::SolFunNiceApp;
 //use crate::extractor::components::app::EmbeddingApp;

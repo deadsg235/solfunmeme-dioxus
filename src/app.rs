@@ -31,6 +31,7 @@ use crate::views::dashboard::Dashboard;
 use crate::views::accounts::Accounts;
 use crate::views::clusters::Clusters;
 use crate::views::extras::Extras;
+use crate::views::source_browser::SourceBrowser;
 
 
 
@@ -99,6 +100,8 @@ pub enum Route {
         Clusters(),
         #[route("/extras")]
         Extras(),
+        #[route("/source")]
+        SourceBrowser(),
         // #[feature ("git2")]
         // #[route("/git-parser")]
         // GitParser2(),

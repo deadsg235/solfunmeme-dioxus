@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use crate::model::crypto::EncryptedPayload;
 use crate::views::crypto_style::*;
-use crate::crypto::SolanaEncryption;
+//use crate::crypto::SolanaEncryption;
 use super::components::*;
 use super::validation::*;
 

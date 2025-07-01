@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
 use crate::{
-    fetch_parser::send_sol_req, Loader, NotificationInfo, SendSvg, UserSvg, 
+//    fetch_parser::send_sol_req, Loader, NotificationInfo, SendSvg, UserSvg, 
 };
 use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE} ;
 

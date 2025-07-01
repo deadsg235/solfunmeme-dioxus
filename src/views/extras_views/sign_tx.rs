@@ -8,7 +8,7 @@ use solana_sdk::{pubkey::Pubkey, transaction::Transaction};
 use wallet_adapter::Utils;
 
 use crate::{model::{storage::{ACTIVE_CONNECTION, CLUSTER_STORAGE, GLOBAL_MESSAGE, WALLET_ADAPTER} }};
-use crate::{NotificationInfo, SignTxSvg,};
+//use crate::{NotificationInfo, SignTxSvg,};
 
 #[component]
 pub fn SignTx() -> Element {

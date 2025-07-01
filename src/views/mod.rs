@@ -35,3 +35,5 @@ pub mod encryption;
 pub mod component_memes;
 pub mod workflow_memes;
 pub mod wikidata_memes;
+pub mod source_browser;
+pub mod source_browser_style;

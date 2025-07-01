@@ -23,6 +23,7 @@ pub mod playground;
 pub mod extractor;
 
 pub mod embedself;
+pub mod core;
 
 fn main() {
     // Use the memes App component from views
