@@ -6,7 +6,7 @@ use syn::ItemFn;
 use syn::parse::Parser;
 // Re-export the McpConfig from the mcp module
 use rrust_kontekst_base::McpConfig;
-use dioxus_logger::tracing::info;
+//use dioxus_logger::tracing::info;
 use syn::{self, parse_macro_input, meta::ParseNestedMeta, Error};
 
 /// Parse a string literal value from meta
@@ -41,8 +41,13 @@ fn parse_bool_value(meta: ParseNestedMeta, target: &mut bool) -> Result<(), Erro
 fn parse_int_value(meta: ParseNestedMeta, target: &mut i32) -> Result<(), Error> {
     if let Ok(value) = meta.value() {
         if let Ok(lit_int) = value.parse::<syn::LitInt>() {
-            *target = lit_int.base10_parse().unwrap_or(0);
-            Ok(())
+            match lit_int.base10_parse() {
+                Ok(value) => {
+                    *target = value;
+                    Ok(())
+                }
+                Err(_) => Err(meta.error("invalid integer literal"))
+            }
         } else {
             Err(meta.error("expected int literal"))
         }
@@ -50,6 +55,26 @@ fn parse_int_value(meta: ParseNestedMeta, target: &mut i32) -> Result<(), Error>
         Err(meta.error("expected int literal"))
     }
 }
+
+/// Parse a float literal value from meta
+// FIXME: suggested by AI , untested and unused
+// fn parse_float_value(meta: ParseNestedMeta, target: &mut f32) -> Result<(), Error> {
+//     if let Ok(value) = meta.value() {
+//         if let Ok(lit_float) = value.parse::<syn::LitFloat>() {
+//             match lit_float.base10_parse() {
+//                 Ok(value) => {
+//                     *target = value;
+//                     Ok(())
+//                 }
+//                 Err(_) => Err(meta.error("invalid float literal"))
+//             }
+//         } else {
+//             Err(meta.error("expected float literal"))
+//         }
+//     } else {
+//         Err(meta.error("expected float literal"))
+//     }
+// }
 
 /// Parse an array of parameters
 fn parse_params_array(meta: ParseNestedMeta, target: &mut Vec<String>) -> Result<(), Error> {

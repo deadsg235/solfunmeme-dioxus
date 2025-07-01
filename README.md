@@ -1,10 +1,19 @@
 ## Solfunmeme Dioxus 
 
-# todo 
+## Overview  
 
-### Idea
+Solfunmeme Dioxus is an ambitious project that combines code analysis, vectorization, and blockchain technology to create a comprehensive code visualization and execution platform.  
+  
+### Core Concepts  
+- **Code Vectorization**: Transform source code into executable vector representations  
+- **Modular Architecture**: Split declarations into individual files for better organization  
+- **Duplicate Detection**: Identify and manage code duplicates across canonical directories  
 
-split each declaration to own file
+### Goals
+
+Automatically split each declaration to own file, each declaration is a meme, a biosemiotic entity that appears in multiple forms,
+like a higher dimensioal being, projected into a lower dimension, a content addressable entity.
+
 vectorize -> emit code from vector
 vector = code = binary 
 executable vectors
@@ -172,10 +181,11 @@ open honest
 5. loyal to holder. 
 long term. months and year.
 
-6. value:
-sell consulting time via our token, consult and help the holder,
-services would be provided to holders.
-longer you hold the more credits you earn , sell, swap or use those credits.
+6. value proposition:
+Sell goods and servics such as consulting time or support via our token.
+We should consult for and help the holders of our token, adding personal value.
+Online Services would be provided to holders according to resources available.
+The longer you hold the project tokens and nfs, the more internal credits you earn, which you can sell, swap or use for services and goods.
 
 7. hosting providers 
 rent ip and ports at market rate. 
@@ -376,8 +386,9 @@ vector -> code
 make each possible value a valid program, no invalid program states possible.
 encode program state into a vector.
 
-
-solana 
+## Solana as storage
+Store each declaration as an account on our solana sidechain, each ast gets a program address.
+Use special indexing to reduce the size of the address space.
 
 # remove 
 unimplemented
@@ -390,6 +401,42 @@ $env:RUSTFLAGS="-C instrument-coverage"
 set RUSTFLAGS="-C instrument-coverage" 
 ```
 
+Then you can run like this 
+`cargo tarpauline`
 
-cargo tarpauline
-cargo llvm-cov
+or this
+`cargo llvm-cov`
+
+
+# Testing 
+
+## write unit test for everything
+
+Write unit tests for the actual implementation code of the features described in the README
+
+### Implement tests for the core functionality mentioned like:
+
+#### Code vectorization logic
+
+#### Declaration splitting functionality
+
+#### Duplicate detection algorithms
+
+#### Wallet integration
+
+#### Data encryption/decryption
+
+#### File parsing and JSON conversion
+
+## Doc tests
+
+add documentation tests to verify code examples if you add them to the README
+
+## Structure Markdown 
+
+Set up automated markdown linting to ensure README formatting remains consistent
+
+### Ontology
+
+Create a formal ontology for the project
+

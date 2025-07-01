@@ -4,7 +4,8 @@ use std::sync::Arc;
 use dioxus::html::HasFileData;
 use gloo_timers::future::TimeoutFuture;
 use dioxus::prelude::*;
-use crate::extractor::components::app::dioxus_elements::FileEngine;
+
+use dioxus::html::FileEngine;  
 use crate::extractor::styles::STYLE;
 //use crate::extractor::error;
 //use crate::extractor::ProcessingFile;
@@ -41,7 +42,10 @@ async fn read_files(file_engine: Arc<dyn FileEngine>,  currently_processing_file
                 let snippet: Vec<CodeSnippet> = [].to_vec();
 		let code_annotations : Vec<AnnotatedWord>  = [].to_vec();
 
-                // if file_name.ends_with(".md") {
+
+// FIXME: broken code, please fix
+                
+        // if file_name.ends_with(".md") {
                 //     let snippets = extract_code_snippets(&contents);
                 //     for snippet in snippets {
                 //         //test_code_snippet(snippet);
@@ -217,7 +221,7 @@ pub fn EmbeddingApp() -> Element {
         div {
             h3 { "Processing Pipeline" }
             div {
-                label { r#for: "wikidata", "Enable Wikidata Annotation" }
+                label { r#for: "wikidata", "Enable Wikidata Annotation (FIXME not working yet)" }
                 input {
                     r#type: "checkbox",
                     id: "wikidata",
@@ -226,7 +230,7 @@ pub fn EmbeddingApp() -> Element {
                 }
             }
             div {
-                label { r#for: "sentiment", "Enable Sentiment Analysis" }
+                label { r#for: "sentiment", "Enable Sentiment Analysis (FIXME not working yet)" }
                 input {
                     r#type: "checkbox",
                     id: "sentiment",
@@ -235,7 +239,7 @@ pub fn EmbeddingApp() -> Element {
                 }
             }
             div {
-                label { r#for: "embedding", "Enable BERT Embedding" }
+                label { r#for: "embedding", "Enable BERT Embedding (FIXME not working yet)" }
                 input {
                     r#type: "checkbox",
                     id: "embedding",

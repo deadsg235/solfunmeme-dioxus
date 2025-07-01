@@ -94,7 +94,7 @@ pub enum MenuOption {
 use crate::extractor::components::example::register_all_components;
 #[component]
 pub fn PlaygroundApp() -> Element {
-
+    crate::embedself::printall;
     register_all_components();
 	
     //    let mut menu_option = use_signal(|| MenuOption::MemeManagement);

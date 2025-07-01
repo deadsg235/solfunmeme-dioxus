@@ -33,7 +33,10 @@ fn App() -> Element {
                 color: #fff;
             ",
             // Placeholder for Three.js canvas
-            canvas { id: "canvas" }
+            canvas {
+                id: "canvas",
+                style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"
+            }
             Info {}
             Controls {}
             Legend {}
@@ -135,7 +138,7 @@ fn Controls() -> Element {
                 input {
                     r#type: "range",
                     min: "0.1",
-                    max: "2",
+                    oninput: move |event| intensity.set(event.data.value().parse().unwrap_or(1.0)),                   max: "2",
                     step: "0.1",
                     value: "{intensity}",
                     oninput: move |event| intensity.set(event.value.parse().unwrap_or(1.0)),
@@ -398,6 +401,38 @@ fn GlobalStyles() -> Element {
             "
         }
     }
+}
+
+// Update App to include GlobalStyles
+#[component]
+fn App() -> Element {
+    rsx! {
+        GlobalStyles {}
+        div {
+            id: "container",
+            style: "
+                position: relative;
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #000011 0%, #001122 50%, #000033 100%);
+                overflow: hidden;
+                font-family: 'Courier New', monospace;
+                color: #fff;
+            ",
+            // Placeholder for Three.js canvas
+            canvas {
+                id: "canvas",
+                style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"
+            }
+            Info {}
+            Controls {}
+            Legend {}
+            Status {}
+        }
+    }
+}
 }
 
 // Placeholder for Three.js integration

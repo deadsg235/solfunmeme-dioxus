@@ -1,5 +1,5 @@
 // use crate::playground::doc_cleaner;
-
+// FIXME get this working so we can pre-process the documents from a cargo command 
 fn main() {
     println!("hello world");
 //     if let Err(e) = (|| -> Result<(), &'static str> {

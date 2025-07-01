@@ -205,6 +205,7 @@ impl McpConfig {
         }
     }
     
+    // FIXME Critical: Box::leak causes permanent memory leaks.
     /// Convert to McpToolInfo for registration
     pub fn to_tool_info(&self, component_name: &'static str) -> McpToolInfo {
         // Convert Vec<String> to &'static [&'static str] - this is a limitation

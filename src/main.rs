@@ -22,8 +22,11 @@ pub mod state;
 pub mod playground;
 pub mod extractor;
 
+pub mod embedself;
 
 fn main() {
     // Use the memes App component from views
+    embedself::printall();
+    
     launch(PlaygroundApp);
 }

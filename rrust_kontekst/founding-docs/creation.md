@@ -62,7 +62,7 @@ pub fn CoreButtons(on_menu_change: EventHandler<MenuOption>) -> Element {
     button {
             class: "{Styles::primarybutton()}",
             onclick: move || on_menu_change.call(MenuOption::Extractor),
-            "Exraction"
+            "Extraction"
         }
     }
 }EditI'll refactor this Dioxus component to use dynamic data by separating the data definition from the rendering logic.Dynamic CoreButtons ComponentCode use dioxus::prelude::*;

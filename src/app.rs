@@ -2,23 +2,22 @@
 
 use dioxus::prelude::*;
 use crate::header::Header;
-use crate::model::NotificationInfo;
-    
-    //git_parser::GitParser,
-
 
 use crate::{
-    //model::NotificationInfo,
+    model::NotificationInfo,
     views::footer::Footer,
-    views::notification::Notification ,
+    views::notification::Notification,
     views::page_not_found::PageNotFound,
-    //git_parser::GitParser,
 };
 
 use crate::views::connections::Connections;
 use crate::model::{AccountState};
+
+// FIXME this is used, [link { rel: "icon", href: FAVICON }](https://github.com/meta-introspector/solfunmeme-dioxus/blob/46e454980e624cf09ea65a39739708ba04e75f70/src/playground/app.rs#L114-L115)
 #[allow(dead_code)]
 pub const FAVICON: Asset = asset!("/assets/favicon.png");
+
+// FIXME this is used, [link { rel: "stylesheet", href: TAILWIND_CSS }]( [TAILWIND_CSS](https://github.com/meta-introspector/solfunmeme-dioxus/blob/46e454980e624cf09ea65a39739708ba04e75f70/src/playground/app.rs#L113)
 #[allow(dead_code)]
 pub const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
@@ -39,6 +38,9 @@ use crate::views::extras::Extras;
 pub(crate) fn MainApp() -> Element {
     let wallet_event_listener = WALLET_ADAPTER.read().events().clone();
 
+    // FIXME: This is commented out because the `ClusterStore` is not implemented yet.
+    // The `ClusterStore` should be implemented to manage clusters.
+    
     // let clusters = vec![
     //     AdapterCluster::devnet(),
     //     AdapterCluster::mainnet(),
