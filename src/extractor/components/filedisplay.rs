@@ -3,30 +3,30 @@ use dioxus::prelude::*;
 //use crate::extractor::ExtractedFile;
 use std::collections::HashSet;
 //use crate::extractor::CodeSnippet;
-use crate::extractor::types::CodeSnippet;
-use crate::extractor::components::filesummary::FileSummary;
-use crate::extractor::components::codesnippet::CodeSnippetComponent;
-use crate::extractor::types::ExtractedFile;
+use crate::extractor::{
+    components::{codesnippet::CodeSnippetComponent, filesummary::FileSummary},
+    types::{CodeSnippet, ExtractedFile},
+};
 #[component]
 pub fn FileDisplay(
     file: ExtractedFile,
     copied_snippets: Signal<HashSet<String>>,
     copy_all_snippets: EventHandler<Vec<CodeSnippet>>,
-    copy_to_clipboard: EventHandler<(String, String)>
+    copy_to_clipboard: EventHandler<(String, String)>,
 ) -> Element {
-//    let get_snippet_id = |file_name: &str, snippet_idx: usize| -> String {
-//        format!("{}_{}", file_name, snippet_idx)
-//    };
+    //    let get_snippet_id = |file_name: &str, snippet_idx: usize| -> String {
+    //        format!("{}_{}", file_name, snippet_idx)
+    //    };
 
     rsx! {
         div { key: "{file.name}",
             h2 { "📝 {file.name}" }
-            
+
             if !file.snippets.is_empty() {
-                FileSummary { 
-                    file: file.clone(), 
-                    copied_snippets, 
-                    copy_all_snippets 
+                FileSummary {
+                    file: file.clone(),
+                    copied_snippets,
+                    copy_all_snippets
                 }
 
                 for (idx, snippet) in file.snippets.iter().enumerate() {

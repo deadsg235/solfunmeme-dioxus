@@ -18,26 +18,26 @@
 // //         .launch(App);
 // // }
 
-use dioxus::prelude::*;
 use crate::model::lean::style::Styles;
+use dioxus::prelude::*;
 
 // #[component]
 #[allow(dead_code)]
 pub fn LeanEditorApp() -> Element {
-//     let state = use_signal(AppState::default);
-    
-     rsx! {
-         div {
-             class: "app-container",
-             style: "{Styles::app_container()}",
-//             Header {}
-//             InputSection { state }
-//             ExpressionList { state }
-//             VectorSpace { state }
-//             Footer {}
+    //     let state = use_signal(AppState::default);
+
+    rsx! {
+             div {
+                 class: "app-container",
+                 style: "{Styles::app_container()}",
+    //             Header {}
+    //             InputSection { state }
+    //             ExpressionList { state }
+    //             VectorSpace { state }
+    //             Footer {}
+             }
          }
-     }
- }
+}
 
 // // ============================================================================
 // // HEADER COMPONENT
@@ -49,13 +49,13 @@ pub fn LeanEditorApp() -> Element {
 //         header {
 //             class: "app-header",
 //             style: "{Styles::header()}",
-//             h1 { 
+//             h1 {
 //                 style: "{Styles::header_title()}",
-//                 "🧠 SimpleExpr Manager" 
+//                 "🧠 SimpleExpr Manager"
 //             }
-//             p { 
+//             p {
 //                 style: "{Styles::header_subtitle()}",
-//                 "Lambda Calculus Expression Builder & Analyzer" 
+//                 "Lambda Calculus Expression Builder & Analyzer"
 //             }
 //         }
 //     }
@@ -77,12 +77,12 @@ pub fn LeanEditorApp() -> Element {
 //     rsx! {
 //         section {
 //             style: "{Styles::section()}",
-            
-//             h2 { 
+
+//             h2 {
 //                 style: "{Styles::section_title()}",
-//                 "Create Expression" 
+//                 "Create Expression"
 //             }
-            
+
 //             ExpressionTypeSelector { state }
 //             ExpressionInputs { state }
 //             MetadataInputs { state }
@@ -95,18 +95,18 @@ pub fn LeanEditorApp() -> Element {
 // #[component]
 // fn ExpressionTypeSelector(props: StateProps) -> Element {
 //     let mut state = props.state;
-    
+
 //     rsx! {
 //         div {
 //             style: "{Styles::radio_group()}",
-            
+
 //             for expr_type in [
-//                 ExpressionType::FromString, 
-//                 ExpressionType::BVar, 
-//                 ExpressionType::Sort, 
-//                 ExpressionType::Const, 
-//                 ExpressionType::Lambda, 
-//                 ExpressionType::Forall, 
+//                 ExpressionType::FromString,
+//                 ExpressionType::BVar,
+//                 ExpressionType::Sort,
+//                 ExpressionType::Const,
+//                 ExpressionType::Lambda,
+//                 ExpressionType::Forall,
 //                 ExpressionType::App
 //             ] {
 //                 label {
@@ -119,11 +119,11 @@ pub fn LeanEditorApp() -> Element {
 //                             state.with_mut(|s| s.expression_type = expr_type.clone());
 //                         },
 //                     }
-//                     span { 
+//                     span {
 //                         style: "{Styles::font_weight_medium()}",
 //                         {match expr_type {
 //                             ExpressionType::BVar => "BVar",
-//                             ExpressionType::Sort => "Sort", 
+//                             ExpressionType::Sort => "Sort",
 //                             ExpressionType::Const => "Const",
 //                             ExpressionType::App => "App",
 //                             ExpressionType::Lambda => "Lambda",
@@ -140,11 +140,11 @@ pub fn LeanEditorApp() -> Element {
 // #[component]
 // fn ExpressionInputs(props: StateProps) -> Element {
 //     let mut state = props.state;
-    
+
 //     rsx! {
 //         div {
 //             style: "{Styles::form_grid()}",
-            
+
 //             // Dynamic inputs based on expression type
 //             {match state.read().expression_type {
 //                 ExpressionType::BVar => rsx! {
@@ -219,11 +219,11 @@ pub fn LeanEditorApp() -> Element {
 // #[component]
 // fn MetadataInputs(props: StateProps) -> Element {
 //     let mut state = props.state;
-    
+
 //     rsx! {
 //         div {
 //             style: "{Styles::form_grid()}",
-            
+
 //             input {
 //                 style: "{Styles::input()}",
 //                 placeholder: "Expression name...",
@@ -232,7 +232,7 @@ pub fn LeanEditorApp() -> Element {
 //                     state.with_mut(|s| s.current_name = evt.value().clone());
 //                 },
 //             }
-            
+
 //             textarea {
 //                 style: "padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; min-height: 50px; resize: vertical;",
 //                 placeholder: "Description...",
@@ -241,7 +241,7 @@ pub fn LeanEditorApp() -> Element {
 //                     state.with_mut(|s| s.current_description = evt.value().clone());
 //                 },
 //             }
-            
+
 //             input {
 //                 style: "{Styles::input()}",
 //                 placeholder: "Tags (comma-separated)...",
@@ -257,13 +257,13 @@ pub fn LeanEditorApp() -> Element {
 // #[component]
 // fn CreateButton(props: StateProps) -> Element {
 //     let mut state = props.state;
-    
+
 //     rsx! {
 //         button {
 //             style: "{Styles::primary_button()}",
 //             onclick: move |_| {
 //                 let current_state = state.read().clone();
-                
+
 //                 if let Some(expr) = Controller::create_expression_from_type(&current_state) {
 //                     let tags: Vec<String> = current_state.current_tags
 //                         .split(',')
@@ -271,7 +271,7 @@ pub fn LeanEditorApp() -> Element {
 //                         .filter(|s| !s.is_empty())
 //                         .map(|s| s.to_string())
 //                         .collect();
-                    
+
 //                     Controller::add_expression(
 //                         &mut state.write(),
 //                         expr,
@@ -289,7 +289,7 @@ pub fn LeanEditorApp() -> Element {
 // #[component]
 // fn SearchInput(props: StateProps) -> Element {
 //     let mut state = props.state;
-    
+
 //     rsx! {
 //         div {
 //             style: "margin-top: 20px;",
@@ -324,9 +324,9 @@ pub fn LeanEditorApp() -> Element {
 //     rsx! {
 //         section {
 //             style: "margin-bottom: 30px;",
-//             h2 { 
+//             h2 {
 //                 style: "{Styles::text_white()} {Styles::margin_bottom(\"20px\")}",
-//                 "📝 Expression Library ({expression_ids.len()})" 
+//                 "📝 Expression Library ({expression_ids.len()})"
 //             }
 //             div {
 //                 style: "{Styles::grid_auto_fill(\"400px\")}",
@@ -384,7 +384,7 @@ pub fn LeanEditorApp() -> Element {
 //     let expr = props.expression.clone();
 //     let mut state = props.state;
 //     let expr_id = expr.id.clone();
-    
+
 //     rsx! {
 //         div {
 //             style: "{Styles::flex_between()} {Styles::margin_bottom(\"15px\")}",
@@ -406,7 +406,7 @@ pub fn LeanEditorApp() -> Element {
 // #[component]
 // fn CodeDisplay(props: ExpressionProps) -> Element {
 //     let expr = props.expression;
-    
+
 //     rsx! {
 //         div {
 //             style: "{Styles::margin_bottom(\"15px\")}",
@@ -414,7 +414,7 @@ pub fn LeanEditorApp() -> Element {
 //                 style: "{Styles::code_block()}",
 //                 code { "{expr.expr.to_string()}" }
 //             }
-            
+
 //             if !expr.description.is_empty() {
 //                 p {
 //                     style: "margin: 10px 0; color: #666; line-height: 1.4;",
@@ -428,7 +428,7 @@ pub fn LeanEditorApp() -> Element {
 // #[component]
 // fn ExpressionMetadata(props: ExpressionProps) -> Element {
 //     let expr = props.expression;
-    
+
 //     rsx! {
 //         div {
 //             style: "display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 14px;",
@@ -439,7 +439,7 @@ pub fn LeanEditorApp() -> Element {
 //                     {match &expr.expr {
 //                         crate::model::SimpleExpr::BVar { .. } => "BVar",
 //                         crate::model::SimpleExpr::Sort { .. } => "Sort",
-//                         crate::model::SimpleExpr::Const { .. } => "Const", 
+//                         crate::model::SimpleExpr::Const { .. } => "Const",
 //                         crate::model::SimpleExpr::App { .. } => "App",
 //                         crate::model::SimpleExpr::Lam { .. } => "Lambda",
 //                         crate::model::SimpleExpr::ForallE { .. } => "Forall",
@@ -461,9 +461,9 @@ pub fn LeanEditorApp() -> Element {
 // fn SimilaritySection(props: ExpressionWithStateProps) -> Element {
 //     let expr = props.expression;
 //     let state = props.state;
-    
+
 //     let similar_expressions = Controller::get_similar_expressions(&state.read(), &expr, 3);
-    
+
 //     rsx! {
 //         if !similar_expressions.is_empty() {
 //             div {
@@ -495,7 +495,7 @@ pub fn LeanEditorApp() -> Element {
 // #[component]
 // pub fn VectorSpace(props: StateProps) -> Element {
 //     let state = props.state;
-    
+
 //     rsx! {
 //         section {
 //             style: "{Styles::section()}",
@@ -503,11 +503,11 @@ pub fn LeanEditorApp() -> Element {
 //                 style: "{Styles::section_title()}",
 //                 "🎯 Vector Space Analysis"
 //             }
-            
+
 //             div {
 //                 style: "text-align: center; padding: 40px; color: #666;",
 //                 p { "Vector space visualization coming soon..." }
-//                 p { 
+//                 p {
 //                     style: "font-size: 14px; margin-top: 10px;",
 //                     "Total expressions: {state.read().expressions.len()}"
 //                 }

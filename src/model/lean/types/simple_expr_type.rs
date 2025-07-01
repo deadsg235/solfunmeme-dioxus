@@ -7,10 +7,20 @@ use crate::model::level::{levels_8, Level};
 #[derive(Debug, Clone, PartialEq)]
 #[allow(dead_code)]
 pub enum SimpleExprType {
-    BVar { index: Option<u64> },
-    Sort { level: Level },
-    Const { levels: Vec<Level>, decl_name: String },
-    App { fn_expr: Box<SimpleExprType>, arg: Box<SimpleExprType> },
+    BVar {
+        index: Option<u64>,
+    },
+    Sort {
+        level: Level,
+    },
+    Const {
+        levels: Vec<Level>,
+        decl_name: String,
+    },
+    App {
+        fn_expr: Box<SimpleExprType>,
+        arg: Box<SimpleExprType>,
+    },
     ForallE {
         forbndr_typ: Option<Box<SimpleExprType>>,
         forbndr_typ_b: Option<Box<SimpleExprType>>,
@@ -54,7 +64,7 @@ pub fn simple_expr_rec_chunk1() -> SimpleExprType {
                     binder_info: String::from("implicit"),
                 }),
                 forbndr_typ_b: None,
-		forbd_b: None,
+                forbd_b: None,
                 // forbd_b: some_box(SimpleExprType::ForallE {
                 //     // forbndr_typ: some_box(SimpleExprType::ForallE {
                 //     //     // forbndr_typ: some_box(SimpleExprType::Const {

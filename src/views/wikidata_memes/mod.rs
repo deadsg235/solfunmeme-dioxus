@@ -55,10 +55,7 @@ pub async fn fetch_wikidata_memes() -> Result<Vec<WikidataMeme>, String> {
         .await
         .map_err(|e| e.to_string())?;
 
-    let wikidata_response: WikidataResponse = response
-        .json()
-        .await
-        .map_err(|e| e.to_string())?;
+    let wikidata_response: WikidataResponse = response.json().await.map_err(|e| e.to_string())?;
 
     let memes = wikidata_response
         .results
@@ -143,7 +140,10 @@ pub fn meme_to_workflow_step(meme: &WikidataMeme) -> crate::views::workflow_meme
     crate::views::workflow_memes::WorkflowStep {
         emoji: "🎭".to_string(), // Default emoji for memes
         component: meme.item_label.clone(),
-        description: meme.description.clone().unwrap_or_else(|| "A meme from Wikidata".to_string()),
+        description: meme
+            .description
+            .clone()
+            .unwrap_or_else(|| "A meme from Wikidata".to_string()),
         test_case: format!(
             r#"
 #[test]
@@ -159,12 +159,7 @@ fn test_meme_{}() {{
     assert_eq!(meme.item_label, "{}");
     assert_eq!(meme.meme_id, "{}");
 }}"#,
-            meme.meme_id,
-            meme.item,
-            meme.item_label,
-            meme.meme_id,
-            meme.item_label,
-            meme.meme_id
+            meme.meme_id, meme.item, meme.item_label, meme.meme_id, meme.item_label, meme.meme_id
         ),
         lean_proof: format!(
             r#"
@@ -174,18 +169,16 @@ begin
   existsi {{ id := "{}", label := "{}" }},
   split; refl
 end"#,
-            meme.meme_id,
-            meme.meme_id,
-            meme.item_label,
-            meme.meme_id,
-            meme.item_label
+            meme.meme_id, meme.meme_id, meme.item_label, meme.meme_id, meme.item_label
         ),
     }
 }
 
 #[allow(dead_code)]
 // Function to create a workflow from a sequence of memes
-pub fn create_meme_workflow(memes: Vec<WikidataMeme>) -> crate::views::workflow_memes::WorkflowMeme {
+pub fn create_meme_workflow(
+    memes: Vec<WikidataMeme>,
+) -> crate::views::workflow_memes::WorkflowMeme {
     let steps: Vec<_> = memes.iter().map(meme_to_workflow_step).collect();
     let emoji_sequence: String = steps.iter().map(|s| s.emoji.clone()).collect();
 
@@ -196,4 +189,4 @@ pub fn create_meme_workflow(memes: Vec<WikidataMeme>) -> crate::views::workflow_
         test_result: "✅ All meme tests passed!".to_string(),
         proof_result: "✓ All meme proofs verified!".to_string(),
     }
-} 
+}

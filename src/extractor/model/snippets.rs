@@ -5,11 +5,9 @@ use regex::Regex;
 
 use crate::extractor::model::content_hash::create_content_hash;
 //use crate::extractor::model::token_count::estimate_token_count;
-use crate::extractor::model::walk_ast::walk_ast;
-use crate::extractor::types::CodeSnippet;
+use crate::extractor::{model::walk_ast::walk_ast, types::CodeSnippet};
 
-    /// Extracts code snippets from markdown AST using the markdown crate.  
-
+/// Extracts code snippets from markdown AST using the markdown crate.  
 
 /// Extracts code snippets from text using regex patterns.
 pub fn extract_code_snippets_old(text: &str) -> Vec<CodeSnippet> {
@@ -90,20 +88,20 @@ pub fn extract_code_snippets_old(text: &str) -> Vec<CodeSnippet> {
 /// Extracts code snippets from text using regex patterns.
 pub fn extract_code_snippets2(text: &str) -> Vec<CodeSnippet> {
     let mut snippets = Vec::new();
-    
+
     // Pattern for code blocks with language specification
     let code_block_re = Regex::new(r"```(\w+)?\s*\n(.*?)\n```").unwrap();
-    
+
     for cap in code_block_re.captures_iter(text) {
         let language = cap.get(1).map(|m| m.as_str()).unwrap_or("text").to_string();
         let content = cap.get(2).unwrap().as_str().trim();
-        
+
         if !content.is_empty() {
             let content_hash = create_content_hash(content);
             let token_count = estimate_token_count(content);
             let line_count = content.lines().count();
             let char_count = content.chars().count();
-            
+
             snippets.push(CodeSnippet {
                 content: content.to_string(),
                 content_hash,
@@ -117,12 +115,13 @@ pub fn extract_code_snippets2(text: &str) -> Vec<CodeSnippet> {
             });
         }
     }
-    
+
     // Also look for inline code snippets
     let inline_code_re = Regex::new(r"`([^`]+)`").unwrap();
     for cap in inline_code_re.captures_iter(text) {
         let content = cap.get(1).unwrap().as_str();
-        if content.len() > 10 { // Only consider substantial inline code
+        if content.len() > 10 {
+            // Only consider substantial inline code
             let content_hash = create_content_hash(content);
             let token_count = estimate_token_count(content);
             let line_count = content.lines().count();
@@ -137,27 +136,24 @@ pub fn extract_code_snippets2(text: &str) -> Vec<CodeSnippet> {
                 test_result: None,
                 line_start: 0,
                 line_end: 0,
-                
-
             });
         }
     }
-    
+
     snippets
 }
 
+// pub fn extract_code_snippets(text: &str) -> Result<Vec<CodeSnippet>, markdown::message::Message> {
+//     let mut snippets = Vec::new();
 
-// pub fn extract_code_snippets(text: &str) -> Result<Vec<CodeSnippet>, markdown::message::Message> {  
-//     let mut snippets = Vec::new();  
-      
-//     // Parse markdown to AST  
-//     let ast = to_mdast(text, &ParseOptions::default())?;  
-      
-//     // Walk the AST to find code nodes  
-//     walk_ast(&ast, &mut snippets);  
-      
-//     Ok(snippets)  
-// }  
+//     // Parse markdown to AST
+//     let ast = to_mdast(text, &ParseOptions::default())?;
+
+//     // Walk the AST to find code nodes
+//     walk_ast(&ast, &mut snippets);
+
+//     Ok(snippets)
+// }
 
 pub fn extract_code_snippets(text: &str) -> Result<Vec<CodeSnippet>, markdown::message::Message> {
     let mut snippets = Vec::new();

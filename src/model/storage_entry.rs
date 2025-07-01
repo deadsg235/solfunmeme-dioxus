@@ -9,5 +9,5 @@ pub struct StorageEntry {
     pub key: String,
     //pub connections: HashMap<String, AdapterCluster>, // Keyed by name for uniqueness
     //pub clusters: Vec<AdapterCluster>,            // Store clusters separately
-    pub entries: Vec<AdapterCluster>,            // Store clusters separately
+    pub entries: Vec<AdapterCluster>, // Store clusters separately
 }

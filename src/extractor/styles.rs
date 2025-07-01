@@ -262,4 +262,3 @@ pub const STYLE: &str = r#"
 //     background: #c82333;
 // }
 // "#;
-

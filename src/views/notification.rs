@@ -64,8 +64,7 @@ pub fn Notification() -> Element {
             }
         }
     }
-} 
-
+}
 
 #[component]
 pub fn Notification2() -> Element {

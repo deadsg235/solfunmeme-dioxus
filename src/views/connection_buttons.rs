@@ -1,6 +1,5 @@
+use crate::{model::lean::style::Styles, playground::MenuOption};
 use dioxus::prelude::*;
-use crate::model::lean::style::Styles;
-use crate::playground::MenuOption;
 
 #[component]
 pub fn ConnectionButtons(on_menu_change: EventHandler<MenuOption>) -> Element {
@@ -21,4 +20,4 @@ pub fn ConnectionButtons(on_menu_change: EventHandler<MenuOption>) -> Element {
             "Connections"
         }
     }
-} 
+}

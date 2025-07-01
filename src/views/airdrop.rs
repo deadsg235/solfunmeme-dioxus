@@ -2,9 +2,6 @@ use dioxus::prelude::*;
 use solana_sdk::native_token::LAMPORTS_PER_SOL;
 
 // ACTIVE_CONNECTION,GLOBAL_MESSAGE,
-use crate::{
-//    fetch_parser::request_airdrop, model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE}, AirdropSvg, Loader, NotificationInfo
-};
 
 #[component]
 pub fn Airdrop(show_airdrop_modal: Signal<bool>) -> Element {

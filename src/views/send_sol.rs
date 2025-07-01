@@ -1,9 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::{
-//    fetch_parser::send_sol_req, Loader, NotificationInfo, SendSvg, UserSvg, 
-};
-use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE} ;
+use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE};
 
 #[component]
 pub fn SendSol(show_send_modal: Signal<bool>) -> Element {

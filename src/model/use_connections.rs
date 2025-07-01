@@ -1,8 +1,7 @@
+use crate::model::{adaptercluster::AdapterCluster, storage_entry::StorageEntry};
 use dioxus::prelude::*;
-use wallet_adapter::Cluster;
-use crate::model::storage_entry::StorageEntry;
-use crate::model::adaptercluster::AdapterCluster;
 use gloo_storage::{LocalStorage, Storage};
+use wallet_adapter::Cluster;
 //use std::collections::HashMap;
 
 #[derive(Clone, Copy, PartialEq)]
@@ -31,7 +30,12 @@ impl UseConnections {
 
     // Get a specific entry by name (replaces get_cluster)
     pub fn get_entry(&self, name: &str) -> Option<AdapterCluster> {
-        self.inner.read().entries.iter().find(|e| e.name() == name).cloned()
+        self.inner
+            .read()
+            .entries
+            .iter()
+            .find(|e| e.name() == name)
+            .cloned()
     }
 
     // Get all unique entry names, sorted (replaces get_cluster_names)
@@ -61,8 +65,8 @@ impl UseConnections {
         }
 
         inner.entries.push(entry);
-	let ik = &inner.key;
-        LocalStorage::set(format!("{ik}_entries" ), &inner.entries)
+        let ik = &inner.key;
+        LocalStorage::set(format!("{ik}_entries"), &inner.entries)
             .expect("Failed to save entries to LocalStorage");
         Ok(())
     }
@@ -72,19 +76,26 @@ impl UseConnections {
         let mut inner = self.inner.write();
 
         // Find and remove the entry
-        let position = inner.entries.iter().position(|entry| entry.name() == name)?;
+        let position = inner
+            .entries
+            .iter()
+            .position(|entry| entry.name() == name)?;
         let removed_entry = inner.entries.remove(position);
 
         // Save updated entries
-	let ik = &inner.key;
-        LocalStorage::set(format!("{ik}_entries" ), &inner.entries)
+        let ik = &inner.key;
+        LocalStorage::set(format!("{ik}_entries"), &inner.entries)
             .expect("Failed to save entries to LocalStorage");
 
         // Update active entry if the removed one was active
         if *self.active_entry.read() == name {
-            let new_active = inner.entries.first().map(|e| e.name().to_string()).unwrap_or_default();
+            let new_active = inner
+                .entries
+                .first()
+                .map(|e| e.name().to_string())
+                .unwrap_or_default();
             self.active_entry.set(new_active.clone());
-	    let ik = &inner.key;
+            let ik = &inner.key;
             LocalStorage::set(format!("{ik}_active_entry"), &new_active)
                 .expect("Failed to save active entry");
         }
@@ -95,8 +106,8 @@ impl UseConnections {
     // Set the active entry (replaces set_active_cluster)
     pub fn set_active_entry(&mut self, name: String) {
         self.active_entry.set(name.clone());
-	let key = &self.inner.read().key;
-        LocalStorage::set(format!("{key}_active_entry", ), &name)
+        let key = &self.inner.read().key;
+        LocalStorage::set(format!("{key}_active_entry",), &name)
             .expect("Failed to save active entry");
     }
 
@@ -112,11 +123,9 @@ impl UseConnections {
     }
 
     pub fn supports_airdrop(&self, active_cluster_name: &str) -> bool {
-
         let active_entry = self.get_entry(active_cluster_name).unwrap();
         active_entry.cluster() != Cluster::MainNet
     }
-
 }
 
 pub fn use_connections(key: impl ToString) -> UseConnections {
@@ -125,7 +134,7 @@ pub fn use_connections(key: impl ToString) -> UseConnections {
     let key_for_active = key.clone();
 
     let state = use_signal(move || {
-	let k2= &key_for_state;
+        let k2 = &key_for_state;
         let entries: Vec<AdapterCluster> = LocalStorage::get(format!("{k2}_entries"))
             .ok()
             .unwrap_or_else(|| {
@@ -146,7 +155,12 @@ pub fn use_connections(key: impl ToString) -> UseConnections {
         LocalStorage::get(format!("{}_active_entry", &key_for_active))
             .ok()
             .unwrap_or_else(|| {
-                state.read().entries.first().map(|e| e.name().to_string()).unwrap_or_default()
+                state
+                    .read()
+                    .entries
+                    .first()
+                    .map(|e| e.name().to_string())
+                    .unwrap_or_default()
             })
     });
 

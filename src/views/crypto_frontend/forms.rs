@@ -1,9 +1,7 @@
+use crate::{model::crypto::EncryptedPayload, views::crypto_style::*};
 use dioxus::prelude::*;
-use crate::model::crypto::EncryptedPayload;
-use crate::views::crypto_style::*;
 //use crate::crypto::SolanaEncryption;
-use super::components::*;
-use super::validation::*;
+use super::{components::*, validation::*};
 
 #[component]
 pub fn EncryptionForm() -> Element {
@@ -30,7 +28,11 @@ pub fn EncryptionForm() -> Element {
 
             // Validate inputs
             if let Err(validation_error) = validate_encryption_inputs(
-                &title_val, &message_val, &recipient_key, &private_key, &public_key
+                &title_val,
+                &message_val,
+                &recipient_key,
+                &private_key,
+                &public_key,
             ) {
                 error_message.set(Some(validation_error));
                 is_processing.set(false);
@@ -38,7 +40,12 @@ pub fn EncryptionForm() -> Element {
             }
 
             // Perform encryption
-            match SolanaEncryption::encrypt_for_recipient(&message_val, &recipient_key, &private_key, &public_key) {
+            match SolanaEncryption::encrypt_for_recipient(
+                &message_val,
+                &recipient_key,
+                &private_key,
+                &public_key,
+            ) {
                 Ok(encrypted_payload) => {
                     let result = format!(
                         "Title: {}\nEncrypted Payload:\n{}",
@@ -59,7 +66,7 @@ pub fn EncryptionForm() -> Element {
     rsx! {
         div { class: CARD,
             CardHeader { title: "Encrypt Message" }
-            
+
             div { class: FORM_CONTAINER,
                 InputField {
                     label: "Title",
@@ -113,7 +120,7 @@ pub fn EncryptionForm() -> Element {
                 }
 
                 if let Some(result) = encrypted_result.read().as_ref() {
-                    SuccessMessage { 
+                    SuccessMessage {
                         title: "Encryption Result:",
                         content: result.clone(),
                         is_code: true
@@ -172,7 +179,7 @@ pub fn DecryptionForm() -> Element {
     rsx! {
         div { class: CARD,
             CardHeader { title: "Decrypt Message" }
-            
+
             div { class: FORM_CONTAINER,
                 TextAreaField {
                     label: "Encrypted Payload (JSON)",
@@ -202,7 +209,7 @@ pub fn DecryptionForm() -> Element {
                 }
 
                 if let Some(result) = decrypted_result.read().as_ref() {
-                    SuccessMessage { 
+                    SuccessMessage {
                         title: "Decrypted Message:",
                         content: result.clone(),
                         is_code: false
@@ -211,4 +218,4 @@ pub fn DecryptionForm() -> Element {
             }
         }
     }
-} 
+}

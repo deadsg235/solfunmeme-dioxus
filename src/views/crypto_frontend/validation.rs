@@ -55,4 +55,4 @@ pub fn validate_decryption_inputs(
     }
 
     Ok(())
-} 
+}

@@ -1,19 +1,16 @@
+use crate::extractor::{
+    components::{
+        appheader::ExtractorAppHeader, clearbutton::ClearButton, dropzone::DropZone,
+        filedisplay::FileDisplay, fileinput::FileInput, progress::ProcessingIndicator,
+        welcome::WelcomeMessage,
+    },
+    model::extract::process_file_engine,
+    styles::STYLE,
+    system::clipboard::{copy_all_snippets_combined, copy_to_clipboard},
+    types::{CodeSnippet, ExtractedFile, ProcessingFile},
+};
 use dioxus::prelude::*;
-use crate::extractor::components::appheader::ExtractorAppHeader;
-use crate::extractor::components::clearbutton::ClearButton;
-use crate::extractor::components::dropzone::DropZone;
-use crate::extractor::components::filedisplay::FileDisplay;
-use crate::extractor::components::fileinput::FileInput;
-use crate::extractor::components::progress::ProcessingIndicator;
-use crate::extractor::components::welcome::WelcomeMessage;
-use crate::extractor::model::extract::process_file_engine;
-use crate::extractor::styles::STYLE;
-use crate::extractor::system::clipboard::copy_all_snippets_combined;
-use crate::extractor::system::clipboard::copy_to_clipboard;
-use crate::extractor::types::CodeSnippet;
-use crate::extractor::types::ExtractedFile;
-use crate::extractor::types::ProcessingFile;
-        
+
 use dioxus::html::FileEngine;
 
 use dioxus_html::HasFileData;
@@ -28,7 +25,8 @@ pub fn MarkdownCodeExtractor() -> Element {
     let files = use_signal(|| Vec::new() as Vec<ExtractedFile>);
     let processing_file = use_signal::<Option<ProcessingFile>>(|| None);
     let hovered = use_signal(|| false);
-    let copied_snippets = use_signal(|| std::collections::HashSet::new() as std::collections::HashSet<String>);
+    let copied_snippets =
+        use_signal(|| std::collections::HashSet::new() as std::collections::HashSet<String>);
 
     // Clipboard handlers
     let copy_to_clipboard = move |(text, snippet_id): (String, String)| {
@@ -63,28 +61,28 @@ pub fn MarkdownCodeExtractor() -> Element {
     files.with(|files_vec| {
         rsx! {
             style { "{STYLE}" }
-            
+
             div { class: "code-extractor",
                 ExtractorAppHeader {}
-                
-                ClearButton { 
+
+                ClearButton {
                     files: files,
                     copied_snippets: copied_snippets
                 }
-                
-                FileInput { 
+
+                FileInput {
                     upload_files: upload_files
                 }
-                
-                DropZone { 
+
+                DropZone {
                     hovered: hovered,
                     read_files: read_files
                 }
-                
-                ProcessingIndicator { 
+
+                ProcessingIndicator {
                     processing_file: processing_file()
                 }
-                
+
                 // Results section
                 for file in files_vec.iter() {
                     FileDisplay {

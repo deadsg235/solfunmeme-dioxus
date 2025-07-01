@@ -1,17 +1,17 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 // Core types for code extraction
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CodeSnippet {
     pub language: String,
     pub content: String,
-    pub content_hash: String,  
+    pub content_hash: String,
     pub line_start: usize,
     pub line_end: usize,
-    pub token_count: usize,  
-    pub line_count: usize,  
-    pub char_count: usize,  
-    pub test_result: Option<TestResult>,  
+    pub token_count: usize,
+    pub line_count: usize,
+    pub char_count: usize,
+    pub test_result: Option<TestResult>,
 }
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
@@ -32,30 +32,30 @@ pub struct ProcessingFile {
 
 // Test execution results
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct TestResult {  
-    pub passed: bool,  
-    pub error_message: Option<String>,  
+pub struct TestResult {
+    pub passed: bool,
+    pub error_message: Option<String>,
     pub execution_time: Option<std::time::Duration>,
     pub output: Option<String>,
-}  
+}
 
 // Document analysis and summary
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct DocumentSummary {  
-    pub total_turns: usize,  
-    pub total_code_snippets: usize,  
-    pub total_tokens: usize,  
-    pub languages_found: Vec<String>,  
-    pub content_hashes: Vec<String>,  
-}  
+pub struct DocumentSummary {
+    pub total_turns: usize,
+    pub total_code_snippets: usize,
+    pub total_tokens: usize,
+    pub languages_found: Vec<String>,
+    pub content_hashes: Vec<String>,
+}
 
 // Conversation processing
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct ConversationTurn {  
-    pub author: String,  
-    pub content: String,  
-    pub code_snippets: Vec<CodeSnippet>,  
-}  
+pub struct ConversationTurn {
+    pub author: String,
+    pub content: String,
+    pub code_snippets: Vec<CodeSnippet>,
+}
 
 // File upload and processing
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
@@ -79,9 +79,9 @@ pub struct AnnotatedWord {
 }
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct Multivector { 
-    pub scalar: f32, 
-    pub vector: [f32; 3] 
+pub struct Multivector {
+    pub scalar: f32,
+    pub vector: [f32; 3],
 }
 
 // Processing states and statistics
@@ -175,10 +175,7 @@ impl ExtractedFile {
     }
 
     pub fn get_languages(&self) -> Vec<String> {
-        let mut languages: Vec<String> = self.snippets
-            .iter()
-            .map(|s| s.language.clone())
-            .collect();
+        let mut languages: Vec<String> = self.snippets.iter().map(|s| s.language.clone()).collect();
         languages.sort();
         languages.dedup();
         languages
@@ -211,8 +208,22 @@ impl ProcessingFile {
 
 // Constants for common languages
 pub const SUPPORTED_LANGUAGES: &[&str] = &[
-    "rust", "javascript", "typescript", "python", "java", "cpp", "c", 
-    "html", "css", "json", "xml", "yaml", "toml", "sql", "bash", "powershell"
+    "rust",
+    "javascript",
+    "typescript",
+    "python",
+    "java",
+    "cpp",
+    "c",
+    "html",
+    "css",
+    "json",
+    "xml",
+    "yaml",
+    "toml",
+    "sql",
+    "bash",
+    "powershell",
 ];
 
 pub fn get_language_config(language: &str) -> LanguageConfig {

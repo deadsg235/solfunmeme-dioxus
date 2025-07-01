@@ -6,9 +6,9 @@ use std::time::Duration;
 use wasm_bindgen::JsCast;
 use web_sys::{console, window};
 //use dioxus_motion::AnimationStep;
-use easer::functions::Easing;
 use crate::playground::orbits::*;
 use dioxus_motion::animations::utils::LoopMode;
+use easer::functions::Easing;
 
 // Welcome to the SOLFUNTHEME Zero Ontology System (ZOS)!
 // This is the entry point for our joyful, interactive theme-powered application.
@@ -336,9 +336,9 @@ const STYLES: &str = r#"
 pub fn SolFunNiceApp() -> Element {
     rsx! {
         // Link our vibrant CSS styles
-	//        document::Link { rel: "stylesheet", href: asset!("./assets/solfunmeme.css") }
-	style { "{STYLES}" }
-        div { 
+    //        document::Link { rel: "stylesheet", href: asset!("./assets/solfunmeme.css") }
+    style { "{STYLES}" }
+        div {
             class: "zos-container",
             // The core of our fun system
             ZeroOntologySystem {}
@@ -378,38 +378,38 @@ fn ZeroOntologySystem() -> Element {
     });
 
     rsx! {
-        // Twinkling particle effects
-        ParticleSystem { particles: particles.clone() }
-        
-        // Enchanting orbital theme network
-//        ThemeOrbitalNetwork {}
-	ThemeOrbitalNetwork2 {}
-//	ThemeOrbitalNetwork3 {}
-//	ThemeOrbitalNetwork4 {}
-        
-        // The exciting boost core
-        BoostCore { 
-            boost_active: boost_active.read().clone(),
-            current_emoji_sequence: current_emoji_sequence.read().clone(),
-            on_boost: move |_| trigger_super_boost(&mut boost_active)
+            // Twinkling particle effects
+            ParticleSystem { particles: particles.clone() }
+
+            // Enchanting orbital theme network
+    //        ThemeOrbitalNetwork {}
+        ThemeOrbitalNetwork2 {}
+    //	ThemeOrbitalNetwork3 {}
+    //	ThemeOrbitalNetwork4 {}
+
+            // The exciting boost core
+            BoostCore {
+                boost_active: boost_active.read().clone(),
+                current_emoji_sequence: current_emoji_sequence.read().clone(),
+                on_boost: move |_| trigger_super_boost(&mut boost_active)
+            }
+
+            // Friendly UI panels
+            FeaturesPanel {}
+            AgreementPanel {
+                fun_score: fun_score.read().clone(),
+                theme_speed: theme_speed.read().clone(),
+                agreement: agreement.read().clone(),
+                excitement_level: excitement_level.read().clone()
+            }
+            WorkflowPanel {}
+            BoostMetricsPanel {}
+
+            // Handle global keyboard events
+            GlobalEventHandlers {
+                on_space_pressed: move |_| trigger_mega_boost_with_particles(&mut boost_active, &mut particles)
+            }
         }
-        
-        // Friendly UI panels
-        FeaturesPanel {}
-        AgreementPanel { 
-            fun_score: fun_score.read().clone(),
-            theme_speed: theme_speed.read().clone(),
-            agreement: agreement.read().clone(),
-            excitement_level: excitement_level.read().clone()
-        }
-        WorkflowPanel {}
-        BoostMetricsPanel {}
-        
-        // Handle global keyboard events
-        GlobalEventHandlers { 
-            on_space_pressed: move |_| trigger_mega_boost_with_particles(&mut boost_active, &mut particles)
-        }
-    }
 }
 
 // A sparkling particle system for visual delight
@@ -431,7 +431,7 @@ fn ParticleSystem(particles: Signal<Vec<ParticleState>>) -> Element {
         div { id: "particles",
             // Render each particle with a unique key
             for particle in particles.read().iter() {
-                Particle { 
+                Particle {
                     key: "{particle.id}",
                     x: particle.x,
                     y: particle.y,
@@ -452,10 +452,7 @@ fn Particle(x: f64, y: f64, color: String, duration: u32) -> Element {
     // Animate the particle's journey
     use_effect(move || {
         motion.animate_to(
-            Transform::new(0.0,
-			   -100.0,
-			   1.0,
-			   0.0),
+            Transform::new(0.0, -100.0, 1.0, 0.0),
             AnimationConfig::new(AnimationMode::Tween(Tween {
                 duration: Duration::from_millis(duration as u64),
                 easing: easer::functions::Linear::ease_in_out,
@@ -481,16 +478,13 @@ fn Particle(x: f64, y: f64, color: String, duration: u32) -> Element {
         transform.scale,
         transform.rotation
     );
-    
+
     rsx! {
-        div { 
+        div {
             class: "particle",
             style: style
         }
     }
-
-
-	
 }
 
 // A captivating network of orbiting theme nodes
@@ -501,21 +495,21 @@ fn ThemeOrbitalNetwork() -> Element {
     rsx! {
         div { class: "theme-orbits",
             // Three concentric orbits with different properties
-            ThemeOrbit { 
+            ThemeOrbit {
                 radius: 300,
                 duration: 8,
                 reverse: false,
                 nodes: get_orbit_nodes(0),
                 on_node_click: move |node_id| handle_node_click(&mut selected_node, node_id)
             }
-            ThemeOrbit { 
+            ThemeOrbit {
                 radius: 500,
                 duration: 12,
                 reverse: true,
                 nodes: get_orbit_nodes(1),
                 on_node_click: move |node_id| handle_node_click(&mut selected_node, node_id)
             }
-            ThemeOrbit { 
+            ThemeOrbit {
                 radius: 700,
                 duration: 16,
                 reverse: false,
@@ -533,50 +527,48 @@ fn ThemeOrbit(
     duration: u32,
     reverse: bool,
     nodes: Vec<ThemeNode>,
-    on_node_click: EventHandler<usize>
+    on_node_click: EventHandler<usize>,
 ) -> Element {
     let mut orbit_motion = use_motion(Transform::identity());
     //console::log_1(&format!("Initialized orbit_motion: {:?}", orbit_motion.get_value()).into());
 
     let orbit_paused = true;
 
-    
     use_effect(move || {
-	if !orbit_paused {
-	    let rotation_direction = if reverse { -360.0 } else { 360.0 };
-	    //	console::log_1(&format!("rotation_direction: {}, duration: {}", rotation_direction, duration).into());
-	    let target_transform = Transform::new(0.0, 0.0, 1.0, rotation_direction);
-	    //	console::log_1(&format!("Target transform: {:?}", target_transform).into());
-	    orbit_motion.animate_to(
-		target_transform,
-		AnimationConfig {
-		    mode: AnimationMode::Tween(Tween {
-			duration: Duration::from_secs(duration as u64),
-			easing: easer::functions::Linear::ease_in_out,
-		    }),
-		    loop_mode: Some(LoopMode::Infinite),
-		    ..Default::default()
-		},
+        if !orbit_paused {
+            let rotation_direction = if reverse { -360.0 } else { 360.0 };
+            //	console::log_1(&format!("rotation_direction: {}, duration: {}", rotation_direction, duration).into());
+            let target_transform = Transform::new(0.0, 0.0, 1.0, rotation_direction);
+            //	console::log_1(&format!("Target transform: {:?}", target_transform).into());
+            orbit_motion.animate_to(
+                target_transform,
+                AnimationConfig {
+                    mode: AnimationMode::Tween(Tween {
+                        duration: Duration::from_secs(duration as u64),
+                        easing: easer::functions::Linear::ease_in_out,
+                    }),
+                    loop_mode: Some(LoopMode::Infinite),
+                    ..Default::default()
+                },
             );
-	}
+        }
     });
-    
 
     let rotation = orbit_motion.get_value().rotation;
-//    console::log_1(&format!("Orbit motion rotation: {}", rotation).into());
+    //    console::log_1(&format!("Orbit motion rotation: {}", rotation).into());
     let radius2 = radius / 2;
     let width = radius;
     let height = radius;
     let style = format!(
 	"width: {width}px; height: {height}px; margin: -{radius2}px 0 0 -{radius2}px; transform: rotate({rotation}deg);"
     );
-    
+
     if nodes.is_empty() {
-	console::log_1(&"No nodes provided to ThemeOrbit".into());
-	return rsx! { div { class: "orbit", style } };
+        console::log_1(&"No nodes provided to ThemeOrbit".into());
+        return rsx! { div { class: "orbit", style } };
     }
     rsx! {
-        div { 
+        div {
             class: "orbit",
             style,
             // Place each node along the orbit
@@ -599,7 +591,7 @@ fn ThemeNodeComponent(
     node: ThemeNode,
     position_angle: f64,
     radius: f64,
-    on_click: EventHandler<()>
+    on_click: EventHandler<()>,
 ) -> Element {
     let mut is_sparking = use_signal(|| false);
     let mut scale = use_motion(1.0f32);
@@ -630,7 +622,7 @@ fn ThemeNodeComponent(
             "{node.emoji}"
 
             if is_sparking.read().clone() {
-                NodeSpark { 
+                NodeSpark {
                     emoji: node.emoji.clone(),
                     on_complete: move |_| is_sparking.set(false)
                 }
@@ -643,7 +635,7 @@ fn ThemeNodeComponent(
 #[component]
 fn NodeSpark(emoji: String, on_complete: EventHandler<()>) -> Element {
     let mut sparks = use_signal(|| Vec::<SparkParticle>::new());
-    
+
     use_effect(move || {
         // Create spark particles
         let mut particles = Vec::new();
@@ -703,7 +695,7 @@ fn SparkParticleComponent(emoji: String, particle: SparkParticle) -> Element {
             0.0,
             AnimationConfig::new(AnimationMode::Tween(Tween {
                 duration: Duration::from_millis(1000),
-		easing: easer::functions::Linear::ease_in_out,
+                easing: easer::functions::Linear::ease_in_out,
                 ..Default::default()
             })),
         );
@@ -718,7 +710,7 @@ fn SparkParticleComponent(emoji: String, particle: SparkParticle) -> Element {
         transform.scale,
         transform.rotation
     );
-    
+
     rsx! {
         div {
             class: "spark-particle",
@@ -733,29 +725,34 @@ fn SparkParticleComponent(emoji: String, particle: SparkParticle) -> Element {
 fn BoostCore(
     boost_active: bool,
     current_emoji_sequence: usize,
-    on_boost: EventHandler<()>
+    on_boost: EventHandler<()>,
 ) -> Element {
     let mut scale = use_motion(1.0f32);
     let emoji_sequences = get_emoji_sequences();
-    let mut rotation = use_motion(0.0f32);   
+    let mut rotation = use_motion(0.0f32);
     let easing = easer::functions::Elastic::ease_out;
-	    
 
-    use_effect(move || {  
-	if boost_active {  
-            let sequence = AnimationSequence::new()    
-		.then(1.3, AnimationConfig::new(AnimationMode::Tween(Tween {    
-                    duration: Duration::from_millis(500),    
-                    easing,    
-		})))    
-		.then(1.0, AnimationConfig::new(AnimationMode::Tween(Tween {    
-                    duration: Duration::from_millis(500),    
-                    easing,    
-		})));  
-            scale.animate_sequence(sequence);  
-	}  
+    use_effect(move || {
+        if boost_active {
+            let sequence = AnimationSequence::new()
+                .then(
+                    1.3,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing,
+                    })),
+                )
+                .then(
+                    1.0,
+                    AnimationConfig::new(AnimationMode::Tween(Tween {
+                        duration: Duration::from_millis(500),
+                        easing,
+                    })),
+                );
+            scale.animate_sequence(sequence);
+        }
     });
-        // Animate boost effect when active - matches HTML hyperPump keyframes
+    // Animate boost effect when active - matches HTML hyperPump keyframes
     use_effect(move || {
         if boost_active {
             console::log_1(&"🚀 BOOST ANIMATION TRIGGERED! 🚀".into());
@@ -824,21 +821,20 @@ fn BoostCore(
         }
     });
 
-
     rsx! {
-        div { 
+        div {
             class: "boost-core",
             style: "transform: scale({scale.get_value()}) rotate({rotation.get_value()}deg)",
             onclick: move |_| on_boost.call(()),
-            
+
             h1 { class: "title", "SOLFUNTHEME" }
             h2 { class: "subtitle", "Zero Ontology System" }
-            
-            div { 
+
+            div {
                 class: "emoji-engine",
                 "{emoji_sequences[current_emoji_sequence % emoji_sequences.len()]}"
             }
-            
+
             div { class: "core-description",
                 div { class: "glow-text", "Super-Theme Boost Protocol" }
                 div { class: "core-tags", "Self-Reflective • Iterative • Fun" }
@@ -851,12 +847,12 @@ fn BoostCore(
 #[component]
 fn FeaturesPanel() -> Element {
     let features = get_system_features();
-    
+
     rsx! {
         div { class: "features-panel",
             h3 { "Key Features" }
             for feature in features {
-                FeatureItem { 
+                FeatureItem {
                     emoji: feature.emoji.clone(),
                     text: feature.text.clone()
                 }
@@ -878,15 +874,15 @@ fn FeatureItem(emoji: String, text: String) -> Element {
                 duration: Duration::from_millis(1500),
                 easing: easer::functions::Cubic::ease_in_out,
             }))
-	        .with_loop(LoopMode::Infinite)  // back-and-forth animation
-	    //            .with_loop(LoopMode::Alternate)  // back-and-forth animation
-		//loop_mode: Some(LoopMode::Infinite),
+            .with_loop(LoopMode::Infinite), // back-and-forth animation
+                                            //            .with_loop(LoopMode::Alternate)  // back-and-forth animation
+                                            //loop_mode: Some(LoopMode::Infinite),
         );
     });
-    
+
     rsx! {
         div { class: "feature",
-            span { 
+            span {
                 class: "feature-emoji",
                 style: "transform: rotate({rotation.get_value()}deg)",
                 "{emoji}"
@@ -902,28 +898,28 @@ fn AgreementPanel(
     fun_score: f64,
     theme_speed: String,
     agreement: f64,
-    excitement_level: String
+    excitement_level: String,
 ) -> Element {
     rsx! {
         div { class: "agreement-panel",
             h3 { "Community Agreement" }
-            
-            MetricDisplay { 
+
+            MetricDisplay {
                 label: "Fun Score:".to_string(),
                 value: format!("{:.1}K", fun_score),
                 color: "#00ff00".to_string()
             }
-            MetricDisplay { 
+            MetricDisplay {
                 label: "Theme Speed:".to_string(),
                 value: theme_speed,
                 color: "#ffff00".to_string()
             }
-            MetricDisplay { 
+            MetricDisplay {
                 label: "Agreement:".to_string(),
                 value: format!("{:.1}% BOOST", agreement),
                 color: "#00ffff".to_string()
             }
-            MetricDisplay { 
+            MetricDisplay {
                 label: "Excitement Level:".to_string(),
                 value: excitement_level,
                 color: "#ff00ff".to_string()
@@ -936,12 +932,12 @@ fn AgreementPanel(
 #[component]
 fn WorkflowPanel() -> Element {
     let workflow_steps = get_workflow_steps();
-    
+
     rsx! {
         div { class: "workflow-panel",
             h3 { "How It Works" }
             for step in workflow_steps {
-                WorkflowStep { 
+                WorkflowStep {
                     number: step.number.clone(),
                     title: step.title.clone(),
                     description: step.description.clone(),
@@ -969,7 +965,7 @@ fn WorkflowStep(number: String, title: String, description: String, color: Strin
 #[component]
 fn BoostMetricsPanel() -> Element {
     let mut metrics = use_signal(|| get_initial_metrics());
-    
+
     // Update metrics periodically
     use_effect(move || {
         spawn(async move {
@@ -1001,7 +997,7 @@ fn MetricDisplay(label: String, value: String, color: String) -> Element {
         div { class: "metric",
             span { "{label}" }
             " "
-            span { 
+            span {
                 class: "metric-value",
                 style: "color: {color};",
                 "{value}"
@@ -1015,14 +1011,17 @@ fn MetricDisplay(label: String, value: String, color: String) -> Element {
 fn GlobalEventHandlers(on_space_pressed: EventHandler<()>) -> Element {
     use_effect(move || {
         let window = window().unwrap();
-        let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
-            if event.code() == "Space" {
-                event.prevent_default();
-                on_space_pressed.call(());
-            }
-        }) as Box<dyn FnMut(_)>);
-        
-        window.add_event_listener_with_callback("keydown", closure.as_ref().unchecked_ref()).unwrap();
+        let closure =
+            wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
+                if event.code() == "Space" {
+                    event.prevent_default();
+                    on_space_pressed.call(());
+                }
+            }) as Box<dyn FnMut(_)>);
+
+        window
+            .add_event_listener_with_callback("keydown", closure.as_ref().unchecked_ref())
+            .unwrap();
         closure.forget();
     });
 
@@ -1079,24 +1078,60 @@ struct MetricData {
 fn get_orbit_nodes(orbit_index: usize) -> Vec<ThemeNode> {
     match orbit_index {
         0 => vec![
-            ThemeNode { emoji: "🚀".to_string(), color: "rgba(255, 0, 0, 0.8)".to_string() },
-            ThemeNode { emoji: "📜".to_string(), color: "rgba(255, 255, 0, 0.8)".to_string() },
-            ThemeNode { emoji: "🔍".to_string(), color: "rgba(0, 255, 255, 0.8)".to_string() },
-            ThemeNode { emoji: "💬".to_string(), color: "rgba(255, 0, 255, 0.8)".to_string() },
+            ThemeNode {
+                emoji: "🚀".to_string(),
+                color: "rgba(255, 0, 0, 0.8)".to_string(),
+            },
+            ThemeNode {
+                emoji: "📜".to_string(),
+                color: "rgba(255, 255, 0, 0.8)".to_string(),
+            },
+            ThemeNode {
+                emoji: "🔍".to_string(),
+                color: "rgba(0, 255, 255, 0.8)".to_string(),
+            },
+            ThemeNode {
+                emoji: "💬".to_string(),
+                color: "rgba(255, 0, 255, 0.8)".to_string(),
+            },
         ],
         1 => vec![
-            ThemeNode { emoji: "🔀".to_string(), color: "rgba(0, 255, 0, 0.8)".to_string() },
-            ThemeNode { emoji: "💡".to_string(), color: "rgba(255, 128, 0, 0.8)".to_string() },
-            ThemeNode { emoji: "💭".to_string(), color: "rgba(128, 255, 0, 0.8)".to_string() },
-            ThemeNode { emoji: "🔑".to_string(), color: "rgba(255, 0, 128, 0.8)".to_string() },
+            ThemeNode {
+                emoji: "🔀".to_string(),
+                color: "rgba(0, 255, 0, 0.8)".to_string(),
+            },
+            ThemeNode {
+                emoji: "💡".to_string(),
+                color: "rgba(255, 128, 0, 0.8)".to_string(),
+            },
+            ThemeNode {
+                emoji: "💭".to_string(),
+                color: "rgba(128, 255, 0, 0.8)".to_string(),
+            },
+            ThemeNode {
+                emoji: "🔑".to_string(),
+                color: "rgba(255, 0, 128, 0.8)".to_string(),
+            },
         ],
         2 => vec![
-            ThemeNode { emoji: "🤖".to_string(), color: "rgba(128, 0, 255, 0.8)".to_string() },
-            ThemeNode { emoji: "🌐".to_string(), color: "rgba(0, 128, 255, 0.8)".to_string() },
-            ThemeNode { emoji: "📊".to_string(), color: "rgba(255, 255, 128, 0.8)".to_string() },
-            ThemeNode { emoji: "🔗".to_string(), color: "rgba(128, 255, 255, 0.8)".to_string() },
+            ThemeNode {
+                emoji: "🤖".to_string(),
+                color: "rgba(128, 0, 255, 0.8)".to_string(),
+            },
+            ThemeNode {
+                emoji: "🌐".to_string(),
+                color: "rgba(0, 128, 255, 0.8)".to_string(),
+            },
+            ThemeNode {
+                emoji: "📊".to_string(),
+                color: "rgba(255, 255, 128, 0.8)".to_string(),
+            },
+            ThemeNode {
+                emoji: "🔗".to_string(),
+                color: "rgba(128, 255, 255, 0.8)".to_string(),
+            },
         ],
-        _ => vec![]
+        _ => vec![],
     }
 }
 
@@ -1115,12 +1150,30 @@ fn get_emoji_sequences() -> Vec<String> {
 
 fn get_system_features() -> Vec<SystemFeature> {
     vec![
-        SystemFeature { emoji: "🚀".to_string(), text: "Self-Reflective Theme Engine".to_string() },
-        SystemFeature { emoji: "🔀".to_string(), text: "Community Agreement System".to_string() },
-        SystemFeature { emoji: "📈".to_string(), text: "Super Boost Mechanism".to_string() },
-        SystemFeature { emoji: "📜".to_string(), text: "Theme Compression".to_string() },
-        SystemFeature { emoji: "🔗".to_string(), text: "Stable Theme-State".to_string() },
-        SystemFeature { emoji: "🌱".to_string(), text: "Theme Growth & Sharing".to_string() },
+        SystemFeature {
+            emoji: "🚀".to_string(),
+            text: "Self-Reflective Theme Engine".to_string(),
+        },
+        SystemFeature {
+            emoji: "🔀".to_string(),
+            text: "Community Agreement System".to_string(),
+        },
+        SystemFeature {
+            emoji: "📈".to_string(),
+            text: "Super Boost Mechanism".to_string(),
+        },
+        SystemFeature {
+            emoji: "📜".to_string(),
+            text: "Theme Compression".to_string(),
+        },
+        SystemFeature {
+            emoji: "🔗".to_string(),
+            text: "Stable Theme-State".to_string(),
+        },
+        SystemFeature {
+            emoji: "🌱".to_string(),
+            text: "Theme Growth & Sharing".to_string(),
+        },
     ]
 }
 
@@ -1155,11 +1208,26 @@ fn get_workflow_steps() -> Vec<WorkflowStepData> {
 
 fn get_initial_metrics() -> Vec<MetricData> {
     vec![
-        MetricData { label: "Theme Strength:".to_string(), value: "SUPER RARE".to_string() },
-        MetricData { label: "Boost Factor:".to_string(), value: "∞x".to_string() },
-        MetricData { label: "Fun Coefficient:".to_string(), value: "1.847".to_string() },
-        MetricData { label: "Theme Level:".to_string(), value: "ITERATIVE".to_string() },
-        MetricData { label: "Status:".to_string(), value: "BOOSTING".to_string() },
+        MetricData {
+            label: "Theme Strength:".to_string(),
+            value: "SUPER RARE".to_string(),
+        },
+        MetricData {
+            label: "Boost Factor:".to_string(),
+            value: "∞x".to_string(),
+        },
+        MetricData {
+            label: "Fun Coefficient:".to_string(),
+            value: "1.847".to_string(),
+        },
+        MetricData {
+            label: "Theme Level:".to_string(),
+            value: "ITERATIVE".to_string(),
+        },
+        MetricData {
+            label: "Status:".to_string(),
+            value: "BOOSTING".to_string(),
+        },
     ]
 }
 
@@ -1168,7 +1236,7 @@ fn update_metrics(fun_score: &mut Signal<f64>, agreement: &mut Signal<f64>) {
     let mut rng = rand::thread_rng();
     let current_score = fun_score.read().clone();
     fun_score.set(current_score + rng.gen_range(-5.0..10.0));
-    
+
     let current_agreement = agreement.read().clone();
     agreement.set((current_agreement + rng.gen_range(-0.5..0.5)).clamp(95.0, 100.0));
 }
@@ -1182,7 +1250,7 @@ fn rotate_emoji_sequence(current_sequence: &mut Signal<usize>) {
 fn spawn_particle(particles: &mut Signal<Vec<ParticleState>>) {
     let mut rng = rand::thread_rng();
     let colors = ["#00ff00", "#ff00ff", "#00ffff", "#ffff00", "#ff0080"];
-    
+
     let new_particle = ParticleState {
         id: rng.gen::<u64>(),
         x: rng.gen_range(0.0..100.0),
@@ -1190,15 +1258,15 @@ fn spawn_particle(particles: &mut Signal<Vec<ParticleState>>) {
         color: colors[rng.gen_range(0..colors.len())].to_string(),
         duration: rng.gen_range(4000..8000),
     };
-    
+
     let mut current_particles = particles.read().clone();
     current_particles.push(new_particle);
-    
+
     // Keep only recent particles
     if current_particles.len() > 20 {
         current_particles.remove(0);
     }
-    
+
     particles.set(current_particles);
 }
 
@@ -1209,14 +1277,17 @@ fn handle_node_click(selected_node: &mut Signal<Option<usize>>, node_id: usize) 
 
 fn trigger_node_spark(is_sparking: &mut Signal<bool>, scale: &mut impl AnimationManager<f32>) {
     is_sparking.set(true);
-    
+
     // Trigger node shake effect
-    scale.animate_to(1.3, AnimationConfig::new(AnimationMode::Spring(Spring::default())));
+    scale.animate_to(
+        1.3,
+        AnimationConfig::new(AnimationMode::Spring(Spring::default())),
+    );
 }
 
 fn trigger_super_boost(boost_active: &mut Signal<bool>) {
     boost_active.set(true);
-    
+
     // Reset boost state after animation
     let mut boost_active_clone = boost_active.clone();
     spawn(async move {
@@ -1225,38 +1296,43 @@ fn trigger_super_boost(boost_active: &mut Signal<bool>) {
     });
 }
 
-fn trigger_mega_boost_with_particles(boost_active: &mut Signal<bool>, particles: &mut Signal<Vec<ParticleState>>) {
+fn trigger_mega_boost_with_particles(
+    boost_active: &mut Signal<bool>,
+    particles: &mut Signal<Vec<ParticleState>>,
+) {
     boost_active.set(true);
     console::log_1(&"🚀 MEGA BOOST ACTIVATED! 🚀".into());
-    
+
     // Spawn particles for mega boost effect
     for _ in 0..50 {
         spawn_particle(particles);
     }
-    
+
     // Create screen flash effect
     if let Some(body) = web_sys::window()
         .and_then(|w| w.document())
-        .and_then(|d| d.body()) 
+        .and_then(|d| d.body())
     {
         let _ = body.style().set_property(
             "background",
-            "linear-gradient(45deg, #ff0000, #ff00ff, #00ffff, #00ff00)"
+            "linear-gradient(45deg, #ff0000, #ff00ff, #00ffff, #00ff00)",
         );
         let _ = body.style().set_property("background-size", "800% 800%");
-        
+
         // Reset after mega boost
         let body_clone = body.clone();
         spawn(async move {
             TimeoutFuture::new(2_000).await;
             let _ = body_clone.style().set_property(
                 "background",
-                "linear-gradient(45deg, #000000, #1a0033, #330066, #6600ff)"
+                "linear-gradient(45deg, #000000, #1a0033, #330066, #6600ff)",
             );
-            let _ = body_clone.style().set_property("background-size", "400% 400%");
+            let _ = body_clone
+                .style()
+                .set_property("background-size", "400% 400%");
         });
     }
-    
+
     // Reset boost state
     let mut boost_active_clone = boost_active.clone();
     spawn(async move {
@@ -1268,30 +1344,32 @@ fn trigger_mega_boost_with_particles(boost_active: &mut Signal<bool>, particles:
 fn trigger_mega_boost(boost_active: &mut Signal<bool>) {
     boost_active.set(true);
     console::log_1(&"🚀 MEGA BOOST ACTIVATED! 🚀".into());
-    
+
     // Create screen flash effect
     if let Some(body) = web_sys::window()
         .and_then(|w| w.document())
-        .and_then(|d| d.body()) 
+        .and_then(|d| d.body())
     {
         let _ = body.style().set_property(
             "background",
-            "linear-gradient(45deg, #ff0000, #ff00ff, #00ffff, #00ff00)"
+            "linear-gradient(45deg, #ff0000, #ff00ff, #00ffff, #00ff00)",
         );
         let _ = body.style().set_property("background-size", "800% 800%");
-        
+
         // Reset after mega boost
         let body_clone = body.clone();
         spawn(async move {
             TimeoutFuture::new(2_000).await;
             let _ = body_clone.style().set_property(
                 "background",
-                "linear-gradient(45deg, #000000, #1a0033, #330066, #6600ff)"
+                "linear-gradient(45deg, #000000, #1a0033, #330066, #6600ff)",
             );
-            let _ = body_clone.style().set_property("background-size", "400% 400%");
+            let _ = body_clone
+                .style()
+                .set_property("background-size", "400% 400%");
         });
     }
-    
+
     // Reset boost state
     let mut boost_active_clone = boost_active.clone();
     spawn(async move {
@@ -1303,7 +1381,7 @@ fn trigger_mega_boost(boost_active: &mut Signal<bool>) {
 fn update_boost_metrics(metrics: &mut Signal<Vec<MetricData>>) {
     let mut rng = rand::thread_rng();
     let mut current_metrics = metrics.read().clone();
-    
+
     // Update Fun coefficient
     for metric in &mut current_metrics {
         match metric.label.as_str() {
@@ -1330,6 +1408,6 @@ fn update_boost_metrics(metrics: &mut Signal<Vec<MetricData>>) {
             _ => {}
         }
     }
-    
+
     metrics.set(current_metrics);
 }

@@ -1,7 +1,6 @@
-use syn::{File, Item, ItemFn, ItemStruct, ItemEnum, ItemTrait, ItemImpl};
-use syn::spanned::Spanned;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use syn::{spanned::Spanned, File, Item, ItemEnum, ItemFn, ItemImpl, ItemStruct, ItemTrait};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Declaration {
@@ -39,7 +38,11 @@ impl DeclarationSplitter {
         }
     }
 
-    pub fn split_file(&mut self, content: &str, file_path: Option<String>) -> Result<(), syn::Error> {
+    pub fn split_file(
+        &mut self,
+        content: &str,
+        file_path: Option<String>,
+    ) -> Result<(), syn::Error> {
         let syntax_tree = syn::parse_file(content)?;
         self.extract_declarations(&syntax_tree, content, file_path);
         Ok(())
@@ -47,7 +50,7 @@ impl DeclarationSplitter {
 
     fn extract_declarations(&mut self, file: &File, content: &str, file_path: Option<String>) {
         let lines: Vec<&str> = content.lines().collect();
-        
+
         for item in &file.items {
             let declaration = self.item_to_declaration(item, &lines, file_path.clone());
             if let Some(decl) = declaration {
@@ -56,22 +59,36 @@ impl DeclarationSplitter {
         }
     }
 
-    fn item_to_declaration(&self, item: &Item, lines: &[&str], file_path: Option<String>) -> Option<Declaration> {
+    fn item_to_declaration(
+        &self,
+        item: &Item,
+        lines: &[&str],
+        file_path: Option<String>,
+    ) -> Option<Declaration> {
         match item {
             Item::Fn(item_fn) => Some(self.function_to_declaration(item_fn, lines, file_path)),
-            Item::Struct(item_struct) => Some(self.struct_to_declaration(item_struct, lines, file_path)),
+            Item::Struct(item_struct) => {
+                Some(self.struct_to_declaration(item_struct, lines, file_path))
+            }
             Item::Enum(item_enum) => Some(self.enum_to_declaration(item_enum, lines, file_path)),
-            Item::Trait(item_trait) => Some(self.trait_to_declaration(item_trait, lines, file_path)),
+            Item::Trait(item_trait) => {
+                Some(self.trait_to_declaration(item_trait, lines, file_path))
+            }
             Item::Impl(item_impl) => Some(self.impl_to_declaration(item_impl, lines, file_path)),
             _ => None,
         }
     }
 
-    fn function_to_declaration(&self, item_fn: &ItemFn, lines: &[&str], file_path: Option<String>) -> Declaration {
+    fn function_to_declaration(
+        &self,
+        item_fn: &ItemFn,
+        lines: &[&str],
+        file_path: Option<String>,
+    ) -> Declaration {
         let name = item_fn.sig.ident.to_string();
         let (start, end) = self.get_span_lines(&item_fn.span());
         let content = self.extract_content(lines, start, end);
-        
+
         Declaration {
             name,
             declaration_type: DeclarationType::Function,
@@ -82,11 +99,16 @@ impl DeclarationSplitter {
         }
     }
 
-    fn struct_to_declaration(&self, item_struct: &ItemStruct, lines: &[&str], file_path: Option<String>) -> Declaration {
+    fn struct_to_declaration(
+        &self,
+        item_struct: &ItemStruct,
+        lines: &[&str],
+        file_path: Option<String>,
+    ) -> Declaration {
         let name = item_struct.ident.to_string();
         let (start, end) = self.get_span_lines(&item_struct.span());
         let content = self.extract_content(lines, start, end);
-        
+
         Declaration {
             name,
             declaration_type: DeclarationType::Struct,
@@ -97,11 +119,16 @@ impl DeclarationSplitter {
         }
     }
 
-    fn enum_to_declaration(&self, item_enum: &ItemEnum, lines: &[&str], file_path: Option<String>) -> Declaration {
+    fn enum_to_declaration(
+        &self,
+        item_enum: &ItemEnum,
+        lines: &[&str],
+        file_path: Option<String>,
+    ) -> Declaration {
         let name = item_enum.ident.to_string();
         let (start, end) = self.get_span_lines(&item_enum.span());
         let content = self.extract_content(lines, start, end);
-        
+
         Declaration {
             name,
             declaration_type: DeclarationType::Enum,
@@ -112,11 +139,16 @@ impl DeclarationSplitter {
         }
     }
 
-    fn trait_to_declaration(&self, item_trait: &ItemTrait, lines: &[&str], file_path: Option<String>) -> Declaration {
+    fn trait_to_declaration(
+        &self,
+        item_trait: &ItemTrait,
+        lines: &[&str],
+        file_path: Option<String>,
+    ) -> Declaration {
         let name = item_trait.ident.to_string();
         let (start, end) = self.get_span_lines(&item_trait.span());
         let content = self.extract_content(lines, start, end);
-        
+
         Declaration {
             name,
             declaration_type: DeclarationType::Trait,
@@ -127,11 +159,16 @@ impl DeclarationSplitter {
         }
     }
 
-    fn impl_to_declaration(&self, item_impl: &ItemImpl, lines: &[&str], file_path: Option<String>) -> Declaration {
+    fn impl_to_declaration(
+        &self,
+        item_impl: &ItemImpl,
+        lines: &[&str],
+        file_path: Option<String>,
+    ) -> Declaration {
         let name = format!("impl_{}", item_impl.self_ty.span().start().line);
         let (start, end) = self.get_span_lines(&item_impl.span());
         let content = self.extract_content(lines, start, end);
-        
+
         Declaration {
             name,
             declaration_type: DeclarationType::Impl,
@@ -150,28 +187,33 @@ impl DeclarationSplitter {
         if start == 0 || start > lines.len() || end > lines.len() {
             return String::new();
         }
-        
+
         lines[(start - 1)..end].join("\n")
     }
 
     pub fn get_declarations_by_type(&self, decl_type: DeclarationType) -> Vec<&Declaration> {
-        self.declarations.iter()
+        self.declarations
+            .iter()
             .filter(|d| d.declaration_type == decl_type)
             .collect()
     }
 
-    pub fn save_declarations_to_files(&self, base_path: &str) -> Result<HashMap<String, String>, std::io::Error> {
+    pub fn save_declarations_to_files(
+        &self,
+        base_path: &str,
+    ) -> Result<HashMap<String, String>, std::io::Error> {
         let mut file_map = HashMap::new();
-        
+
         for declaration in &self.declarations {
-            let filename = format!("{}_{}.rs", 
+            let filename = format!(
+                "{}_{}.rs",
                 declaration.declaration_type.to_string().to_lowercase(),
                 declaration.name.replace("::", "_")
             );
             let full_path = format!("{}/{}", base_path, filename);
             file_map.insert(full_path, declaration.content.clone());
         }
-        
+
         Ok(file_map)
     }
 }
@@ -227,7 +269,7 @@ enum Color {
     fn test_function_extraction() {
         let mut splitter = DeclarationSplitter::new();
         splitter.split_file(TEST_CODE, None).unwrap();
-        
+
         let functions = splitter.get_declarations_by_type(DeclarationType::Function);
         assert_eq!(functions.len(), 1);
         assert_eq!(functions[0].name, "main");
@@ -237,7 +279,7 @@ enum Color {
     fn test_struct_extraction() {
         let mut splitter = DeclarationSplitter::new();
         splitter.split_file(TEST_CODE, None).unwrap();
-        
+
         let structs = splitter.get_declarations_by_type(DeclarationType::Struct);
         assert_eq!(structs.len(), 1);
         assert_eq!(structs[0].name, "Point");
@@ -247,7 +289,7 @@ enum Color {
     fn test_enum_extraction() {
         let mut splitter = DeclarationSplitter::new();
         splitter.split_file(TEST_CODE, None).unwrap();
-        
+
         let enums = splitter.get_declarations_by_type(DeclarationType::Enum);
         assert_eq!(enums.len(), 1);
         assert_eq!(enums[0].name, "Color");
@@ -257,7 +299,7 @@ enum Color {
     fn test_save_declarations_to_files() {
         let mut splitter = DeclarationSplitter::new();
         splitter.split_file(TEST_CODE, None).unwrap();
-        
+
         let file_map = splitter.save_declarations_to_files("/tmp").unwrap();
         assert_eq!(file_map.len(), 3);
         assert!(file_map.contains_key("/tmp/function_main.rs"));

@@ -9,7 +9,7 @@ pub fn Dashboard() -> Element {
             h2 {class:"dark:text-gray-300 text-2xl" , ""}
 
             div {class:"text-center flex flex-col justify-between items-center",
-                h3 {class:"text-black dark:text-gray-300 text-md", 
+                h3 {class:"text-black dark:text-gray-300 text-md",
                     "Welcome to Solfunmeme Dashboard"
                 }
                 p {class:"text-black dark:text-gray-300 text-md",
@@ -39,7 +39,7 @@ pub fn Dashboard() -> Element {
                         li {"20. allow for execution of the emojiprograms, proof engines, lean4 expressions."}
 
                     }
-                }                                
+                }
             }
         }
     }

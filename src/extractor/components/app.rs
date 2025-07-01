@@ -1,12 +1,11 @@
 // used as embedding app MenuOption::Embedding => rsx!(EmbeddingApp {}) from src/playground/app.rs
-// 
-use std::sync::Arc;
-use dioxus::html::HasFileData;
+//
+use dioxus::{html::HasFileData, prelude::*};
 use gloo_timers::future::TimeoutFuture;
-use dioxus::prelude::*;
+use std::sync::Arc;
 
-use dioxus::html::FileEngine;  
 use crate::extractor::styles::STYLE;
+use dioxus::html::FileEngine;
 //use crate::extractor::error;
 //use crate::extractor::ProcessingFile;
 use crate::extractor::types::UploadedFile;
@@ -18,113 +17,114 @@ use crate::extractor::types::DocumentSummary;
 //use crate::extractor::types::UploadedFile;
 //use crate::extractor::STYLE;
 //use crate::extractor::model::extract::extract_code_snippets;
-use crate::extractor::types::ProcessingFile;
-use crate::extractor::types::CodeSnippet;
-use crate::extractor::types::AnnotatedWord;
+use crate::extractor::types::{AnnotatedWord, CodeSnippet, ProcessingFile};
 
-async fn read_files(file_engine: Arc<dyn FileEngine>,  currently_processing_file : &mut Signal<Option<ProcessingFile>>, files_uploaded: &mut Signal<Vec<UploadedFile>>) {
-        let files = file_engine.files();
-        for file_name in &files {
-            currently_processing_file.set(Some(ProcessingFile {
-                name: file_name.clone(),
-                ..Default::default()
-            }));
-            TimeoutFuture::new(1).await;
+async fn read_files(
+    file_engine: Arc<dyn FileEngine>,
+    currently_processing_file: &mut Signal<Option<ProcessingFile>>,
+    files_uploaded: &mut Signal<Vec<UploadedFile>>,
+) {
+    let files = file_engine.files();
+    for file_name in &files {
+        currently_processing_file.set(Some(ProcessingFile {
+            name: file_name.clone(),
+            ..Default::default()
+        }));
+        TimeoutFuture::new(1).await;
 
-            if let Some(contents) = file_engine.read_file_to_string(file_name).await {
-                let lines: Vec<&str> = contents.lines().collect();
-                let total_lines = lines.len();
+        if let Some(contents) = file_engine.read_file_to_string(file_name).await {
+            let lines: Vec<&str> = contents.lines().collect();
+            let total_lines = lines.len();
 
+            if let Some(p) = currently_processing_file.write().as_mut() {
+                p.total_lines = total_lines;
+            }
+
+            let snippet: Vec<CodeSnippet> = [].to_vec();
+            let code_annotations: Vec<AnnotatedWord> = [].to_vec();
+
+            // FIXME: broken code, please fix
+
+            // if file_name.ends_with(".md") {
+            //     let snippets = extract_code_snippets(&contents);
+            //     for snippet in snippets {
+            //         //test_code_snippet(snippet);
+            //         //code_annotations.push(annotate_code_snippet(snippet));
+            // 	//snippets.push(snippet);
+            //     }
+
+            // }
+            //Err(e) => error!("Markdown parsing error: {}", e),
+            //}
+            //}
+
+            for (i, line) in lines.iter().enumerate() {
+                let words = line.split_whitespace().collect::<Vec<_>>();
                 if let Some(p) = currently_processing_file.write().as_mut() {
-                    p.total_lines = total_lines;
+                    //let line_annotations = words.iter().map(|&w| annotate_word(w)).collect::<Vec<_>>();
+                    //p.annotations.extend(line_annotations);
+                    p.current_content.push_str(line);
+                    p.current_content.push('\n');
+                    p.progress = i + 1;
                 }
-
-                let snippet: Vec<CodeSnippet> = [].to_vec();
-		let code_annotations : Vec<AnnotatedWord>  = [].to_vec();
-
-
-// FIXME: broken code, please fix
-                
-        // if file_name.ends_with(".md") {
-                //     let snippets = extract_code_snippets(&contents);
-                //     for snippet in snippets {
-                //         //test_code_snippet(snippet);
-                //         //code_annotations.push(annotate_code_snippet(snippet));
-		// 	//snippets.push(snippet);
-                //     }
-                    
-                // }
-                        //Err(e) => error!("Markdown parsing error: {}", e),
-                    //}
-                //}
-
-                for (i, line) in lines.iter().enumerate() {
-                    let words = line.split_whitespace().collect::<Vec<_>>();
-                    if let Some(p) = currently_processing_file.write().as_mut() {
-                       //let line_annotations = words.iter().map(|&w| annotate_word(w)).collect::<Vec<_>>();
-                        //p.annotations.extend(line_annotations);
-                        p.current_content.push_str(line);
-                        p.current_content.push('\n');
-                        p.progress = i + 1;
-                    }
-                    if i % 10 == 0 || i == total_lines - 1 {
-                        TimeoutFuture::new(1).await;
-                    }
-                }
-
-                let summary = DocumentSummary {
-                    total_turns: 1,
-                    total_code_snippets: 0, //snippets.len(),
-		    total_tokens: 0,
-		    // FIXME
-//                    total_tokens: snippets.iter().map(|s| s.token_count).sum::<usize>(),
-//                    languages_found: snippets.iter().map(|s| s.language.clone()).collect::<std::collections::HashSet<_>>().into_iter().collect(),
-		    //                    content_hashes: snippets.iter().map(|s| s.content_hash.clone()).collect(),
-		    content_hashes:[].to_vec(),
-		    languages_found:[].to_vec(),
-		    
-                };
-
-                //let duplicate_report = check_duplicates(snippets.clone());
-//                let zip_url = create_zip(&duplicate_report.unique_snippets).unwrap_or_else(|e| {
-//                    error!("ZIP creation failed: {:?}", e);
-//                    String::new()
-//                });
-
-                if let Some(mut     p_file) = currently_processing_file.take() {
-                    p_file.summary = Some(summary);
-                    //p_file.duplicate_report = Some(duplicate_report);
-                    //p_file.code_annotations = code_annotations;
-                    let generated_program = "FIXME";//generate_program(&p_file.annotations);
-
-                    files_uploaded.write().push(UploadedFile {
-                        name: file_name.clone(),
-                        contents: contents.clone(),
-                        //annotations: p_file.annotations,
-                        generated_program: generated_program.to_string(),
-                        summary: p_file.summary,
-                        //duplicate_report: p_file.duplicate_report,
-			            zip_url : Some("FIXME".to_string()),
-			//                        zip_url: if zip_url.is_empty() { None } else { Some(zip_url) },
-                        //code_annotations: p_file.code_annotations,
-                    });
+                if i % 10 == 0 || i == total_lines - 1 {
+                    TimeoutFuture::new(1).await;
                 }
             }
-        
-        }; // for filename
-        
+
+            let summary = DocumentSummary {
+                total_turns: 1,
+                total_code_snippets: 0, //snippets.len(),
+                total_tokens: 0,
+                // FIXME
+                //                    total_tokens: snippets.iter().map(|s| s.token_count).sum::<usize>(),
+                //                    languages_found: snippets.iter().map(|s| s.language.clone()).collect::<std::collections::HashSet<_>>().into_iter().collect(),
+                //                    content_hashes: snippets.iter().map(|s| s.content_hash.clone()).collect(),
+                content_hashes: [].to_vec(),
+                languages_found: [].to_vec(),
+            };
+
+            //let duplicate_report = check_duplicates(snippets.clone());
+            //                let zip_url = create_zip(&duplicate_report.unique_snippets).unwrap_or_else(|e| {
+            //                    error!("ZIP creation failed: {:?}", e);
+            //                    String::new()
+            //                });
+
+            if let Some(mut p_file) = currently_processing_file.take() {
+                p_file.summary = Some(summary);
+                //p_file.duplicate_report = Some(duplicate_report);
+                //p_file.code_annotations = code_annotations;
+                let generated_program = "FIXME"; //generate_program(&p_file.annotations);
+
+                files_uploaded.write().push(UploadedFile {
+                    name: file_name.clone(),
+                    contents: contents.clone(),
+                    //annotations: p_file.annotations,
+                    generated_program: generated_program.to_string(),
+                    summary: p_file.summary,
+                    //duplicate_report: p_file.duplicate_report,
+                    zip_url: Some("FIXME".to_string()),
+                    //                        zip_url: if zip_url.is_empty() { None } else { Some(zip_url) },
+                    //code_annotations: p_file.code_annotations,
+                });
+            }
+        }
+    } // for filename
 }
 
-
-async fn upload_files( evt: FormEvent, currently_processing_file: &mut Signal<Option<ProcessingFile>>, files_uploaded: &mut Signal<Vec<UploadedFile>>) {
-        if let Some(file_engine) = evt.files() {
-            read_files(file_engine, currently_processing_file, files_uploaded  ).await;
-        }
+async fn upload_files(
+    evt: FormEvent,
+    currently_processing_file: &mut Signal<Option<ProcessingFile>>,
+    files_uploaded: &mut Signal<Vec<UploadedFile>>,
+) {
+    if let Some(file_engine) = evt.files() {
+        read_files(file_engine, currently_processing_file, files_uploaded).await;
     }
+}
 
 // #[mcp_component(
 //      menu = "core",
-//      label = "Embedding App", 
+//      label = "Embedding App",
 //      emoji = "🔗",
 //      description = "Manage Embeddings",
 //      visible = true,
@@ -140,18 +140,18 @@ pub fn EmbeddingApp() -> Element {
     let mut enable_embedding = use_signal(|| false);
     //let wikidata_data = use_signal::<Option<Value>>(|| None);
 
-//    use_effect(move || {
-//        if *enable_wikidata.read() {
-//            spawn(async move {
-//                match fetch_wikidata_graph().await {
-//                    Ok(data) => wikidata_data.set(Some(data)),
-//                    Err(e) => error!("Wikidata fetch failed: {}", e),
-//                }
-//            });
-//        }
-//    });
+    //    use_effect(move || {
+    //        if *enable_wikidata.read() {
+    //            spawn(async move {
+    //                match fetch_wikidata_graph().await {
+    //                    Ok(data) => wikidata_data.set(Some(data)),
+    //                    Err(e) => error!("Wikidata fetch failed: {}", e),
+    //                }
+    //            });
+    //        }
+    //    });
 
-//    let mut annotator = WikidataAnnotator::new();
+    //    let mut annotator = WikidataAnnotator::new();
 
     // let annotate_word = move |word: &str| -> AnnotatedWord {
     //     let embedding = if *enable_embedding.read() {
@@ -166,13 +166,13 @@ pub fn EmbeddingApp() -> Element {
     //         0.0
     //     };
     //     let multivector = Multivector::from_vector(reduced.try_into().unwrap_or([0.0; 3]));
-        
+
     //     if *enable_wikidata.read() {
     //         if let Some(data) = wikidata_data.read().as_ref() {
     //             return annotator.annotate_word(word, data);
     //         }
     //     }
-        
+
     //     AnnotatedWord {
     //         word: word.to_string(),
     //         primary_emoji: "🌟".to_string(),
@@ -184,33 +184,31 @@ pub fn EmbeddingApp() -> Element {
     //     }
     // };
 
+    //     let generate_program = |annotations: &[AnnotatedWord]| -> String {
+    //         let struct_defs = r#"
+    // #[derive(Debug)]
+    // struct Annotation {
+    //     word: String,
+    //     primary_emoji: String,
+    //     secondary_emoji: String,
+    // }
+    // "#;
+    //         let data = annotations.iter().map(|anno| format!(
+    //             r#"Annotation {{
+    //                 word: "{}".to_string(),
+    //                 primary_emoji: "{}".to_string(),
+    //                 secondary_emoji: "{}".to_string(),
+    //             }}"#,
+    //             anno.word, anno.primary_emoji, anno.secondary_emoji
+    //         )).collect::<Vec<_>>().join(",\n    ");
+    //         format!(
+    //             //"{}\nfn main() {{\n    let annotations = vec![{}];\n    for anno in annotations {{\n        println!(\"{:?}\", anno);\n    }}\n}}",
+    // 	    "debug {:?}  {:?} ",
+    //             struct_defs, data
+    //         )
+    //     };
 
-//     let generate_program = |annotations: &[AnnotatedWord]| -> String {
-//         let struct_defs = r#"
-// #[derive(Debug)]
-// struct Annotation {
-//     word: String,
-//     primary_emoji: String,
-//     secondary_emoji: String,
-// }
-// "#;
-//         let data = annotations.iter().map(|anno| format!(
-//             r#"Annotation {{
-//                 word: "{}".to_string(),
-//                 primary_emoji: "{}".to_string(),
-//                 secondary_emoji: "{}".to_string(),
-//             }}"#,
-//             anno.word, anno.primary_emoji, anno.secondary_emoji
-//         )).collect::<Vec<_>>().join(",\n    ");
-//         format!(
-//             //"{}\nfn main() {{\n    let annotations = vec![{}];\n    for anno in annotations {{\n        println!(\"{:?}\", anno);\n    }}\n}}",
-// 	    "debug {:?}  {:?} ",
-//             struct_defs, data
-//         )
-//     };
-
-    
-   // read files
+    // read files
 
     rsx! {
         style { "{STYLE}" }
@@ -378,7 +376,4 @@ pub fn EmbeddingApp() -> Element {
             }
         }
     }
-    
 }
-
-

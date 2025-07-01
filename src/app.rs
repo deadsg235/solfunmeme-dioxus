@@ -1,17 +1,12 @@
-
-
-use dioxus::prelude::*;
 use crate::header::Header;
+use dioxus::prelude::*;
 
 use crate::{
     model::NotificationInfo,
-    views::footer::Footer,
-    views::notification::Notification,
-    views::page_not_found::PageNotFound,
+    views::{footer::Footer, notification::Notification, page_not_found::PageNotFound},
 };
 
-use crate::views::connections::Connections;
-use crate::model::{AccountState};
+use crate::{model::AccountState, views::connections::Connections};
 
 // FIXME this is used, [link { rel: "icon", href: FAVICON }](https://github.com/meta-introspector/solfunmeme-dioxus/blob/46e454980e624cf09ea65a39739708ba04e75f70/src/playground/app.rs#L114-L115)
 #[allow(dead_code)]
@@ -23,17 +18,13 @@ pub const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 pub(crate) const LOGO: Asset = asset!("/assets/logo.png");
 
-use crate::model::storage::WALLET_ADAPTER;
-use crate::model::storage::{GLOBAL_MESSAGE, ACCOUNT_STATE, ACTIVE_CONNECTION};
+use crate::model::storage::{ACCOUNT_STATE, ACTIVE_CONNECTION, GLOBAL_MESSAGE, WALLET_ADAPTER};
 //use crate::model::storage::{ClusterStore, NotificationInfo};
 //use crate::model::adaptercluster::AdapterCluster;
-use crate::views::dashboard::Dashboard;
-use crate::views::accounts::Accounts;
-use crate::views::clusters::Clusters;
-use crate::views::extras::Extras;
-use crate::views::source_browser::SourceBrowser;
-
-
+use crate::views::{
+    accounts::Accounts, clusters::Clusters, dashboard::Dashboard, extras::Extras,
+    source_browser::SourceBrowser,
+};
 
 #[component]
 pub(crate) fn MainApp() -> Element {
@@ -41,7 +32,7 @@ pub(crate) fn MainApp() -> Element {
 
     // FIXME: This is commented out because the `ClusterStore` is not implemented yet.
     // The `ClusterStore` should be implemented to manage clusters.
-    
+
     // let clusters = vec![
     //     AdapterCluster::devnet(),
     //     AdapterCluster::mainnet(),
@@ -49,7 +40,6 @@ pub(crate) fn MainApp() -> Element {
     //     AdapterCluster::localnet(),
     // ];
     //    if CLUSTER_STORAGE.write().add_clusters(clusters).is_err() {}     // FIXME: add default clusters
-
 
     spawn(async move {
         while let Ok(wallet_event) = wallet_event_listener.recv().await {
@@ -84,8 +74,6 @@ pub(crate) fn MainApp() -> Element {
     }
 }
 
-
-
 #[derive(Clone, Debug, PartialEq, Routable)]
 #[rustfmt::skip]
 pub enum Route { 
@@ -109,4 +97,3 @@ pub enum Route {
     #[route("/:..route")]
     PageNotFound { route: Vec<String> },
 }
-

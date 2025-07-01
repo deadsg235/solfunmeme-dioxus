@@ -20,4 +20,4 @@ pub const LEAN_PROOF: &str = "bg-gray-800 text-blue-400 p-3 rounded";
 pub const CODE_BLOCK: &str = "font-mono text-sm overflow-x-auto";
 pub const WORKFLOW_RESULTS: &str = "mt-6 flex gap-4";
 pub const TEST_RESULT: &str = "text-green-600 font-semibold";
-pub const PROOF_RESULT: &str = "text-blue-600 font-semibold"; 
+pub const PROOF_RESULT: &str = "text-blue-600 font-semibold";

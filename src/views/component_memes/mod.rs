@@ -1,10 +1,10 @@
 use dioxus::prelude::*;
 //use std::collections::HashMap;
 mod style;
-use style::*;
 use serde::{Deserialize, Serialize};
+use style::*;
 
-#[derive(Debug, Clone, PartialEq, Serialize,Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComponentMeme {
     pub name: String,
     pub emoji: String,
@@ -13,8 +13,7 @@ pub struct ComponentMeme {
     pub matrix_representation: Vec<Vec<f64>>,
 }
 
-
-#[derive(Debug, Clone, PartialEq, Serialize,Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MemeCategory {
     pub name: String,
     pub emoji: String,
@@ -26,7 +25,9 @@ pub fn get_crypto_component_memes() -> Vec<ComponentMeme> {
         ComponentMeme {
             name: "CryptoFrontendApp".to_string(),
             emoji: "🔐".to_string(),
-            lean_expression: "structure CryptoApp := (encryption: EncryptionForm) (decryption: DecryptionForm)".to_string(),
+            lean_expression:
+                "structure CryptoApp := (encryption: EncryptionForm) (decryption: DecryptionForm)"
+                    .to_string(),
             description: "The main encryption application component".to_string(),
             matrix_representation: vec![
                 vec![1.0, 0.0, 0.0],
@@ -37,7 +38,9 @@ pub fn get_crypto_component_memes() -> Vec<ComponentMeme> {
         ComponentMeme {
             name: "EncryptionForm".to_string(),
             emoji: "📝".to_string(),
-            lean_expression: "structure EncryptionForm := (title: String) (message: String) (keys: KeyPair)".to_string(),
+            lean_expression:
+                "structure EncryptionForm := (title: String) (message: String) (keys: KeyPair)"
+                    .to_string(),
             description: "Form for encrypting messages".to_string(),
             matrix_representation: vec![
                 vec![1.0, 1.0, 0.0],
@@ -48,7 +51,9 @@ pub fn get_crypto_component_memes() -> Vec<ComponentMeme> {
         ComponentMeme {
             name: "DecryptionForm".to_string(),
             emoji: "🔓".to_string(),
-            lean_expression: "structure DecryptionForm := (payload: EncryptedPayload) (key: PrivateKey)".to_string(),
+            lean_expression:
+                "structure DecryptionForm := (payload: EncryptedPayload) (key: PrivateKey)"
+                    .to_string(),
             description: "Form for decrypting messages".to_string(),
             matrix_representation: vec![
                 vec![0.0, 1.0, 1.0],
@@ -66,30 +71,24 @@ pub fn get_ui_component_memes() -> Vec<ComponentMeme> {
             emoji: "📋".to_string(),
             lean_expression: "structure CardHeader := (title: String)".to_string(),
             description: "Header component for cards".to_string(),
-            matrix_representation: vec![
-                vec![1.0, 0.0],
-                vec![0.0, 1.0],
-            ],
+            matrix_representation: vec![vec![1.0, 0.0], vec![0.0, 1.0]],
         },
         ComponentMeme {
             name: "InputField".to_string(),
             emoji: "✏️".to_string(),
-            lean_expression: "structure InputField := (label: String) (value: String) (onInput: String → Unit)".to_string(),
+            lean_expression:
+                "structure InputField := (label: String) (value: String) (onInput: String → Unit)"
+                    .to_string(),
             description: "Reusable input field component".to_string(),
-            matrix_representation: vec![
-                vec![1.0, 1.0],
-                vec![1.0, 0.0],
-            ],
+            matrix_representation: vec![vec![1.0, 1.0], vec![1.0, 0.0]],
         },
         ComponentMeme {
             name: "ActionButton".to_string(),
             emoji: "🔘".to_string(),
-            lean_expression: "structure ActionButton := (text: String) (onClick: Unit → Unit)".to_string(),
+            lean_expression: "structure ActionButton := (text: String) (onClick: Unit → Unit)"
+                .to_string(),
             description: "Reusable button component".to_string(),
-            matrix_representation: vec![
-                vec![0.0, 1.0],
-                vec![1.0, 0.0],
-            ],
+            matrix_representation: vec![vec![0.0, 1.0], vec![1.0, 0.0]],
         },
     ]
 }
@@ -117,7 +116,7 @@ pub fn ComponentMemeView(component_meme: ComponentMeme) -> Element {
                     // })
                 }
             }
-             
+
         }
     }
 }
@@ -143,7 +142,7 @@ pub fn MemeCategoryView(category: MemeCategory) -> Element {
 pub fn ComponentMemeExplorer() -> Element {
     //let crypto_memes = get_crypto_component_memes();
     //let ui_memes = get_ui_component_memes();
-    
+
     // let categories = vec![
     //     MemeCategory {
     //         name: "Crypto Components".to_string(),
@@ -156,7 +155,7 @@ pub fn ComponentMemeExplorer() -> Element {
     //         components: ui_memes,
     //     },
     // ];
-    
+
     rsx! {
         div { class: MEME_EXPLORER,
             h1 { class: "text-3xl font-bold text-gray-900 mb-8", "Component Meme Explorer" }
@@ -167,4 +166,4 @@ pub fn ComponentMemeExplorer() -> Element {
             }
         }
     }
-} 
+}

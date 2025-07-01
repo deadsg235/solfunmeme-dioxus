@@ -1,26 +1,28 @@
-use web_sys::window;
 use wasm_bindgen::{JsCast, JsValue};
+use web_sys::window;
 
 use crate::extractor::{model::files::create_download_filename, types::CodeSnippet};
 //use crate::extractor::CodeSnippet;
 pub fn download_rust_snippets_as_file(snippets: &[CodeSnippet]) {
-    let rust_snippets: Vec<_> = snippets.iter()
+    let rust_snippets: Vec<_> = snippets
+        .iter()
         .filter(|s| s.language.to_lowercase() == "rust" || s.language.to_lowercase() == "rs")
         .collect();
-        
+
     if rust_snippets.is_empty() {
         return;
     }
-    
-    let combined = rust_snippets.iter()
+
+    let combined = rust_snippets
+        .iter()
         .map(|snippet| snippet.content.clone())
         .collect::<Vec<_>>()
         .join("\n\n");
-        
+
     if let Some(window) = window() {
         if let Ok(blob) = web_sys::Blob::new_with_str_sequence_and_options(
             &js_sys::Array::from_iter([JsValue::from(combined)]),
-            web_sys::BlobPropertyBag::new().type_("text/plain")
+            web_sys::BlobPropertyBag::new().type_("text/plain"),
         ) {
             if let Ok(url) = web_sys::Url::create_object_url_with_blob(&blob) {
                 if let Some(document) = window.document() {
@@ -39,27 +41,29 @@ pub fn download_rust_snippets_as_file(snippets: &[CodeSnippet]) {
     }
 }
 
-pub fn create_download_handler() -> impl FnMut((Vec<CodeSnippet>, String))  {
-    move |args: (Vec<CodeSnippet>,  String)| {
-	let (snippets, language) = args;
-        let filtered_snippets: Vec<_> = snippets.iter()
+pub fn create_download_handler() -> impl FnMut((Vec<CodeSnippet>, String)) {
+    move |args: (Vec<CodeSnippet>, String)| {
+        let (snippets, language) = args;
+        let filtered_snippets: Vec<_> = snippets
+            .iter()
             .filter(|s| s.language.to_lowercase() == language.to_lowercase())
             .collect();
-            
+
         if filtered_snippets.is_empty() {
             return;
         }
-        
-        let combined = filtered_snippets.iter()
+
+        let combined = filtered_snippets
+            .iter()
             .map(|snippet| snippet.content.clone())
             .collect::<Vec<_>>()
             .join("\n\n");
-            
+
         let filename = create_download_filename(&language);
-        
+
         #[cfg(target_arch = "wasm32")]
         download_web(&combined, &filename);
-        
+
         #[cfg(not(target_arch = "wasm32"))]
         download_desktop(&combined, &filename);
     }

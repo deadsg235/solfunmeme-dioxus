@@ -1,16 +1,14 @@
+use crate::model::{use_connections, UseConnections};
 use dioxus::prelude::*;
-use crate::model::use_connections;
-use crate::model::UseConnections;
 use url::Url;
 
 //use crate::{
 //    model::{storage::{GLOBAL_MESSAGE}, MyCluster},
-//     utils::{get_cluster_svg, trunk_cluster_name}, 
- //    AdapterCluster, BinSvg, CheckSvg, CloseSvg, ClusterName, ClustersSvg, 
-//     LinkSvg, NotificationInfo, 
+//     utils::{get_cluster_svg, trunk_cluster_name},
+//    AdapterCluster, BinSvg, CheckSvg, CloseSvg, ClusterName, ClustersSvg,
+//     LinkSvg, NotificationInfo,
 //}
-use crate::model::AdapterCluster;
-use crate::model::NotificationInfo;
+use crate::model::{AdapterCluster, NotificationInfo};
 
 //CLUSTER_STORAGE, GLOBAL_MESSAGE
 
@@ -68,7 +66,7 @@ pub fn ClusterInfo(connections: UseConnections) -> Element {
                                 class: "bg-blue-100 text-blue-800 text-sm font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
                                 {adapter_cluster.cluster().chain()}
                             }
-                            div { 
+                            div {
                                 id: "masked-endpoint",
                                 class: "text-sm mt-2", {adapter_cluster.masked_endpoint()} }
                         }
@@ -102,7 +100,7 @@ fn Switch(cluster_name: String, mut connections: UseConnections) -> Element {
             onclick: move |_| {
                 if let Some(_active_cluster) = connections.get_entry(&cluster_name) {
                     connections.set_active_entry(cluster_name.clone());
-		    let msg = format!("{cluster_name} cluster now active!");
+            let msg = format!("{cluster_name} cluster now active!");
                     GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(msg));
                 } else {
                     GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(format!("Could not find `{cluster_name}` cluster!")));
@@ -141,7 +139,10 @@ fn Delete(cluster_name: String, mut connections: UseConnections) -> Element {
 }
 
 #[component]
-pub fn AddClusterModal(mut show_add_entry_modal: Signal<bool>, mut connections: UseConnections) -> Element {
+pub fn AddClusterModal(
+    mut show_add_entry_modal: Signal<bool>,
+    mut connections: UseConnections,
+) -> Element {
     #[derive(Debug, Default)]
     struct AddCluster {
         name: String,
@@ -150,7 +151,8 @@ pub fn AddClusterModal(mut show_add_entry_modal: Signal<bool>, mut connections: 
     }
 
     let mut add_entry = use_signal(AddCluster::default);
-    let should_show_button = !add_entry.read().name.is_empty() && !add_entry.read().endpoint.is_empty();
+    let should_show_button =
+        !add_entry.read().name.is_empty() && !add_entry.read().endpoint.is_empty();
 
     if *show_add_entry_modal.read() {
         rsx! {
@@ -252,7 +254,7 @@ pub fn AddClusterModal(mut show_add_entry_modal: Signal<bool>, mut connections: 
                                     onclick: move |_| {
                                         let adapter_cluster = AdapterCluster::new()
                                             .add_name(add_entry.read().name.as_str())
-                                            .add_endpoint(add_entry.read().endpoint.as_str())                                            
+                                            .add_endpoint(add_entry.read().endpoint.as_str())
                                             .add_cluster(add_entry.read().network);
                                         let name = adapter_cluster.name().to_string();
                                         match connections.add_entry(adapter_cluster) {

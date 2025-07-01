@@ -1,8 +1,6 @@
 //use std::collections::HashMap;
 
-use serde::{Serialize, Deserialize};
-
-
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq)]
 #[allow(dead_code)]
@@ -22,7 +20,6 @@ pub struct LevelDescr {
     pub kind: String,
 }
 
-
 // Equivalent to Lean's Level type
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Level {
@@ -34,23 +31,39 @@ pub enum Level {
     MVar(u64),
 }
 
-            // Define globals for u_1 to u_8
-            #[allow(dead_code)]
-pub fn LEVEL_U1F() -> Level { Level::Param("u_1".to_string()) }
+// Define globals for u_1 to u_8
 #[allow(dead_code)]
-pub fn LEVEL_U2F() -> Level { Level::Param("u_2".to_string()) }
+pub fn LEVEL_U1F() -> Level {
+    Level::Param("u_1".to_string())
+}
 #[allow(dead_code)]
-pub fn LEVEL_U3F() -> Level { Level::Param("u_3".to_string()) }
+pub fn LEVEL_U2F() -> Level {
+    Level::Param("u_2".to_string())
+}
 #[allow(dead_code)]
-pub fn LEVEL_U4F() -> Level { Level::Param("u_4".to_string()) }
+pub fn LEVEL_U3F() -> Level {
+    Level::Param("u_3".to_string())
+}
 #[allow(dead_code)]
-pub fn LEVEL_U5F() -> Level { Level::Param("u_5".to_string()) }
+pub fn LEVEL_U4F() -> Level {
+    Level::Param("u_4".to_string())
+}
 #[allow(dead_code)]
-pub fn LEVEL_U6F() -> Level { Level::Param("u_6".to_string()) }
+pub fn LEVEL_U5F() -> Level {
+    Level::Param("u_5".to_string())
+}
 #[allow(dead_code)]
-pub fn LEVEL_U7F() -> Level { Level::Param("u_7".to_string()) }
+pub fn LEVEL_U6F() -> Level {
+    Level::Param("u_6".to_string())
+}
 #[allow(dead_code)]
-pub fn LEVEL_U8F() -> Level { Level::Param("u_8".to_string()) }
+pub fn LEVEL_U7F() -> Level {
+    Level::Param("u_7".to_string())
+}
+#[allow(dead_code)]
+pub fn LEVEL_U8F() -> Level {
+    Level::Param("u_8".to_string())
+}
 
 // Use a function to return the vector at runtime, since Vec and .clone() are not allowed in consts
 #[allow(dead_code)]
@@ -66,7 +79,6 @@ pub fn levels_8() -> Vec<Level> {
         LEVEL_U8F(),
     ]
 }
-
 
 // #[derive(Debug, Deserialize, Serialize)]
 // #[serde(tag = "type")]
@@ -88,7 +100,6 @@ pub fn level_to_string(level: &Level) -> String {
     }
 }
 
-
 // // Enhanced Level enum to match the JSON better
 // #[derive(Debug, Clone, PartialEq)]
 // pub enum LevelType {
@@ -99,7 +110,6 @@ pub fn level_to_string(level: &Level) -> String {
 //     Param(String),
 //     MVar(u64),
 // }
-
 
 //use super::level::Level;
 //use crate::model::lean::LevelType;
@@ -123,13 +133,6 @@ pub const LEVEL_U8: LevelType = LevelType::Param("u_8");
 #[allow(dead_code)]
 pub fn levels_8f() -> Vec<LevelType<'static>> {
     vec![
-        LEVEL_U1,
-        LEVEL_U2,
-        LEVEL_U3,
-        LEVEL_U4,
-        LEVEL_U5,
-        LEVEL_U6,
-        LEVEL_U7,
-        LEVEL_U8,
+        LEVEL_U1, LEVEL_U2, LEVEL_U3, LEVEL_U4, LEVEL_U5, LEVEL_U6, LEVEL_U7, LEVEL_U8,
     ]
 }

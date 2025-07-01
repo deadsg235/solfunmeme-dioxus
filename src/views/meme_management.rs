@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::model::lean::style::Styles;
+use dioxus::prelude::*;
 
 // #[component]
 // pub fn MemeManagement() -> Element {
@@ -11,8 +11,6 @@ use crate::model::lean::style::Styles;
 //         }
 //     }
 // }
-
-
 
 #[derive(Clone, PartialEq)]
 pub enum MemeCategory {
@@ -49,13 +47,13 @@ pub fn MemeManagement() -> Element {
             class: "{Styles::section()}",
             h2 { class: "{Styles::h2()}", "🎭 Meme Management Toolbox" }
             p { class: "{Styles::p()}", "Explore and manage different types of memes for your SolFunMeme application." }
-            
+
             div { class: "grid grid-cols-1 lg:grid-cols-4 gap-6 mt-6",
                 // Meme Categories Sidebar
                 div { class: "lg:col-span-1",
                     div { class: "bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4",
                         h3 { class: "text-lg font-semibold mb-4 text-gray-900 dark:text-white", "Meme Categories" }
-                        
+
                         // Search Bar
                         div { class: "mb-4",
                             input {
@@ -65,7 +63,7 @@ pub fn MemeManagement() -> Element {
                                 oninput: move |e| search_query.set(e.value()),
                             }
                         }
-                        
+
                         for category in [
                             MemeCategory::ComponentMemes,
                             MemeCategory::WorkflowMemes,
@@ -152,12 +150,12 @@ pub fn MemeManagement() -> Element {
 fn MemeCard(meme: Meme, on_select: EventHandler<Meme>) -> Element {
     let meme1 = meme.clone();
     let meme2 = meme.clone();
-    
+
     rsx! {
-        div { 
+        div {
             class: "border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer bg-white dark:bg-gray-700",
             onclick: move |_| on_select.call(meme1.clone()),
-            
+
             div { class: "flex items-center gap-3 mb-3",
                 span { class: "text-2xl", "{meme.emoji}" }
                 div {
@@ -165,16 +163,16 @@ fn MemeCard(meme: Meme, on_select: EventHandler<Meme>) -> Element {
                     p { class: "text-sm text-gray-600 dark:text-gray-300", "{meme.description}" }
                 }
             }
-            
+
             div { class: "flex flex-wrap gap-1 mb-3",
                 for tag in meme.tags.iter().take(3) {
-                    span { 
+                    span {
                         class: "px-2 py-1 bg-gray-100 dark:bg-gray-600 text-xs rounded-full text-gray-700 dark:text-gray-300",
                         "{tag}"
                     }
                 }
             }
-            
+
             div { class: "flex justify-between items-center",
                 button {
                     class: "text-blue-500 hover:text-blue-700 text-sm font-medium",
@@ -200,14 +198,14 @@ fn MemeCard(meme: Meme, on_select: EventHandler<Meme>) -> Element {
 #[component]
 fn MemeDetailsModal(meme: Meme, on_close: EventHandler<()>) -> Element {
     rsx! {
-        div { 
+        div {
             class: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50",
             onclick: move |_| on_close.call(()),
-            
-            div { 
+
+            div {
                 class: "bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto",
                 onclick: move |e| e.stop_propagation(),
-                
+
                 div { class: "flex justify-between items-start mb-4",
                     div { class: "flex items-center gap-3",
                         span { class: "text-3xl", "{meme.emoji}" }
@@ -222,31 +220,31 @@ fn MemeDetailsModal(meme: Meme, on_close: EventHandler<()>) -> Element {
                         "✕"
                     }
                 }
-                
+
                 div { class: "mb-4",
                     h4 { class: "font-medium text-gray-900 dark:text-white mb-2", "Description" }
                     p { class: "text-gray-700 dark:text-gray-300", "{meme.description}" }
                 }
-                
+
                 div { class: "mb-4",
                     h4 { class: "font-medium text-gray-900 dark:text-white mb-2", "Content" }
                     div { class: "bg-gray-100 dark:bg-gray-700 p-3 rounded-lg",
                         pre { class: "text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap", "{meme.content}" }
                     }
                 }
-                
+
                 div { class: "mb-6",
                     h4 { class: "font-medium text-gray-900 dark:text-white mb-2", "Tags" }
                     div { class: "flex flex-wrap gap-2",
                         for tag in meme.tags.iter() {
-                            span { 
+                            span {
                                 class: "px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full",
                                 "{tag}"
                             }
                         }
                     }
                 }
-                
+
                 div { class: "flex gap-3",
                     button {
                         class: "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors",
@@ -306,9 +304,12 @@ fn filter_memes(memes: &[Meme], category: &MemeCategory, search_query: &str) -> 
                 true
             } else {
                 let query = search_query.to_lowercase();
-                meme.name.to_lowercase().contains(&query) ||
-                meme.description.to_lowercase().contains(&query) ||
-                meme.tags.iter().any(|tag| tag.to_lowercase().contains(&query))
+                meme.name.to_lowercase().contains(&query)
+                    || meme.description.to_lowercase().contains(&query)
+                    || meme
+                        .tags
+                        .iter()
+                        .any(|tag| tag.to_lowercase().contains(&query))
             }
         })
         .cloned()
@@ -325,7 +326,11 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::ComponentMemes,
             emoji: "🎭".to_string(),
             content: "rsx! { button { class: \"animate-bounce\", \"Click me!\" } }".to_string(),
-            tags: vec!["button".to_string(), "animation".to_string(), "interactive".to_string()],
+            tags: vec![
+                "button".to_string(),
+                "animation".to_string(),
+                "interactive".to_string(),
+            ],
         },
         Meme {
             id: "comp_002".to_string(),
@@ -333,10 +338,14 @@ fn get_memes() -> Vec<Meme> {
             description: "Rotating card components with smooth transitions".to_string(),
             category: MemeCategory::ComponentMemes,
             emoji: "🎠".to_string(),
-            content: "rsx! { div { class: \"transform rotate-3d\", \"Card content\" } }".to_string(),
-            tags: vec!["card".to_string(), "carousel".to_string(), "rotation".to_string()],
+            content: "rsx! { div { class: \"transform rotate-3d\", \"Card content\" } }"
+                .to_string(),
+            tags: vec![
+                "card".to_string(),
+                "carousel".to_string(),
+                "rotation".to_string(),
+            ],
         },
-        
         // Workflow Memes
         Meme {
             id: "work_001".to_string(),
@@ -345,7 +354,11 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::WorkflowMemes,
             emoji: "⚡".to_string(),
             content: "State: Loading -> Success -> Error -> Retry".to_string(),
-            tags: vec!["state".to_string(), "workflow".to_string(), "transitions".to_string()],
+            tags: vec![
+                "state".to_string(),
+                "workflow".to_string(),
+                "transitions".to_string(),
+            ],
         },
         Meme {
             id: "work_002".to_string(),
@@ -354,9 +367,12 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::WorkflowMemes,
             emoji: "🔄".to_string(),
             content: "Input -> Process -> Transform -> Output".to_string(),
-            tags: vec!["pipeline".to_string(), "data".to_string(), "processing".to_string()],
+            tags: vec![
+                "pipeline".to_string(),
+                "data".to_string(),
+                "processing".to_string(),
+            ],
         },
-        
         // Wikidata Memes
         Meme {
             id: "wiki_001".to_string(),
@@ -365,7 +381,11 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::WikidataMemes,
             emoji: "🕸️".to_string(),
             content: "Entity -> Property -> Value -> Reference".to_string(),
-            tags: vec!["knowledge".to_string(), "graph".to_string(), "entities".to_string()],
+            tags: vec![
+                "knowledge".to_string(),
+                "graph".to_string(),
+                "entities".to_string(),
+            ],
         },
         Meme {
             id: "wiki_002".to_string(),
@@ -374,9 +394,12 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::WikidataMemes,
             emoji: "🌐".to_string(),
             content: "Subject -> Predicate -> Object".to_string(),
-            tags: vec!["semantic".to_string(), "linked-data".to_string(), "rdf".to_string()],
+            tags: vec![
+                "semantic".to_string(),
+                "linked-data".to_string(),
+                "rdf".to_string(),
+            ],
         },
-        
         // Crypto Memes
         Meme {
             id: "crypto_001".to_string(),
@@ -394,9 +417,12 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::CryptoMemes,
             emoji: "💎".to_string(),
             content: "💎🙌 NEVER SELLING 💎🙌".to_string(),
-            tags: vec!["diamond".to_string(), "hands".to_string(), "holding".to_string()],
+            tags: vec![
+                "diamond".to_string(),
+                "hands".to_string(),
+                "holding".to_string(),
+            ],
         },
-        
         // Lean Memes
         Meme {
             id: "lean_001".to_string(),
@@ -405,7 +431,11 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::LeanMemes,
             emoji: "🤔".to_string(),
             content: "assume ¬P → ⊥ → P (but at what cost?)".to_string(),
-            tags: vec!["proof".to_string(), "contradiction".to_string(), "logic".to_string()],
+            tags: vec![
+                "proof".to_string(),
+                "contradiction".to_string(),
+                "logic".to_string(),
+            ],
         },
         Meme {
             id: "lean_002".to_string(),
@@ -414,9 +444,12 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::LeanMemes,
             emoji: "🍲".to_string(),
             content: "simp; ring; omega; tauto; sorry".to_string(),
-            tags: vec!["tactics".to_string(), "automation".to_string(), "sorry".to_string()],
+            tags: vec![
+                "tactics".to_string(),
+                "automation".to_string(),
+                "sorry".to_string(),
+            ],
         },
-        
         // Fun Memes
         Meme {
             id: "fun_001".to_string(),
@@ -425,7 +458,11 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::FunMemes,
             emoji: "🔥".to_string(),
             content: "🐕☕ \"This is fine\" 🔥🔥🔥".to_string(),
-            tags: vec!["fine".to_string(), "chaos".to_string(), "coffee".to_string()],
+            tags: vec![
+                "fine".to_string(),
+                "chaos".to_string(),
+                "coffee".to_string(),
+            ],
         },
         Meme {
             id: "fun_002".to_string(),
@@ -434,7 +471,11 @@ fn get_memes() -> Vec<Meme> {
             category: MemeCategory::FunMemes,
             emoji: "👀".to_string(),
             content: "Old Framework 😠 Me 👨 New Shiny Framework 😍".to_string(),
-            tags: vec!["distracted".to_string(), "technology".to_string(), "frameworks".to_string()],
+            tags: vec![
+                "distracted".to_string(),
+                "technology".to_string(),
+                "frameworks".to_string(),
+            ],
         },
     ]
 }

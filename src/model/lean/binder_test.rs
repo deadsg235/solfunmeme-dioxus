@@ -5,7 +5,6 @@
 mod tests {
     use crate::model::binder::BinderInfo;
 
-
     #[test]
     fn test_debug_trait() {
         let binder = BinderInfo::Default;

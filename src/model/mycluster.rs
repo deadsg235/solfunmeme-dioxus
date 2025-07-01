@@ -57,7 +57,7 @@ impl MyCluster {
             MyCluster::LocalNet => wallet_adapter::Cluster::LocalNet,
             MyCluster::SolfunmemeNet => wallet_adapter::Cluster::LocalNet,
         }
-    }   
+    }
     /// A Solana endpoint URI
     pub fn endpoint(&self) -> &str {
         match self {
@@ -65,7 +65,7 @@ impl MyCluster {
             MyCluster::DevNet => DEVNET_ENDPOINT,
             MyCluster::TestNet => TESTNET_ENDPOINT,
             MyCluster::LocalNet => LOCALNET_ENDPOINT,
-	    MyCluster::SolfunmemeNet => SOLFUNMEMENET_ENDPOINT,
+            MyCluster::SolfunmemeNet => SOLFUNMEMENET_ENDPOINT,
         }
     }
 
@@ -76,12 +76,9 @@ impl MyCluster {
             MyCluster::DevNet => DEVNET,
             MyCluster::TestNet => TESTNET,
             MyCluster::LocalNet => LOCALNET,
-	    MyCluster::SolfunmemeNet => SOLFUNMEMENET,
+            MyCluster::SolfunmemeNet => SOLFUNMEMENET,
         }
     }
-
-
-    
 }
 
 impl core::fmt::Display for MyCluster {
@@ -89,9 +86,6 @@ impl core::fmt::Display for MyCluster {
         write!(f, "{}", self.display())
     }
 }
-
-
-
 
 impl TryFrom<&str> for MyCluster {
     type Error = WalletError;

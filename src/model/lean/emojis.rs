@@ -2,8 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 use std::collections::HashMap;
 
-use crate::model::simple_expr::SimpleExprType;
-use crate::model::lean::level::level_to_string;
+use crate::model::{lean::level::level_to_string, simple_expr::SimpleExprType};
 
 // Define Rust structs to match the JSON schema
 #[derive(Debug, Deserialize, Serialize)]
@@ -71,7 +70,11 @@ pub struct Rule<'a> {
 }
 // Function to convert a Type node to an emoji string
 #[allow(dead_code)]
-pub fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&str, &str>) -> String {
+pub fn type_to_emoji(
+    typ: &SimpleExprType,
+    depth: usize,
+    emoji_map: &HashMap<&str, &str>,
+) -> String {
     let indent = "  ".repeat(depth);
     match typ {
         SimpleExprType::ForallE {
@@ -121,9 +124,14 @@ pub fn type_to_emoji(typ: &SimpleExprType, depth: usize, emoji_map: &HashMap<&st
             emoji_map.get("sort").unwrap_or(&"📏"),
             level_to_string(level)
         ),
-        SimpleExprType::BVar { .. } => format!("{}{}", indent, emoji_map.get("bvar").unwrap_or(&"📍")),
-        SimpleExprType::App { //func,
-             arg, fn_expr } => format!(
+        SimpleExprType::BVar { .. } => {
+            format!("{}{}", indent, emoji_map.get("bvar").unwrap_or(&"📍"))
+        }
+        SimpleExprType::App {
+            //func,
+            arg,
+            fn_expr,
+        } => format!(
             "{}{} (\n{}\n{}\n{})",
             indent,
             emoji_map.get("app").unwrap_or(&"➡️"),

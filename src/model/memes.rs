@@ -26,27 +26,27 @@ use dioxus::prelude::*;
 
 #[derive(Clone, Copy, PartialEq, Debug)]
 pub struct Expression {
-    pub astring: Signal<String>
-}   
-
-impl  Expression {
-    #[allow(dead_code)]
-   pub fn complexity () -> i32 {1}
-    
+    pub astring: Signal<String>,
 }
 
+impl Expression {
+    #[allow(dead_code)]
+    pub fn complexity() -> i32 {
+        1
+    }
+}
 
 #[derive(Clone, Copy, PartialEq)]
 #[allow(dead_code)]
 pub struct ExpressionListObj {
     pub expressions: Signal<Vec<Expression>>,
-}   
+}
 
 #[derive(Clone, PartialEq)]
 #[allow(dead_code)]
 pub struct ExpressionList {
     pub expressions: Vec<Expression>,
-}   
+}
 
 // ============================================================================
 // MONADS - Functional Programming Core

@@ -24,15 +24,17 @@ impl CodeVector {
         if self.dimensions.len() != other.dimensions.len() {
             return 0.0;
         }
-        
-        let dot_product: f32 = self.dimensions.iter()
+
+        let dot_product: f32 = self
+            .dimensions
+            .iter()
             .zip(other.dimensions.iter())
             .map(|(a, b)| a * b)
             .sum();
-            
+
         let norm_a: f32 = self.dimensions.iter().map(|x| x * x).sum::<f32>().sqrt();
         let norm_b: f32 = other.dimensions.iter().map(|x| x * x).sum::<f32>().sqrt();
-        
+
         if norm_a == 0.0 || norm_b == 0.0 {
             0.0
         } else {
@@ -52,13 +54,13 @@ impl CodeVectorizer {
 
     pub fn vectorize(&self, code: &str) -> CodeVector {
         let mut dimensions = vec![0.0; self.dimension_size];
-        
+
         // Simple hash-based vectorization
         for (i, byte) in code.bytes().enumerate() {
             let idx = (byte as usize + i) % self.dimension_size;
             dimensions[idx] += 1.0;
         }
-        
+
         // Normalize
         let sum: f32 = dimensions.iter().sum();
         if sum > 0.0 {
@@ -66,9 +68,8 @@ impl CodeVectorizer {
                 *dim /= sum;
             }
         }
-        
-        CodeVector::new(dimensions)
-            .with_metadata("length".to_string(), code.len().to_string())
+
+        CodeVector::new(dimensions).with_metadata("length".to_string(), code.len().to_string())
     }
 }
 

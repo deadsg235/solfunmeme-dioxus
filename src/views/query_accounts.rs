@@ -1,8 +1,7 @@
 //use crate::AccountState;
 use dioxus::prelude::*;
 
-use crate::views::accounts::TokenAccountCard;
-use crate::views::coins::QueryCoinDialog;
+use crate::views::{accounts::TokenAccountCard, coins::QueryCoinDialog};
 
 // Dialog state: open/closed, input address, loading, and fetched result
 #[component]

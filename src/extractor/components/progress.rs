@@ -13,7 +13,7 @@ pub fn ProcessingIndicator(processing_file: ReadOnlySignal<Option<ProcessingFile
                         "Progress: {pf.progress} / {pf.total_lines} lines ({((pf.progress as f32 / pf.total_lines as f32) * 100.0) as i32}%)"
                     }
                     div { class: "progress-bar",
-                        div { 
+                        div {
                             class: "progress-fill",
                             style: "width: {((pf.progress as f32 / pf.total_lines as f32) * 100.0)}%"
                         }
@@ -37,7 +37,7 @@ pub fn ProcessingIndicator(processing_file: ReadOnlySignal<Option<ProcessingFile
 //                             "Progress: {pf.progress} / {pf.total_lines} lines ({((pf.progress as f32 / pf.total_lines as f32) * 100.0) as i32}%)"
 //                         }
 //                         div { class: "progress-bar",
-//                             div { 
+//                             div {
 //                                 class: "progress-fill",
 //                                 style: "width: {((pf.progress as f32 / pf.total_lines as f32) * 100.0)}%"
 //                             }

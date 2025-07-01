@@ -1,11 +1,25 @@
 use dioxus::prelude::*;
 
 use crate::{
-    model::{storage::{ACTIVE_CONNECTION, CLUSTER_NET_STATE, GLOBAL_MESSAGE, WALLET_ADAPTER}, use_connections, ClusterNetState, NotificationInfo}, 
-    //trunk_cluster_name, 
-    utils::{copied_address, trunk_cluster_name}, ChangeWalletSvg, CloseSvg, ClustersSvg, CopySvg, DisconnectSvg, FetchReq, GradientWalletIcon, Loader, MenuSvg, Route, WalletSvg, LOGO
-    //NotificationInfo, Route, WalletSvg, ACTIVE_CONNECTION, CLUSTER_NET_STATE, CLUSTER_STORAGE,
-    //GLOBAL_MESSAGE, LOGO, WALLET_ADAPTER,
+    model::{
+        storage::{ACTIVE_CONNECTION, CLUSTER_NET_STATE, GLOBAL_MESSAGE, WALLET_ADAPTER},
+        use_connections, ClusterNetState, NotificationInfo,
+    },
+    //trunk_cluster_name,
+    utils::{copied_address, trunk_cluster_name},
+    ChangeWalletSvg,
+    CloseSvg,
+    ClustersSvg,
+    CopySvg,
+    DisconnectSvg,
+    FetchReq,
+    GradientWalletIcon,
+    Loader,
+    MenuSvg,
+    Route,
+    WalletSvg,
+    LOGO, //NotificationInfo, Route, WalletSvg, ACTIVE_CONNECTION, CLUSTER_NET_STATE, CLUSTER_STORAGE,
+          //GLOBAL_MESSAGE, LOGO, WALLET_ADAPTER,
 };
 
 #[component]
@@ -183,16 +197,15 @@ fn NavItem(route: fn() -> Route, text: &str) -> Element {
 }
 
 fn NavClusterItem() -> Element {
-
     let mut connections = use_connections("solana_wallet");
     let cluster_names = connections.get_entry_names();
-    let active_entry_name =  connections.active_entry().clone();
+    let active_entry_name = connections.active_entry().clone();
 
     rsx! {
         div{
             class:"flex w-full items-center justify-center md:w-[15%]",
             select{
-		name: "select_cluster",
+        name: "select_cluster",
                 onchange:move |event| {
                     let cluster_name = &event.data.value();
                     let cluster = connections.get_entry(cluster_name);
@@ -202,18 +215,18 @@ fn NavClusterItem() -> Element {
                         GLOBAL_MESSAGE.write().push_back(NotificationInfo::new(cluster_identifier));
                     }
 
-                    
+
                 },
                 class:"flex text-sm hover:bg-true-yonder bg-true-blue text-white rounded-full md:py-1 md:px-4 appearance-none text-center cursor-pointer",
                 for adapter_cluster in cluster_names {
 
 
-                    option {    
+                    option {
                         key:adapter_cluster.identifier().as_str(),
                         value: adapter_cluster.clone(),
-                        selected: active_entry_name == adapter_cluster,                                            
-                        
-                        { 
+                        selected: active_entry_name == adapter_cluster,
+
+                        {
                              let val = adapter_cluster.clone();
                             trunk_cluster_name(&val).to_string();
                         }
@@ -377,7 +390,7 @@ fn PingCluster() -> Element {
 
     if *CLUSTER_NET_STATE.read() == ClusterNetState::Failure {
         let active_entry2 = connections.active_entry().clone();
-        
+
         rsx! {
             div {class:"flex w-full justify-center min-h-[40px] bg-red-800 text-center items-center text-2xl justify-center items-center",
                 div{ class:"flex px-4 py-2 justify-center items-center",

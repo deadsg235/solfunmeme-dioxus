@@ -78,11 +78,10 @@ struct OurSourceViewWorkflow;
 
 use dioxus_logger::tracing::info;
 
-pub fn printall(){
-
+pub fn printall() {
     info!("PRINT ALL");
     for file in OurSource::iter() {
-	println!("{}", file.as_ref());
-	info!("print {}", file.as_ref());
+        println!("{}", file.as_ref());
+        info!("print {}", file.as_ref());
     }
 }

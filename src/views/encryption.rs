@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::model::lean::style::Styles;
+use dioxus::prelude::*;
 
 #[component]
 pub fn Encryption() -> Element {
@@ -10,4 +10,4 @@ pub fn Encryption() -> Element {
             p { class: "{Styles::p()}", "This section demonstrates encryption functionality." }
         }
     }
-} 
+}

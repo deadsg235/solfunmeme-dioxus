@@ -335,9 +335,9 @@ fn Status() -> Element {
                 class: "status-line",
                 style: "margin: 3px 0; display: flex; justify-content: space-between;",
                 span { "Monster Elements:" }
-                span { class: "status-value", 
+                span { class: "status-value",
                 style: "color: #00ffff; font-weight: bold;",
-                "8×10⁵³" 
+                "8×10⁵³"
             }
             }
             div {
@@ -392,4 +392,4 @@ fn init_three_js() {
     // Example: Call JavaScript functions to initialize Three.js scene
     println!("Initialize Three.js scene (placeholder)");
     // Actual implementation would require wasm-bindgen bindings to Three.js
-} 
+}

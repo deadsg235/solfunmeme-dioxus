@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 mod style;
-use style::*;
 use serde::{Deserialize, Serialize};
+use style::*;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowStep {
@@ -46,7 +46,8 @@ fn test_encryption_form_input() {
     // Verify inputs
     assert_eq!(title_input.value(), "Test Title");
     assert_eq!(message_input.value(), "Test Message");
-}"#.to_string(),
+}"#
+                .to_string(),
                 lean_proof: r#"
 theorem encryption_form_valid : 
   ∀ (title message : String) (keys : KeyPair),
@@ -56,7 +57,8 @@ begin
   intros title message keys h,
   existsi { title := title, message := message, keys := keys },
   split; refl
-end"#.to_string(),
+end"#
+                    .to_string(),
             },
             WorkflowStep {
                 emoji: "🔑".to_string(),
@@ -70,7 +72,8 @@ fn test_key_validation() {
     
     assert!(SolanaEncryption::is_valid_public_key(valid_key));
     assert!(!SolanaEncryption::is_valid_public_key(invalid_key));
-}"#.to_string(),
+}"#
+                .to_string(),
                 lean_proof: r#"
 theorem key_validation_sound :
   ∀ (key : String),
@@ -80,7 +83,8 @@ begin
   intros key h,
   existsi { value := key },
   refl
-end"#.to_string(),
+end"#
+                    .to_string(),
             },
             WorkflowStep {
                 emoji: "🔐".to_string(),
@@ -95,7 +99,8 @@ fn test_message_encryption() {
     let encrypted = SolanaEncryption::encrypt(message, key);
     assert!(encrypted.is_ok());
     assert!(encrypted.unwrap().len() > 0);
-}"#.to_string(),
+}"#
+                .to_string(),
                 lean_proof: r#"
 theorem encryption_preserves_message :
   ∀ (msg : String) (key : PublicKey),
@@ -105,7 +110,8 @@ begin
   intros msg key,
   existsi (encrypt msg key),
   apply encryption_correct
-end"#.to_string(),
+end"#
+                    .to_string(),
             },
             WorkflowStep {
                 emoji: "📨".to_string(),
@@ -119,7 +125,8 @@ fn test_message_transmission() {
     
     assert!(result.is_ok());
     assert_eq!(result.unwrap().status, "sent");
-}"#.to_string(),
+}"#
+                .to_string(),
                 lean_proof: r#"
 theorem transmission_preserves_payload :
   ∀ (payload : EncryptedPayload),
@@ -128,7 +135,8 @@ begin
   intros payload,
   existsi (transmit payload),
   apply transmission_correct
-end"#.to_string(),
+end"#
+                    .to_string(),
             },
             WorkflowStep {
                 emoji: "🔓".to_string(),
@@ -143,7 +151,8 @@ fn test_message_decryption() {
     let decrypted = SolanaEncryption::decrypt(payload, key);
     assert!(decrypted.is_ok());
     assert_eq!(decrypted.unwrap(), "Test Message");
-}"#.to_string(),
+}"#
+                .to_string(),
                 lean_proof: r#"
 theorem decryption_recovers_message :
   ∀ (payload : EncryptedPayload) (key : PrivateKey),
@@ -151,7 +160,8 @@ theorem decryption_recovers_message :
 begin
   intros payload key,
   apply encryption_decryption_inverse
-end"#.to_string(),
+end"#
+                    .to_string(),
             },
         ],
         test_result: "✅ All tests passed!".to_string(),
@@ -214,11 +224,11 @@ pub fn WorkflowMemeView(workflow: WorkflowMeme) -> Element {
 #[component]
 pub fn WorkflowMemeExplorer() -> Element {
     let encryption_workflow = get_encryption_workflow();
-    
+
     rsx! {
         div { class: WORKFLOW_EXPLORER,
             h1 { class: EXPLORER_TITLE, "Workflow Meme Explorer" }
             WorkflowMemeView { workflow: encryption_workflow }
         }
     }
-} 
+}

@@ -3,22 +3,22 @@ use serde::{Deserialize, Serialize};
 //#1. gcc asts, metacoq, lean4 dumper and rust procedureal macros and rust syn parsers produce expressions
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum MetaMemes {
-	Gcc,
+    Gcc,
     LLVM,
-	MetaCoq,
+    MetaCoq,
     Haskell,
     Coq,
     Ocaml,
     Lean4,
-    Rust,    
-    MetaMeme
+    Rust,
+    MetaMeme,
 }
 //2. we can import those asts as "memes" or meta-memes. They are syntactic forms.
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Meme {
-    typ : MetaMemes,
-    value : &'static str
+    typ: MetaMemes,
+    value: &'static str,
 }
 
 impl Meme {
@@ -37,21 +37,19 @@ pub const META_MEME: Meme = Meme {
 // 4. writing proofs and validating interpretations.
 #[allow(dead_code)]
 pub fn interpret(_m: Meme) {
-// #FIXME #8 continue
+    // #FIXME #8 continue
 }
 #[allow(dead_code)]
-pub fn prove(_m: Meme) {
-
-}
-// add two memes for context 
+pub fn prove(_m: Meme) {}
+// add two memes for context
 #[allow(dead_code)]
-pub fn context(_cx: Meme , _value: Meme) {}
+pub fn context(_cx: Meme, _value: Meme) {}
 
 // 6. the memes can be solana pdas, github issues, codeberg issues,
 // tweets, basically any rdf that we can construct.
 #[allow(dead_code)]
 pub enum MemeProviders {
-	GitHub,
+    GitHub,
     CodeBerg,
     Discord,
     GitGud,
@@ -61,7 +59,7 @@ pub enum MemeProviders {
     AwsCodeCommit,
     LocalGit,
     Twitter,
-    Telegram, 
+    Telegram,
     Matrix,
     Irc,
 }
@@ -71,41 +69,39 @@ pub fn fetch(_pr: MemeProviders, _url: String) -> Meme {
     unimplemented!()
 }
 
-// 5. creating llm content from the memes, expanding them. 
+// 5. creating llm content from the memes, expanding them.
 #[allow(dead_code)]
 pub enum LLMProviders {
-	GitHub,
-	OpenAI,
+    GitHub,
+    OpenAI,
     AWSBedrock,
     Google,
     XAi,
     Groq,
     Ollama,
-    OpenLightLLM
+    OpenLightLLM,
 }
 
 #[allow(dead_code)]
-pub fn expand(_prov:LLMProviders, _m: Meme) -> Meme {
-
-        Meme {
-            typ : MetaMemes::MetaMeme,
-            value : "fixme",
-        }
+pub fn expand(_prov: LLMProviders, _m: Meme) -> Meme {
+    Meme {
+        typ: MetaMemes::MetaMeme,
+        value: "fixme",
+    }
 }
 
-// 7. this structure should only have 8 layers and loop back on itself like bott periodicity. 
+// 7. this structure should only have 8 layers and loop back on itself like bott periodicity.
 
 #[allow(dead_code)]
-pub const ZOS1 : Meme = Meme {
+pub const ZOS1: Meme = Meme {
     typ: MetaMemes::MetaMeme,
-    value : "ZOS1=[0,1,2,3,5,7,11,13]"
+    value: "ZOS1=[0,1,2,3,5,7,11,13]",
 };
 
 #[allow(dead_code)]
-pub const ZOS1_ARRAY : [i32; 8] = [0, 1, 2, 3, 5, 7, 11, 13];
+pub const ZOS1_ARRAY: [i32; 8] = [0, 1, 2, 3, 5, 7, 11, 13];
 
-// 
-
+//
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum MemeUniverse {

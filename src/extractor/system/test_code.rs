@@ -12,34 +12,37 @@ pub fn test_code_snippet_old(snippet: &mut CodeSnippet) {
                 snippet.test_result = Some(TestResult {
                     passed: true,
                     error_message: None,
-		    output,
+                    output,
                     execution_time: Some(start_time.elapsed()),
                 });
             } else {
                 snippet.test_result = Some(TestResult {
                     passed: false,
                     error_message: Some("No function or variable declarations found".to_string()),
-		    execution_time: Some(start_time.elapsed()),
-		    output,
+                    execution_time: Some(start_time.elapsed()),
+                    output,
                 });
             }
         }
         "javascript" | "js" => {
             // For JavaScript, we could use a JS engine
             // For now, just check for basic syntax
-            if snippet.content.contains("function") || snippet.content.contains("const ") || snippet.content.contains("let ") {
+            if snippet.content.contains("function")
+                || snippet.content.contains("const ")
+                || snippet.content.contains("let ")
+            {
                 snippet.test_result = Some(TestResult {
                     passed: true,
                     error_message: None,
                     execution_time: Some(start_time.elapsed()),
-		    output,
+                    output,
                 });
             } else {
                 snippet.test_result = Some(TestResult {
                     passed: false,
                     error_message: Some("No function or variable declarations found".to_string()),
                     execution_time: Some(start_time.elapsed()),
-		    output,
+                    output,
                 });
             }
         }
@@ -49,59 +52,61 @@ pub fn test_code_snippet_old(snippet: &mut CodeSnippet) {
                 passed: false,
                 error_message: Some("Language not supported for testing".to_string()),
                 execution_time: Some(start_time.elapsed()),
-		output,
+                output,
             });
         }
     }
 }
 
 /// Tests a code snippet by attempting to compile/execute it.  
-pub fn test_code_snippet(snippet: &mut CodeSnippet) {  
-    let start_time = std::time::Instant::now();  
-    let output = None;      
-    match snippet.language.as_str() {  
-        "rust" => {  
-            if snippet.content.contains("fn ") || snippet.content.contains("let ") {  
-                snippet.test_result = Some(TestResult {  
-                    passed: true,  
-                    error_message: None,  
+pub fn test_code_snippet(snippet: &mut CodeSnippet) {
+    let start_time = std::time::Instant::now();
+    let output = None;
+    match snippet.language.as_str() {
+        "rust" => {
+            if snippet.content.contains("fn ") || snippet.content.contains("let ") {
+                snippet.test_result = Some(TestResult {
+                    passed: true,
+                    error_message: None,
                     execution_time: Some(start_time.elapsed()),
-		    output,
-                });  
-            } else {  
-                snippet.test_result = Some(TestResult {  
-                    passed: false,  
-                    error_message: Some("No function or variable declarations found".to_string()),  
+                    output,
+                });
+            } else {
+                snippet.test_result = Some(TestResult {
+                    passed: false,
+                    error_message: Some("No function or variable declarations found".to_string()),
                     execution_time: Some(start_time.elapsed()),
-		    output,
-                });  
-            }  
-        }  
-        "javascript" | "js" => {  
-            if snippet.content.contains("function") || snippet.content.contains("const ") || snippet.content.contains("let ") {  
-                snippet.test_result = Some(TestResult {  
-                    passed: true,  
-                    error_message: None,  
+                    output,
+                });
+            }
+        }
+        "javascript" | "js" => {
+            if snippet.content.contains("function")
+                || snippet.content.contains("const ")
+                || snippet.content.contains("let ")
+            {
+                snippet.test_result = Some(TestResult {
+                    passed: true,
+                    error_message: None,
                     execution_time: Some(start_time.elapsed()),
-		    output,
-                });  
-            } else {  
-                snippet.test_result = Some(TestResult {  
-                    passed: false,  
-                    error_message: Some("No function or variable declarations found".to_string()),  
+                    output,
+                });
+            } else {
+                snippet.test_result = Some(TestResult {
+                    passed: false,
+                    error_message: Some("No function or variable declarations found".to_string()),
                     execution_time: Some(start_time.elapsed()),
-		    output,
-                });  
-            }  
-        }  
-        _ => {  
-            snippet.test_result = Some(TestResult {  
-                passed: false,  
-                error_message: Some("Language not supported for testing".to_string()),  
+                    output,
+                });
+            }
+        }
+        _ => {
+            snippet.test_result = Some(TestResult {
+                passed: false,
+                error_message: Some("Language not supported for testing".to_string()),
                 execution_time: Some(start_time.elapsed()),
-		output,
-            });  
-        }  
-    }  
-}  
-
+                output,
+            });
+        }
+    }
+}

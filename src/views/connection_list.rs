@@ -1,17 +1,16 @@
+use crate::model::use_connections;
 use dioxus::prelude::*;
-use crate::model::{use_connections};
 #[allow(dead_code)]
-fn list_connections(
-    // connections: &UseConnections,
+fn list_connections(// connections: &UseConnections,
     //filtered_connections: &Vec<Connection>, //, connections: &UseConnections
 ) -> Element {
     let connections = use_connections("solana_wallet");
     rsx! {
         div { class: "divide-y divide-gray-200 dark:divide-gray-700",
 
-              
+
               for conn in connections.get_all_entries() {
-		  //for conn in filtered_connections {
+          //for conn in filtered_connections {
                   { web_sys::console::log_1(&wasm_bindgen::JsValue::from_str(&format!("conn: {}", conn.name))); }
                   div { class: "p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors",
                         div { class: "flex items-center justify-between",
@@ -35,7 +34,7 @@ fn list_connections(
                                             let conn_name = conn.name.clone();
                                             let mut connections = use_connections("solana_wallet");
                                             let res = connections.remove_entry(&conn_name);
-                                            drop(res);                                          
+                                            drop(res);
 
                                         },
                                         "Delete"

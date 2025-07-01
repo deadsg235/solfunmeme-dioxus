@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::embedself::*;
+use dioxus::prelude::*;
 //shemod source_browser_style;
 
 #[component]
@@ -52,29 +52,103 @@ pub fn SourceBrowser() -> Element {
         _ => vec![],
     };
 
-    let file_content = selected_file().and_then(|filename| {
-        match selected_module().as_str() {
-            "src" => OurSource::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/bin" => OurSourceBin::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/extractor" => OurSourceExtractor::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/extractor/components" => OurSourceExtractorComponents::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/extractor/model" => OurSourceExtractorModel::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/extractor/system" => OurSourceExtractorSystem::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/model" => OurSourceModel::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/model/git" => OurSourceModelGit::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/model/lean" => OurSourceModelLean::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/model/lean/types" => OurSourceModelLeanTypes::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/model/math" => OurSourceModeMath::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/playground" => OurSourcePlayground::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/state" => OurSourceState::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/views" => OurSourceView::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/views/component_memes" => OurSourceViewComponent::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/views/crypto_frontend" => OurSourceViewCrypto::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/views/extras_views" => OurSourceViewextra::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/views/wikidata_memes" => OurSourceViewWikwidata::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            "src/views/workflow_memes" => OurSourceViewWorkflow::get(&filename).map(|f| std::str::from_utf8(&f.data).unwrap_or("Binary file").to_string()),
-            _ => None,
-        }
+    let file_content = selected_file().and_then(|filename| match selected_module().as_str() {
+        "src" => OurSource::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/bin" => OurSourceBin::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/extractor" => OurSourceExtractor::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/extractor/components" => OurSourceExtractorComponents::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/extractor/model" => OurSourceExtractorModel::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/extractor/system" => OurSourceExtractorSystem::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/model" => OurSourceModel::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/model/git" => OurSourceModelGit::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/model/lean" => OurSourceModelLean::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/model/lean/types" => OurSourceModelLeanTypes::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/model/math" => OurSourceModeMath::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/playground" => OurSourcePlayground::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/state" => OurSourceState::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/views" => OurSourceView::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/views/component_memes" => OurSourceViewComponent::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/views/crypto_frontend" => OurSourceViewCrypto::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/views/extras_views" => OurSourceViewextra::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/views/wikidata_memes" => OurSourceViewWikwidata::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        "src/views/workflow_memes" => OurSourceViewWorkflow::get(&filename).map(|f| {
+            std::str::from_utf8(&f.data)
+                .unwrap_or("Binary file")
+                .to_string()
+        }),
+        _ => None,
     });
 
     rsx! {
@@ -147,10 +221,7 @@ fn FileList(
 }
 
 #[component]
-fn FileViewer(
-    file_content: Option<String>,
-    selected_file: Signal<Option<String>>,
-) -> Element {
+fn FileViewer(file_content: Option<String>, selected_file: Signal<Option<String>>) -> Element {
     rsx! {
         if let Some(content) = file_content {
             div { class: "file-viewer",

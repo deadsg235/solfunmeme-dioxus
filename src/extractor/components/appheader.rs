@@ -6,4 +6,3 @@ pub fn ExtractorAppHeader() -> Element {
         p { "Upload markdown files to extract and copy code snippets with ease" }
     }
 }
-

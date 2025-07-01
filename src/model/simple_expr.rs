@@ -1,12 +1,12 @@
 // Simple expression types and constructors for Lean 4 expressions
 // This module provides types and constructors for representing Lean 4 expressions in Rust.
 //use std::collections::HashMap;
-use serde::Serialize;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 //use crate::model::binder::BinderInfo;
-use crate::model::binder::BinderInfoData;
-use crate::model::level::Level;
-use crate::model::level::*;
+use crate::model::{
+    binder::BinderInfoData,
+    level::{Level, *},
+};
 //use crate::model::simple_expr;
 
 /// Represents a bound variable in Lean 4 expressions
@@ -34,7 +34,7 @@ pub struct CnstInf {
     pub forbd: Forbd,
     pub binderName: String,
     pub binderInfo: String,
-}  
+}
 
 /// Represents constant information with snake_case naming
 #[derive(Debug, Clone, PartialEq)]
@@ -78,8 +78,6 @@ pub struct Foo {
 // Rust translation of the SimpleExpr type and its recursor
 // Based on the Lean 4 JSON representation
 
-
-
 // Equivalent to Lean's Name type
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[allow(dead_code)]
@@ -91,7 +89,6 @@ pub enum Name {
 
 // Equivalent to Lean's BinderInfo
 
-
 // The main SimpleExpr type (inductive type from Lean)
 #[derive(Debug, Clone, PartialEq)]
 #[allow(dead_code)]
@@ -100,7 +97,7 @@ pub enum SimpleExpr {
     BVar {
         index: u64,
     },
-    
+
     // Sort (Type universe)
     Sort {
         level: Level,
@@ -111,26 +108,26 @@ pub enum SimpleExpr {
         name: Name,
         levels: Vec<Level>,
     },
-    
+
     // Function application
     App {
         func: Box<SimpleExpr>,
         arg: Box<SimpleExpr>,
     },
-    
+
     // Lambda abstraction
     Lam {
         binder_name: Name,
-	//#[serde(rename = "binderType")]
+        //#[serde(rename = "binderType")]
         binder_type: Box<SimpleExpr>,
         body: Box<SimpleExpr>,
         binder_info: BinderInfoData,
     },
-    
+
     // Dependent product (Pi type / forall)
     ForallE {
         binder_name: Name,
-//	#[serde(rename = "binderType")]
+        //	#[serde(rename = "binderType")]
         binder_type: Box<SimpleExpr>,
         body: Box<SimpleExpr>,
         binder_info: BinderInfoData,
@@ -163,36 +160,84 @@ impl SimpleExpr {
             SimpleExpr::Const { name, levels } => const_case(name, levels),
             SimpleExpr::App { func, arg } => {
                 let func_ih = func.rec(
-                    bvar_case.clone(), sort_case.clone(), const_case.clone(),
-                    app_case.clone(), lam_case.clone(), forall_case.clone()
+                    bvar_case.clone(),
+                    sort_case.clone(),
+                    const_case.clone(),
+                    app_case.clone(),
+                    lam_case.clone(),
+                    forall_case.clone(),
                 );
                 let arg_ih = arg.rec(
-                    bvar_case.clone(), sort_case.clone(), const_case.clone(),
-                    app_case.clone(), lam_case.clone(), forall_case.clone()
+                    bvar_case.clone(),
+                    sort_case.clone(),
+                    const_case.clone(),
+                    app_case.clone(),
+                    lam_case.clone(),
+                    forall_case.clone(),
                 );
                 app_case(func, arg, func_ih, arg_ih)
             }
-            SimpleExpr::Lam { binder_name, binder_type, body, binder_info } => {
+            SimpleExpr::Lam {
+                binder_name,
+                binder_type,
+                body,
+                binder_info,
+            } => {
                 let binder_type_ih = binder_type.rec(
-                    bvar_case.clone(), sort_case.clone(), const_case.clone(),
-                    app_case.clone(), lam_case.clone(), forall_case.clone()
+                    bvar_case.clone(),
+                    sort_case.clone(),
+                    const_case.clone(),
+                    app_case.clone(),
+                    lam_case.clone(),
+                    forall_case.clone(),
                 );
                 let body_ih = body.rec(
-                    bvar_case, sort_case, const_case,
-                    app_case, lam_case.clone(), forall_case.clone()
+                    bvar_case,
+                    sort_case,
+                    const_case,
+                    app_case,
+                    lam_case.clone(),
+                    forall_case.clone(),
                 );
-                lam_case(binder_name, binder_type, body, binder_info, binder_type_ih, body_ih)
+                lam_case(
+                    binder_name,
+                    binder_type,
+                    body,
+                    binder_info,
+                    binder_type_ih,
+                    body_ih,
+                )
             }
-            SimpleExpr::ForallE { binder_name, binder_type, body, binder_info } => {
+            SimpleExpr::ForallE {
+                binder_name,
+                binder_type,
+                body,
+                binder_info,
+            } => {
                 let binder_type_ih = binder_type.rec(
-                    bvar_case.clone(), sort_case.clone(), const_case.clone(),
-                    app_case.clone(), lam_case.clone(), forall_case.clone()
+                    bvar_case.clone(),
+                    sort_case.clone(),
+                    const_case.clone(),
+                    app_case.clone(),
+                    lam_case.clone(),
+                    forall_case.clone(),
                 );
                 let body_ih = body.rec(
-                    bvar_case, sort_case, const_case,
-                    app_case, lam_case, forall_case.clone()
+                    bvar_case,
+                    sort_case,
+                    const_case,
+                    app_case,
+                    lam_case,
+                    forall_case.clone(),
                 );
-                forall_case(binder_name, binder_type, body, binder_info, binder_type_ih, body_ih)
+                forall_case(
+                    binder_name,
+                    binder_type,
+                    body,
+                    binder_info,
+                    binder_type_ih,
+                    body_ih,
+                )
             }
         }
     }
@@ -220,12 +265,18 @@ impl SimpleExpr {
             SimpleExpr::Sort { level } => sort_case(level),
             SimpleExpr::Const { name, levels } => const_case(name, levels),
             SimpleExpr::App { func, arg } => app_case(func, arg),
-            SimpleExpr::Lam { binder_name, binder_type, body, binder_info } => {
-                lam_case(binder_name, binder_type, body, binder_info)
-            },
-            SimpleExpr::ForallE { binder_name, binder_type, body, binder_info } => {
-                forall_case(binder_name, binder_type, body, binder_info)
-            },
+            SimpleExpr::Lam {
+                binder_name,
+                binder_type,
+                body,
+                binder_info,
+            } => lam_case(binder_name, binder_type, body, binder_info),
+            SimpleExpr::ForallE {
+                binder_name,
+                binder_type,
+                body,
+                binder_info,
+            } => forall_case(binder_name, binder_type, body, binder_info),
         }
     }
 }
@@ -257,7 +308,12 @@ impl SimpleExpr {
     }
     #[allow(dead_code)]
     // Create a lambda
-    pub fn lam(name: Name, binder_type: SimpleExpr, body: SimpleExpr, info: BinderInfoData) -> Self {
+    pub fn lam(
+        name: Name,
+        binder_type: SimpleExpr,
+        body: SimpleExpr,
+        info: BinderInfoData,
+    ) -> Self {
         SimpleExpr::Lam {
             binder_name: name,
             binder_type: Box::new(binder_type),
@@ -267,7 +323,12 @@ impl SimpleExpr {
     }
     #[allow(dead_code)]
     // Create a forall (Pi type)
-    pub fn forall_e(name: Name, binder_type: SimpleExpr, body: SimpleExpr, info: BinderInfoData) -> Self {
+    pub fn forall_e(
+        name: Name,
+        binder_type: SimpleExpr,
+        body: SimpleExpr,
+        info: BinderInfoData,
+    ) -> Self {
         SimpleExpr::ForallE {
             binder_name: name,
             binder_type: Box::new(binder_type),
@@ -275,17 +336,20 @@ impl SimpleExpr {
             binder_info: info,
         }
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     // Helper method to create a simple function type
     pub fn arrow(domain: SimpleExpr, codomain: SimpleExpr) -> Self {
         Self::forall_e(
             Name::anonymous(),
             domain,
             codomain,
-            BinderInfoData { implicit: false, strict: false },
+            BinderInfoData {
+                implicit: false,
+                strict: false,
+            },
         )
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     // Helper method to create a simple lambda with anonymous binder
     pub fn lambda(binder_type: SimpleExpr, body: SimpleExpr) -> Self {
         Self::lam(
@@ -299,8 +363,7 @@ impl SimpleExpr {
 
 //#[cfg(test)]
 mod tests {
-    
-    
+
     #[test]
     fn test_simple_expr_construction() {
         // Create a simple expression: λx: Type, x
@@ -312,17 +375,17 @@ mod tests {
             x_var,
             BinderInfoData::default(),
         );
-        
+
         // Test pattern matching
         let result = identity.match_expr(
             |_| "bvar",
-            |_| "sort", 
+            |_| "sort",
             |_, _| "const",
             |_, _| "app",
             |_, _, _, _| "lambda",
             |_, _, _, _| "forall",
         );
-        
+
         assert_eq!(result, "lambda");
     }
 }
@@ -359,11 +422,11 @@ pub enum SimpleExprType<'a> {
     },
     Const {
         levels: Vec<Level>,
-	#[serde(rename = "declName")]
+        #[serde(rename = "declName")]
         decl_name: std::borrow::Cow<'a, str>,
     },
     App {
-	#[serde(rename = "fn")]
+        #[serde(rename = "fn")]
         fn_expr: Box<SimpleExprType<'a>>,
         arg: Box<SimpleExprType<'a>>,
     },
@@ -373,21 +436,21 @@ pub enum SimpleExprType<'a> {
         forbd_b: Option<Box<SimpleExprType<'a>>>,
         forbd: Option<Box<SimpleExprType<'a>>>,
 
-	#[serde(rename = "binderName")]
-	binder_name: std::borrow::Cow<'a, str>,
+        #[serde(rename = "binderName")]
+        binder_name: std::borrow::Cow<'a, str>,
 
-	#[serde(rename = "binderInfo")]
+        #[serde(rename = "binderInfo")]
         binder_info: std::borrow::Cow<'a, str>,
     },
     Lam {
-	#[serde(rename = "binderName")]
+        #[serde(rename = "binderName")]
         binder_name: std::borrow::Cow<'a, str>,
 
-	#[serde(rename = "binderType")]
+        #[serde(rename = "binderType")]
         binder_type: Box<SimpleExprType<'a>>,
         body: Box<SimpleExprType<'a>>,
 
-	#[serde(rename = "binderInfo")]
+        #[serde(rename = "binderInfo")]
         binder_info: std::borrow::Cow<'a, str>,
     },
 }
@@ -397,7 +460,7 @@ impl<'a> SimpleExprType<'a> {
         SimpleExprType::BVar { index: Some(0) }
     }
 }
-    
+
 #[allow(dead_code)]
 // Convert the JSON chunk 1 into a Rust value at runtime (not a const)
 pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
@@ -440,10 +503,7 @@ pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
                 forbd_b: some_box(SimpleExprType::ForallE {
                     forbndr_typ: some_box(SimpleExprType::ForallE {
                         forbndr_typ: some_box(SimpleExprType::Const {
-                            levels: vec![
-                                LEVEL_U2F(),
-                                LEVEL_U3F(),
-                            ],
+                            levels: vec![LEVEL_U2F(), LEVEL_U3F()],
                             decl_name: std::borrow::Cow::Borrowed("Level"),
                         }),
                         forbndr_typ_b: None,
@@ -493,8 +553,7 @@ pub fn simple_expr_rec_chunk1<'a>() -> SimpleExprType<'a> {
 
 //#[cfg(test)]
 mod tests2 {
-    
-    
+
     #[test]
     fn test_chunk1_structure() {
         // Test that the structure compiles and can be accessed
@@ -536,7 +595,13 @@ impl Forbd2 {
 
 impl CnstInf {
     #[allow(dead_code)]
-    pub fn new(levels: Vec<Level>, decl_name: String, forbd: Forbd, binder_name: String, binder_info: String) -> Self {
+    pub fn new(
+        levels: Vec<Level>,
+        decl_name: String,
+        forbd: Forbd,
+        binder_name: String,
+        binder_info: String,
+    ) -> Self {
         Self {
             levels,
             declName: decl_name,
@@ -549,7 +614,13 @@ impl CnstInf {
 
 impl CnstInf2 {
     #[allow(dead_code)]
-    pub fn new(levels: Vec<Level>, decl_name: String, forbd: Forbd, binder_name: String, binder_info: String) -> Self {
+    pub fn new(
+        levels: Vec<Level>,
+        decl_name: String,
+        forbd: Forbd,
+        binder_name: String,
+        binder_info: String,
+    ) -> Self {
         Self {
             levels,
             decl_name,
@@ -562,7 +633,12 @@ impl CnstInf2 {
 
 impl Sig {
     #[allow(dead_code)]
-    pub fn new(atype: String, forbndr_typ_b: String, binder_name: String, binder_info: String) -> Self {
+    pub fn new(
+        atype: String,
+        forbndr_typ_b: String,
+        binder_name: String,
+        binder_info: String,
+    ) -> Self {
         Self {
             atype,
             forbndrTypB: forbndr_typ_b,
@@ -574,7 +650,12 @@ impl Sig {
 
 impl Sig2 {
     #[allow(dead_code)]
-    pub fn new(atype: String, forbndr_typ_b: String, binder_name: String, binder_info: String) -> Self {
+    pub fn new(
+        atype: String,
+        forbndr_typ_b: String,
+        binder_name: String,
+        binder_info: String,
+    ) -> Self {
         Self {
             atype,
             forbndr_typ_b,
@@ -598,10 +679,7 @@ impl Foo {
 impl CnstInfB {
     #[allow(dead_code)]
     pub fn new(sig: Sig, cnst_inf: CnstInf) -> Self {
-        Self {
-            sig,
-            cnst_inf,
-        }
+        Self { sig, cnst_inf }
     }
 }
 
@@ -618,10 +696,7 @@ impl CnstInfB2 {
 impl Foo2 {
     #[allow(dead_code)]
     pub fn new(akind: String, cnst_inf_b: CnstInfB) -> Self {
-        Self {
-            akind,
-            cnst_inf_b,
-        }
+        Self { akind, cnst_inf_b }
     }
 }
 
@@ -630,15 +705,15 @@ impl Name {
     pub fn anonymous() -> Self {
         Self::Anonymous
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn str(name: Name, string: String) -> Self {
         Self::Str(Box::new(name), string)
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn num(name: Name, num: u64) -> Self {
         Self::Num(Box::new(name), num)
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn from_string(s: String) -> Self {
         Self::Str(Box::new(Self::Anonymous), s)
     }
@@ -689,7 +764,7 @@ impl<'a> SimpleExprType<'a> {
             binder_info: std::borrow::Cow::Borrowed(binder_info),
         }
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn lam(
         binder_name: &'a str,
         binder_type: SimpleExprType<'a>,
@@ -704,5 +779,3 @@ impl<'a> SimpleExprType<'a> {
         }
     }
 }
-
-

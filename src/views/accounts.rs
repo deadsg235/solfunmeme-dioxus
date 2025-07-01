@@ -1,16 +1,6 @@
 use dioxus::prelude::*;
 //use wallet_adapter::Cluster;
 
-use crate::{
-//    format_timestamp, model::{storage::{ACCOUNT_STATE, ACTIVE_CONNECTION, CLUSTER_NET_STATE, GLOBAL_MESSAGE, LOADING}, use_connections, AccountState, ClusterNetState, NotificationInfo}, utils::{format_address_url, format_tx_url, get_cluster_svg, link_target_blank, trunk_cluster_name}, views::{airdrop::Airdrop, connect_first::ConnectWalletFirst, query_accounts::QueryAccountDialog, receive_sol::ReceiveSol, send_sol::SendSol}, AirdropSvg, AtaSvg, BalanceSvg, CheckSvg, ErrorSvg, Loader, MintSvg, ReceiveSvg, SendSvg, SignatureSvg, TimestampSvg, UserSvg, WalletSvg 
-    //trunk_cluster_name,
-     //utils::{format_address_url, format_tx_url, get_cluster_svg, link_target_blank, trunk_cluster_name}, views::{QueryAccountDialog, ReceiveSol, SendSol}, Airdrop, AirdropSvg, AtaSvg, BalanceSvg, CheckSvg, ErrorSvg, Loader, MintSvg, NotificationInfo, ReceiveSvg, SendSvg, SignatureSvg, TimestampSvg, UserSvg, WalletSvg
-};
-
-
-
-
-
 #[component]
 pub fn Accounts() -> Element {
     let mut address = String::default();
@@ -81,7 +71,7 @@ pub fn ClusterSuccess(
 
     let connections = use_connections("solana_wallet");
     let active_cluster_name = connections.active_entry();
-    
+
     rsx! {
         div {class:"flex w-full h-full mt-4 mb-10 flex-col items-center",
             div {
@@ -194,7 +184,7 @@ pub fn ClusterSuccess(
         SendSol{show_send_modal}
     QueryAccountDialog{show_query_dialog}
         ReceiveSol{show_receive_modal}
-	if connections.supports_airdrop(&active_cluster_name){
+    if connections.supports_airdrop(&active_cluster_name){
             Airdrop{show_airdrop_modal}
         }
     }
@@ -231,7 +221,7 @@ pub fn TokenAccountCard(
             div { class: "flex flex-col w-full",
                 div { class: "flex w-full items-start flex-col mt-2.5",
                     div {class:"w-full justify-between  flex",
-                        div { 
+                        div {
                             id: "cluster-chain",
                             class: "bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
                             {cluster.cluster.toCluster().chain()}
@@ -309,13 +299,13 @@ pub fn TxCard(
             div { class: "flex flex-col w-full",
                 div { class: "flex w-full items-start flex-col mt-2.5",
                     div {class:"w-full justify-between items-start  flex",
-                        div { 
+                        div {
                             id: "cluster-chain-2",
                             class: "flex bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
                             {cluster.chain()}
                         }
                         if let Some(state_inner) = state {
-                            div { 
+                            div {
                                 id: "cluster-state-2",
                                 class: "flex bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
                                 {state_inner.to_uppercase()}

@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
-use dioxus::launch;
 use crate::playground::app::PlaygroundApp;
-mod views;
+use dioxus::launch;
 mod model;
+mod views;
 use model::*;
 mod header;
 mod utils;
@@ -12,22 +12,21 @@ pub(crate) use svg_assets::*;
 mod fetch_util;
 pub(crate) use fetch_util::*;
 mod app;
-pub(crate) use app::LOGO;
-pub(crate) use app::Route;
-use crate::{    model::NotificationInfo };
+use crate::model::NotificationInfo;
+pub(crate) use app::{Route, LOGO};
 mod password_manager;
 
-pub mod fetch_parser;
-pub mod state;
-pub mod playground;
 pub mod extractor;
+pub mod fetch_parser;
+pub mod playground;
+pub mod state;
 
-pub mod embedself;
 pub mod core;
+pub mod embedself;
 
 fn main() {
     // Use the memes App component from views
     embedself::printall();
-    
+
     launch(PlaygroundApp);
 }

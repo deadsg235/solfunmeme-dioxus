@@ -1,7 +1,6 @@
-use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
-use serde::Serialize;
-use serde::Deserialize;
 use crate::model::mycluster::MyCluster;
+use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
+use serde::{Deserialize, Serialize};
 //use crate::model::Connection;
 use wallet_adapter::Cluster;
 
@@ -44,23 +43,23 @@ impl AdapterCluster {
         self.endpoint.as_str()
     }
 
-//    pub fn identifier(&self) -> String {
-//         self.to_string()
-//    }
+    //    pub fn identifier(&self) -> String {
+    //         self.to_string()
+    //    }
 
-     pub fn query_string(&self) -> String {
-         if self.name.as_bytes() == self.cluster.to_string().as_bytes()
-             && self.cluster != MyCluster::LocalNet
-         {
-             String::new() + "?cluster=" + self.cluster.to_string().as_str()
-         } else {
-             String::new()
-                 + "?cluster=custom&customUrl="
-                 + utf8_percent_encode(self.endpoint.as_str(), NON_ALPHANUMERIC)
-                     .to_string()
-                     .as_str()
-         }
-     }
+    pub fn query_string(&self) -> String {
+        if self.name.as_bytes() == self.cluster.to_string().as_bytes()
+            && self.cluster != MyCluster::LocalNet
+        {
+            String::new() + "?cluster=" + self.cluster.to_string().as_str()
+        } else {
+            String::new()
+                + "?cluster=custom&customUrl="
+                + utf8_percent_encode(self.endpoint.as_str(), NON_ALPHANUMERIC)
+                    .to_string()
+                    .as_str()
+        }
+    }
 
     pub fn devnet() -> Self {
         AdapterCluster {
@@ -96,10 +95,9 @@ impl AdapterCluster {
 
     // Mask sensitive parts of the endpoint for display
     pub fn masked_endpoint(&self) -> String {
-        let name :&  str = self.name.as_str();
-        let clst : MyCluster = name.try_into()
-            .unwrap_or_else(|_|MyCluster::LocalNet); // Default to LocalNet if conversion fails     
-            
+        let name: &str = self.name.as_str();
+        let clst: MyCluster = name.try_into().unwrap_or_else(|_| MyCluster::LocalNet); // Default to LocalNet if conversion fails
+
         AdapterCluster {
             name: self.name.clone(),
             endpoint: self.endpoint.clone(),
@@ -120,7 +118,6 @@ impl std::fmt::Display for AdapterCluster {
         write!(f, "{}", self.cluster.display())
     }
 }
-
 
 impl AdapterCluster {
     // Mask sensitive parts of the URL for display
@@ -189,7 +186,7 @@ impl AdapterCluster {
                 if let Some(scheme_end) = self.endpoint.find("://") {
                     let scheme_part = &self.endpoint[..scheme_end + 3];
                     let after_at = &self.endpoint[at_pos..];
-                    format!("{scheme_part}***{after_at}" )
+                    format!("{scheme_part}***{after_at}")
                 } else {
                     self.endpoint.clone()
                 }
@@ -201,4 +198,3 @@ impl AdapterCluster {
         }
     }
 }
-

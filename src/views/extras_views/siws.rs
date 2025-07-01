@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE, WALLET_ADAPTER} ;
+use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE, WALLET_ADAPTER};
 
 //use crate::{
 //    ErrorSvg, MintSvg, NotificationInfo, SiwsSvg, TimestampSvg, UserSvg, };

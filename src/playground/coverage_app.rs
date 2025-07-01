@@ -56,11 +56,7 @@ pub fn CoverageApp() -> Element {
                     .2
                     .partial_cmp(&b.functions.2)
                     .unwrap_or(Ordering::Equal),
-                SortColumn::Lines => a
-                    .lines
-                    .2
-                    .partial_cmp(&b.lines.2)
-                    .unwrap_or(Ordering::Equal),
+                SortColumn::Lines => a.lines.2.partial_cmp(&b.lines.2).unwrap_or(Ordering::Equal),
                 SortColumn::Branches => a
                     .branches
                     .2
@@ -194,7 +190,11 @@ fn coverage_class(coverage: f64) -> &'static str {
     }
 }
 
-fn sort_indicator(column: SortColumn, current_column: SortColumn, direction: SortDirection) -> Element {
+fn sort_indicator(
+    column: SortColumn,
+    current_column: SortColumn,
+    direction: SortDirection,
+) -> Element {
     if column == current_column {
         rsx! {
             span { class: "ml-1",
@@ -215,17 +215,17 @@ fn toggle_sort(
     mut sort_direction: Signal<SortDirection>,
 ) {
     if *sort_column.read() == column {
-	let new_direction = match *sort_direction.read() {
-             SortDirection::Ascending => SortDirection::Descending,
-             SortDirection::Descending => SortDirection::Ascending,
-         };
+        let new_direction = match *sort_direction.read() {
+            SortDirection::Ascending => SortDirection::Descending,
+            SortDirection::Descending => SortDirection::Ascending,
+        };
         sort_direction.set(new_direction);
-	
-	//sort_direction.set(match *sort_direction.read() {
-//        sort_direction.write_with(|dir| match dir {
-//            SortDirection::Ascending => SortDirection::Descending,
-//            SortDirection::Descending => SortDirection::Ascending,
-//        });
+
+    //sort_direction.set(match *sort_direction.read() {
+    //        sort_direction.write_with(|dir| match dir {
+    //            SortDirection::Ascending => SortDirection::Descending,
+    //            SortDirection::Descending => SortDirection::Ascending,
+    //        });
     } else {
         sort_column.set(column);
         sort_direction.set(SortDirection::Ascending);

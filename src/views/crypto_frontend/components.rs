@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::views::crypto_style::*;
+use dioxus::prelude::*;
 
 #[derive(Props, Clone, PartialEq)]
 pub struct CardHeaderProps {
@@ -142,4 +142,4 @@ pub fn SuccessMessage(props: SuccessMessageProps) -> Element {
             }
         }
     }
-} 
+}

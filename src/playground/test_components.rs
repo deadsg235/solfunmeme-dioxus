@@ -1,58 +1,21 @@
 pub use dioxus::prelude::*;
 
-pub use crate::playground::MenuOption::Airdrop;
-pub use crate::playground::MenuOption::Memes;
-pub use crate::playground::MenuOption::MemeManagement;
-pub use crate::playground::MenuOption::MetaMemeOperations;
-pub use crate::playground::MenuOption::ReceiveSol;
-pub use crate::playground::MenuOption::SendSol;
-pub use crate::playground::MenuOption::StylingAndEmojis;
-pub use crate::playground::test_components::ComponentName::ActionButton;
-pub use crate::playground::test_components::ComponentName::AddClusterModal;
-pub use crate::playground::test_components::ComponentName::CardHeader;
-pub use crate::playground::test_components::ComponentName::ClusterInfo;
-pub use crate::playground::test_components::ComponentName::CodeDisplay;
-pub use crate::playground::test_components::ComponentName::ConnectWalletFirst;
-pub use crate::playground::test_components::ComponentName::ConnectionButtons;
-pub use crate::playground::test_components::ComponentName::CoreButtons;
-pub use crate::playground::test_components::ComponentName::CreateButton;
-pub use crate::playground::test_components::ComponentName::CryptoAppHeader;
-pub use crate::playground::test_components::ComponentName::CryptoButtons;
-pub use crate::playground::test_components::ComponentName::CryptoErrorMessage;
-pub use crate::playground::test_components::ComponentName::CryptoFrontendApp;
-pub use crate::playground::test_components::ComponentName::DecryptionForm;
-pub use crate::playground::test_components::ComponentName::EncryptionForm;
-pub use crate::playground::test_components::ComponentName::ExpressionCard;
-pub use crate::playground::test_components::ComponentName::ExpressionInputs;
-pub use crate::playground::test_components::ComponentName::ExpressionList;
-pub use crate::playground::test_components::ComponentName::ExpressionMetadata;
-pub use crate::playground::test_components::ComponentName::ExpressionTypeSelector;
-pub use crate::playground::test_components::ComponentName::Footer;
-pub use crate::playground::test_components::ComponentName::InputField;
-pub use crate::playground::test_components::ComponentName::InputSection;
-pub use crate::playground::test_components::ComponentName::ManagementButtons;
-pub use crate::playground::test_components::ComponentName::MemeCardHeader;
-pub use crate::playground::test_components::ComponentName::MemesFooter;
-pub use crate::playground::test_components::ComponentName::MetadataInputs;
-pub use crate::playground::test_components::ComponentName::Notification;
-pub use crate::playground::test_components::ComponentName::Notification2;
-pub use crate::playground::test_components::ComponentName::PageNotFound;
-pub use crate::playground::test_components::ComponentName::QueryAccountDialog;
-pub use crate::playground::test_components::ComponentName::QueryCoinDialog;
-pub use crate::playground::test_components::ComponentName::SearchInput;
-pub use crate::playground::test_components::ComponentName::SignInWithSolana;
-pub use crate::playground::test_components::ComponentName::SignMessage;
-pub use crate::playground::test_components::ComponentName::SignTx;
-pub use crate::playground::test_components::ComponentName::SimilaritySection;
-pub use crate::playground::test_components::ComponentName::SuccessMessage;
-pub use crate::playground::test_components::ComponentName::TextAreaField;
-pub use crate::playground::test_components::ComponentName::TransactionButtons;
-pub use crate::playground::test_components::ComponentName::VectorSpace;
-pub use crate::playground::test_components::ComponentName::WikidataMemeExplorer;
-pub use crate::playground::test_components::ComponentName::WikidataMemeView;
-pub use crate::playground::test_components::ComponentName::WorkflowMemeExplorer;
-pub use crate::playground::test_components::ComponentName::WorkflowMemeView;
-pub use crate::playground::test_components::ComponentName::WorkflowStepView;
+pub use crate::playground::{
+    test_components::ComponentName::{
+        ActionButton, AddClusterModal, CardHeader, ClusterInfo, CodeDisplay, ConnectWalletFirst,
+        ConnectionButtons, CoreButtons, CreateButton, CryptoAppHeader, CryptoButtons,
+        CryptoErrorMessage, CryptoFrontendApp, DecryptionForm, EncryptionForm, ExpressionCard,
+        ExpressionInputs, ExpressionList, ExpressionMetadata, ExpressionTypeSelector, Footer,
+        InputField, InputSection, ManagementButtons, MemeCardHeader, MemesFooter, MetadataInputs,
+        Notification, Notification2, PageNotFound, QueryAccountDialog, QueryCoinDialog,
+        SearchInput, SignInWithSolana, SignMessage, SignTx, SimilaritySection, SuccessMessage,
+        TextAreaField, TransactionButtons, VectorSpace, WikidataMemeExplorer, WikidataMemeView,
+        WorkflowMemeExplorer, WorkflowMemeView, WorkflowStepView,
+    },
+    MenuOption::{
+        Airdrop, MemeManagement, Memes, MetaMemeOperations, ReceiveSol, SendSol, StylingAndEmojis,
+    },
+};
 //pub use crate::Route::Clusters;
 //pub use crate::Route::TestMenuApp;
 //crate::playground::test_app::TestMenuApp_completions::Component::TestMenuApp
@@ -106,38 +69,36 @@ pub use crate::playground::test_components::ComponentName::WorkflowStepView;
 // Component metadata
 
 //pub use dioxus_router::prelude::*;
+pub use crate::{
+    playground::{
+        test_components::ComponentName::{
+            AddPasswordForm, ComponentMemeExplorer, ComponentMemeView, GitParser2, LoginScreen,
+            MemeCategoryView, PasswordAppHeader, PasswordDetail, PasswordErrorMessage,
+            PasswordList, PasswordMainApp, WelcomeScreen,
+        },
+        MenuOption,
+    },
+    views::{
+        component_memes::{ComponentMeme, MemeCategory},
+        wikidata_memes::WikidataMeme,
+        workflow_memes::WorkflowMeme,
+    },
+};
 pub use serde::{Deserialize, Serialize};
 pub use std::collections::HashMap;
-pub use crate::views::component_memes::MemeCategory;
-pub use crate::views::wikidata_memes::WikidataMeme;
-pub use crate::views::workflow_memes::WorkflowMeme;
-pub use crate::views::component_memes::ComponentMeme;
-pub use crate::playground::MenuOption;
-pub use crate::playground::test_components::ComponentName::GitParser2;
-pub use crate::playground::test_components::ComponentName::ComponentMemeExplorer;
-pub use crate::playground::test_components::ComponentName::MemeCategoryView;
-pub use crate::playground::test_components::ComponentName::ComponentMemeView;
-pub use crate::playground::test_components::ComponentName::WelcomeScreen;
-pub use crate::playground::test_components::ComponentName::PasswordDetail;
-pub use crate::playground::test_components::ComponentName::AddPasswordForm;
-pub use crate::playground::test_components::ComponentName::PasswordList;
-pub use crate::playground::test_components::ComponentName::PasswordMainApp;
-pub use crate::playground::test_components::ComponentName::LoginScreen;
-pub use crate::playground::test_components::ComponentName::PasswordErrorMessage;
-pub use crate::playground::test_components::ComponentName::PasswordAppHeader;
 //pub use crate::password_manager::PasswordApp;
-pub use crate::playground::test_components::ComponentName::PingCluster;
-pub use crate::header::ActiveAccountDropDown;
-pub use crate::playground::test_components::ComponentName::NavWalletItem;
-pub use crate::header::ConnectWalletModalModal;
-pub use crate::header::Header;
+pub use crate::{
+    header::{ActiveAccountDropDown, ConnectWalletModalModal, Header},
+    playground::test_components::ComponentName::{NavWalletItem, PingCluster},
+};
 //pub use crate::model::useConnections;
-pub use crate::views::workflow_memes::WorkflowStep;
-pub use crate::password_manager::PasswordAppState;
-pub use crate::views::accounts::Accounts;
-pub use crate::views::accounts::ClusterSuccess;
-pub use crate::views::accounts::TokenAccountCard;
-pub use crate::views::accounts::TxCard;
+pub use crate::{
+    password_manager::PasswordAppState,
+    views::{
+        accounts::{Accounts, ClusterSuccess, TokenAccountCard, TxCard},
+        workflow_memes::WorkflowStep,
+    },
+};
 //let food =1;
 
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
@@ -240,14 +201,14 @@ pub enum PropValue {
     WikidataMeme(WikidataMeme),
     WorkflowMeme(WorkflowMeme),
     WorkflowStep(WorkflowStep),
-//    pub useConnections(pub useConnections),
-//    MenuOptionHandler(EventHandler<MenuOption>),
+    //    pub useConnections(pub useConnections),
+    //    MenuOptionHandler(EventHandler<MenuOption>),
     StringVec(Vec<String>),
 }
 
 #[component]
 pub fn ComponentBuilderApp() -> Element {
-    let selected_component =  use_signal(|| None::<ComponentName>);
+    let selected_component = use_signal(|| None::<ComponentName>);
     let components = use_signal(|| vec![] as Vec<ComponentInstance>);
     let next_id = use_signal(|| 0u32);
     let mut props_config = use_signal(|| HashMap::<String, PropValue>::new());
@@ -271,560 +232,563 @@ pub fn ComponentBuilderApp() -> Element {
         //     selected_component.set(None);
         // }
     };
-     rsx! {
-         div { "FIXME" }}
+    rsx! {
+    div { "FIXME" }}
 
-//     rsx! {
-//         div { class: "container mx-auto p-4",
-//             h1 { class: "text-3xl font-bold mb-6 text-center",
-//                 "Component Builder"
-//             }
-//             div { class: "grid grid-cols-1 lg:grid-cols-4 gap-6",
-//                 // Component Selection Sidebar
-//                 div { class: "lg:col-span-1",
-//                     div { class: "bg-white shadow-lg rounded-lg p-4",
-//                           h2 { class: "text-xl font-semibold mb-4", "Select Component" }
-			  
-//                         // for category in get_component_categories() {
-//                         //     div { class: "mb-4",
-//                         //         h3 { class: "text-lg font-medium mb-2", "{category.0}" }
-//                         //         for component in category.1 {
-//                         //             button {
-//                         //                 class: format!(
-//                         //                     "w-full text-left p-3 mb-2 rounded-lg transition-colors {}",
-//                         //                     if selected_component() == Some(component.clone()) {
-//                         //                         "bg-blue-500 text-white"
-//                         //                     } else {
-//                         //                         "bg-gray-100 hover:bg-gray-200"
-//                         //                     }
-//                         //                 ),
-//                         //                 onclick: move |_| selected_component.set(Some(component.clone())),
-//                         //                 "{component_name(&component)}"
-//                         //             }
-//                         //         }
-//                         //     }
-//                         // }
-//                     }
-//                 }
-// 	    }
-// 	}
+    //     rsx! {
+    //         div { class: "container mx-auto p-4",
+    //             h1 { class: "text-3xl font-bold mb-6 text-center",
+    //                 "Component Builder"
+    //             }
+    //             div { class: "grid grid-cols-1 lg:grid-cols-4 gap-6",
+    //                 // Component Selection Sidebar
+    //                 div { class: "lg:col-span-1",
+    //                     div { class: "bg-white shadow-lg rounded-lg p-4",
+    //                           h2 { class: "text-xl font-semibold mb-4", "Select Component" }
 
-//         // Configuration and Preview Panel
-//         div { class: "lg:col-span-3",
-//               div { class: "bg-white shadow-lg rounded-lg p-6",
-//                     div { class: "flex justify-between items-center mb-4",
-//                           h2 { class: "text-2xl font-semibold",
-//                                "{selected_component().map(|c| component_name(&c)).unwrap_or_default()}"
-//                           }
-//                           button {
-//                               class: "bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600",
-//                               onclick: move |_| add_component(),
-//                               "Add Component"
-//                             }
-//                         }
-//                         if let Some(component) = selected_component() {
-//                             ComponentConfigPanel {
-//                                 component,
-// //                                on_update: update_prop
-//                             }
-//                         }
-//                         div { class: "mt-6",
-//                             h3 { class: "text-lg font-semibold mb-2", "Composed Components" }
-//                             div { class: "grid gap-4",
-//                                 for instance in components.read().iter() {
-//                                     RenderComponent { instance: instance.clone() }
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
+    //                         // for category in get_component_categories() {
+    //                         //     div { class: "mb-4",
+    //                         //         h3 { class: "text-lg font-medium mb-2", "{category.0}" }
+    //                         //         for component in category.1 {
+    //                         //             button {
+    //                         //                 class: format!(
+    //                         //                     "w-full text-left p-3 mb-2 rounded-lg transition-colors {}",
+    //                         //                     if selected_component() == Some(component.clone()) {
+    //                         //                         "bg-blue-500 text-white"
+    //                         //                     } else {
+    //                         //                         "bg-gray-100 hover:bg-gray-200"
+    //                         //                     }
+    //                         //                 ),
+    //                         //                 onclick: move |_| selected_component.set(Some(component.clone())),
+    //                         //                 "{component_name(&component)}"
+    //                         //             }
+    //                         //         }
+    //                         //     }
+    //                         // }
+    //                     }
+    //                 }
+    // 	    }
+    // 	}
 
-//             // Navigation Link
-//             div { class: "mt-4",
-// //                Link {
-// //                    to: Route::TestMenuApp {},
-// //                    class: "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600",
-// //                    "Back to Test Menu"
-// //                }
-//             }
-//         }
+    //         // Configuration and Preview Panel
+    //         div { class: "lg:col-span-3",
+    //               div { class: "bg-white shadow-lg rounded-lg p-6",
+    //                     div { class: "flex justify-between items-center mb-4",
+    //                           h2 { class: "text-2xl font-semibold",
+    //                                "{selected_component().map(|c| component_name(&c)).unwrap_or_default()}"
+    //                           }
+    //                           button {
+    //                               class: "bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600",
+    //                               onclick: move |_| add_component(),
+    //                               "Add Component"
+    //                             }
+    //                         }
+    //                         if let Some(component) = selected_component() {
+    //                             ComponentConfigPanel {
+    //                                 component,
+    // //                                on_update: update_prop
+    //                             }
+    //                         }
+    //                         div { class: "mt-6",
+    //                             h3 { class: "text-lg font-semibold mb-2", "Composed Components" }
+    //                             div { class: "grid gap-4",
+    //                                 for instance in components.read().iter() {
+    //                                     RenderComponent { instance: instance.clone() }
+    //                                 }
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+
+    //             // Navigation Link
+    //             div { class: "mt-4",
+    // //                Link {
+    // //                    to: Route::TestMenuApp {},
+    // //                    class: "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600",
+    // //                    "Back to Test Menu"
+    // //                }
+    //             }
+    //         }
 }
 
 #[component]
-fn ComponentConfigPanel(component: ComponentName, on_update: EventHandler<(String, PropValue)>) -> Element {
+fn ComponentConfigPanel(
+    component: ComponentName,
+    on_update: EventHandler<(String, PropValue)>,
+) -> Element {
     let props = get_component_props(&component);
     rsx! {
-        div { class: "border border-gray-200 rounded-lg p-4",
-            h3 { class: "font-medium text-lg mb-2", "Configure Properties" }
-            for prop in props {
-                div { class: "mb-4",
-                    label { class: "block text-sm font-medium text-gray-700", "{prop.0}" }
-                    match prop.1 {
-                        "bool" => {
-                            let value = use_signal(|| false);
-                            rsx! {
-                                input {
-                                    r#type: "checkbox",
-                                    checked: "{value}",
-                                    onchange: move |evt| {
-//                                        value.set(evt.checked());
-//                                        on_update.call((prop.0.to_string(), PropValue::SignalBool(value)));
+            div { class: "border border-gray-200 rounded-lg p-4",
+                h3 { class: "font-medium text-lg mb-2", "Configure Properties" }
+                for prop in props {
+                    div { class: "mb-4",
+                        label { class: "block text-sm font-medium text-gray-700", "{prop.0}" }
+                        match prop.1 {
+                            "bool" => {
+                                let value = use_signal(|| false);
+                                rsx! {
+                                    input {
+                                        r#type: "checkbox",
+                                        checked: "{value}",
+                                        onchange: move |evt| {
+    //                                        value.set(evt.checked());
+    //                                        on_update.call((prop.0.to_string(), PropValue::SignalBool(value)));
+                                        }
                                     }
                                 }
                             }
-                        }
-                        "string" => {
-                            let value = use_signal(|| String::new());
-                            rsx! {
-                                input {
-                                    class: "w-full p-2 border border-gray-300 rounded-lg",
-                                    value: "{value}",
-                                    oninput: move |evt| {
-//                                        value.set(evt.value().clone());
-//                                        on_update.call((prop.0.to_string(), PropValue::SignalString(value)));
+                            "string" => {
+                                let value = use_signal(|| String::new());
+                                rsx! {
+                                    input {
+                                        class: "w-full p-2 border border-gray-300 rounded-lg",
+                                        value: "{value}",
+                                        oninput: move |evt| {
+    //                                        value.set(evt.value().clone());
+    //                                        on_update.call((prop.0.to_string(), PropValue::SignalString(value)));
+                                        }
                                     }
                                 }
                             }
-                        }
-                        "password_app_state" => {
-                            let value = use_signal(|| PasswordAppState::default());
-                            rsx! {
-                                button {
-                                    class: "bg-blue-500 text-white px-3 py-1 rounded",
-                                    onclick: move |_| {
-//                                        value.set(PasswordAppState::default());
-//                                        on_update.call((prop.0.to_string(), PropValue::SignalPasswordAppState(value)));
-                                    },
-                                    "Reset State"
+                            "password_app_state" => {
+                                let value = use_signal(|| PasswordAppState::default());
+                                rsx! {
+                                    button {
+                                        class: "bg-blue-500 text-white px-3 py-1 rounded",
+                                        onclick: move |_| {
+    //                                        value.set(PasswordAppState::default());
+    //                                        on_update.call((prop.0.to_string(), PropValue::SignalPasswordAppState(value)));
+                                        },
+                                        "Reset State"
+                                    }
                                 }
                             }
+                            _ => rsx! { span { class: "text-sm text-gray-500", "Unsupported prop type" } },
                         }
-                        _ => rsx! { span { class: "text-sm text-gray-500", "Unsupported prop type" } },
                     }
                 }
             }
         }
-    }
 }
 
 #[component]
 fn RenderComponent(instance: ComponentInstance) -> Element {
     match instance.name {
-//         ComponentName::Header => rsx! { Header {} },
-//         ComponentName::ConnectWalletModalModal => {
-//             let show_modal = instance.props.get("show_modal").and_then(|v| match v {
-//                 //PropValue::SignalBool(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             let show_connecting = instance.props.get("show_connecting").and_then(|v| match v {
-// //                PropValue::SignalBool(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ConnectWalletModalModal { show_modal, show_connecting } }
-//         }
-//         ComponentName::NavWalletItem => {
-// //             let show_modal = instance.props.get("show_modal").and_then(|v| match v {
-// // //                PropValue::SignalBool(s) => Some(*s),
-// //                 _ => None,
-// //             }).unwrap_or_default();
-// //             let show_connecting = instance.props.get("show_connecting").and_then(|v| match v {
-// // //                PropValue::SignalBool(s) => Some(*s),
-// //                 _ => None,
-// //             }).unwrap_or_default();
-// 	    // //            rsx! { NavWalletItem { show_modal, show_connecting } }
-// 	    //rsx! div {"fixme"}
-//         }
-//         ComponentName::ActiveAccountDropDown => {
-	    
-//             let show_modal = instance.props.get("show_modal").and_then(|v| match v {
-// //                PropValue::SignalBool(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             let shortened_address = instance.props.get("shortened_address").and_then(|v| match v {
-// //                PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             //rsx! { ActiveAccountDropDown { show_modal, shortened_address } }
-//         }
-// //        ComponentName::PingCluster => rsx! { PingCluster {} },
-//         ComponentName::PasswordApp => rsx! { PasswordApp {} },
-//         ComponentName::PasswordAppHeader => {
-//             let app_state = instance.props.get("app_state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { PasswordAppHeader { app_state } }
-//         }
-//         ComponentName::PasswordErrorMessage => {
-//             let message = instance.props.get("message").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { PasswordErrorMessage { message } }
-//         }
-//         ComponentName::LoginScreen => {
-//             let app_state = instance.props.get("app_state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { LoginScreen { app_state } }
-//         }
-//         ComponentName::PasswordMainApp => {
-//             let app_state = instance.props.get("app_state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { PasswordMainApp { app_state } }
-//         }
-//         ComponentName::PasswordList => {
-//             let app_state = instance.props.get("app_state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { PasswordList { app_state } }
-//         }
-//         ComponentName::AddPasswordForm => {
-//             let app_state = instance.props.get("app_state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { AddPasswordForm { app_state } }
-//         }
-//         ComponentName::PasswordDetail => {
-//             let app_state = instance.props.get("app_state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { PasswordDetail { app_state } }
-//         }
-//         ComponentName::WelcomeScreen => rsx! { WelcomeScreen {} },
-//         ComponentName::Accounts => rsx! { Accounts {} },
-//         ComponentName::ClusterSuccess => {
-//             let address = instance.props.get("address").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             let shortened_address = instance.props.get("shortened_address").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ClusterSuccess { address, shortened_address } }
-//         }
-//         ComponentName::TokenAccountCard => {
-//             let mint = instance.props.get("mint").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             let ata_address = instance.props.get("ata_address").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { TokenAccountCard { mint, ata_address } }
-//         }
-//         ComponentName::TxCard => {
-//             let tx = instance.props.get("tx").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             let timestamp = instance.props.get("timestamp").and_then(|v| match v {
-//                 PropValue::String(s) => s.parse::<i64>().ok(),
-//                 _ => None,
-//             });
-//             rsx! { TxCard { tx, timestamp } }
-//         }
-//         ComponentName::Airdrop => {
-//             let show_airdrop_modal = instance.props.get("show_airdrop_modal").and_then(|v| match v {
-//                 PropValue::SignalBool(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { Airdrop { show_airdrop_modal } }
-//         }
-//         ComponentName::Clusters => rsx! { Clusters {} },
-//         ComponentName::ClusterInfo => {
-//             let connections = instance.props.get("connections").and_then(|v| match v {
-//                 PropValue::pub useConnections(c) => Some(c.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ClusterInfo { connections } }
-//         }
-//         ComponentName::AddClusterModal => {
-//             let show_add_entry_modal = instance.props.get("show_add_entry_modal").and_then(|v| match v {
-//                 PropValue::SignalBool(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             let connections = instance.props.get("connections").and_then(|v| match v {
-//                 PropValue::pub useConnections(c) => Some(c.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { AddClusterModal { show_add_entry_modal, connections } }
-//         }
-//         ComponentName::QueryCoinDialog => rsx! { QueryCoinDialog {} },
-//         ComponentName::ComponentMemeView => {
-//             let component_meme = instance.props.get("component_meme").and_then(|v| match v {
-//                 PropValue::ComponentMeme(c) => Some(c.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ComponentMemeView { component_meme } }
-//         }
-//         ComponentName::MemeCategoryView => {
-//             let category = instance.props.get("category").and_then(|v| match v {
-//                 PropValue::MemeCategory(c) => Some(c.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { MemeCategoryView { category } }
-//         }
-//         ComponentName::ComponentMemeExplorer => rsx! { ComponentMemeExplorer {} },
-//         ComponentName::ConnectionButtons => {
-//             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
-//                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ConnectionButtons { on_menu_change } }
-//         }
-//         ComponentName::ConnectWalletFirst => rsx! { ConnectWalletFirst {} },
-//         ComponentName::CoreButtons => {
-//             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
-//                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { CoreButtons { on_menu_change } }
-//         }
-//         ComponentName::CryptoButtons => {
-//             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
-//                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { CryptoButtons { on_menu_change } }
-//         }
-//         ComponentName::CryptoFrontendApp => rsx! { CryptoFrontendApp {} },
-//         ComponentName::CryptoAppHeader => rsx! { CryptoAppHeader {} },
-//         ComponentName::CardHeader => {
-//             let title = instance.props.get("title").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { CardHeader { title } }
-//         }
-//         ComponentName::InputField => {
-//             let label = instance.props.get("label").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { InputField { label } }
-//         }
-//         ComponentName::TextAreaField => {
-//             let label = instance.props.get("label").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { TextAreaField { label } }
-//         }
-//         ComponentName::ActionButton => {
-//             let label = instance.props.get("label").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ActionButton { label } }
-//         }
-//         ComponentName::CryptoErrorMessage => {
-//             let message = instance.props.get("message").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { CryptoErrorMessage { message } }
-//         }
-//         ComponentName::SuccessMessage => {
-//             let message = instance.props.get("message").and_then(|v| match v {
-//                 PropValue::SignalString(s) => Some(s.read().clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { SuccessMessage { message } }
-//         }
-//         ComponentName::EncryptionForm => rsx! { EncryptionForm {} },
-//         ComponentName::DecryptionForm => rsx! { DecryptionForm {} },
-//         ComponentName::Dashboard => rsx! { Dashboard {} },
-//         ComponentName::Extras => rsx! { Extras {} },
-//         ComponentName::SignMessage => rsx! { SignMessage {} },
-//         ComponentName::SignTx => rsx! { SignTx {} },
-//         ComponentName::SignInWithSolana => rsx! { SignInWithSolana {} },
-//         ComponentName::Footer => rsx! { Footer {} },
-//         ComponentName::GitParser2 => rsx! { GitParser2 {} },
-//         ComponentName::ManagementButtons => {
-//             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
-//                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ManagementButtons { on_menu_change } }
-//         }
-//         ComponentName::MemeManagement => rsx! { MemeManagement {} },
-//         ComponentName::Memes => rsx! { Memes {} },
-//         ComponentName::MemeCardHeader => {
-//             let expr = instance.props.get("expression").and_then(|v| match v {
-//                 PropValue::String(s) => Some(s.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { MemeCardHeader { expression: expr, state } }
-//         }
-//         ComponentName::InputSection => {
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { InputSection { state } }
-//         }
-//         ComponentName::ExpressionTypeSelector => {
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ExpressionTypeSelector { state } }
-//         }
-//         ComponentName::ExpressionInputs => {
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ExpressionInputs { state } }
-//         }
-//         ComponentName::MetadataInputs => {
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { MetadataInputs { state } }
-//         }
-//         ComponentName::CreateButton => {
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { CreateButton { state } }
-//         }
-//         ComponentName::SearchInput => {
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { SearchInput { state } }
-//         }
-//         ComponentName::ExpressionList => {
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ExpressionList { state } }
-//         }
-//         ComponentName::ExpressionCard => {
-//             let expr = instance.props.get("expression").and_then(|v| match v {
-//                 PropValue::String(s) => Some(s.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ExpressionCard { expression: expr, state } }
-//         }
-//         ComponentName::CodeDisplay => {
-//             let expr = instance.props.get("expression").and_then(|v| match v {
-//                 PropValue::String(s) => Some(s.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { CodeDisplay { expression: expr } }
-//         }
-//         ComponentName::ExpressionMetadata => {
-//             let expr = instance.props.get("expression").and_then(|v| match v {
-//                 PropValue::String(s) => Some(s.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ExpressionMetadata { expression: expr } }
-//         }
-//         ComponentName::SimilaritySection => {
-//             let expr = instance.props.get("expression").and_then(|v| match v {
-//                 PropValue::String(s) => Some(s.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { SimilaritySection { expression: expr, state } }
-//         }
-//         ComponentName::VectorSpace => {
-//             let state = instance.props.get("state").and_then(|v| match v {
-//                 PropValue::SignalPasswordAppState(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { VectorSpace { state } }
-//         }
-//         ComponentName::MemesFooter => rsx! { MemesFooter {} },
-//         ComponentName::MetaMemeOperations => rsx! { MetaMemeOperations {} },
-//         ComponentName::Notification => rsx! { Notification {} },
-//         ComponentName::Notification2 => rsx! { Notification2 {} },
-//         ComponentName::PageNotFound => {
-//             let route = instance.props.get("route").and_then(|v| match v {
-//                 PropValue::StringVec(v) => Some(v.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { PageNotFound { route } }
-//         }
-//         ComponentName::QueryAccountDialog => {
-//             let show_query_dialog = instance.props.get("show_query_dialog").and_then(|v| match v {
-//                 PropValue::SignalBool(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { QueryAccountDialog { show_query_dialog } }
-//         }
-//         ComponentName::ReceiveSol => {
-//             let show_receive_modal = instance.props.get("show_receive_modal").and_then(|v| match v {
-//                 PropValue::SignalBool(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { ReceiveSol { show_receive_modal } }
-//         }
-//         ComponentName::SendSol => {
-//             let show_send_modal = instance.props.get("show_send_modal").and_then(|v| match v {
-//                 PropValue::SignalBool(s) => Some(*s),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { SendSol { show_send_modal } }
-//         }
-//         ComponentName::StylingAndEmojis => rsx! { StylingAndEmojis {} },
-//         ComponentName::TransactionButtons => {
-//             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
-//                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { TransactionButtons { on_menu_change } }
-//         }
-//         ComponentName::WikidataMemeView => {
-//             let meme = instance.props.get("meme").and_then(|v| match v {
-//                 PropValue::WikidataMeme(m) => Some(m.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { WikidataMemeView { meme } }
-//         }
-//         ComponentName::WikidataMemeExplorer => rsx! { WikidataMemeExplorer {} },
-//         ComponentName::WorkflowStepView => {
-//             let step = instance.props.get("step").and_then(|v| match v {
-//                 PropValue::WorkflowStep(s) => Some(s.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { WorkflowStepView { step } }
-//         }
-//         ComponentName::WorkflowMemeView => {
-//             let workflow = instance.props.get("workflow").and_then(|v| match v {
-//                 PropValue::WorkflowMeme(w) => Some(w.clone()),
-//                 _ => None,
-//             }).unwrap_or_default();
-//             rsx! { WorkflowMemeView { workflow } }
-//         }
-	//         ComponentName::WorkflowMemeExplorer => rsx! { WorkflowMemeExplorer {} },
-	_ => rsx! { div {"FIXME"}}
+        //         ComponentName::Header => rsx! { Header {} },
+        //         ComponentName::ConnectWalletModalModal => {
+        //             let show_modal = instance.props.get("show_modal").and_then(|v| match v {
+        //                 //PropValue::SignalBool(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             let show_connecting = instance.props.get("show_connecting").and_then(|v| match v {
+        // //                PropValue::SignalBool(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ConnectWalletModalModal { show_modal, show_connecting } }
+        //         }
+        //         ComponentName::NavWalletItem => {
+        // //             let show_modal = instance.props.get("show_modal").and_then(|v| match v {
+        // // //                PropValue::SignalBool(s) => Some(*s),
+        // //                 _ => None,
+        // //             }).unwrap_or_default();
+        // //             let show_connecting = instance.props.get("show_connecting").and_then(|v| match v {
+        // // //                PropValue::SignalBool(s) => Some(*s),
+        // //                 _ => None,
+        // //             }).unwrap_or_default();
+        // 	    // //            rsx! { NavWalletItem { show_modal, show_connecting } }
+        // 	    //rsx! div {"fixme"}
+        //         }
+        //         ComponentName::ActiveAccountDropDown => {
+
+        //             let show_modal = instance.props.get("show_modal").and_then(|v| match v {
+        // //                PropValue::SignalBool(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             let shortened_address = instance.props.get("shortened_address").and_then(|v| match v {
+        // //                PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             //rsx! { ActiveAccountDropDown { show_modal, shortened_address } }
+        //         }
+        // //        ComponentName::PingCluster => rsx! { PingCluster {} },
+        //         ComponentName::PasswordApp => rsx! { PasswordApp {} },
+        //         ComponentName::PasswordAppHeader => {
+        //             let app_state = instance.props.get("app_state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { PasswordAppHeader { app_state } }
+        //         }
+        //         ComponentName::PasswordErrorMessage => {
+        //             let message = instance.props.get("message").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { PasswordErrorMessage { message } }
+        //         }
+        //         ComponentName::LoginScreen => {
+        //             let app_state = instance.props.get("app_state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { LoginScreen { app_state } }
+        //         }
+        //         ComponentName::PasswordMainApp => {
+        //             let app_state = instance.props.get("app_state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { PasswordMainApp { app_state } }
+        //         }
+        //         ComponentName::PasswordList => {
+        //             let app_state = instance.props.get("app_state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { PasswordList { app_state } }
+        //         }
+        //         ComponentName::AddPasswordForm => {
+        //             let app_state = instance.props.get("app_state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { AddPasswordForm { app_state } }
+        //         }
+        //         ComponentName::PasswordDetail => {
+        //             let app_state = instance.props.get("app_state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { PasswordDetail { app_state } }
+        //         }
+        //         ComponentName::WelcomeScreen => rsx! { WelcomeScreen {} },
+        //         ComponentName::Accounts => rsx! { Accounts {} },
+        //         ComponentName::ClusterSuccess => {
+        //             let address = instance.props.get("address").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             let shortened_address = instance.props.get("shortened_address").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ClusterSuccess { address, shortened_address } }
+        //         }
+        //         ComponentName::TokenAccountCard => {
+        //             let mint = instance.props.get("mint").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             let ata_address = instance.props.get("ata_address").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { TokenAccountCard { mint, ata_address } }
+        //         }
+        //         ComponentName::TxCard => {
+        //             let tx = instance.props.get("tx").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             let timestamp = instance.props.get("timestamp").and_then(|v| match v {
+        //                 PropValue::String(s) => s.parse::<i64>().ok(),
+        //                 _ => None,
+        //             });
+        //             rsx! { TxCard { tx, timestamp } }
+        //         }
+        //         ComponentName::Airdrop => {
+        //             let show_airdrop_modal = instance.props.get("show_airdrop_modal").and_then(|v| match v {
+        //                 PropValue::SignalBool(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { Airdrop { show_airdrop_modal } }
+        //         }
+        //         ComponentName::Clusters => rsx! { Clusters {} },
+        //         ComponentName::ClusterInfo => {
+        //             let connections = instance.props.get("connections").and_then(|v| match v {
+        //                 PropValue::pub useConnections(c) => Some(c.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ClusterInfo { connections } }
+        //         }
+        //         ComponentName::AddClusterModal => {
+        //             let show_add_entry_modal = instance.props.get("show_add_entry_modal").and_then(|v| match v {
+        //                 PropValue::SignalBool(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             let connections = instance.props.get("connections").and_then(|v| match v {
+        //                 PropValue::pub useConnections(c) => Some(c.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { AddClusterModal { show_add_entry_modal, connections } }
+        //         }
+        //         ComponentName::QueryCoinDialog => rsx! { QueryCoinDialog {} },
+        //         ComponentName::ComponentMemeView => {
+        //             let component_meme = instance.props.get("component_meme").and_then(|v| match v {
+        //                 PropValue::ComponentMeme(c) => Some(c.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ComponentMemeView { component_meme } }
+        //         }
+        //         ComponentName::MemeCategoryView => {
+        //             let category = instance.props.get("category").and_then(|v| match v {
+        //                 PropValue::MemeCategory(c) => Some(c.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { MemeCategoryView { category } }
+        //         }
+        //         ComponentName::ComponentMemeExplorer => rsx! { ComponentMemeExplorer {} },
+        //         ComponentName::ConnectionButtons => {
+        //             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
+        //                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ConnectionButtons { on_menu_change } }
+        //         }
+        //         ComponentName::ConnectWalletFirst => rsx! { ConnectWalletFirst {} },
+        //         ComponentName::CoreButtons => {
+        //             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
+        //                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { CoreButtons { on_menu_change } }
+        //         }
+        //         ComponentName::CryptoButtons => {
+        //             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
+        //                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { CryptoButtons { on_menu_change } }
+        //         }
+        //         ComponentName::CryptoFrontendApp => rsx! { CryptoFrontendApp {} },
+        //         ComponentName::CryptoAppHeader => rsx! { CryptoAppHeader {} },
+        //         ComponentName::CardHeader => {
+        //             let title = instance.props.get("title").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { CardHeader { title } }
+        //         }
+        //         ComponentName::InputField => {
+        //             let label = instance.props.get("label").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { InputField { label } }
+        //         }
+        //         ComponentName::TextAreaField => {
+        //             let label = instance.props.get("label").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { TextAreaField { label } }
+        //         }
+        //         ComponentName::ActionButton => {
+        //             let label = instance.props.get("label").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ActionButton { label } }
+        //         }
+        //         ComponentName::CryptoErrorMessage => {
+        //             let message = instance.props.get("message").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { CryptoErrorMessage { message } }
+        //         }
+        //         ComponentName::SuccessMessage => {
+        //             let message = instance.props.get("message").and_then(|v| match v {
+        //                 PropValue::SignalString(s) => Some(s.read().clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { SuccessMessage { message } }
+        //         }
+        //         ComponentName::EncryptionForm => rsx! { EncryptionForm {} },
+        //         ComponentName::DecryptionForm => rsx! { DecryptionForm {} },
+        //         ComponentName::Dashboard => rsx! { Dashboard {} },
+        //         ComponentName::Extras => rsx! { Extras {} },
+        //         ComponentName::SignMessage => rsx! { SignMessage {} },
+        //         ComponentName::SignTx => rsx! { SignTx {} },
+        //         ComponentName::SignInWithSolana => rsx! { SignInWithSolana {} },
+        //         ComponentName::Footer => rsx! { Footer {} },
+        //         ComponentName::GitParser2 => rsx! { GitParser2 {} },
+        //         ComponentName::ManagementButtons => {
+        //             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
+        //                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ManagementButtons { on_menu_change } }
+        //         }
+        //         ComponentName::MemeManagement => rsx! { MemeManagement {} },
+        //         ComponentName::Memes => rsx! { Memes {} },
+        //         ComponentName::MemeCardHeader => {
+        //             let expr = instance.props.get("expression").and_then(|v| match v {
+        //                 PropValue::String(s) => Some(s.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { MemeCardHeader { expression: expr, state } }
+        //         }
+        //         ComponentName::InputSection => {
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { InputSection { state } }
+        //         }
+        //         ComponentName::ExpressionTypeSelector => {
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ExpressionTypeSelector { state } }
+        //         }
+        //         ComponentName::ExpressionInputs => {
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ExpressionInputs { state } }
+        //         }
+        //         ComponentName::MetadataInputs => {
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { MetadataInputs { state } }
+        //         }
+        //         ComponentName::CreateButton => {
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { CreateButton { state } }
+        //         }
+        //         ComponentName::SearchInput => {
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { SearchInput { state } }
+        //         }
+        //         ComponentName::ExpressionList => {
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ExpressionList { state } }
+        //         }
+        //         ComponentName::ExpressionCard => {
+        //             let expr = instance.props.get("expression").and_then(|v| match v {
+        //                 PropValue::String(s) => Some(s.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ExpressionCard { expression: expr, state } }
+        //         }
+        //         ComponentName::CodeDisplay => {
+        //             let expr = instance.props.get("expression").and_then(|v| match v {
+        //                 PropValue::String(s) => Some(s.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { CodeDisplay { expression: expr } }
+        //         }
+        //         ComponentName::ExpressionMetadata => {
+        //             let expr = instance.props.get("expression").and_then(|v| match v {
+        //                 PropValue::String(s) => Some(s.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ExpressionMetadata { expression: expr } }
+        //         }
+        //         ComponentName::SimilaritySection => {
+        //             let expr = instance.props.get("expression").and_then(|v| match v {
+        //                 PropValue::String(s) => Some(s.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { SimilaritySection { expression: expr, state } }
+        //         }
+        //         ComponentName::VectorSpace => {
+        //             let state = instance.props.get("state").and_then(|v| match v {
+        //                 PropValue::SignalPasswordAppState(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { VectorSpace { state } }
+        //         }
+        //         ComponentName::MemesFooter => rsx! { MemesFooter {} },
+        //         ComponentName::MetaMemeOperations => rsx! { MetaMemeOperations {} },
+        //         ComponentName::Notification => rsx! { Notification {} },
+        //         ComponentName::Notification2 => rsx! { Notification2 {} },
+        //         ComponentName::PageNotFound => {
+        //             let route = instance.props.get("route").and_then(|v| match v {
+        //                 PropValue::StringVec(v) => Some(v.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { PageNotFound { route } }
+        //         }
+        //         ComponentName::QueryAccountDialog => {
+        //             let show_query_dialog = instance.props.get("show_query_dialog").and_then(|v| match v {
+        //                 PropValue::SignalBool(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { QueryAccountDialog { show_query_dialog } }
+        //         }
+        //         ComponentName::ReceiveSol => {
+        //             let show_receive_modal = instance.props.get("show_receive_modal").and_then(|v| match v {
+        //                 PropValue::SignalBool(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { ReceiveSol { show_receive_modal } }
+        //         }
+        //         ComponentName::SendSol => {
+        //             let show_send_modal = instance.props.get("show_send_modal").and_then(|v| match v {
+        //                 PropValue::SignalBool(s) => Some(*s),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { SendSol { show_send_modal } }
+        //         }
+        //         ComponentName::StylingAndEmojis => rsx! { StylingAndEmojis {} },
+        //         ComponentName::TransactionButtons => {
+        //             let on_menu_change = instance.props.get("on_menu_change").and_then(|v| match v {
+        //                 PropValue::MenuOptionHandler(h) => Some(h.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { TransactionButtons { on_menu_change } }
+        //         }
+        //         ComponentName::WikidataMemeView => {
+        //             let meme = instance.props.get("meme").and_then(|v| match v {
+        //                 PropValue::WikidataMeme(m) => Some(m.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { WikidataMemeView { meme } }
+        //         }
+        //         ComponentName::WikidataMemeExplorer => rsx! { WikidataMemeExplorer {} },
+        //         ComponentName::WorkflowStepView => {
+        //             let step = instance.props.get("step").and_then(|v| match v {
+        //                 PropValue::WorkflowStep(s) => Some(s.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { WorkflowStepView { step } }
+        //         }
+        //         ComponentName::WorkflowMemeView => {
+        //             let workflow = instance.props.get("workflow").and_then(|v| match v {
+        //                 PropValue::WorkflowMeme(w) => Some(w.clone()),
+        //                 _ => None,
+        //             }).unwrap_or_default();
+        //             rsx! { WorkflowMemeView { workflow } }
+        //         }
+        //         ComponentName::WorkflowMemeExplorer => rsx! { WorkflowMemeExplorer {} },
+        _ => rsx! { div {"FIXME"}},
     }
 }
 
@@ -913,104 +877,134 @@ fn component_name(component: &ComponentName) -> &'static str {
 
 fn get_component_categories() -> Vec<(&'static str, Vec<ComponentName>)> {
     vec![
-        ("Header", vec![
-            ComponentName::Header,
-            ComponentName::ConnectWalletModalModal,
-            ComponentName::NavWalletItem,
-            ComponentName::ActiveAccountDropDown,
-            ComponentName::PingCluster,
-        ]),
-        ("Password Manager", vec![
-            ComponentName::PasswordApp,
-            ComponentName::PasswordAppHeader,
-            ComponentName::PasswordErrorMessage,
-            ComponentName::LoginScreen,
-            ComponentName::PasswordMainApp,
-            ComponentName::PasswordList,
-            ComponentName::AddPasswordForm,
-            ComponentName::PasswordDetail,
-            ComponentName::WelcomeScreen,
-        ]),
-        ("Accounts", vec![
-            ComponentName::Accounts,
-            ComponentName::ClusterSuccess,
-            ComponentName::TokenAccountCard,
-            ComponentName::TxCard,
-        ]),
-        ("Clusters", vec![
-            ComponentName::Clusters,
-            ComponentName::ClusterInfo,
-            ComponentName::AddClusterModal,
-        ]),
+        (
+            "Header",
+            vec![
+                ComponentName::Header,
+                ComponentName::ConnectWalletModalModal,
+                ComponentName::NavWalletItem,
+                ComponentName::ActiveAccountDropDown,
+                ComponentName::PingCluster,
+            ],
+        ),
+        (
+            "Password Manager",
+            vec![
+                ComponentName::PasswordApp,
+                ComponentName::PasswordAppHeader,
+                ComponentName::PasswordErrorMessage,
+                ComponentName::LoginScreen,
+                ComponentName::PasswordMainApp,
+                ComponentName::PasswordList,
+                ComponentName::AddPasswordForm,
+                ComponentName::PasswordDetail,
+                ComponentName::WelcomeScreen,
+            ],
+        ),
+        (
+            "Accounts",
+            vec![
+                ComponentName::Accounts,
+                ComponentName::ClusterSuccess,
+                ComponentName::TokenAccountCard,
+                ComponentName::TxCard,
+            ],
+        ),
+        (
+            "Clusters",
+            vec![
+                ComponentName::Clusters,
+                ComponentName::ClusterInfo,
+                ComponentName::AddClusterModal,
+            ],
+        ),
         ("Airdrop", vec![ComponentName::Airdrop]),
         ("Coins", vec![ComponentName::QueryCoinDialog]),
-        ("Memes", vec![
-            ComponentName::ComponentMemeView,
-            ComponentName::MemeCategoryView,
-            ComponentName::ComponentMemeExplorer,
-            ComponentName::Memes,
-            ComponentName::MemeCardHeader,
-            ComponentName::InputSection,
-            ComponentName::ExpressionTypeSelector,
-            ComponentName::ExpressionInputs,
-            ComponentName::MetadataInputs,
-            ComponentName::CreateButton,
-            ComponentName::SearchInput,
-            ComponentName::ExpressionList,
-            ComponentName::ExpressionCard,
-            ComponentName::CodeDisplay,
-            ComponentName::ExpressionMetadata,
-            ComponentName::SimilaritySection,
-            ComponentName::VectorSpace,
-            ComponentName::MemesFooter,
-            ComponentName::WikidataMemeView,
-            ComponentName::WikidataMemeExplorer,
-            ComponentName::WorkflowStepView,
-            ComponentName::WorkflowMemeView,
-            ComponentName::WorkflowMemeExplorer,
-        ]),
-        ("Buttons", vec![
-            ComponentName::ConnectionButtons,
-            ComponentName::CoreButtons,
-            ComponentName::CryptoButtons,
-            ComponentName::ManagementButtons,
-            ComponentName::TransactionButtons,
-        ]),
-        ("Crypto Frontend", vec![
-            ComponentName::CryptoFrontendApp,
-            ComponentName::CryptoAppHeader,
-            ComponentName::CardHeader,
-            ComponentName::InputField,
-            ComponentName::TextAreaField,
-            ComponentName::ActionButton,
-            ComponentName::CryptoErrorMessage,
-            ComponentName::SuccessMessage,
-            ComponentName::EncryptionForm,
-            ComponentName::DecryptionForm,
-        ]),
+        (
+            "Memes",
+            vec![
+                ComponentName::ComponentMemeView,
+                ComponentName::MemeCategoryView,
+                ComponentName::ComponentMemeExplorer,
+                ComponentName::Memes,
+                ComponentName::MemeCardHeader,
+                ComponentName::InputSection,
+                ComponentName::ExpressionTypeSelector,
+                ComponentName::ExpressionInputs,
+                ComponentName::MetadataInputs,
+                ComponentName::CreateButton,
+                ComponentName::SearchInput,
+                ComponentName::ExpressionList,
+                ComponentName::ExpressionCard,
+                ComponentName::CodeDisplay,
+                ComponentName::ExpressionMetadata,
+                ComponentName::SimilaritySection,
+                ComponentName::VectorSpace,
+                ComponentName::MemesFooter,
+                ComponentName::WikidataMemeView,
+                ComponentName::WikidataMemeExplorer,
+                ComponentName::WorkflowStepView,
+                ComponentName::WorkflowMemeView,
+                ComponentName::WorkflowMemeExplorer,
+            ],
+        ),
+        (
+            "Buttons",
+            vec![
+                ComponentName::ConnectionButtons,
+                ComponentName::CoreButtons,
+                ComponentName::CryptoButtons,
+                ComponentName::ManagementButtons,
+                ComponentName::TransactionButtons,
+            ],
+        ),
+        (
+            "Crypto Frontend",
+            vec![
+                ComponentName::CryptoFrontendApp,
+                ComponentName::CryptoAppHeader,
+                ComponentName::CardHeader,
+                ComponentName::InputField,
+                ComponentName::TextAreaField,
+                ComponentName::ActionButton,
+                ComponentName::CryptoErrorMessage,
+                ComponentName::SuccessMessage,
+                ComponentName::EncryptionForm,
+                ComponentName::DecryptionForm,
+            ],
+        ),
         ("Dashboard", vec![ComponentName::Dashboard]),
-        ("Extras", vec![
-            ComponentName::Extras,
-            ComponentName::SignMessage,
-            ComponentName::SignTx,
-            ComponentName::SignInWithSolana,
-        ]),
+        (
+            "Extras",
+            vec![
+                ComponentName::Extras,
+                ComponentName::SignMessage,
+                ComponentName::SignTx,
+                ComponentName::SignInWithSolana,
+            ],
+        ),
         ("Footer", vec![ComponentName::Footer]),
         ("Git", vec![ComponentName::GitParser2]),
-        ("Meme Management", vec![
-            ComponentName::MemeManagement,
-            ComponentName::MetaMemeOperations,
-        ]),
-        ("Notifications", vec![
-            ComponentName::Notification,
-            ComponentName::Notification2,
-        ]),
+        (
+            "Meme Management",
+            vec![
+                ComponentName::MemeManagement,
+                ComponentName::MetaMemeOperations,
+            ],
+        ),
+        (
+            "Notifications",
+            vec![ComponentName::Notification, ComponentName::Notification2],
+        ),
         ("Page Not Found", vec![ComponentName::PageNotFound]),
-        ("Transactions", vec![
-            ComponentName::QueryAccountDialog,
-            ComponentName::ReceiveSol,
-            ComponentName::SendSol,
-        ]),
+        (
+            "Transactions",
+            vec![
+                ComponentName::QueryAccountDialog,
+                ComponentName::ReceiveSol,
+                ComponentName::SendSol,
+            ],
+        ),
         ("Styling", vec![ComponentName::StylingAndEmojis]),
         ("Connection", vec![ComponentName::ConnectWalletFirst]),
     ]
@@ -1018,18 +1012,13 @@ fn get_component_categories() -> Vec<(&'static str, Vec<ComponentName>)> {
 
 fn get_component_props(component: &ComponentName) -> Vec<(&'static str, &'static str)> {
     match component {
-        ComponentName::ConnectWalletModalModal => vec![
-            ("show_modal", "bool"),
-            ("show_connecting", "bool"),
-        ],
-        ComponentName::NavWalletItem => vec![
-            ("show_modal", "bool"),
-            ("show_connecting", "bool"),
-        ],
-        ComponentName::ActiveAccountDropDown => vec![
-            ("show_modal", "bool"),
-            ("shortened_address", "string"),
-        ],
+        ComponentName::ConnectWalletModalModal => {
+            vec![("show_modal", "bool"), ("show_connecting", "bool")]
+        }
+        ComponentName::NavWalletItem => vec![("show_modal", "bool"), ("show_connecting", "bool")],
+        ComponentName::ActiveAccountDropDown => {
+            vec![("show_modal", "bool"), ("shortened_address", "string")]
+        }
         ComponentName::PasswordAppHeader => vec![("app_state", "password_app_state")],
         ComponentName::PasswordErrorMessage => vec![("message", "string")],
         ComponentName::LoginScreen => vec![("app_state", "password_app_state")],
@@ -1037,18 +1026,11 @@ fn get_component_props(component: &ComponentName) -> Vec<(&'static str, &'static
         ComponentName::PasswordList => vec![("app_state", "password_app_state")],
         ComponentName::AddPasswordForm => vec![("app_state", "password_app_state")],
         ComponentName::PasswordDetail => vec![("app_state", "password_app_state")],
-        ComponentName::ClusterSuccess => vec![
-            ("address", "string"),
-            ("shortened_address", "string"),
-        ],
-        ComponentName::TokenAccountCard => vec![
-            ("mint", "string"),
-            ("ata_address", "string"),
-        ],
-        ComponentName::TxCard => vec![
-            ("tx", "string"),
-            ("timestamp", "string"),
-        ],
+        ComponentName::ClusterSuccess => {
+            vec![("address", "string"), ("shortened_address", "string")]
+        }
+        ComponentName::TokenAccountCard => vec![("mint", "string"), ("ata_address", "string")],
+        ComponentName::TxCard => vec![("tx", "string"), ("timestamp", "string")],
         ComponentName::Airdrop => vec![("show_airdrop_modal", "bool")],
         ComponentName::ClusterInfo => vec![("connections", "pub use_connections")],
         ComponentName::AddClusterModal => vec![
@@ -1066,10 +1048,9 @@ fn get_component_props(component: &ComponentName) -> Vec<(&'static str, &'static
         ComponentName::ActionButton => vec![("label", "string")],
         ComponentName::CryptoErrorMessage => vec![("message", "string")],
         ComponentName::SuccessMessage => vec![("message", "string")],
-        ComponentName::MemeCardHeader => vec![
-            ("expression", "string"),
-            ("state", "password_app_state"),
-        ],
+        ComponentName::MemeCardHeader => {
+            vec![("expression", "string"), ("state", "password_app_state")]
+        }
         ComponentName::InputSection => vec![("state", "password_app_state")],
         ComponentName::ExpressionTypeSelector => vec![("state", "password_app_state")],
         ComponentName::ExpressionInputs => vec![("state", "password_app_state")],
@@ -1077,16 +1058,14 @@ fn get_component_props(component: &ComponentName) -> Vec<(&'static str, &'static
         ComponentName::CreateButton => vec![("state", "password_app_state")],
         ComponentName::SearchInput => vec![("state", "password_app_state")],
         ComponentName::ExpressionList => vec![("state", "password_app_state")],
-        ComponentName::ExpressionCard => vec![
-            ("expression", "string"),
-            ("state", "password_app_state"),
-        ],
+        ComponentName::ExpressionCard => {
+            vec![("expression", "string"), ("state", "password_app_state")]
+        }
         ComponentName::CodeDisplay => vec![("expression", "string")],
         ComponentName::ExpressionMetadata => vec![("expression", "string")],
-        ComponentName::SimilaritySection => vec![
-            ("expression", "string"),
-            ("state", "password_app_state"),
-        ],
+        ComponentName::SimilaritySection => {
+            vec![("expression", "string"), ("state", "password_app_state")]
+        }
         ComponentName::VectorSpace => vec![("state", "password_app_state")],
         ComponentName::PageNotFound => vec![("route", "string_vec")],
         ComponentName::QueryAccountDialog => vec![("show_query_dialog", "bool")],

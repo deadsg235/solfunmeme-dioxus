@@ -9,7 +9,6 @@ pub enum BinderInfo {
     AuxDecl,
 }
 
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BinderInfoData {
     pub implicit: bool,
@@ -32,4 +31,3 @@ impl BinderInfoData {
         }
     }
 }
-

@@ -6,6 +6,3 @@ pub use sign_message::*;
 
 pub mod sign_tx;
 pub use sign_tx::*;
-
-
-

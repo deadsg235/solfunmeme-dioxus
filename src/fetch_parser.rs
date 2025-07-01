@@ -11,7 +11,14 @@ use wallet_adapter::{
     SendOptions, WalletError, WalletResult,
 };
 
-use crate::{model::{storage::{ACCOUNT_STATE, WALLET_ADAPTER}, use_connections, AccountState, BlockHashResponseValue, ResponseWithContext, RpcResponse, SignaturesResponse, TokenAccountResponse}, FetchReq};
+use crate::{
+    model::{
+        storage::{ACCOUNT_STATE, WALLET_ADAPTER},
+        use_connections, AccountState, BlockHashResponseValue, ResponseWithContext, RpcResponse,
+        SignaturesResponse, TokenAccountResponse,
+    },
+    FetchReq,
+};
 //, views::FetchReq
 //use bincode::config::legacy;
 
@@ -56,8 +63,6 @@ async fn get_blockhash() -> WalletResult<solana_sdk::hash::Hash> {
         .map_err(|error| WalletError::Op(error.to_string()))
 }
 
-
-
 pub async fn get_balance(address: &str) -> WalletResult<String> {
     let balance_options = jzon::object! {
         "id":1,
@@ -99,7 +104,7 @@ pub async fn send_sol_req(
     let mut tx = Transaction::new_with_payer(&[send_sol_instruction], Some(&pubkey));
     let blockhash = get_blockhash().await?;
     tx.message.recent_blockhash = blockhash;
-    
+
     //#[cfg(feature = "bincodev1")]
     let tx_bytes = bincode::serialize(&tx).map_err(|error| WalletError::Op(error.to_string()))?;
 
@@ -196,8 +201,3 @@ pub async fn accounts_runner(address: &str) -> WalletResult<AccountState> {
         transactions: signatures.clone(),
     })
 }
-
-
-
-
-

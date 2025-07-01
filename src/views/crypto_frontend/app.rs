@@ -1,6 +1,6 @@
-use dioxus::prelude::*;
+use super::forms::{DecryptionForm, EncryptionForm};
 use crate::views::crypto_style::*;
-use super::forms::{EncryptionForm, DecryptionForm};
+use dioxus::prelude::*;
 
 #[component]
 pub fn CryptoFrontendApp() -> Element {
@@ -24,4 +24,4 @@ pub fn AppHeader() -> Element {
             "Solana Wallet Encryption Demo"
         }
     }
-} 
+}

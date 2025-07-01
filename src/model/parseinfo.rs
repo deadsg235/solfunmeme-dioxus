@@ -1,5 +1,5 @@
-use serde::Deserialize;
 use crate::model::TokenAmount;
+use serde::Deserialize;
 
 #[derive(Debug, PartialEq, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]

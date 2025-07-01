@@ -2,8 +2,6 @@
 mod tests {
     use crate::model::level::Level;
 
-    
-
     #[test]
     fn test_level_zero_equality() {
         assert_eq!(Level::Zero, Level::Zero);
@@ -21,8 +19,14 @@ mod tests {
 
     #[test]
     fn test_level_max() {
-        let l1 = Level::Max(Box::new(Level::Zero), Box::new(Level::Succ(Box::new(Level::Zero))));
-        let l2 = Level::Max(Box::new(Level::Zero), Box::new(Level::Succ(Box::new(Level::Zero))));
+        let l1 = Level::Max(
+            Box::new(Level::Zero),
+            Box::new(Level::Succ(Box::new(Level::Zero))),
+        );
+        let l2 = Level::Max(
+            Box::new(Level::Zero),
+            Box::new(Level::Succ(Box::new(Level::Zero))),
+        );
         assert_eq!(l1, l2);
 
         let l3 = Level::Max(Box::new(Level::Zero), Box::new(Level::Zero));
@@ -31,11 +35,20 @@ mod tests {
 
     #[test]
     fn test_level_imax() {
-        let l1 = Level::IMax(Box::new(Level::Zero), Box::new(Level::Succ(Box::new(Level::Zero))));
-        let l2 = Level::IMax(Box::new(Level::Zero), Box::new(Level::Succ(Box::new(Level::Zero))));
+        let l1 = Level::IMax(
+            Box::new(Level::Zero),
+            Box::new(Level::Succ(Box::new(Level::Zero))),
+        );
+        let l2 = Level::IMax(
+            Box::new(Level::Zero),
+            Box::new(Level::Succ(Box::new(Level::Zero))),
+        );
         assert_eq!(l1, l2);
 
-        let l3 = Level::IMax(Box::new(Level::Succ(Box::new(Level::Zero))), Box::new(Level::Zero));
+        let l3 = Level::IMax(
+            Box::new(Level::Succ(Box::new(Level::Zero))),
+            Box::new(Level::Zero),
+        );
         assert_ne!(l1, l3);
     }
 
@@ -60,18 +73,14 @@ mod tests {
     #[test]
     fn test_nested_levels() {
         let l1 = Level::Max(
-            Box::new(Level::Succ(Box::new(Level::Param("a".to_string().to_string())))),
-            Box::new(Level::IMax(
-                Box::new(Level::MVar(1)),
-                Box::new(Level::Zero),
-            )),
+            Box::new(Level::Succ(Box::new(Level::Param(
+                "a".to_string().to_string(),
+            )))),
+            Box::new(Level::IMax(Box::new(Level::MVar(1)), Box::new(Level::Zero))),
         );
         let l2 = Level::Max(
             Box::new(Level::Succ(Box::new(Level::Param("a".to_string())))),
-            Box::new(Level::IMax(
-                Box::new(Level::MVar(1)),
-                Box::new(Level::Zero),
-            )),
+            Box::new(Level::IMax(Box::new(Level::MVar(1)), Box::new(Level::Zero))),
         );
         assert_eq!(l1, l2);
     }

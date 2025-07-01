@@ -1,5 +1,7 @@
-use crate::core::vectorization::{CodeVector, CodeVectorizer};
-use crate::core::declaration_splitter::Declaration;
+use crate::core::{
+    declaration_splitter::Declaration,
+    vectorization::{CodeVector, CodeVectorizer},
+};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -84,7 +86,8 @@ impl DuplicateDetector {
         let mut canonical_files = HashMap::new();
 
         for group in &report.groups {
-            let filename = format!("canonical_{}_{}.rs", 
+            let filename = format!(
+                "canonical_{}_{}.rs",
                 group.canonical.declaration_type.to_string().to_lowercase(),
                 group.canonical.name.replace("::", "_")
             );
@@ -98,13 +101,15 @@ impl DuplicateDetector {
         let mut mapping = HashMap::new();
 
         for group in &report.groups {
-            let canonical_key = format!("{}::{}", 
+            let canonical_key = format!(
+                "{}::{}",
                 group.canonical.file_path.as_deref().unwrap_or("unknown"),
                 group.canonical.name
             );
 
             for duplicate in &group.duplicates {
-                let duplicate_key = format!("{}::{}", 
+                let duplicate_key = format!(
+                    "{}::{}",
                     duplicate.file_path.as_deref().unwrap_or("unknown"),
                     duplicate.name
                 );
@@ -116,11 +121,18 @@ impl DuplicateDetector {
     }
 
     pub fn calculate_deduplication_savings(&self, report: &DuplicateReport) -> DeduplicationStats {
-        let total_original_size: usize = report.groups.iter()
-            .map(|g| g.canonical.content.len() + g.duplicates.iter().map(|d| d.content.len()).sum::<usize>())
+        let total_original_size: usize = report
+            .groups
+            .iter()
+            .map(|g| {
+                g.canonical.content.len()
+                    + g.duplicates.iter().map(|d| d.content.len()).sum::<usize>()
+            })
             .sum();
 
-        let deduplicated_size: usize = report.groups.iter()
+        let deduplicated_size: usize = report
+            .groups
+            .iter()
             .map(|g| g.canonical.content.len())
             .sum();
 
@@ -155,9 +167,13 @@ pub struct DeduplicationStats {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::core::declaration_splitter::{DeclarationType};
+    use crate::core::declaration_splitter::DeclarationType;
 
-    fn create_test_declaration(name: &str, content: &str, file_path: Option<String>) -> Declaration {
+    fn create_test_declaration(
+        name: &str,
+        content: &str,
+        file_path: Option<String>,
+    ) -> Declaration {
         Declaration {
             name: name.to_string(),
             declaration_type: DeclarationType::Function,
@@ -171,10 +187,18 @@ mod tests {
     #[test]
     fn test_duplicate_detection_identical() {
         let detector = DuplicateDetector::new(100, 0.9);
-        
+
         let declarations = vec![
-            create_test_declaration("func1", "fn test() { println!(\"hello\"); }", Some("file1.rs".to_string())),
-            create_test_declaration("func2", "fn test() { println!(\"hello\"); }", Some("file2.rs".to_string())),
+            create_test_declaration(
+                "func1",
+                "fn test() { println!(\"hello\"); }",
+                Some("file1.rs".to_string()),
+            ),
+            create_test_declaration(
+                "func2",
+                "fn test() { println!(\"hello\"); }",
+                Some("file2.rs".to_string()),
+            ),
         ];
 
         let report = detector.detect_duplicates(&declarations);
@@ -185,7 +209,7 @@ mod tests {
     #[test]
     fn test_duplicate_detection_different() {
         let detector = DuplicateDetector::new(100, 0.9);
-        
+
         let declarations = vec![
             create_test_declaration("func1", "fn test1() { println!(\"hello\"); }", None),
             create_test_declaration("func2", "fn test2() { println!(\"world\"); }", None),
@@ -199,7 +223,7 @@ mod tests {
     #[test]
     fn test_canonical_directory_creation() {
         let detector = DuplicateDetector::new(100, 0.9);
-        
+
         let declarations = vec![
             create_test_declaration("func1", "fn test() { println!(\"hello\"); }", None),
             create_test_declaration("func2", "fn test() { println!(\"hello\"); }", None),
@@ -207,7 +231,7 @@ mod tests {
 
         let report = detector.detect_duplicates(&declarations);
         let canonical_files = detector.create_canonical_directory(&report);
-        
+
         assert_eq!(canonical_files.len(), 1);
         assert!(canonical_files.contains_key("canonical_function_func1.rs"));
     }
@@ -215,24 +239,35 @@ mod tests {
     #[test]
     fn test_duplicate_mapping() {
         let detector = DuplicateDetector::new(100, 0.9);
-        
+
         let declarations = vec![
-            create_test_declaration("func1", "fn test() { println!(\"hello\"); }", Some("file1.rs".to_string())),
-            create_test_declaration("func2", "fn test() { println!(\"hello\"); }", Some("file2.rs".to_string())),
+            create_test_declaration(
+                "func1",
+                "fn test() { println!(\"hello\"); }",
+                Some("file1.rs".to_string()),
+            ),
+            create_test_declaration(
+                "func2",
+                "fn test() { println!(\"hello\"); }",
+                Some("file2.rs".to_string()),
+            ),
         ];
 
         let report = detector.detect_duplicates(&declarations);
         let mapping = detector.generate_duplicate_mapping(&report);
-        
+
         assert_eq!(mapping.len(), 1);
         assert!(mapping.contains_key("file2.rs::func2"));
-        assert_eq!(mapping.get("file2.rs::func2"), Some(&"file1.rs::func1".to_string()));
+        assert_eq!(
+            mapping.get("file2.rs::func2"),
+            Some(&"file1.rs::func1".to_string())
+        );
     }
 
     #[test]
     fn test_deduplication_stats() {
         let detector = DuplicateDetector::new(100, 0.9);
-        
+
         let content = "fn test() { println!(\"hello\"); }";
         let declarations = vec![
             create_test_declaration("func1", content, None),
@@ -241,7 +276,7 @@ mod tests {
 
         let report = detector.detect_duplicates(&declarations);
         let stats = detector.calculate_deduplication_savings(&report);
-        
+
         assert_eq!(stats.original_size, content.len() * 2);
         assert_eq!(stats.deduplicated_size, content.len());
         assert_eq!(stats.savings, content.len());

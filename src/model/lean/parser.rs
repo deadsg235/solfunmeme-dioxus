@@ -206,12 +206,10 @@
 
 // // Parse Identifier (e.g., "SimpleExpr", "u_1", "default")
 
-
 // // Parse Indent (e.g., "  ", "    ")
 // fn parse_indent(input: &str) -> IResult<&str, &str> {
 //     take_while1(|c: char| c == ' ')(input)
 // }
-
 
 // // Parse the root (e.g., "📖 SimpleExpr.rec")
 // fn parse_root(input: &str) -> IResult<&str, Root> {
@@ -233,7 +231,6 @@
 //         parse_lam,
 //     ))(input)
 // }
-
 
 // fn parse_program(input: &str) -> IResult<&str, Program> {
 //     let (input, root) = parse_root(input)?;

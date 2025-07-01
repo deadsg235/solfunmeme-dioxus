@@ -14,7 +14,7 @@ pub struct Theme {
     pub accent_color: &'static str,
     pub error_color: &'static str,
     pub success_color: &'static str,
-    
+
     // Spacing
     pub spacing_xs: &'static str,
     pub spacing_sm: &'static str,
@@ -22,12 +22,12 @@ pub struct Theme {
     #[allow(dead_code)]
     pub spacing_lg: &'static str,
     pub spacing_xl: &'static str,
-    
+
     // Border radius
     pub radius_sm: &'static str,
     pub radius_md: &'static str,
     pub radius_lg: &'static str,
-    
+
     // Typography
     pub font_family_mono: &'static str,
     pub font_family_sans: &'static str,
@@ -35,7 +35,7 @@ pub struct Theme {
     pub font_size_md: &'static str,
     pub font_size_lg: &'static str,
     pub font_size_xl: &'static str,
-    
+
     // Shadows
     pub shadow_sm: &'static str,
     pub shadow_md: &'static str,
@@ -55,19 +55,19 @@ impl Default for Theme {
             accent_color: "#667eea",
             error_color: "#ff4757",
             success_color: "#2ed573",
-            
+
             // Spacing
             spacing_xs: "5px",
             spacing_sm: "10px",
             spacing_md: "15px",
             spacing_lg: "20px",
             spacing_xl: "30px",
-            
+
             // Border radius
             radius_sm: "8px",
             radius_md: "12px",
             radius_lg: "15px",
-            
+
             // Typography
             font_family_mono: "'Fira Code', monospace",
             font_family_sans: "system-ui, -apple-system, sans-serif",
@@ -75,7 +75,7 @@ impl Default for Theme {
             font_size_md: "16px",
             font_size_lg: "1.2rem",
             font_size_xl: "2.5rem",
-            
+
             // Shadows
             shadow_sm: "0 2px 8px rgba(0,0,0,0.1)",
             shadow_md: "0 4px 16px rgba(0,0,0,0.1)",
@@ -95,19 +95,19 @@ pub static THEME: Theme = Theme {
     accent_color: "#667eea",
     error_color: "#ff4757",
     success_color: "#2ed573",
-    
+
     // Spacing
     spacing_xs: "5px",
     spacing_sm: "10px",
     spacing_md: "15px",
     spacing_lg: "20px",
     spacing_xl: "30px",
-    
+
     // Border radius
     radius_sm: "8px",
     radius_md: "12px",
     radius_lg: "15px",
-    
+
     // Typography
     font_family_mono: "'Fira Code', monospace",
     font_family_sans: "system-ui, -apple-system, sans-serif",
@@ -115,7 +115,7 @@ pub static THEME: Theme = Theme {
     font_size_md: "16px",
     font_size_lg: "1.2rem",
     font_size_xl: "2.5rem",
-    
+
     // Shadows
     shadow_sm: "0 2px 8px rgba(0,0,0,0.1)",
     shadow_md: "0 4px 16px rgba(0,0,0,0.1)",
@@ -133,14 +133,16 @@ impl Styles {
     pub fn app_container() -> String {
         format!(
             "font-family: {}; background: {}; min-height: 100vh; padding: {};",
-            THEME.font_family_mono,
-            THEME.background_color,
-            THEME.spacing_lg
+            THEME.font_family_mono, THEME.background_color, THEME.spacing_lg
         )
     }
 
-    pub fn h2()->String {"".to_string()}
-    pub fn p()->String {"".to_string()}
+    pub fn h2() -> String {
+        "".to_string()
+    }
+    pub fn p() -> String {
+        "".to_string()
+    }
 
     // Header styles
     pub fn header() -> String {
@@ -150,34 +152,26 @@ impl Styles {
     pub fn header_title() -> String {
         format!(
             "font-size: {}; margin-bottom: {}; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);",
-            THEME.font_size_xl,
-            THEME.spacing_sm
+            THEME.font_size_xl, THEME.spacing_sm
         )
     }
 
     pub fn header_subtitle() -> String {
-        format!(
-            "font-size: {}; opacity: 0.9;",
-            THEME.font_size_lg
-        )
+        format!("font-size: {}; opacity: 0.9;", THEME.font_size_lg)
     }
 
     // Section styles
     pub fn section() -> String {
         format!(
             "background: {}; border-radius: {}; padding: 25px; margin-bottom: {}; box-shadow: {};",
-            THEME.surface_color,
-            THEME.radius_lg,
-            THEME.spacing_xl,
-            THEME.shadow_lg
+            THEME.surface_color, THEME.radius_lg, THEME.spacing_xl, THEME.shadow_lg
         )
     }
 
     pub fn section_title() -> String {
         format!(
             "margin-bottom: {}; color: {};",
-            THEME.spacing_lg,
-            THEME.text_primary
+            THEME.spacing_lg, THEME.text_primary
         )
     }
 
@@ -185,9 +179,7 @@ impl Styles {
     pub fn input() -> String {
         format!(
             "padding: {}; border: 2px solid #ddd; border-radius: {}; font-size: {};",
-            THEME.spacing_sm,
-            THEME.radius_sm,
-            THEME.font_size_md
+            THEME.spacing_sm, THEME.radius_sm, THEME.font_size_md
         )
     }
 
@@ -203,9 +195,7 @@ impl Styles {
     pub fn search_input() -> String {
         format!(
             "width: 100%; padding: {}; border: 2px solid #ddd; border-radius: {}; font-size: {};",
-            THEME.spacing_sm,
-            THEME.radius_sm,
-            THEME.font_size_md
+            THEME.spacing_sm, THEME.radius_sm, THEME.font_size_md
         )
     }
 
@@ -231,16 +221,14 @@ impl Styles {
     pub fn grid_auto_fit(min_width: &str) -> String {
         format!(
             "display: grid; grid-template-columns: repeat(auto-fit, minmax({}, 1fr)); gap: {};",
-            min_width,
-            THEME.spacing_sm
+            min_width, THEME.spacing_sm
         )
     }
 
     pub fn grid_auto_fill(min_width: &str) -> String {
         format!(
             "display: grid; grid-template-columns: repeat(auto-fill, minmax({}, 1fr)); gap: {};",
-            min_width,
-            THEME.spacing_lg
+            min_width, THEME.spacing_lg
         )
     }
 
@@ -253,7 +241,7 @@ impl Styles {
     }
 
     pub fn flex_with_gap(gap: &str) -> String {
-        format!("display: flex; align-items: center; gap: {gap};" )
+        format!("display: flex; align-items: center; gap: {gap};")
     }
 
     // Card styles
@@ -268,10 +256,7 @@ impl Styles {
     }
 
     pub fn card_hover() -> String {
-        format!(
-            "{} hover: transform: translateY(-2px);",
-            Self::card()
-        )
+        format!("{} hover: transform: translateY(-2px);", Self::card())
     }
 
     // Code styles

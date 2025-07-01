@@ -3,10 +3,11 @@ use dioxus::prelude::*;
 //use std::collections::HashMap;
 //use wallet_adapter::{Cluster,};
 
-use crate::{model::use_connections,
-	    //views::{
+use crate::{
+    model::use_connections,
+    //views::{
     //cluster_management_section, connection_filter, connection_list, connection_management::connection_management_section
-	    //}
+    //}
 };
 #[allow(dead_code)]
 // Main Connections component
@@ -37,7 +38,7 @@ pub fn Connections() -> Element {
 
     rsx! {
         div { class: "container mx-auto p-6 max-w-6xl",
-    
+
         }
     }
 }

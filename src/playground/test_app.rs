@@ -114,7 +114,7 @@ pub fn TestMenuApp() -> Element {
             h1 { class: "text-3xl font-bold mb-6 text-center",
                 "SolFunMeme Test Suite"
             }
-            
+
             div { class: "grid grid-cols-1 lg:grid-cols-4 gap-6",
                 // Category Sidebar
                 div { class: "lg:col-span-1",
@@ -229,7 +229,7 @@ pub fn TestMenuApp() -> Element {
 //             h1 { class: "text-3xl font-bold mb-6 text-center",
 //                 "SolFunMeme Test Suite"
 //             }
-            
+
 //             div { class: "grid grid-cols-1 lg:grid-cols-4 gap-6",
 //                 // Category Sidebar
 //                 div { class: "lg:col-span-1",
@@ -345,7 +345,7 @@ pub fn TestMenuApp() -> Element {
 //             h1 { class: "text-3xl font-bold mb-6 text-center",
 //                 "SolFunMeme Test Suite"
 //             }
-            
+
 //             div { class: "grid grid-cols-1 lg:grid-cols-4 gap-6",
 //                 // Category Sidebar
 //                 div { class: "lg:col-span-1",
@@ -467,7 +467,7 @@ pub fn TestMenuApp2() -> Element {
             h1 { class: "text-3xl font-bold mb-6 text-center",
                 "SolFunMeme Test Suite"
             }
-            
+
             div { class: "grid grid-cols-1 lg:grid-cols-4 gap-6",
                 // Category Sidebar
                 div { class: "lg:col-span-1",
@@ -593,8 +593,8 @@ fn TestCaseCard(test_case: TestCase, on_run: EventHandler<Result<String, String>
 fn category_name(category: &TestCategory) -> &'static str {
     match category {
         TestCategory::CryptoOperations => "Crypto Operations",
-	TestCategory::TimerFunctions => "Timer Functions",
-	TestCategory::WalletOperations => "Wallet Operations",
+        TestCategory::TimerFunctions => "Timer Functions",
+        TestCategory::WalletOperations => "Wallet Operations",
         TestCategory::ClusterManagement => "Cluster Management",
         TestCategory::AccountOperations => "Account Operations",
         TestCategory::TransactionOps => "Transaction Operations",
@@ -613,16 +613,15 @@ fn run_category_tests(
 ) {
     let test_cases = get_test_cases();
     let mut results = Vec::new();
-    
+
     for test_case in test_cases.iter().filter(|tc| tc.category == category) {
         let result = (test_case.test_fn)();
         results.push((test_case.name.clone(), result));
     }
-    
+
     test_results.set(results);
     show_results.set(true);
 }
-
 
 // Test function implementations (placeholder)
 fn test_keypair_generation() -> Result<String, String> {
@@ -677,7 +676,6 @@ fn test_fee_calculation() -> Result<String, String> {
     Ok("Test successful".to_string())
 }
 
-
 fn test_workflow_memes() -> Result<String, String> {
     Ok("Test successful".to_string())
 }
@@ -722,18 +720,6 @@ fn test_storage_operation() -> Result<String, String> {
     Ok("Test successful".to_string())
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 // OLD CODE
 #[derive(Clone, PartialEq)]
 pub enum TestCategory22 {
@@ -757,7 +743,6 @@ pub struct TestCase2 {
 }
 
 //use dioxus::prelude::*;
-
 
 #[component]
 fn TestCaseCard2(test_case: TestCase, on_run: EventHandler<Result<String, String>>) -> Element {
@@ -800,16 +785,15 @@ fn TestCaseCard2(test_case: TestCase, on_run: EventHandler<Result<String, String
 // ) {
 //     let test_cases = get_test_cases();
 //     let mut results = Vec::new();
-    
+
 //     for test_case in test_cases.iter().filter(|tc| tc.category == category) {
 //         let result = (test_case.test_fn)();
 //         results.push((test_case.name.clone(), result));
 //     }
-    
+
 //     test_results.set(results);
 //     show_results.set(true);
 // }
-
 
 // Test function implementations (placeholder - implement based on your actual test logic)
 fn test_keypair_generation2() -> Result<String, String> {
@@ -859,7 +843,7 @@ fn test_balance_tracking() -> Result<String, String> {
 
 fn test_component_meme() -> Result<String, String> {
     Ok("Test successful".to_string())
-}   
+}
 
 fn test_expression_parsing() -> Result<String, String> {
     Ok("Test successful".to_string())
@@ -868,14 +852,13 @@ fn test_expression_parsing() -> Result<String, String> {
 fn expression_parsing() -> Result<String, String> {
     Ok("Test successful".to_string())
 }
-    
 
-fn test_emoji_conversion()-> Result<String, String> {
+fn test_emoji_conversion() -> Result<String, String> {
     Ok("Test successful".to_string())
 }
 
 //test_emoji_conversion
-    
+
 // This menu structure provides:
 
 // 1. **Categorized test organization** - Tests are grouped by functionality
@@ -886,7 +869,6 @@ fn test_emoji_conversion()-> Result<String, String> {
 // 6. **Extensible design** - Easy to add new test cases and categories
 
 // The placeholder test functions should be replaced with actual calls to your existing test modules to provide real functionality testing.
-
 
 fn get_test_cases() -> Vec<TestCase> {
     vec![
@@ -915,10 +897,9 @@ fn get_test_cases() -> Vec<TestCase> {
             category: TestCategory::CryptoOperations,
             test_fn: test_key_validation,
         },
-	
         // Cluster Management
         //TestCategory2 {
-	TestCase {
+        TestCase {
             name: "Add Cluster".to_string(),
             description: "Test adding new Solana clusters".to_string(),
             category: TestCategory::ClusterManagement,
@@ -936,7 +917,6 @@ fn get_test_cases() -> Vec<TestCase> {
             category: TestCategory::ClusterManagement,
             test_fn: test_cluster_validation,
         },
-
         // Account Operations
         TestCase {
             name: "Account Query".to_string(),
@@ -956,7 +936,6 @@ fn get_test_cases() -> Vec<TestCase> {
             category: TestCategory::AccountOperations,
             test_fn: test_balance_tracking,
         },
-
         // Transaction Operations
         TestCase {
             name: "SOL Transfer".to_string(),
@@ -976,7 +955,6 @@ fn get_test_cases() -> Vec<TestCase> {
             category: TestCategory::TransactionOps,
             test_fn: test_fee_calculation,
         },
-
         // Meme Features
         TestCase {
             name: "Component Memes".to_string(),
@@ -996,7 +974,6 @@ fn get_test_cases() -> Vec<TestCase> {
             category: TestCategory::MemeFeatures,
             test_fn: test_wikidata_integration,
         },
-
         // Lean Integration
         TestCase {
             name: "Expression Parsing".to_string(),
@@ -1008,7 +985,7 @@ fn get_test_cases() -> Vec<TestCase> {
             name: "Emoji Conversion".to_string(),
             description: "Test converting expressions to emoji representation".to_string(),
             category: TestCategory::LeanIntegration,
-            test_fn: test_emoji_conversion,                 	    
+            test_fn: test_emoji_conversion,
         },
         TestCase {
             name: "Level Management".to_string(),
@@ -1016,7 +993,6 @@ fn get_test_cases() -> Vec<TestCase> {
             category: TestCategory::LeanIntegration,
             test_fn: test_level_management,
         },
-
         // Notification System
         TestCase {
             name: "SystemSystemNotification Creation".to_string(),
@@ -1030,7 +1006,6 @@ fn get_test_cases() -> Vec<TestCase> {
             category: TestCategory::TimerFunctions,
             test_fn: test_timed_notification,
         },
-
         TestCase {
             name: "Wallet Connection".to_string(),
             description: "testConnectionDescription".to_string(),
@@ -1054,7 +1029,7 @@ fn get_test_cases() -> Vec<TestCase> {
             description: "Test storage utility".to_string(),
             category: TestCategory::UtilityFunctions,
             test_fn: test_storage_operation,
-        }
+        },
     ]
 }
 fn get_test_cases2() -> Vec<TestCase> {
@@ -1084,7 +1059,6 @@ fn get_test_cases2() -> Vec<TestCase> {
             category: TestCategory::CryptoOperations,
             test_fn: test_key_validation,
         },
-
         // Cluster Management
         TestCase {
             name: "Add Cluster".to_string(),
@@ -1104,7 +1078,6 @@ fn get_test_cases2() -> Vec<TestCase> {
             category: TestCategory::ClusterManagement,
             test_fn: test_cluster_validation,
         },
-
         // Account Operations
         TestCase {
             name: "Account Query".to_string(),
@@ -1124,7 +1097,6 @@ fn get_test_cases2() -> Vec<TestCase> {
             category: TestCategory::AccountOperations,
             test_fn: test_balance_tracking,
         },
-
         // Transaction Operations
         TestCase {
             name: "SOL Transfer".to_string(),
@@ -1144,7 +1116,6 @@ fn get_test_cases2() -> Vec<TestCase> {
             category: TestCategory::TransactionOps,
             test_fn: test_fee_calculation,
         },
-
         // Meme Features
         TestCase {
             name: "Component Memes".to_string(),
@@ -1164,7 +1135,6 @@ fn get_test_cases2() -> Vec<TestCase> {
             category: TestCategory::MemeFeatures,
             test_fn: test_wikidata_integration,
         },
-
         // Lean Integration
         TestCase {
             name: "Expression Parsing".to_string(),
@@ -1184,7 +1154,6 @@ fn get_test_cases2() -> Vec<TestCase> {
             category: TestCategory::LeanIntegration,
             test_fn: test_level_management,
         },
-
         // Notification System
         TestCase {
             name: "Notification Creation".to_string(),
@@ -1198,7 +1167,6 @@ fn get_test_cases2() -> Vec<TestCase> {
             category: TestCategory::NotificationSystem,
             test_fn: test_timed_notification,
         },
-
         // Connection Management
         TestCase {
             name: "Wallet Connection".to_string(),
@@ -1212,7 +1180,6 @@ fn get_test_cases2() -> Vec<TestCase> {
             category: TestCategory::ConnectionManagement,
             test_fn: test_connection_filtering,
         },
-
         // Utility Functions
         TestCase {
             name: "Data Parsing".to_string(),

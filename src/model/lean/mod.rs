@@ -3,10 +3,10 @@ pub mod constants;
 pub mod level;
 pub mod name;
 
-pub mod types;
+pub mod emojis;
 pub mod meme;
 pub mod style;
-pub mod emojis;
+pub mod types;
 // mod binder
 mod binder_test;
 mod constants_test;
@@ -16,8 +16,6 @@ mod level_test;
 pub mod parser;
 
 mod view;
-
-
 
 // pub use binder::BinderInfo;
 // pub use level::{Level, LevelType};

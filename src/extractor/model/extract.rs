@@ -1,25 +1,27 @@
-use std::sync::Arc;
-use dioxus::prelude::*;
-use dioxus::html::FileEngine;
+use crate::extractor::{
+    model::extract_html::extract_code_snippets_from_html,
+    types::{CodeSnippet, DocumentSummary, ExtractedFile, ProcessingFile, TestResult},
+};
+use dioxus::{html::FileEngine, prelude::*};
 use gloo_timers::future::TimeoutFuture;
-use std::collections::hash_map::DefaultHasher;
-use std::hash::{Hash, Hasher};
-use crate::extractor::model::extract_html::extract_code_snippets_from_html;
-use crate::extractor::types::{CodeSnippet, ExtractedFile, ProcessingFile, TestResult, DocumentSummary};
+use std::{
+    collections::hash_map::DefaultHasher,
+    hash::{Hash, Hasher},
+    sync::Arc,
+};
 
 // /// Extract code snippets from markdown content
 // src/extractor/model/extract.rs
 //  11:pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
 // 174:            let snippets = extract_code_snippets(&content);
 // src/extractor/system/files.rs
-//   7:use crate::extractor::{model::extract::extract_code_snippets, types::{ExtractedFile, ProcessingFile}};
-//  37:            let snippets = extract_code_snippets(&content);
-// 100:            let snippets = extract_code_snippets(&content);
-// 152:                let snippets = extract_code_snippets(&content);
+//   7:use crate::extractor::{model::extract::extract_code_snippets, types::{ExtractedFile, ProcessingFile}};
+//  37:            let snippets = extract_code_snippets(&content);
+// 100:            let snippets = extract_code_snippets(&content);
+// 152:                let snippets = extract_code_snippets(&content);
 // src/extractor/system/process_file.rs
 // 6:use crate::extractor::model::extract::extract_code_snippets;
 
-     
 pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
     let mut snippets = Vec::new();
     let lines: Vec<&str> = content.lines().collect();
@@ -27,7 +29,7 @@ pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
     let mut current_language = String::new();
     let mut current_content = String::new();
     let mut start_line = 0;
-    
+
     for (i, line) in lines.iter().enumerate() {
         if line.starts_with("```") {
             if in_code_block {
@@ -37,7 +39,7 @@ pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
                         current_language.clone(),
                         current_content.clone(),
                         start_line,
-                        i
+                        i,
                     );
                     snippets.push(snippet);
                 }
@@ -60,34 +62,30 @@ pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
             current_content.push_str(line);
         }
     }
-    
+
     // Handle unclosed code block
     if in_code_block && !current_content.trim().is_empty() {
-        let snippet = create_code_snippet(
-            current_language,
-            current_content,
-            start_line,
-            lines.len()
-        );
+        let snippet =
+            create_code_snippet(current_language, current_content, start_line, lines.len());
         snippets.push(snippet);
     }
-    
+
     snippets
 }
 
 /// Create a complete CodeSnippet with all fields populated
 fn create_code_snippet(
-    language: String, 
-    content: String, 
-    line_start: usize, 
-    line_end: usize
+    language: String,
+    content: String,
+    line_start: usize,
+    line_end: usize,
 ) -> CodeSnippet {
     let content_hash = generate_content_hash(&content);
     let token_count = estimate_token_count(&content);
     let line_count = content.lines().count();
     let char_count = content.chars().count();
     let test_result = Some(create_default_test_result());
-    
+
     CodeSnippet {
         language,
         content,
@@ -115,9 +113,7 @@ pub fn estimate_token_count(content: &str) -> usize {
         .split_whitespace()
         .map(|word| {
             // Count punctuation and operators as separate tokens
-            let punctuation_count = word.chars()
-                .filter(|c| c.is_ascii_punctuation())
-                .count();
+            let punctuation_count = word.chars().filter(|c| c.is_ascii_punctuation()).count();
             1 + punctuation_count
         })
         .sum()
@@ -137,29 +133,27 @@ fn create_default_test_result() -> TestResult {
 pub async fn process_file_engine(
     file_engine: Arc<dyn FileEngine>,
     mut files: Signal<Vec<ExtractedFile>>,
-    mut processing_file: Signal<Option<ProcessingFile>>
+    mut processing_file: Signal<Option<ProcessingFile>>,
 ) {
     let file_names = file_engine.files();
 
-
     for file_name in &file_names {
-
-	let summary = Some(DocumentSummary{
-	    total_turns: 9,  
-	    total_code_snippets: 0,  
-	    total_tokens: 0,  
-	    languages_found: [].to_vec(),  
-	    content_hashes: [].to_vec(),  	    
-	});
+        let summary = Some(DocumentSummary {
+            total_turns: 9,
+            total_code_snippets: 0,
+            total_tokens: 0,
+            languages_found: [].to_vec(),
+            content_hashes: [].to_vec(),
+        });
         // Start processing this file
         processing_file.set(Some(ProcessingFile {
             name: file_name.clone(),
             progress: 0,
             total_lines: 0,
             current_content: String::new(),
-	    summary,
+            summary,
         }));
-        
+
         // Small delay for UI responsiveness
         TimeoutFuture::new(50).await;
 
@@ -183,21 +177,20 @@ pub async fn process_file_engine(
             }
 
             // Extract code snippets
-	    // FIXME why are we doing the same thing twice?
-	    let snippets = extract_code_snippets(&content);
-	    // …then append any HTML‐based snippets
-	    let mut all_snippets = snippets;
-	    all_snippets.extend(extract_code_snippets_from_html(&content));
-	    // Finally push one combined ExtractedFile
-	    files.write().push(ExtractedFile {
-	        name: file_name.clone(),
-	        snippets: all_snippets,
-	        total_lines,
-	    });
-
+            // FIXME why are we doing the same thing twice?
+            let snippets = extract_code_snippets(&content);
+            // …then append any HTML‐based snippets
+            let mut all_snippets = snippets;
+            all_snippets.extend(extract_code_snippets_from_html(&content));
+            // Finally push one combined ExtractedFile
+            files.write().push(ExtractedFile {
+                name: file_name.clone(),
+                snippets: all_snippets,
+                total_lines,
+            });
         }
     }
-    
+
     // Clear processing state
     processing_file.set(None);
 }
@@ -210,9 +203,9 @@ pub fn generate_snippet_id(file_name: &str, snippet_idx: usize) -> String {
 /// Validate if content appears to be a markdown file
 pub fn is_markdown_file(file_name: &str) -> bool {
     let lower_name = file_name.to_lowercase();
-    lower_name.ends_with(".md") || 
-    lower_name.ends_with(".markdown") || 
-    lower_name.ends_with(".mdown")
+    lower_name.ends_with(".md")
+        || lower_name.ends_with(".markdown")
+        || lower_name.ends_with(".mdown")
 }
 
 /// Get language-specific file extension for downloaded snippets

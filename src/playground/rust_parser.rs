@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use std::collections::HashMap;
-use syn_serde::json;
 use syn;
+use syn_serde::json;
 
 // --- Data Structures ---
 
@@ -31,9 +31,9 @@ fn json_to_ast_nodes(json_val: serde_json::Value) -> Vec<AstNode> {
         for (key, mut value) in obj {
             let type_name = value["type"].as_str().unwrap_or("Unknown").to_string();
             let mut children = vec![];
-            
+
             if let Some(content) = value.get_mut("content") {
-                 if content.is_object() || content.is_array() {
+                if content.is_object() || content.is_array() {
                     children = json_to_ast_nodes(content.take());
                 }
             }
@@ -49,8 +49,8 @@ fn json_to_ast_nodes(json_val: serde_json::Value) -> Vec<AstNode> {
             });
         }
     } else if let serde_json::Value::Array(arr) = json_val {
-         for (i, mut item) in arr.into_iter().enumerate() {
-             nodes.push(AstNode {
+        for (i, mut item) in arr.into_iter().enumerate() {
+            nodes.push(AstNode {
                 type_name: item["type"].as_str().unwrap_or("ArrayItem").to_string(),
                 key: i.to_string(),
                 value: value_to_string_short(&item["content"]),
@@ -59,7 +59,7 @@ fn json_to_ast_nodes(json_val: serde_json::Value) -> Vec<AstNode> {
                 is_editing: false,
                 edited_value: "".to_string(),
             });
-         }
+        }
     }
     nodes
 }
@@ -187,7 +187,7 @@ pub fn RustParserApp() -> Element {
             parse_code(&mut state_w);
         }
     };
-    
+
     let handle_clear = move || {
         let mut state_w = state.write();
         clear_state(&mut state_w);
@@ -235,7 +235,6 @@ pub fn RustParserApp() -> Element {
             state.write().input_code = evt.value();
         }
     };
-    
 
     let on_toggle_pretty = {
         let mut state = state.clone();
@@ -276,7 +275,7 @@ pub fn RustParserApp() -> Element {
     };
 
     let on_save_edit = move |(path, value): (Vec<usize>, String)| {
-         if let Some(node) = get_node_mut(&mut state.write().ast_nodes, &path) {
+        if let Some(node) = get_node_mut(&mut state.write().ast_nodes, &path) {
             node.is_editing = false;
             node.value = value;
         }
@@ -341,7 +340,7 @@ fn RustParserControls(
     on_toggle_view_mode: EventHandler<()>,
     is_pretty: bool,
 ) -> Element {
-     rsx! {
+    rsx! {
         div { class: "flex justify-center items-center gap-4 p-2 bg-gray-800 rounded-lg",
             button {
                 class: "px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold",
@@ -508,7 +507,6 @@ fn RustAstOutput(parsed_ast: Option<String>, error_message: Option<String>) -> E
     }
 }
 
-
 // --- Example Snippets ---
 
 const HELLO_WORLD_CODE: &str = r#"
@@ -574,7 +572,6 @@ fn ExampleCard(props: ExampleCardProps) -> Element {
     }
 }
 
-
 // --- Settings ---
 
 #[derive(Props, PartialEq, Clone)]
@@ -587,9 +584,7 @@ fn handle_emoji_input(
     key: String,
     on_change: EventHandler<(String, String)>,
 ) -> impl FnMut(Event<FormData>) {
-    move |evt: Event<FormData>| {
-        on_change.call((key.clone(), evt.value()))
-    }
+    move |evt: Event<FormData>| on_change.call((key.clone(), evt.value()))
 }
 
 #[component]
@@ -612,4 +607,3 @@ fn EmojiSettings(props: EmojiSettingsProps) -> Element {
         }
     }
 }
-

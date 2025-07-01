@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::model::lean::style::Styles;
+use dioxus::prelude::*;
 
 #[component]
 pub fn StylingAndEmojis() -> Element {
@@ -10,4 +10,4 @@ pub fn StylingAndEmojis() -> Element {
             p { class: "{Styles::p()}", "This section demonstrates styling and emoji support." }
         }
     }
-} 
+}

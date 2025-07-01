@@ -15,21 +15,21 @@ pub mod app;
 // Re-export common types
 pub use app::MenuOption;
 
+pub mod bert_test;
+pub mod coverage_app;
+pub mod doc_cleaner;
+pub mod embedding;
+pub mod monster_meta_meme;
+pub mod performance_charts;
+pub mod rust_parser;
+pub mod solfunmeme;
+pub mod solfunnice;
 pub mod test_app;
 pub mod test_components;
 pub mod test_emojis;
-pub mod doc_cleaner;
-pub mod coverage_app;
-pub mod embedding;
-pub mod performance_charts;
-pub mod bert_test;
-pub mod rust_parser;
-pub mod monster_meta_meme;
-pub mod solfunmeme;
-pub mod solfunnice;
 //pub use test_app::*;
+pub mod markdown_processor;
 pub mod orbits;
 pub mod wikidata;
-pub mod markdown_processor;
 //pub mod newcode; delete
 pub mod mcp;

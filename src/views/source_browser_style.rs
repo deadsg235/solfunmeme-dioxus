@@ -67,4 +67,4 @@ pub fn SourceBrowserStyle() -> Element {
     rsx! {
         style { style }
     }
-} 
+}

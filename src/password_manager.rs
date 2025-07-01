@@ -6,11 +6,11 @@ use std::collections::HashMap;
 use web_sys::console;
 
 // Crypto utilities (simplified for demo - in production use proper crypto libraries)
-use sha2::{Sha256, Digest};
 use aes_gcm::{
     aead::{Aead, AeadCore, KeyInit, OsRng},
-    Aes256Gcm, Nonce, Key
+    Aes256Gcm, Key, Nonce,
 };
+use sha2::{Digest, Sha256};
 
 // ============================================================================
 // DATA MODELS
@@ -73,15 +73,16 @@ impl Default for NewPasswordForm {
 // ============================================================================
 
 //, PartialEq
-#[derive(Clone,  Serialize,
-	 //Deserialize
+#[derive(
+    Clone,
+    Serialize,
+    //Deserialize
 )]
 pub struct CryptoManager {
     #[allow(dead_code)]
-    #[serde(skip)]    
+    #[serde(skip)]
     cipher: Aes256Gcm,
 }
-
 
 // impl<'de> Deserialize<'de> for CryptoManager {
 //     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
@@ -92,7 +93,6 @@ pub struct CryptoManager {
 //     }
 // }
 
-
 impl CryptoManager {
     #[allow(dead_code)]
     pub fn new(master_password: &str) -> Self {
@@ -102,10 +102,10 @@ impl CryptoManager {
         let key_bytes = hasher.finalize();
         let key = Key::<Aes256Gcm>::from_slice(&key_bytes);
         let cipher = Aes256Gcm::new(key);
-        
+
         Self { cipher }
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn encrypt(&self, plaintext: &str) -> Result<(Vec<u8>, Vec<u8>), String> {
         let nonce = Aes256Gcm::generate_nonce(&mut OsRng);
         match self.cipher.encrypt(&nonce, plaintext.as_bytes()) {
@@ -113,7 +113,7 @@ impl CryptoManager {
             Err(_) => Err("Encryption failed".to_string()),
         }
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn decrypt(&self, ciphertext: &[u8], nonce: &[u8]) -> Result<String, String> {
         let nonce = Nonce::from_slice(nonce);
         match self.cipher.decrypt(nonce, ciphertext) {
@@ -136,8 +136,12 @@ impl PasswordStore {
             entries: HashMap::new(),
         }
     }
-#[allow(dead_code)]
-    pub fn add_entry(&mut self, form: NewPasswordForm, crypto: &CryptoManager) -> Result<String, String> {
+    #[allow(dead_code)]
+    pub fn add_entry(
+        &mut self,
+        form: NewPasswordForm,
+        crypto: &CryptoManager,
+    ) -> Result<String, String> {
         if form.title.is_empty() || form.username.is_empty() || form.password.is_empty() {
             return Err("Please fill in all required fields".to_string());
         }
@@ -145,15 +149,23 @@ impl PasswordStore {
         let (encrypted_password, nonce) = crypto.encrypt(&form.password)?;
         let id = format!("{}", js_sys::Date::now() as u64);
         let now = js_sys::Date::new_0().to_iso_string().as_string().unwrap();
-        
+
         let entry = PasswordEntry {
             id: id.clone(),
             title: form.title,
             username: form.username,
             encrypted_password,
             nonce,
-            url: if form.url.is_empty() { None } else { Some(form.url) },
-            notes: if form.notes.is_empty() { None } else { Some(form.notes) },
+            url: if form.url.is_empty() {
+                None
+            } else {
+                Some(form.url)
+            },
+            notes: if form.notes.is_empty() {
+                None
+            } else {
+                Some(form.notes)
+            },
             created_at: now.clone(),
             updated_at: now,
         };
@@ -162,27 +174,34 @@ impl PasswordStore {
         console::log_1(&"Password saved successfully".into());
         Ok(id)
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn get_entry(&self, id: &str) -> Option<&PasswordEntry> {
         self.entries.get(id)
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn get_all_entries(&self) -> Vec<(String, PasswordEntry)> {
-        self.entries.iter().map(|(k, v)| (k.clone(), v.clone())).collect()
+        self.entries
+            .iter()
+            .map(|(k, v)| (k.clone(), v.clone()))
+            .collect()
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn len(&self) -> usize {
         self.entries.len()
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
     }
-#[allow(dead_code)]
-    pub fn decrypt_entry(&self, id: &str, crypto: &CryptoManager) -> Result<DecryptedEntry, String> {
+    #[allow(dead_code)]
+    pub fn decrypt_entry(
+        &self,
+        id: &str,
+        crypto: &CryptoManager,
+    ) -> Result<DecryptedEntry, String> {
         let entry = self.get_entry(id).ok_or("Entry not found".to_string())?;
         let password = crypto.decrypt(&entry.encrypted_password, &entry.nonce)?;
-        
+
         Ok(DecryptedEntry {
             id: entry.id.clone(),
             title: entry.title.clone(),
@@ -247,8 +266,11 @@ pub fn unlock_vault(state: &mut PasswordAppState) {
         state.error_message = "Please enter master password".to_string();
         return;
     }
-    
-    web_sys::console::log_1(&wasm_bindgen::JsValue::from_str(&format!("Password: {}", &state.master_password)));
+
+    web_sys::console::log_1(&wasm_bindgen::JsValue::from_str(&format!(
+        "Password: {}",
+        &state.master_password
+    )));
 
     let crypto = CryptoManager::new(&state.master_password);
     state.crypto_manager = Some(crypto);
@@ -289,7 +311,10 @@ pub fn select_entry(state: &mut PasswordAppState, entry_id: String) {
 #[allow(dead_code)]
 pub fn save_password(state: &mut PasswordAppState) {
     if let Some(crypto) = &state.crypto_manager {
-        match state.password_store.add_entry(state.form_data.clone(), crypto) {
+        match state
+            .password_store
+            .add_entry(state.form_data.clone(), crypto)
+        {
             Ok(_) => {
                 state.form_data = NewPasswordForm::default();
                 state.show_add_form = false;
@@ -324,13 +349,10 @@ pub fn toggle_password_visibility(state: &mut PasswordAppState) {
 }
 #[allow(dead_code)]
 pub fn copy_to_clipboard(_text: String) {
-    let _ = web_sys::window()
-        .unwrap()
-        .navigator()
-        .clipboard();
- //       .unwrap()
-        //.write_text(&text);
-       // #FIXME clipboard.write_text(&text);
+    let _ = web_sys::window().unwrap().navigator().clipboard();
+    //       .unwrap()
+    //.write_text(&text);
+    // #FIXME clipboard.write_text(&text);
 }
 
 // ============================================================================
@@ -347,9 +369,9 @@ pub fn PasswordApp() -> Element {
             class: "min-h-screen bg-gray-900 text-white p-6",
             div {
                 class: "max-w-4xl mx-auto",
-                
+
                 PasswordAppHeader { app_state }
-                
+
                 if !app_state.read().error_message.is_empty() {
                     ErrorMessage { message: app_state.read().error_message.clone() }
                 }
@@ -423,9 +445,9 @@ fn LoginScreen(app_state: Signal<PasswordAppState>) -> Element {
             e.prevent_default();
             //handle_unlock(e);
             let mut app_state2 = app_state;
-    //     move |_| {
+            //     move |_| {
             unlock_vault(&mut app_state2.write());
-    //     }
+            //     }
         }
     };
 
@@ -468,7 +490,7 @@ fn MainInterface(app_state: Signal<PasswordAppState>) -> Element {
     rsx! {
         div {
             class: "grid grid-cols-1 lg:grid-cols-3 gap-6",
-            
+
             div {
                 class: "lg:col-span-1",
                 PasswordList { app_state }
@@ -514,21 +536,21 @@ fn PasswordList(app_state: Signal<PasswordAppState>) -> Element {
                     "➕ Add New"
                 }
             }
-            
+
             div {
                 class: "space-y-2 max-h-96 overflow-y-auto",
                 {
                     entries.into_iter().map(|(id, entry)| {
                         let entry_id = id.clone();
                         let is_selected = app_state.read().selected_entry == Some(id.clone());
-                        
+
                         let handle_select = {
                             let mut app_state2 = app_state;
                             move |_| {
                                 select_entry(&mut app_state2.write(), entry_id.clone());
                             }
                         };
-                        
+
                         rsx! {
                             div {
                                 key: "{id}",
@@ -556,7 +578,7 @@ fn PasswordList(app_state: Signal<PasswordAppState>) -> Element {
                         }
                     })
                 }
-                
+
                 if app_state.read().password_store.is_empty() {
                     div {
                         class: "text-center text-gray-400 py-8",
@@ -610,7 +632,7 @@ fn AddPasswordForm(app_state: Signal<PasswordAppState>) -> Element {
 
     let handle_password_change = {
         //let mut app_state = app_state.clone();
-	let mut app_state2 = app_state;
+        let mut app_state2 = app_state;
         move |evt: FormEvent| {
             app_state2.write().form_data.password = evt.value();
         }
@@ -618,7 +640,7 @@ fn AddPasswordForm(app_state: Signal<PasswordAppState>) -> Element {
 
     let handle_url_change = {
         //let mut app_state = app_state.clone();
-	let mut app_state2 = app_state;
+        let mut app_state2 = app_state;
         move |evt: FormEvent| {
             app_state2.write().form_data.url = evt.value();
         }
@@ -650,7 +672,7 @@ fn AddPasswordForm(app_state: Signal<PasswordAppState>) -> Element {
             form {
                 class: "space-y-4",
                 onsubmit: handle_form_submit,
-                
+
                 div {
                     label {
                         class: "block text-sm font-medium mb-2",
@@ -734,7 +756,7 @@ fn AddPasswordForm(app_state: Signal<PasswordAppState>) -> Element {
 #[component]
 fn PasswordDetail(app_state: Signal<PasswordAppState>) -> Element {
     let entry_id = app_state.read().selected_entry.clone().unwrap();
-    
+
     let handle_toggle_password = {
         let mut app_state2 = app_state;
         move |_| {
@@ -744,7 +766,7 @@ fn PasswordDetail(app_state: Signal<PasswordAppState>) -> Element {
 
     if let Some(entry) = app_state.read().password_store.get_entry(&entry_id) {
         let entry = entry.clone();
-        
+
         let handle_copy_username = {
             let username = entry.username.clone();
             move |_| {
@@ -776,7 +798,7 @@ fn PasswordDetail(app_state: Signal<PasswordAppState>) -> Element {
 
                 div {
                     class: "space-y-4",
-                    
+
                     div {
                         class: "flex justify-between items-center p-3 bg-gray-700 rounded",
                         div {

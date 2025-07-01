@@ -1,8 +1,7 @@
 use dioxus::prelude::*;
 //use crate::{NotificationInfo, SignMessageSvg };
 
-use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE, WALLET_ADAPTER} ;
-
+use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE, WALLET_ADAPTER};
 
 #[component]
 pub fn SignMessage() -> Element {

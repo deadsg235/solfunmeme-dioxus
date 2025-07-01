@@ -1,9 +1,12 @@
 use dioxus::prelude::*;
 
-
-
-use crate::{model::storage::ACTIVE_CONNECTION, views::{connect_first::ConnectWalletFirst, extras_views::{SignInWithSolana, SignMessage, SignTx}}};
-
+use crate::{
+    model::storage::ACTIVE_CONNECTION,
+    views::{
+        connect_first::ConnectWalletFirst,
+        extras_views::{SignInWithSolana, SignMessage, SignTx},
+    },
+};
 
 #[component]
 pub fn Extras() -> Element {

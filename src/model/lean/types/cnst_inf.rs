@@ -5,7 +5,7 @@ use super::{forbd::Forbd, sig::Sig};
 
 #[derive(Debug, Clone, PartialEq)]
 #[allow(dead_code)]
-pub struct  CnstInf{
+pub struct CnstInf {
     pub levels: Vec<Level>,
     pub decl_name: String,
     pub forbd: Forbd,

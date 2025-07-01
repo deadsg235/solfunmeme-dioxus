@@ -1,6 +1,5 @@
 use crate::model::{SignaturesResponse, TokenAccountResponse};
 
-
 #[derive(Debug, Default, PartialEq)]
 pub struct AccountState {
     pub balance: String,

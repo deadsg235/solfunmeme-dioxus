@@ -1,7 +1,6 @@
 use dioxus::prelude::*;
 use wallet_adapter::Cluster;
 
-
 use crate::model::{AdapterCluster, MyCluster, UseConnections};
 #[allow(dead_code)]
 pub fn cluster_management_section(
@@ -31,28 +30,28 @@ pub fn cluster_management_section(
                         div { class: "grid grid-cols-1 md:grid-cols-3 gap-4 mb-4",
                               div {
                                   label {
-				      class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1",
-				      for: "cluster-name",
+                      class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1",
+                      for: "cluster-name",
                                       "Cluster Name"
                                   }
                                   input {
                                       placeholder: "e.g., my-custom-cluster",
                                       value: "{new_cluster_name}",
-				      name: "cluster-name",
+                      name: "cluster-name",
                                       class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
                                       oninput: move |event| new_cluster_name.set(event.value().clone())
                                   }
                               }
                               div {
                                   label {
-				      class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1",
-				      for: "cluster-type",
+                      class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1",
+                      for: "cluster-type",
                                       "Cluster Type"
                                   }
                                   select {
                                       class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
                                       value: "{new_cluster_type}",
-				      name: "cluster-type",
+                      name: "cluster-type",
                                       onchange: move |event| {
                                           new_cluster_type.set(event.value().clone());
                                           // Auto-fill endpoint based on type
@@ -73,14 +72,14 @@ pub fn cluster_management_section(
                               }
                               div {
                                   label {
-				      for: "endpoint-url",
-				      class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1",
+                      for: "endpoint-url",
+                      class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1",
                                       "Endpoint URL"
                                   }
                                   input {
                                       placeholder: "https://api.devnet.solana.com",
                                       value: "{new_cluster_endpoint}",
-				      name: "endpoint-url",
+                      name: "endpoint-url",
                                       class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
                                       oninput: move |event| new_cluster_endpoint.set(event.value().clone())
                                   }

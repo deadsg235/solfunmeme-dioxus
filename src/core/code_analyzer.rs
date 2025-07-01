@@ -1,6 +1,8 @@
-use crate::core::declaration_splitter::{Declaration, DeclarationSplitter, DeclarationType};
-use crate::core::vectorization::{CodeVector, CodeVectorizer};
-use crate::core::duplicate_detector::{DuplicateDetector, DuplicateReport};
+use crate::core::{
+    declaration_splitter::{Declaration, DeclarationSplitter, DeclarationType},
+    duplicate_detector::{DuplicateDetector, DuplicateReport},
+    vectorization::{CodeVector, CodeVectorizer},
+};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use syn_serde::json;
@@ -41,13 +43,19 @@ impl CodeAnalyzer {
         }
     }
 
-    pub fn analyze_file(&mut self, content: &str, file_path: String) -> Result<CodeAnalysis, Box<dyn std::error::Error>> {
+    pub fn analyze_file(
+        &mut self,
+        content: &str,
+        file_path: String,
+    ) -> Result<CodeAnalysis, Box<dyn std::error::Error>> {
         // Parse and split declarations
         self.splitter = DeclarationSplitter::new();
         self.splitter.split_file(content, Some(file_path.clone()))?;
 
         // Generate vectors for each declaration
-        let vectors: Vec<CodeVector> = self.splitter.declarations
+        let vectors: Vec<CodeVector> = self
+            .splitter
+            .declarations
             .iter()
             .map(|decl| self.vectorizer.vectorize(&decl.content))
             .collect();
@@ -60,7 +68,10 @@ impl CodeAnalyzer {
 
         // Detect duplicates
         let duplicate_report = if self.splitter.declarations.len() > 1 {
-            Some(self.duplicate_detector.detect_duplicates(&self.splitter.declarations))
+            Some(
+                self.duplicate_detector
+                    .detect_duplicates(&self.splitter.declarations),
+            )
         } else {
             None
         };
@@ -75,9 +86,12 @@ impl CodeAnalyzer {
         })
     }
 
-    pub fn analyze_multiple_files(&mut self, files: HashMap<String, String>) -> Result<Vec<CodeAnalysis>, Box<dyn std::error::Error>> {
+    pub fn analyze_multiple_files(
+        &mut self,
+        files: HashMap<String, String>,
+    ) -> Result<Vec<CodeAnalysis>, Box<dyn std::error::Error>> {
         let mut analyses = Vec::new();
-        
+
         for (file_path, content) in files {
             match self.analyze_file(&content, file_path.clone()) {
                 Ok(analysis) => analyses.push(analysis),
@@ -104,7 +118,7 @@ impl CodeAnalyzer {
 
     fn calculate_metrics(&self, content: &str, declarations: &[Declaration]) -> CodeMetrics {
         let total_lines = content.lines().count();
-        
+
         let mut function_count = 0;
         let mut struct_count = 0;
         let mut enum_count = 0;
@@ -137,7 +151,7 @@ impl CodeAnalyzer {
 
     fn calculate_complexity_score(&self, content: &str) -> f32 {
         let mut score = 0.0;
-        
+
         // Simple complexity metrics
         score += content.matches("if ").count() as f32 * 1.0;
         score += content.matches("match ").count() as f32 * 2.0;
@@ -145,7 +159,7 @@ impl CodeAnalyzer {
         score += content.matches("while ").count() as f32 * 1.5;
         score += content.matches("loop ").count() as f32 * 2.0;
         score += content.matches("unsafe ").count() as f32 * 3.0;
-        
+
         // Normalize by lines of code
         let lines = content.lines().count().max(1) as f32;
         score / lines
@@ -162,7 +176,8 @@ impl CodeAnalyzer {
                 "Vector[?]".to_string()
             };
 
-            let meme = format!("{} {} - {} (Lines: {}-{})", 
+            let meme = format!(
+                "{} {} - {} (Lines: {}-{})",
                 emoji,
                 declaration.name,
                 vector_summary,
@@ -235,10 +250,10 @@ impl Display for Point {
     fn test_analyze_file() {
         let mut analyzer = CodeAnalyzer::new(100, 0.8);
         let result = analyzer.analyze_file(TEST_CODE, "test.rs".to_string());
-        
+
         assert!(result.is_ok());
         let analysis = result.unwrap();
-        
+
         assert_eq!(analysis.file_path, "test.rs");
         assert!(analysis.declarations.len() > 0);
         assert_eq!(analysis.vectors.len(), analysis.declarations.len());
@@ -248,8 +263,10 @@ impl Display for Point {
     #[test]
     fn test_code_metrics() {
         let mut analyzer = CodeAnalyzer::new(100, 0.8);
-        let analysis = analyzer.analyze_file(TEST_CODE, "test.rs".to_string()).unwrap();
-        
+        let analysis = analyzer
+            .analyze_file(TEST_CODE, "test.rs".to_string())
+            .unwrap();
+
         assert!(analysis.metrics.total_lines > 0);
         assert_eq!(analysis.metrics.function_count, 2); // main + display
         assert_eq!(analysis.metrics.struct_count, 1);
@@ -262,8 +279,10 @@ impl Display for Point {
     #[test]
     fn test_meme_representation() {
         let mut analyzer = CodeAnalyzer::new(100, 0.8);
-        let analysis = analyzer.analyze_file(TEST_CODE, "test.rs".to_string()).unwrap();
-        
+        let analysis = analyzer
+            .analyze_file(TEST_CODE, "test.rs".to_string())
+            .unwrap();
+
         let memes = analyzer.generate_meme_representation(&analysis);
         assert!(memes.len() > 0);
         assert!(memes.contains_key("main"));
@@ -276,7 +295,7 @@ impl Display for Point {
         let mut files = HashMap::new();
         files.insert("test1.rs".to_string(), TEST_CODE.to_string());
         files.insert("test2.rs".to_string(), "fn hello() {}".to_string());
-        
+
         let analyses = analyzer.analyze_multiple_files(files).unwrap();
         assert_eq!(analyses.len(), 2);
     }
@@ -285,14 +304,14 @@ impl Display for Point {
     fn test_cross_file_duplicates() {
         let mut analyzer = CodeAnalyzer::new(100, 0.8);
         let duplicate_code = "fn duplicate() { println!(\"same\"); }";
-        
+
         let mut files = HashMap::new();
         files.insert("file1.rs".to_string(), duplicate_code.to_string());
         files.insert("file2.rs".to_string(), duplicate_code.to_string());
-        
+
         let analyses = analyzer.analyze_multiple_files(files).unwrap();
         let cross_file_report = analyzer.find_cross_file_duplicates(&analyses);
-        
+
         assert!(cross_file_report.groups.len() > 0);
     }
 }

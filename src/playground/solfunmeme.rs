@@ -13,7 +13,6 @@
 // gloo-timers = "0.3"
 // rand = "0.8"
 // */
-
 // use dioxus::prelude::*;
 // use dioxus_motion::*;
 // use gloo_timers::future::TimeoutFuture;
@@ -31,7 +30,7 @@
 // fn App() -> Element {
 //     rsx! {
 //        // document::Link { rel: "stylesheet", href: asset!("./assets/style.css") }
-//         div { 
+//         div {
 //             class: "zos-container",
 //             //ZeroOntologySystem {}
 // 	    "FIXME"
@@ -72,20 +71,20 @@
 // //     rsx! {
 // //         // Floating particles system
 // //         ParticleSystem {}
-        
+
 // //         // Orbital meme network
 // //         MemeOrbitalNetwork {}
-        
+
 // //         // Central pump core
-// //         PumpCore { 
+// //         PumpCore {
 // //             pump_active: pump_active.read().clone(),
 // //             current_emoji_sequence: current_emoji_sequence.read().clone(),
 // //             on_pump: move |_| trigger_hyper_pump(&mut pump_active)
 // //         }
-        
+
 // //         // UI Panels
 // //         FeaturesPanel {}
-// //         ConsensusPanel { 
+// //         ConsensusPanel {
 // //             Engaging_score: Engaging_score.read().clone(),
 // //             meme_velocity: meme_velocity.read().clone(),
 // //             consensus: consensus.read().clone(),
@@ -93,9 +92,9 @@
 // //         }
 // //         WorkflowPanel {}
 // //         PumpMetricsPanel {}
-        
+
 // //         // Global event handlers
-// //         GlobalEventHandlers { 
+// //         GlobalEventHandlers {
 // //             on_space_pressed: move |_| trigger_mega_pump(&mut pump_active)
 // //         }
 // //     }
@@ -119,7 +118,7 @@
 // //     rsx! {
 // //         div { id: "particles",
 // //             for particle in particles.read().iter() {
-// //                 Particle { 
+// //                 Particle {
 // //                     key: "{particle.id}",
 // //                     x: particle.x,
 // //                     y: particle.y,
@@ -135,7 +134,7 @@
 // // #[component]
 // // fn Particle(x: f64, y: f64, color: String, duration: u32) -> Element {
 // //     let motion = use_motion_state(|| MotionState::new());
-    
+
 // //     use_effect(move || {
 // //         motion.animate_to(
 // //             Motion::new()
@@ -147,7 +146,7 @@
 // //     });
 
 // //     rsx! {
-// //         div { 
+// //         div {
 // //             class: "particle",
 // //             style: "left: {x}%; background-color: {color};",
 // //             Motion { state: motion }
@@ -162,21 +161,21 @@
 
 // //     rsx! {
 // //         div { class: "meme-orbits",
-// //             MemeOrbit { 
+// //             MemeOrbit {
 // //                 radius: 300,
 // //                 duration: 8,
 // //                 reverse: false,
 // //                 nodes: get_orbit_nodes(0),
 // //                 on_node_click: move |node_id| handle_node_click(&mut selected_node, node_id)
 // //             }
-// //             MemeOrbit { 
+// //             MemeOrbit {
 // //                 radius: 500,
 // //                 duration: 12,
 // //                 reverse: true,
 // //                 nodes: get_orbit_nodes(1),
 // //                 on_node_click: move |node_id| handle_node_click(&mut selected_node, node_id)
 // //             }
-// //             MemeOrbit { 
+// //             MemeOrbit {
 // //                 radius: 700,
 // //                 duration: 16,
 // //                 reverse: false,
@@ -197,7 +196,7 @@
 // //     on_node_click: EventHandler<usize>
 // // ) -> Element {
 // //     let orbit_motion = use_motion_state(|| MotionState::new());
-    
+
 // //     use_effect(move || {
 // //         let rotation_direction = if reverse { -360.0 } else { 360.0 };
 // //         orbit_motion.animate_loop(
@@ -208,7 +207,7 @@
 // //     });
 
 // //     rsx! {
-// //         div { 
+// //         div {
 // //             class: "orbit",
 // //             style: "width: {radius}px; height: {radius}px; margin: -{radius/2}px 0 0 -{radius/2}px;",
 // //             Motion { state: orbit_motion },
@@ -244,8 +243,8 @@
 // //         div {
 // //             class: "meme-node",
 // //             style: "
-// //                 left: {x + radius}px; 
-// //                 top: {y + radius}px; 
+// //                 left: {x + radius}px;
+// //                 top: {y + radius}px;
 // //                 background-color: {node.color};
 // //             ",
 // //             Motion { state: node_motion },
@@ -258,7 +257,7 @@
 // //             "{node.emoji}"
 
 // //             if is_exploding.read().clone() {
-// //                 NodeExplosion { 
+// //                 NodeExplosion {
 // //                     emoji: node.emoji.clone(),
 // //                     on_complete: move |_| is_exploding.set(false)
 // //                 }
@@ -271,7 +270,7 @@
 // #[component]
 // fn NodeExplosion(emoji: String, on_complete: EventHandler<()>) -> Element {
 //     let mut explosions = use_signal(|| Vec::<ExplosionParticle>::new());
-    
+
 //     use_effect(move || {
 //         // Create explosion particles
 //         let mut particles = Vec::new();
@@ -311,7 +310,7 @@
 // // #[component]
 // // fn ExplosionParticleComponent(emoji: String, particle: ExplosionParticle) -> Element {
 // //     let motion = use_motion_state(|| MotionState::new());
-    
+
 // //     use_effect(move || {
 // //         motion.animate_to(
 // //             Motion::new()
@@ -342,7 +341,7 @@
 // // ) -> Element {
 // //     let core_motion = use_motion_state(|| MotionState::new());
 // //     let emoji_sequences = get_emoji_sequences();
-    
+
 // //     // Animate pump effect when active
 // //     use_effect(move || {
 // //         if pump_active {
@@ -359,19 +358,19 @@
 // //     });
 
 // //     rsx! {
-// //         div { 
+// //         div {
 // //             class: "pump-core",
 // //             Motion { state: core_motion },
 // //             onclick: move |_| on_pump.call(()),
-            
+
 // //             h1 { class: "title", "SOLFUNMEME" }
 // //             h2 { class: "subtitle", "Zero Ontology System" }
-            
-// //             div { 
+
+// //             div {
 // //                 class: "emoji-engine",
 // //                 "{emoji_sequences[current_emoji_sequence % emoji_sequences.len()]}"
 // //             }
-            
+
 // //             div { class: "core-description",
 // //                 div { class: "glow-text", "Meta-Meme Pump Protocol" }
 // //                 div { class: "core-tags", "Self-Introspective • Recursive • Engaging" }
@@ -384,12 +383,12 @@
 // #[component]
 // fn FeaturesPanel() -> Element {
 //     let features = get_system_features();
-    
+
 //     rsx! {
 //         div { class: "features-panel",
 //             h3 { "Key Features" }
 //             for feature in features {
-//                 FeatureItem { 
+//                 FeatureItem {
 //                     emoji: feature.emoji,
 //                     text: feature.text
 //                 }
@@ -402,7 +401,7 @@
 // // #[component]
 // // fn FeatureItem(emoji: String, text: String) -> Element {
 // //     let emoji_motion = use_motion_state(|| MotionState::new());
-    
+
 // //     use_effect(move || {
 // //         // Wiggle animation
 // //         emoji_motion.animate_loop(
@@ -418,7 +417,7 @@
 
 // //     rsx! {
 // //         div { class: "feature",
-// //             span { 
+// //             span {
 // //                 class: "feature-emoji",
 // //                 Motion { state: emoji_motion },
 // //                 "{emoji}"
@@ -439,23 +438,23 @@
 //     rsx! {
 //         div { class: "consensus-panel",
 //             h3 { "Paxos Consensus" }
-            
-//             MetricDisplay { 
+
+//             MetricDisplay {
 //                 label: "Engaging Score:",
 //                 value: format!("{:.1}K", Engaging_score),
 //                 color: "#00ff00"
 //             }
-//             MetricDisplay { 
+//             MetricDisplay {
 //                 label: "Meme Velocity:",
 //                 value: meme_velocity,
 //                 color: "#ffff00"
 //             }
-//             MetricDisplay { 
+//             MetricDisplay {
 //                 label: "Consensus:",
 //                 value: format!("{:.1}% PUMP", consensus),
 //                 color: "#00ffff"
 //             }
-//             MetricDisplay { 
+//             MetricDisplay {
 //                 label: "Hype Level:",
 //                 value: hype_level,
 //                 color: "#ff00ff"
@@ -468,12 +467,12 @@
 // #[component]
 // fn WorkflowPanel() -> Element {
 //     let workflow_steps = get_workflow_steps();
-    
+
 //     rsx! {
 //         div { class: "workflow-panel",
 //             h3 { "How It Works" }
 //             for step in workflow_steps {
-//                 WorkflowStep { 
+//                 WorkflowStep {
 //                     number: step.number,
 //                     title: step.title,
 //                     description: step.description,
@@ -501,7 +500,7 @@
 // #[component]
 // fn PumpMetricsPanel() -> Element {
 //     let mut metrics = use_signal(|| get_initial_metrics());
-    
+
 //     // Update metrics periodically
 //     use_effect(move || {
 //         spawn(async move {
@@ -533,7 +532,7 @@
 //         div { class: "metric",
 //             span { "{label}" }
 //             " "
-//             span { 
+//             span {
 //                 class: "metric-value",
 //                 style: "color: {color};",
 //                 "{value}"
@@ -553,7 +552,7 @@
 //                 on_space_pressed.call(());
 //             }
 //         }) as Box<dyn FnMut(_)>);
-        
+
 //         window.add_event_listener_with_callback("keydown", closure.as_ref().unchecked_ref()).unwrap();
 //         closure.forget();
 //     });
@@ -700,7 +699,7 @@
 //     let mut rng = rand::thread_rng();
 //     let current_score = Engaging_score.read().clone();
 //     Engaging_score.set(current_score + rng.gen_range(-5.0..10.0));
-    
+
 //     let current_consensus = consensus.read().clone();
 //     consensus.set((current_consensus + rng.gen_range(-0.5..0.5)).clamp(95.0, 100.0));
 // }
@@ -714,7 +713,7 @@
 // fn spawn_particle(particles: &mut Signal<Vec<ParticleState>>) {
 //     let mut rng = rand::thread_rng();
 //     let colors = ["#00ff00", "#ff00ff", "#00ffff", "#ffff00", "#ff0080"];
-    
+
 //     let new_particle = ParticleState {
 //         id: rng.gen(),
 //         x: rng.gen_range(0.0..100.0),
@@ -722,15 +721,15 @@
 //         color: colors[rng.gen_range(0..colors.len())].to_string(),
 //         duration: rng.gen_range(4000..8000),
 //     };
-    
+
 //     let mut current_particles = particles.read().clone();
 //     current_particles.push(new_particle);
-    
+
 //     // Keep only recent particles
 //     if current_particles.len() > 20 {
 //         current_particles.remove(0);
 //     }
-    
+
 //     particles.set(current_particles);
 // }
 
@@ -741,7 +740,7 @@
 
 // // fn trigger_node_explosion(is_exploding: &mut Signal<bool>, node_motion: &MotionState) {
 // //     is_exploding.set(true);
-    
+
 // //     // Trigger node shake effect
 // //     node_motion.animate_to(
 // //         Motion::new()
@@ -772,7 +771,7 @@
 
 // fn trigger_hyper_pump(pump_active: &mut Signal<bool>) {
 //     pump_active.set(true);
-    
+
 //     // Reset pump state after animation
 //     let mut pump_active_clone = pump_active.clone();
 //     spawn(async move {
@@ -784,24 +783,24 @@
 // fn trigger_mega_pump(pump_active: &mut Signal<bool>) {
 //     pump_active.set(true);
 //     console::log_1(&"🚀 MEGA PUMP ACTIVATED! 🚀".into());
-    
+
 //     // Create screen flash effect
 //     if let Some(body) = web_sys::window()
 //         .and_then(|w| w.document())
-//         .and_then(|d| d.body()) 
+//         .and_then(|d| d.body())
 //     {
-//         let _ = body.style().set_property("background", 
+//         let _ = body.style().set_property("background",
 //             "linear-gradient(45deg, #ff0000, #ff00ff, #00ffff, #00ff00)");
-        
+
 //         // Reset after mega pump
 //         let body_clone = body.clone();
 //         spawn(async move {
 //             TimeoutFuture::new(2_000).await;
-//             let _ = body_clone.style().set_property("background", 
+//             let _ = body_clone.style().set_property("background",
 //                 "linear-gradient(45deg, #000000, #1a0033, #330066, #6600ff)");
 //         });
 //     }
-    
+
 //     // Reset pump state
 //     let mut pump_active_clone = pump_active.clone();
 //     spawn(async move {
@@ -813,7 +812,7 @@
 // fn update_pump_metrics(metrics: &mut Signal<Vec<MetricData>>) {
 //     let mut rng = rand::thread_rng();
 //     let mut current_metrics = metrics.read().clone();
-    
+
 //     // Update Engaging coefficient
 //     for metric in &mut current_metrics {
 //         if metric.label == "Engaging Coefficient:" {
@@ -821,6 +820,6 @@
 //             metric.value = format!("{:.3}", new_value);
 //         }
 //     }
-    
+
 //     metrics.set(current_metrics);
 // }

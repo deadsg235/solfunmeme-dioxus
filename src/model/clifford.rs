@@ -1,5 +1,5 @@
-use tclifford::{declare_algebra, Multivector};
 use serde::{Deserialize, Serialize};
+use tclifford::{declare_algebra, Multivector};
 
 // BERT Configuration matching your provided config
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7,9 +7,9 @@ pub struct BertConfig {
     pub hidden_act: String, // "gelu"
     pub attention_probs_dropout_prob: f32,
     pub hidden_dropout_prob: f32,
-    pub hidden_size: usize,        // 768
+    pub hidden_size: usize, // 768
     pub initializer_range: f32,
-    pub intermediate_size: usize,  // 3072
+    pub intermediate_size: usize,       // 3072
     pub max_position_embeddings: usize, // 512
     pub num_attention_heads: usize,     // 12
     pub num_hidden_layers: usize,       // 12
@@ -97,15 +97,15 @@ impl BertCliffordEncoder {
 
         // Method 1: Simple encoding - use generators as vector components
         // This creates a grade-1 multivector (pure vector)
-	//let mv = MultivectorBase::<f32, BertCl, tclifford::coeff_storage::ArrayStorage<f32>>::from_vector(generators.iter().cloned());
-	let mv = tclifford::Multivector::<f32, BertCl>::from_vector(generators.iter().cloned());
-	    
+        //let mv = MultivectorBase::<f32, BertCl, tclifford::coeff_storage::ArrayStorage<f32>>::from_vector(generators.iter().cloned());
+        let mv = tclifford::Multivector::<f32, BertCl>::from_vector(generators.iter().cloned());
+
         match mv {
             Ok(mv) => Ok(mv),
             Err(_) => {
                 // Fallback: manual construction
                 let mut mv = BertMultivector::default();
-                
+
                 // Add scalar part (magnitude of original vector)
                 let magnitude = bert_embedding.iter().map(|x| x * x).sum::<f32>().sqrt();
                 mv = mv + BertMultivector::from_scalar(magnitude * self.grade_weights[0]);
@@ -116,7 +116,8 @@ impl BertCliffordEncoder {
                         let mut basis_mv = BertMultivector::default();
                         // Create basis vector e_i (this is simplified - actual implementation would use basis())
                         // For now, we'll create a simple representation
-                        basis_mv = basis_mv + BertMultivector::from_scalar(gen_val * self.grade_weights[1]);
+                        basis_mv = basis_mv
+                            + BertMultivector::from_scalar(gen_val * self.grade_weights[1]);
                     }
                 }
 
@@ -126,7 +127,10 @@ impl BertCliffordEncoder {
     }
 
     /// Enhanced encoding that uses multiple grades
-    pub fn encode_embedding_multigrade(&self, bert_embedding: &[f32]) -> Result<BertMultivector, String> {
+    pub fn encode_embedding_multigrade(
+        &self,
+        bert_embedding: &[f32],
+    ) -> Result<BertMultivector, String> {
         if bert_embedding.len() != self.config.hidden_size {
             return Err(format!(
                 "Expected embedding size {}, got {}",
@@ -153,9 +157,9 @@ impl BertCliffordEncoder {
         result = result + BertMultivector::from_scalar(magnitude * self.grade_weights[0]);
 
         // Grade 1 (vector): directional information
-        if let Ok(vector_part) = BertMultivector::from_vector(
-            generators.iter().map(|&x| x * self.grade_weights[1])
-        ) {
+        if let Ok(vector_part) =
+            BertMultivector::from_vector(generators.iter().map(|&x| x * self.grade_weights[1]))
+        {
             result = result + vector_part;
         }
 
@@ -169,13 +173,13 @@ impl BertCliffordEncoder {
     pub fn decode_multivector(&self, multivector: &BertMultivector) -> Vec<f32> {
         // This is a simplified decoder - in practice you'd want the pseudoinverse
         // of the projection matrix and proper grade extraction
-        
+
         // For now, create a simple reconstruction
         let mut result = vec![0.0; self.config.hidden_size];
-        
+
         // Extract scalar and vector parts (simplified)
         // In practice, you'd use multivector.grade(0), multivector.grade(1), etc.
-        
+
         // Placeholder reconstruction
         for i in 0..self.config.hidden_size {
             result[i] = (i as f32) * 0.001; // Simplified placeholder
@@ -198,7 +202,7 @@ pub struct CliffordAttention {
 impl CliffordAttention {
     pub fn new(config: BertConfig) -> Self {
         let encoder = BertCliffordEncoder::new(config.clone());
-        
+
         // Initialize projection matrices (simplified)
         let dim = 1024; // BertCl has 2^10 = 1024 basis elements
         let query_projection = vec![vec![0.01; dim]; dim];
@@ -226,19 +230,19 @@ impl CliffordAttention {
         // Simplified attention computation
         // In full implementation, you'd use geometric products for richer interactions
         let mut attended_mvs = Vec::new();
-        
+
         for (i, mv_i) in multivectors.iter().enumerate() {
             let mut attended = BertMultivector::default();
-            
+
             for (j, mv_j) in multivectors.iter().enumerate() {
                 // Compute attention weight (simplified)
                 let weight = if i == j { 1.0 } else { 0.1 };
-                
+
                 // In full implementation: use geometric product mv_i * mv_j
                 // For now, simple weighted sum
                 attended = attended + mv_j.clone() * weight;
             }
-            
+
             attended_mvs.push(attended);
         }
 
@@ -277,7 +281,6 @@ impl CliffordBertLayer {
 
 //#[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn test_clifford_encoding() {
@@ -306,7 +309,9 @@ mod tests {
         // Create sequence of dummy embeddings
         let input_embeddings: Vec<Vec<f32>> = (0..5)
             .map(|seq_idx| {
-                (0..768).map(|i| (i as f32 + seq_idx as f32) * 0.001).collect()
+                (0..768)
+                    .map(|i| (i as f32 + seq_idx as f32) * 0.001)
+                    .collect()
             })
             .collect();
 
@@ -329,12 +334,12 @@ fn main() {
 
     // Example: encode a BERT embedding
     let dummy_embedding: Vec<f32> = (0..768).map(|i| (i as f32) * 0.001).collect();
-    
+
     match encoder.encode_embedding(&dummy_embedding) {
         Ok(multivector) => {
             println!("Successfully encoded BERT embedding to Clifford multivector");
             println!("Multivector basis size: 2^10 = 1024 elements");
-            
+
             // Decode back
             let decoded = encoder.decode_multivector(&multivector);
             println!("Decoded back to {}-dimensional vector", decoded.len());

@@ -2,9 +2,8 @@
 // test
 //#[cfg(test)]
 mod tests {
-    
 
-//    use super::*;
+    //    use super::*;
 
     fn get_sample_keys() -> (String, String, String, String) {
         // These are dummy 32-byte base58-encoded keys for testing only.
@@ -13,7 +12,12 @@ mod tests {
         let sender_public = bs58::encode([2u8; 32]).into_string();
         let recipient_private = bs58::encode([3u8; 32]).into_string();
         let recipient_public = bs58::encode([4u8; 32]).into_string();
-        (sender_private, sender_public, recipient_private, recipient_public)
+        (
+            sender_private,
+            sender_public,
+            recipient_private,
+            recipient_public,
+        )
     }
 
     #[test]
@@ -40,7 +44,7 @@ mod tests {
         assert!(SolanaEncryption::validate_private_key(invalid_key).is_err());
     }
 
-    // FIXME later, failing crypto, we dont need this in version 1. 
+    // FIXME later, failing crypto, we dont need this in version 1.
     // #[test]
     // fn test_encrypt_and_decrypt_round_trip() {
     //     let (sender_private, sender_public, recipient_private, recipient_public) = get_sample_keys();
@@ -62,7 +66,8 @@ mod tests {
 
     #[test]
     fn test_decrypt_with_wrong_key_fails() {
-        let (sender_private, sender_public, _recipient_private, recipient_public) = get_sample_keys();
+        let (sender_private, sender_public, _recipient_private, recipient_public) =
+            get_sample_keys();
         let message = "Secret message";
 
         let payload = SolanaEncryption::encrypt_for_recipient(
@@ -81,7 +86,8 @@ mod tests {
 
     #[test]
     fn test_invalid_nonce_in_payload() {
-        let (sender_private, sender_public, recipient_private, recipient_public) = get_sample_keys();
+        let (sender_private, sender_public, recipient_private, recipient_public) =
+            get_sample_keys();
         let message = "Another message";
 
         let mut payload = SolanaEncryption::encrypt_for_recipient(
@@ -100,7 +106,8 @@ mod tests {
 
     #[test]
     fn test_invalid_encrypted_data_in_payload() {
-        let (sender_private, sender_public, recipient_private, recipient_public) = get_sample_keys();
+        let (sender_private, sender_public, recipient_private, recipient_public) =
+            get_sample_keys();
         let message = "Another message";
 
         let mut payload = SolanaEncryption::encrypt_for_recipient(
@@ -118,7 +125,6 @@ mod tests {
     }
 }
 
-
 //#[cfg(test)]
 mod tests2 {
     use crate::model::crypto::SolanaEncryption;
@@ -126,12 +132,17 @@ mod tests2 {
     //use super::*;
 
     fn get_fake_keys() -> (String, String, String, String) {
-    // Generate two valid Ed25519 keypairs
-    let (sender_private, sender_public) = SolanaEncryption::generate_keypair();
-    let (recipient_private, recipient_public) = SolanaEncryption::generate_keypair();
-    (sender_private, sender_public, recipient_private, recipient_public)
-}
-    
+        // Generate two valid Ed25519 keypairs
+        let (sender_private, sender_public) = SolanaEncryption::generate_keypair();
+        let (recipient_private, recipient_public) = SolanaEncryption::generate_keypair();
+        (
+            sender_private,
+            sender_public,
+            recipient_private,
+            recipient_public,
+        )
+    }
+
     #[test]
     fn test_validate_public_key_valid() {
         let (_, sender_public, _, _) = get_fake_keys();
@@ -196,8 +207,7 @@ mod tests2 {
 
     #[test]
     fn test_decrypt_with_invalid_private_key() {
-        let (sender_private, sender_public, 
-            _recipient_private, recipient_public) = get_fake_keys();
+        let (sender_private, sender_public, _recipient_private, recipient_public) = get_fake_keys();
         let message = "msg";
         let payload = SolanaEncryption::encrypt_for_recipient(
             message,
