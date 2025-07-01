@@ -68,3 +68,4 @@ flycheck_*.el
 /rrust_kontekst_base/target/
 /error.txt
 /report.txt
+/target-wasm-solfunmeme/*
