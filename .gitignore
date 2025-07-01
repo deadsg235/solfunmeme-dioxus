@@ -66,3 +66,5 @@ flycheck_*.el
 /tree.txt
 /rrust_kontekst/target/
 /rrust_kontekst_base/target/
+/error.txt
+/report.txt

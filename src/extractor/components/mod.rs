@@ -1,7 +1,7 @@
 pub mod extractor;
 pub mod appheader;
 pub mod clearbutton;
-pub mod codeextractor;
+
 pub mod codesnippet;
 pub mod dropzone;
 pub mod filedisplay;
