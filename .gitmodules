@@ -1,3 +1,0 @@
-[submodule "rust-embed"]
-	path = vendor/rust-embed
-	url = https://git.sr.ht/~h4/rust-embed
