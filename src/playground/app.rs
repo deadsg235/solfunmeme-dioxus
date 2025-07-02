@@ -21,6 +21,7 @@ use crate::views::{
     receive_sol::ReceiveSolComponent, send_sol::SendSolComponent,
     styling_and_emojis::StylingAndEmojis, transaction_buttons::TransactionButtons,
     airdrop::AirdropComponent,
+    source_browser::SourceBrowser,
 };
 //pub mod embedding;
 //use crate::playground::embedding::EmbeddingApp;
@@ -85,6 +86,7 @@ pub enum MenuOption {
     SolFunMeme,
     #[allow(dead_code)]
     Extractor,
+    SourceBrowser,
 }
 
 use crate::extractor::components::example::register_all_components;
@@ -176,6 +178,7 @@ pub fn PlaygroundApp() -> Element {
                 //                    MenuOption::SolFunMeme => rsx!(SolFunMemeApp {}),
                 MenuOption::SolFunMeme => rsx!(SolFunNiceApp {}),
                 MenuOption::Extractor => rsx!(MarkdownCodeExtractor {}),
+                        MenuOption::SourceBrowser => rsx!(SourceBrowser {}),
                         _ => rsx!(div { "TODO"})
                     }
                 }

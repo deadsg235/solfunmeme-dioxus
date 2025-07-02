@@ -1,7 +1,7 @@
 use crate::embedself::*;
 use dioxus::prelude::*;
 use crate::views::source_browser_style;
-
+use dioxus_logger::tracing::debug;
 
 //use source_browser_style;
 
@@ -54,6 +54,7 @@ pub fn SourceBrowser() -> Element {
         "src/views/workflow_memes" => OurSourceViewWorkflow::iter().collect::<Vec<_>>(),
         _ => vec![],
     };
+    debug!("SourceBrowser: files for module {}: {:?}", selected_module(), files);
 
     let file_content = selected_file().and_then(|filename| match selected_module().as_str() {
         "src" => OurSource::get(&filename).map(|f| {
