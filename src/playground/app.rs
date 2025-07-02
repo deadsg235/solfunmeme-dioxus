@@ -6,14 +6,21 @@ use crate::{model::NotificationInfo, playground::solfunnice::SolFunNiceApp};
 //use crate::extractor::system::clipboard::copy_all_snippets_combined;
 //ouse crate::extractor::error;
 //use crate::password_manager::DecryptedEntry;
+use crate::password_manager::PasswordAppState;
+// use crate::playground::MenuOption::Airdrop;
+// todo rename : airdrop::Airdrop,
 use crate::views::{
-    accounts::Accounts, airdrop::Airdrop, clusters::Clusters,
+    accounts::Accounts, clusters::Clusters,
     component_memes::ComponentMemeExplorer, connection_buttons::ConnectionButtons,
     connections::Connections, core_buttons::CoreButtons, crypto_buttons::CryptoButtons,
     dashboard::Dashboard, encryption::Encryption, expression_parsing::ExpressionParsing,
     management_buttons::ManagementButtons, meme_management::MemeManagement,
-    meta_meme_operations::MetaMemeOperations, receive_sol::ReceiveSol, send_sol::SendSol,
+    meta_meme_operations::MetaMemeOperations,
+
+    // views
+    receive_sol::ReceiveSolComponent, send_sol::SendSolComponent,
     styling_and_emojis::StylingAndEmojis, transaction_buttons::TransactionButtons,
+    airdrop::AirdropComponent,
 };
 //pub mod embedding;
 //use crate::playground::embedding::EmbeddingApp;
@@ -101,8 +108,8 @@ pub fn PlaygroundApp() -> Element {
 
     rsx! {
 
-            link { rel: "stylesheet", href: TAILWIND_CSS }
-            link { rel: "icon", href: FAVICON }
+//            link { rel: "stylesheet", href: TAILWIND_CSS }
+//            link { rel: "icon", href: FAVICON }
             div {
                 style: format!(
                     "background: {}; padding: {}; font-family: {}",
@@ -151,14 +158,14 @@ pub fn PlaygroundApp() -> Element {
                         //MenuOption::Lean => rsx!(LeanEditor {}),
                         //MenuOption::ConnectionManagement => rsx!(ConnectionManagement {}),
                         //MenuOption::ConnectionList => rsx!(ConnectionList {}),
-                        MenuOption::SendSol => rsx!(SendSol { show_send_modal: show_send_modal }),
-                        MenuOption::ReceiveSol => rsx!(ReceiveSol { show_receive_modal: show_receive_modal }),
+                        MenuOption::SendSol => rsx!(SendSolComponent { show_send_modal: show_send_modal }),
+                        MenuOption::ReceiveSol => rsx!(ReceiveSolComponent { show_receive_modal: show_receive_modal }),
                         //MenuOption::QueryAccounts => rsx!(QueryAccounts {}),
                         MenuOption::Dashboard => rsx!(Dashboard {}),
                         MenuOption::Connections => rsx!(Connections {}),
                         //MenuOption::ClustersManagement => rsx!(ClustersManagement {}),
                         MenuOption::Clusters => rsx!(Clusters {}),
-                        MenuOption::Airdrop => rsx!(Airdrop { show_airdrop_modal: show_airdrop_modal }),
+                        MenuOption::Airdrop => rsx!(AirdropComponent { show_airdrop_modal: show_airdrop_modal }),
                         MenuOption::Accounts => rsx!(Accounts {}),
                         MenuOption::ComponentMemes => rsx!(ComponentMemeExplorer {}),
     //                    MenuOption::Embedding => rsx!(EmbeddingApp {}),

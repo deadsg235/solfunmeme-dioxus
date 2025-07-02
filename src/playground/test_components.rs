@@ -1,5 +1,6 @@
 pub use dioxus::prelude::*;
 
+use crate::password_manager::PasswordAppState;
 pub use crate::playground::{
     test_components::ComponentName::{
         ActionButton, AddClusterModal, CardHeader, ClusterInfo, CodeDisplay, ConnectWalletFirst,
@@ -7,8 +8,10 @@ pub use crate::playground::{
         CryptoErrorMessage, CryptoFrontendApp, DecryptionForm, EncryptionForm, ExpressionCard,
         ExpressionInputs, ExpressionList, ExpressionMetadata, ExpressionTypeSelector, Footer,
         InputField, InputSection, ManagementButtons, MemeCardHeader, MemesFooter, MetadataInputs,
-        Notification, Notification2, PageNotFound, QueryAccountDialog, QueryCoinDialog,
-        SearchInput, SignInWithSolana, SignMessage, SignTx, SimilaritySection, SuccessMessage,
+        Notification, Notification2, PageNotFound,
+	QueryAccountDialogName, // a name
+	QueryCoinDialog,
+        SearchInput, SignInWithSolana, SignTx, SimilaritySection, SuccessMessage,
         TextAreaField, TransactionButtons, VectorSpace, WikidataMemeExplorer, WikidataMemeView,
         WorkflowMemeExplorer, WorkflowMemeView, WorkflowStepView,
     },
@@ -88,12 +91,12 @@ pub use serde::{Deserialize, Serialize};
 pub use std::collections::HashMap;
 //pub use crate::password_manager::PasswordApp;
 pub use crate::{
-    header::{ActiveAccountDropDown, ConnectWalletModalModal, Header},
+//    header::{ActiveAccountDropDown, ConnectWalletModalModal, Header},
     playground::test_components::ComponentName::{NavWalletItem, PingCluster},
 };
 //pub use crate::model::useConnections;
 pub use crate::{
-    password_manager::PasswordAppState,
+//    password_manager::PasswordAppState,
     views::{
         accounts::{Accounts, ClusterSuccess, TokenAccountCard, TxCard},
         workflow_memes::WorkflowStep,
@@ -121,7 +124,7 @@ pub enum ComponentName {
     ClusterSuccess,
     TokenAccountCard,
     TxCard,
-    Airdrop,
+    AirdropName,
     Clusters,
     ClusterInfo,
     AddClusterModal,
@@ -171,7 +174,7 @@ pub enum ComponentName {
     Notification,
     Notification2,
     PageNotFound,
-    QueryAccountDialog,
+    QueryAccountDialogName,
     ReceiveSol,
     SendSol,
     StylingAndEmojis,
@@ -812,7 +815,7 @@ fn component_name(component: &ComponentName) -> &'static str {
         ComponentName::ClusterSuccess => "Cluster Success",
         ComponentName::TokenAccountCard => "Token Account Card",
         ComponentName::TxCard => "Tx Card",
-        ComponentName::Airdrop => "Airdrop",
+        ComponentName::AirdropName => "Airdrop",
         ComponentName::Clusters => "Clusters",
         ComponentName::ClusterInfo => "Cluster Info",
         ComponentName::AddClusterModal => "Add Cluster Modal",
@@ -862,7 +865,7 @@ fn component_name(component: &ComponentName) -> &'static str {
         ComponentName::Notification => "Notification",
         ComponentName::Notification2 => "Notification 2",
         ComponentName::PageNotFound => "Page Not Found",
-        ComponentName::QueryAccountDialog => "Query Account Dialog",
+        ComponentName::QueryAccountDialogName => "Query Account Dialog",
         ComponentName::ReceiveSol => "Receive Sol",
         ComponentName::SendSol => "Send Sol",
         ComponentName::StylingAndEmojis => "Styling And Emojis",
@@ -918,7 +921,7 @@ fn get_component_categories() -> Vec<(&'static str, Vec<ComponentName>)> {
                 ComponentName::AddClusterModal,
             ],
         ),
-        ("Airdrop", vec![ComponentName::Airdrop]),
+        ("Airdrop", vec![ComponentName::AirdropName]),
         ("Coins", vec![ComponentName::QueryCoinDialog]),
         (
             "Memes",
@@ -1000,7 +1003,7 @@ fn get_component_categories() -> Vec<(&'static str, Vec<ComponentName>)> {
         (
             "Transactions",
             vec![
-                ComponentName::QueryAccountDialog,
+                ComponentName::QueryAccountDialogName,
                 ComponentName::ReceiveSol,
                 ComponentName::SendSol,
             ],
@@ -1031,7 +1034,7 @@ fn get_component_props(component: &ComponentName) -> Vec<(&'static str, &'static
         }
         ComponentName::TokenAccountCard => vec![("mint", "string"), ("ata_address", "string")],
         ComponentName::TxCard => vec![("tx", "string"), ("timestamp", "string")],
-        ComponentName::Airdrop => vec![("show_airdrop_modal", "bool")],
+        ComponentName::AirdropName => vec![("show_airdrop_modal", "bool")],
         ComponentName::ClusterInfo => vec![("connections", "pub use_connections")],
         ComponentName::AddClusterModal => vec![
             ("show_add_entry_modal", "bool"),
@@ -1068,7 +1071,7 @@ fn get_component_props(component: &ComponentName) -> Vec<(&'static str, &'static
         }
         ComponentName::VectorSpace => vec![("state", "password_app_state")],
         ComponentName::PageNotFound => vec![("route", "string_vec")],
-        ComponentName::QueryAccountDialog => vec![("show_query_dialog", "bool")],
+        ComponentName::QueryAccountDialogName => vec![("show_query_dialog", "bool")],
         ComponentName::ReceiveSol => vec![("show_receive_modal", "bool")],
         ComponentName::SendSol => vec![("show_send_modal", "bool")],
         ComponentName::TransactionButtons => vec![("on_menu_change", "menu_option_handler")],

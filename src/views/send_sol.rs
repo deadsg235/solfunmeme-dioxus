@@ -1,9 +1,15 @@
+
+use crate::SendSvg;
+use crate::UserSvg;
+use crate::Loader;
+use crate::send_sol_req;
+use crate::NotificationInfo;
 use dioxus::prelude::*;
 
 use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE};
 
 #[component]
-pub fn SendSol(show_send_modal: Signal<bool>) -> Element {
+pub fn SendSolComponent(show_send_modal: Signal<bool>) -> Element {
     let mut loading = use_signal(|| false);
     let mut address = use_signal(Option::default);
     let mut lamports = use_signal(|| 0u64);

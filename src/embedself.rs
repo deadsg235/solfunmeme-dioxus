@@ -2,79 +2,79 @@ use rust_embed::Embed;
 
 #[derive(Embed)]
 #[folder = "src"]
-struct OurSource;
+pub struct OurSource;
 
 #[derive(Embed)]
 #[folder = "src/bin"]
-struct OurSourceBin;
+pub struct OurSourceBin;
 
 #[derive(Embed)]
 #[folder = "src/extractor"]
-struct OurSourceExtractor;
+pub struct OurSourceExtractor;
 
 #[derive(Embed)]
 #[folder = "src/extractor/components"]
-struct OurSourceExtractorComponents;
+pub struct OurSourceExtractorComponents;
 
 #[derive(Embed)]
 #[folder = "src/extractor/model"]
-struct OurSourceExtractorModel;
+pub struct OurSourceExtractorModel;
 
 #[derive(Embed)]
 #[folder = "src/extractor/system"]
-struct OurSourceExtractorSystem;
+pub struct OurSourceExtractorSystem;
 
 #[derive(Embed)]
 #[folder = "src/model"]
-struct OurSourceModel;
+pub struct OurSourceModel;
 
 #[derive(Embed)]
 #[folder = "src/model/git"]
-struct OurSourceModelGit;
+pub struct OurSourceModelGit;
 
 #[derive(Embed)]
 #[folder = "src/model/lean"]
-struct OurSourceModelLean;
+pub struct OurSourceModelLean;
 
 #[derive(Embed)]
 #[folder = "src/model/lean/types"]
-struct OurSourceModelLeanTypes;
+pub struct OurSourceModelLeanTypes;
 
 #[derive(Embed)]
 #[folder = "src/model/math"]
-struct OurSourceModeMath;
+pub struct OurSourceModeMath;
 
 #[derive(Embed)]
 #[folder = "src/playground"]
-struct OurSourcePlayground;
+pub struct OurSourcePlayground;
 
 #[derive(Embed)]
 #[folder = "src/state"]
-struct OurSourceState;
+pub struct OurSourceState;
 
 #[derive(Embed)]
 #[folder = "src/views"]
-struct OurSourceView;
+pub struct OurSourceView;
 
 #[derive(Embed)]
 #[folder = "src/views/component_memes"]
-struct OurSourceViewComponent;
+pub struct OurSourceViewComponent;
 
 #[derive(Embed)]
 #[folder = "src/views/crypto_frontend"]
-struct OurSourceViewCrypto;
+pub struct OurSourceViewCrypto;
 
 #[derive(Embed)]
 #[folder = "src/views/extras_views"]
-struct OurSourceViewextra;
+pub struct OurSourceViewextra;
 
 #[derive(Embed)]
 #[folder = "src/views/wikidata_memes"]
-struct OurSourceViewWikwidata;
+pub struct OurSourceViewWikwidata;
 
 #[derive(Embed)]
 #[folder = "src/views/workflow_memes"]
-struct OurSourceViewWorkflow;
+pub struct OurSourceViewWorkflow;
 
 use dioxus_logger::tracing::info;
 

@@ -1,11 +1,11 @@
 use dioxus::prelude::*;
-
+use crate::utils::address_qrcode;
 //use crate::utils::address_qrcode;
-//use crate::{    utils::copied_address, CopySvg, NotificationInfo, ReceiveSvg};
+use crate::{    utils::copied_address, CopySvg, NotificationInfo, ReceiveSvg};
 use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE};
 
 #[component]
-pub fn ReceiveSol(show_receive_modal: Signal<bool>) -> Element {
+pub fn ReceiveSolComponent(show_receive_modal: Signal<bool>) -> Element {
     let mut address = String::default();
     let mut shortened_address = String::default();
 

@@ -7,7 +7,7 @@ use crate::views::{
 };
 
 //use crate::Route;
-use crate::header::Header;
+//use crate::header::Header;
 //use crate::playground::test_emojis::ComponentName::Header;
 //use crate::views::memes::Header;
 //use crate::header::ConnectWalletModalModal;
@@ -86,7 +86,7 @@ use crate::views::component_memes::ComponentMeme;
 
 // Component metadata
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
-enum ComponentName {
+pub enum ComponentName {
     Header,
     ConnectWalletModalModal,
     NavWalletItem,
@@ -416,7 +416,7 @@ fn ComponentConfigPanel(
         }
     }
 }
-
+use crate::views::memes::Header;
 #[component]
 fn RenderComponent(instance: ComponentInstance) -> Element {
     match instance.name {

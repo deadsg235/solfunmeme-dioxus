@@ -1,6 +1,9 @@
 use crate::embedself::*;
 use dioxus::prelude::*;
-//shemod source_browser_style;
+use crate::views::source_browser_style;
+
+
+//use source_browser_style;
 
 #[component]
 pub fn SourceBrowser() -> Element {
@@ -157,7 +160,7 @@ pub fn SourceBrowser() -> Element {
                 h2 { "Source Code Browser" }
             }
             div { class: "browser-content",
-                ModuleSidebar { modules: modules.clone(), selected_module: selected_module.clone(), set_selected_module: selected_module.setter(), set_selected_file: selected_file.setter(), files: files.clone(), selected_file: selected_file.clone() }
+                ModuleSidebar { modules: modules.clone(), selected_module: selected_module.clone(), set_selected_module: selected_module.clone(), set_selected_file: selected_file.clone(), files: files.clone(), selected_file: selected_file.clone() }
                 div { class: "content-area",
                     FileViewer { file_content: file_content.clone(), selected_file: selected_file.clone() }
                 }
@@ -171,8 +174,8 @@ pub fn SourceBrowser() -> Element {
 fn ModuleSidebar(
     modules: Vec<(&'static str, &'static str)>,
     selected_module: Signal<String>,
-    set_selected_module: Setter<String>,
-    set_selected_file: Setter<Option<String>>,
+    set_selected_module: Signal<String>,
+    set_selected_file: Signal<Option<String>>,
     files: Vec<std::borrow::Cow<'static, str>>,
     selected_file: Signal<Option<String>>,
 ) -> Element {
@@ -184,8 +187,8 @@ fn ModuleSidebar(
                     li {
                         class: if selected_module() == path { "selected" } else { "" },
                         onclick: move |_| {
-                            set_selected_module(path.to_string());
-                            set_selected_file(None);
+                            set_selected_module.set(path.to_string());
+                            set_selected_file.set(None);
                         },
                         "{name}"
                     }
@@ -202,7 +205,7 @@ fn ModuleSidebar(
 fn FileList(
     files: Vec<std::borrow::Cow<'static, str>>,
     selected_file: Signal<Option<String>>,
-    set_selected_file: Setter<Option<String>>,
+    set_selected_file: Signal<Option<String>>,
 ) -> Element {
     rsx! {
         div {
@@ -211,7 +214,7 @@ fn FileList(
                 for file in files {
                     li {
                         class: if selected_file().as_ref() == Some(&file.to_string()) { "selected" } else { "" },
-                        onclick: move |_| set_selected_file(Some(file.to_string())),
+                        onclick: move |_| set_selected_file.set(Some(file.to_string())),
                         "{file}"
                     }
                 }

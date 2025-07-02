@@ -1,5 +1,52 @@
 use dioxus::prelude::*;
 //use wallet_adapter::Cluster;
+use crate::model::storage::ACTIVE_CONNECTION;
+use crate::model::storage::CLUSTER_NET_STATE;
+use crate::model::ClusterNetState;
+use crate::model::storage::ACCOUNT_STATE;
+use crate::views::connect_first::ConnectWalletFirst;
+use crate::AccountState;
+use crate::use_connections;
+use crate::Loader;
+use crate::WalletSvg;
+use crate::utils::format_address_url;
+use crate::storage::LOADING;
+use crate::SendSvg;
+use crate::AirdropSvg;
+use crate::AtaSvg;
+use crate::BalanceSvg;
+use crate::CheckSvg;
+use crate::ErrorSvg;
+//use //crate::Loader;
+use crate::MintSvg;
+use crate::NotificationInfo;
+use crate::ReceiveSvg;
+use crate::SignatureSvg;
+use crate::TimestampSvg;
+use crate::UserSvg;
+///use crate::WalletSvg;
+use crate::format_timestamp;
+use crate::playground::MenuOption::{Airdrop, ReceiveSol, SendSol};
+use crate::playground::test_components::ComponentName::{AirdropName, QueryAccountDialogName}; //enum
+//use crate::playground::test_components::ComponentName::ReceiveSol;
+//use crate::playground::test_components::ComponentName::SendSol;
+//use crate::playground::test_emojis::ComponentName::Airdrop;
+//use crate::playground::test_emojis::ComponentName::QueryAccountDialog;
+//use crate::playground::test_emojis::ComponentName::ReceiveSol;
+//use crate::playground::test_emojis::ComponentName::SendSol;
+use crate::storage::GLOBAL_MESSAGE;
+//use crate::utils::format_address_url;
+use crate::utils::format_tx_url;
+use crate::utils::get_cluster_svg;
+use crate::utils::link_target_blank;
+//use crate::utils::link_target_blank;
+use crate::utils::trunk_cluster_name;
+
+use crate::views::airdrop::AirdropComponent;
+use crate::views::query_accounts::QueryAccountDialog;
+//use crate::views::receive_sol::ReceiveSol;
+use crate::views::send_sol::SendSolComponent;
+use crate::views::receive_sol::ReceiveSolComponent;
 
 #[component]
 pub fn Accounts() -> Element {
@@ -181,11 +228,11 @@ pub fn ClusterSuccess(
             }
         }
 
-        SendSol{show_send_modal}
+        SendSolComponent{show_send_modal}
     QueryAccountDialog{show_query_dialog}
-        ReceiveSol{show_receive_modal}
+        ReceiveSolComponent{show_receive_modal}
     if connections.supports_airdrop(&active_cluster_name){
-            Airdrop{show_airdrop_modal}
+            AirdropComponent{show_airdrop_modal}
         }
     }
 }

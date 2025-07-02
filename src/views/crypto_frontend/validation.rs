@@ -1,4 +1,4 @@
-//use crate::crypto::SolanaEncryption;
+use crate::crypto::SolanaEncryption;
 
 #[allow(dead_code)]
 pub fn validate_encryption_inputs(

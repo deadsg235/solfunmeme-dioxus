@@ -3,6 +3,8 @@
 use super::{forbd::Forbd, sig::Sig};
 //use crate::level::Level;
 
+use crate::model::level::Level;
+
 #[derive(Debug, Clone, PartialEq)]
 #[allow(dead_code)]
 pub struct CnstInf {

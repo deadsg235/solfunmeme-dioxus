@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-//use crate::{NotificationInfo, SignMessageSvg };
+use crate::{NotificationInfo, SignMessageSvg };
 
 use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE, WALLET_ADAPTER};
 

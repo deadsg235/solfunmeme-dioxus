@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 use reqwest;
 use serde::{Deserialize, Serialize};
 //use std::collections::HashMap;
-mod style;
+pub mod style;
 use style::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
