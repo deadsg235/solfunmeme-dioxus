@@ -302,6 +302,8 @@ or in bash
     
 ```
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/meta-introspector/solfunmeme-dioxus)
+
 
 
 ### Requirements
