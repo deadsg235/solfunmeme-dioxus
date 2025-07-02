@@ -1,11 +1,11 @@
 use dioxus::prelude::*;
-
-use crate::{
-    utils::copied_address, CopySvg, NotificationInfo, ReceiveSvg, ACTIVE_CONNECTION, GLOBAL_MESSAGE,
-};
+use crate::utils::address_qrcode;
+//use crate::utils::address_qrcode;
+use crate::{    utils::copied_address, CopySvg, NotificationInfo, ReceiveSvg};
+use crate::model::storage::{ACTIVE_CONNECTION, GLOBAL_MESSAGE};
 
 #[component]
-pub fn ReceiveSol(show_receive_modal: Signal<bool>) -> Element {
+pub fn ReceiveSolComponent(show_receive_modal: Signal<bool>) -> Element {
     let mut address = String::default();
     let mut shortened_address = String::default();
 
@@ -17,7 +17,7 @@ pub fn ReceiveSol(show_receive_modal: Signal<bool>) -> Element {
             .to_string();
     }
 
-    let qrcode = if let Ok(qr) = crate::address_qrcode(&address) {
+    let qrcode = if let Ok(qr) = address_qrcode(&address) {
         qr
     } else {
         rsx! {
@@ -59,7 +59,7 @@ pub fn ReceiveSol(show_receive_modal: Signal<bool>) -> Element {
 
                                 spawn(async move {
                                     if let Err(error) = copied_address(&address_inner).await {
-                                        GLOBAL_MESSAGE.write().push_back(NotificationInfo::error(format!("COPY ERROR: {:?}", error)));
+                                        GLOBAL_MESSAGE.write().push_back(NotificationInfo::error(format!("COPY ERROR: {error:?}" )));
                                     } else {
                                         GLOBAL_MESSAGE.write().push_back(NotificationInfo::new("Copied to clipboard"));
                                     }

@@ -60,3 +60,12 @@ flycheck_*.el
 /network-security.data
 
 .vercel
+*.profraw
+/tarpaulin-report.html
+/test_orbits_2d_projection.csv
+/tree.txt
+/rrust_kontekst/target/
+/rrust_kontekst_base/target/
+/error.txt
+/report.txt
+/target-wasm-solfunmeme/*

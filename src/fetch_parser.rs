@@ -1,18 +1,26 @@
 use std::str::FromStr;
 
 use dioxus::prelude::*;
-use serde::Deserialize;
 use solana_sdk::{
     native_token::LAMPORTS_PER_SOL, pubkey::Pubkey, system_instruction::transfer,
     transaction::Transaction,
 };
-use solana_transaction_error::TransactionError;
+//use solana_transaction_error::TransactionError;
 use wallet_adapter::{
     web_sys::{js_sys::Date, wasm_bindgen::JsValue},
     SendOptions, WalletError, WalletResult,
 };
 
-use crate::{views::AccountState, FetchReq, ACCOUNT_STATE, CLUSTER_STORAGE, WALLET_ADAPTER};
+use crate::{
+    model::{
+        storage::{ACCOUNT_STATE, WALLET_ADAPTER},
+        use_connections, AccountState, BlockHashResponseValue, ResponseWithContext, RpcResponse,
+        SignaturesResponse, TokenAccountResponse,
+    },
+    FetchReq,
+};
+//, views::FetchReq
+//use bincode::config::legacy;
 
 pub fn format_timestamp(unix_timestamp: i64) -> String {
     let timestamp_ms = unix_timestamp as f64 * 1000.0; //Convert seconds to millisconds
@@ -55,14 +63,6 @@ async fn get_blockhash() -> WalletResult<solana_sdk::hash::Hash> {
         .map_err(|error| WalletError::Op(error.to_string()))
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct BlockHashResponseValue<'a> {
-    #[serde(borrow)]
-    pub blockhash: &'a str,
-    pub last_valid_block_height: u64,
-}
-
 pub async fn get_balance(address: &str) -> WalletResult<String> {
     let balance_options = jzon::object! {
         "id":1,
@@ -92,7 +92,8 @@ pub async fn send_sol_req(
     lamports: u64,
     public_key_bytes: [u8; 32],
 ) -> WalletResult<()> {
-    let cluster = CLUSTER_STORAGE.read().active_cluster().cluster();
+    let connections = use_connections("solana_wallet");
+    let cluster = connections.active_entry_object();
 
     let pubkey = Pubkey::new_from_array(public_key_bytes);
     let recipient = Pubkey::from_str(recipient).or(Err(WalletError::Op(
@@ -102,13 +103,18 @@ pub async fn send_sol_req(
     let send_sol_instruction = transfer(&pubkey, &recipient, lamports);
     let mut tx = Transaction::new_with_payer(&[send_sol_instruction], Some(&pubkey));
     let blockhash = get_blockhash().await?;
-
     tx.message.recent_blockhash = blockhash;
+
+    //#[cfg(feature = "bincodev1")]
     let tx_bytes = bincode::serialize(&tx).map_err(|error| WalletError::Op(error.to_string()))?;
+
+    //#[cfg(feature = "bincodev2")]
+    //let tx_bytes = bincode::encode_to_vec(&tx, legacy()).map_err(|error| WalletError::Op(error.to_string()))?;
+    //let tx_bytes = tx.serialize().map_err(|error| WalletError::Op(error.to_string()))?;
 
     WALLET_ADAPTER
         .read()
-        .sign_and_send_transaction(&tx_bytes, cluster, SendOptions::default())
+        .sign_and_send_transaction(&tx_bytes, cluster.cluster(), SendOptions::default())
         .await?;
 
     Ok(())
@@ -137,7 +143,7 @@ pub async fn request_airdrop(lamports: u64, address: &str) -> WalletResult<()> {
 pub async fn accounts_runner(address: &str) -> WalletResult<AccountState> {
     *ACCOUNT_STATE.write() = AccountState::default();
 
-    let balance = crate::get_balance(&address).await?;
+    let balance = crate::get_balance(address).await?;
 
     let token_accounts_options = jzon::object! {
         "id":1,
@@ -194,93 +200,4 @@ pub async fn accounts_runner(address: &str) -> WalletResult<AccountState> {
         token_accounts,
         transactions: signatures.clone(),
     })
-}
-
-#[derive(Debug, PartialEq, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct RpcResponse<T> {
-    pub jsonrpc: String,
-    pub id: u8,
-    pub result: T,
-}
-
-#[derive(Debug, PartialEq, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct SignaturesResponse {
-    pub block_time: Option<i64>,
-    pub confirmation_status: Option<String>,
-    pub err: Option<TransactionError>,
-    pub signature: String,
-}
-
-#[derive(Debug, PartialEq, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct ResponseWithContext<O> {
-    pub value: O,
-}
-
-#[derive(Debug, PartialEq, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct TokenAccountResponse {
-    pub pubkey: String,
-    pub account: Account,
-}
-
-impl TokenAccountResponse {
-    pub fn mint(&self) -> String {
-        self.account.data.parsed.info.mint.to_owned()
-    }
-
-    pub fn ata_address(&self) -> String {
-        self.pubkey.to_owned()
-    }
-
-    pub fn balance(&self) -> String {
-        self.account
-            .data
-            .parsed
-            .info
-            .token_amount
-            .ui_amount_string
-            .to_owned()
-    }
-
-    pub fn state(&self) -> String {
-        self.account.data.parsed.info.state.to_uppercase()
-    }
-}
-
-#[derive(Debug, PartialEq, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Account {
-    pub data: TokenData,
-}
-
-#[derive(Debug, PartialEq, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct TokenAmount {
-    pub amount: String,
-    pub decimals: u8,
-    pub ui_amount: f64,
-    pub ui_amount_string: String,
-}
-
-#[derive(Debug, PartialEq, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct ParseInfo {
-    pub mint: String,
-    pub state: String,
-    pub token_amount: TokenAmount,
-}
-
-#[derive(Debug, PartialEq, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Parsed {
-    pub info: ParseInfo,
-}
-
-#[derive(Debug, PartialEq, Clone, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct TokenData {
-    pub parsed: Parsed,
 }

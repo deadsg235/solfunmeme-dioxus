@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
+//use crate::WalletSvg;
 use crate::WalletSvg;
-
 #[component]
 pub fn ConnectWalletFirst() -> Element {
     rsx! {

@@ -1,10 +1,10 @@
 use dioxus::prelude::*;
-use solana_sdk::{pubkey::Pubkey, system_instruction, transaction::Transaction};
+use solana_system_interface::instruction as system_instruction;
+use solana_sdk::{pubkey::Pubkey, transaction::Transaction};
+use solana_system_interface::*;
 use wallet_adapter::Utils;
-
-use crate::{
-    NotificationInfo, SignTxSvg, ACTIVE_CONNECTION, CLUSTER_STORAGE, GLOBAL_MESSAGE, WALLET_ADAPTER,
-};
+use crate::model::storage::{ACTIVE_CONNECTION, CLUSTER_STORAGE, GLOBAL_MESSAGE, WALLET_ADAPTER};
+use crate::{NotificationInfo, SignTxSvg,};
 
 #[component]
 pub fn SignTx() -> Element {
@@ -35,6 +35,7 @@ pub fn SignTx() -> Element {
                             let recipient_pubkey = Pubkey::new_from_array(Utils::public_key_rand());
 
                             let instr = system_instruction::transfer(&pubkey, &recipient_pubkey, lamports);
+
                             let tx = Transaction::new_with_payer(&[instr], Some(&pubkey));
                             let tx_bytes = bincode::serialize(&tx).unwrap();
                             let cluster = CLUSTER_STORAGE.read().active_cluster().cluster();

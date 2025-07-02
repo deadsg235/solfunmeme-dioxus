@@ -1,50 +1,52 @@
 use dioxus::prelude::*;
-use wallet_adapter::Cluster;
+//use wallet_adapter::Cluster;
+use crate::model::storage::ACTIVE_CONNECTION;
+use crate::model::storage::CLUSTER_NET_STATE;
+use crate::model::ClusterNetState;
+use crate::model::storage::ACCOUNT_STATE;
+use crate::views::connect_first::ConnectWalletFirst;
+use crate::AccountState;
+use crate::use_connections;
+use crate::Loader;
+use crate::WalletSvg;
+use crate::utils::format_address_url;
+use crate::storage::LOADING;
+use crate::SendSvg;
+use crate::AirdropSvg;
+use crate::AtaSvg;
+use crate::BalanceSvg;
+use crate::CheckSvg;
+use crate::ErrorSvg;
+//use //crate::Loader;
+use crate::MintSvg;
+use crate::NotificationInfo;
+use crate::ReceiveSvg;
+use crate::SignatureSvg;
+use crate::TimestampSvg;
+use crate::UserSvg;
+///use crate::WalletSvg;
+use crate::format_timestamp;
+use crate::playground::MenuOption::{Airdrop, ReceiveSol, SendSol};
+use crate::playground::test_components::ComponentName::{AirdropName, QueryAccountDialogName}; //enum
+//use crate::playground::test_components::ComponentName::ReceiveSol;
+//use crate::playground::test_components::ComponentName::SendSol;
+//use crate::playground::test_emojis::ComponentName::Airdrop;
+//use crate::playground::test_emojis::ComponentName::QueryAccountDialog;
+//use crate::playground::test_emojis::ComponentName::ReceiveSol;
+//use crate::playground::test_emojis::ComponentName::SendSol;
+use crate::storage::GLOBAL_MESSAGE;
+//use crate::utils::format_address_url;
+use crate::utils::format_tx_url;
+use crate::utils::get_cluster_svg;
+use crate::utils::link_target_blank;
+//use crate::utils::link_target_blank;
+use crate::utils::trunk_cluster_name;
 
-use crate::{
-    format_timestamp, link_target_blank, trunk_cluster_name,
-    utils::{format_address_url, format_tx_url, get_cluster_svg},
-    views::{ReceiveSol, SendSol, QueryAccountDialog},
-    Airdrop, AirdropSvg, AtaSvg, BalanceSvg, CheckSvg, ErrorSvg, Loader, MintSvg, NotificationInfo,
-    ReceiveSvg, SendSvg, SignatureSvg, SignaturesResponse, TimestampSvg, TokenAccountResponse,
-    UserSvg, WalletSvg, ACCOUNT_STATE, ACTIVE_CONNECTION, CLUSTER_NET_STATE, CLUSTER_STORAGE,
-    GLOBAL_MESSAGE, LOADING,
-};
-
-use super::ConnectWalletFirst;
-
-#[derive(Debug, Default, PartialEq, Eq, Clone, Copy)]
-pub enum ClusterNetState {
-    Success,
-    #[default]
-    Waiting,
-    Failure,
-}
-
-#[derive(Debug, Default, PartialEq)]
-pub struct AccountState {
-    pub balance: String,
-    pub token_accounts: Vec<TokenAccountResponse>,
-    pub transactions: Vec<SignaturesResponse>,
-}
-
-impl AccountState {
-    pub fn token_accounts_is_empty(&self) -> bool {
-        self.token_accounts.is_empty()
-    }
-
-    pub fn transactions_is_empty(&self) -> bool {
-        self.token_accounts.is_empty()
-    }
-
-    pub fn token_accounts(&self) -> &[TokenAccountResponse] {
-        self.token_accounts.as_slice()
-    }
-
-    pub fn transactions(&self) -> &[SignaturesResponse] {
-        self.transactions.as_slice()
-    }
-}
+use crate::views::airdrop::AirdropComponent;
+use crate::views::query_accounts::QueryAccountDialog;
+//use crate::views::receive_sol::ReceiveSol;
+use crate::views::send_sol::SendSolComponent;
+use crate::views::receive_sol::ReceiveSolComponent;
 
 #[component]
 pub fn Accounts() -> Element {
@@ -81,7 +83,7 @@ pub fn Accounts() -> Element {
 }
 
 #[component]
-fn ClusterSuccess(
+pub fn ClusterSuccess(
     address: String,
     shortened_address: String,
     public_key_bytes: [u8; 32],
@@ -114,6 +116,9 @@ fn ClusterSuccess(
         });
     });
 
+    let connections = use_connections("solana_wallet");
+    let active_cluster_name = connections.active_entry();
+
     rsx! {
         div {class:"flex w-full h-full mt-4 mb-10 flex-col items-center",
             div {
@@ -142,12 +147,12 @@ fn ClusterSuccess(
                         class:"flex bg-true-blue items-center justify-center text-sm text-white px-5 py-2 mt-5 rounded-full hover:bg-cobalt-blue",
                         span{class:"w-[25px] flex mr-1", {ReceiveSvg()}} "Receive"
                     }
-		    button {
+            button {
                         onclick:move|_|{show_query_dialog.set(true)},
                         class:"flex bg-true-blue items-center justify-center text-sm text-white px-5 py-2 mt-5 rounded-full hover:bg-cobalt-blue",
                         span{class:"w-[25px] flex mr-1", {ReceiveSvg()}} "Query"
                     }
-                    if CLUSTER_STORAGE.read().active_cluster().cluster() != Cluster::MainNet{
+                    if connections.supports_airdrop(&active_cluster_name){
                         button {
                             onclick:move|_|{show_airdrop_modal.set(true)},
                             class:"flex bg-true-blue items-center justify-center text-sm text-white px-5 py-2 mt-5 rounded-full hover:bg-cobalt-blue",
@@ -223,11 +228,11 @@ fn ClusterSuccess(
             }
         }
 
-        SendSol{show_send_modal}
-	QueryAccountDialog{show_query_dialog}
-        ReceiveSol{show_receive_modal}
-        if CLUSTER_STORAGE.read().active_cluster().cluster() != Cluster::MainNet{
-            Airdrop{show_airdrop_modal}
+        SendSolComponent{show_send_modal}
+    QueryAccountDialog{show_query_dialog}
+        ReceiveSolComponent{show_receive_modal}
+    if connections.supports_airdrop(&active_cluster_name){
+            AirdropComponent{show_airdrop_modal}
         }
     }
 }
@@ -239,10 +244,11 @@ pub fn TokenAccountCard(
     token_balance: String,
     state: String,
 ) -> Element {
-    let cluster = CLUSTER_STORAGE.read().active_cluster().cluster();
-    let cluster_image = get_cluster_svg(cluster);
-
-    let cluster_name = trunk_cluster_name(CLUSTER_STORAGE.read().active_cluster().name());
+    //let cluster = CLUSTER_STORAGE.read().active_cluster().cluster();
+    let connections = use_connections("solana_wallet");
+    let cluster = connections.active_entry_object();
+    let cluster_image = get_cluster_svg(cluster.cluster());
+    let cluster_name2 = trunk_cluster_name(cluster.name());
 
     let shortened_mint_address = wallet_adapter::Utils::shorten_base58(&mint)
         .map(|address| address.to_string())
@@ -256,16 +262,20 @@ pub fn TokenAccountCard(
             div {class:"flex w-full items-center",
                 span{class:"w-[28px] pr-2", {cluster_image()}}
                 h5 { class: "flex text-2xl",
-                    {cluster_name}
+                    {cluster_name2}
                 }
             }
             div { class: "flex flex-col w-full",
                 div { class: "flex w-full items-start flex-col mt-2.5",
                     div {class:"w-full justify-between  flex",
-                        div { class: "bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
-                            {cluster.chain()}
+                        div {
+                            id: "cluster-chain",
+                            class: "bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
+                            {cluster.cluster.toCluster().chain()}
                         }
-                        div { class: "bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
+                        div {
+                            id: "cluster-state",
+                            class: "bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
                             {state}
                         }
                     }
@@ -299,17 +309,21 @@ pub fn TokenAccountCard(
 }
 
 #[component]
-fn TxCard(
+pub fn TxCard(
     tx: String,
     timestamp: Option<i64>,
     state: Option<String>,
     succeeded: bool,
     address: String,
 ) -> Element {
-    let cluster = CLUSTER_STORAGE.read().active_cluster().cluster();
+    //    let cluster = CLUSTER_STORAGE.read().active_cluster().cluster();
+    let connections = use_connections("solana_wallet");
+    let acluster = connections.active_entry_object();
+    let cluster = acluster.cluster();
+
     let cluster_image = get_cluster_svg(cluster);
 
-    let cluster_name = trunk_cluster_name(CLUSTER_STORAGE.read().active_cluster().name());
+    let cluster_name2 = trunk_cluster_name(cluster.display());
 
     let shortened_address = wallet_adapter::Utils::shorten_base58(&address)
         .map(|address| address.to_string())
@@ -326,17 +340,21 @@ fn TxCard(
             div {class:"flex items-center",
                 span{class:"w-[28px] pr-2", {cluster_image()}}
                 h5 { class: "text-2xl font-semibold tracking-tight",
-                    {cluster_name}
+                    {cluster_name2}
                 }
             }
             div { class: "flex flex-col w-full",
                 div { class: "flex w-full items-start flex-col mt-2.5",
                     div {class:"w-full justify-between items-start  flex",
-                        div { class: "flex bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
+                        div {
+                            id: "cluster-chain-2",
+                            class: "flex bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
                             {cluster.chain()}
                         }
                         if let Some(state_inner) = state {
-                            div { class: "flex bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
+                            div {
+                                id: "cluster-state-2",
+                                class: "flex bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-200 dark:text-blue-800",
                                 {state_inner.to_uppercase()}
                             }
                         }
@@ -396,7 +414,7 @@ pub async fn fetch_account_state(
             if let Some(error_msg) = error_msg {
                 GLOBAL_MESSAGE
                     .write()
-                    .push_back(NotificationInfo::error(format!("{error_msg}: {:?}", error)));
+                    .push_back(NotificationInfo::error(format!("{error_msg}: {error:?}")));
             }
         }
     }

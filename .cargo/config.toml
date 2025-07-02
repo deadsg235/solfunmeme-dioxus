@@ -1,5 +1,11 @@
-
-#https://github.com/GlareDB/glaredb/blob/c8c2d3ab252f1f8ea4cfb7785f5c0b876267542f/.cargo/config.toml#L2
-# See <https://docs.rs/getrandom/latest/getrandom/#webassembly-support>
+#RUSTFLAGS="--cfg wasm_js" cargo build --target wasm32-unknown-unknown
 [target.wasm32-unknown-unknown]
-rustflags = ['--cfg', 'getrandom_backend="wasm_js"']
+rustflags = ["--cfg", "getrandom_backend=\"wasm_js\"" ]
+
+
+# Blocking waiting for file lock on build directory
+#build.target-dir = "target-wasm-solfunmeme"
+
+
+[build]
+target-dir = "target-wasm-solfunmeme"
