@@ -77,10 +77,13 @@ pub struct OurSourceViewWikwidata;
 pub struct OurSourceViewWorkflow;
 
 use dioxus_logger::tracing::info;
+use dioxus_logger::tracing::debug;
 
 pub fn printall() {
     info!("PRINT ALL");
-    for file in OurSource::iter() {
+    let files: Vec<_> = OurSource::iter().collect();
+    debug!("rust-embed OurSource::iter() found: {:?}", files);
+    for file in &files {
         println!("{}", file.as_ref());
         info!("print {}", file.as_ref());
     }

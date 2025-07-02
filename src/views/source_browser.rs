@@ -7,6 +7,7 @@ use dioxus_logger::tracing::debug;
 
 #[component]
 pub fn SourceBrowser() -> Element {
+    crate::embedself::printall();
     let mut selected_module = use_signal(|| "src".to_string());
     let mut selected_file = use_signal(|| None::<String>);
 
