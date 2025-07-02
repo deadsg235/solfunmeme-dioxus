@@ -453,3 +453,9 @@ Set up automated markdown linting to ensure README formatting remains consistent
 
 Create a formal ontology for the project
 
+# Code generation
+ 
+ ```
+ RUST_BACKTRACE=full cargo run --bin generate_embedded
+```
+ 

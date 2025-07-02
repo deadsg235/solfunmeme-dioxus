@@ -6664,6 +6664,7 @@ dependencies = [
  "url",
  "urlencoding",
  "uuid",
+ "walkdir",
  "wallet-adapter",
  "wasm-bindgen",
  "wasm-bindgen-futures",
