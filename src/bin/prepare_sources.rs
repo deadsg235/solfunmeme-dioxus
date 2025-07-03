@@ -2,6 +2,10 @@ use walkdir::WalkDir;
 use std::fs;
 use std::collections::HashMap;
 use solfunmeme_dioxus::core::code_analyzer::CodeAnalyzer;
+use std::path::Path;
+use std::time::{SystemTime, UNIX_EPOCH};
+use std::collections::BTreeMap;
+use regex::Regex;
 
 /**
 idea : lets build a mini compiler right here
@@ -32,29 +36,575 @@ creation of mathematical mmodel
 export data for gui (reduce the size)
 
  */
+
+// --- AST Node Type Emoji Mapping (updated & deduplicated) ---
+const EMOJI_TYPE_MAP: &[(&str, &str, &str)] = &[
+    // Rust Core
+    ("fn", "🦀⚙️", "Rust Core"),
+    ("struct", "🏛️🧱", "Rust Core"),
+    ("enum", "🎲", "Rust Core"),
+    ("mod", "📦", "Rust Core"),
+    ("use", "🔗", "Rust Core"),
+    ("impl", "🔨", "Rust Core"),
+    ("trait", "🧩", "Rust Core"),
+    ("const", "🔒", "Rust Core"),
+    ("static", "🪨", "Rust Core"),
+    ("type", "🏷️", "Rust Core"),
+    ("ident", "🆔", "Rust Core"),
+    ("attrs", "🎨", "Rust Core"),
+    ("fields", "🌱", "Rust Core"),
+    ("meta", "🧠", "Rust Core"),
+    ("path", "🛤️", "Rust Core"),
+    ("lit", "💡", "Rust Core"),
+    ("tokens", "🎟️", "Rust Core"),
+    ("expr", "🧮", "Rust Core"),
+    ("block", "🧱", "Rust Core"),
+    ("call", "📞", "Rust Core"),
+    ("method", "🔧", "Rust Core"),
+    ("macro", "🪄", "Rust Core"),
+    ("trait_object", "🦋", "Rust Core"),
+    ("item", "📜", "Rust Core"),
+    ("items", "📚", "Rust Core"),
+    ("field", "🌿", "Rust Core"),
+    ("inputs", "➡️", "Rust Core"),
+    ("output", "⬅️", "Rust Core"),
+    ("receiver", "📡", "Rust Core"),
+    ("generics", "🔣", "Rust Core"),
+    ("lifetime", "⏳", "Rust Core"),
+    ("where_clause", "❓", "Rust Core"),
+    ("tuple", "🤝", "Rust Core"),
+    ("tuple_struct", "🏗️", "Rust Core"),
+    ("array", "🔢", "Rust Core"),
+    ("int", "#️⃣", "Rust Core"),
+    ("float", "💧", "Rust Core"),
+    ("bool", "✅", "Rust Core"),
+    ("char", "🔤", "Rust Core"),
+    ("str", "📝", "Rust Core"),
+    ("closure", "🕸️", "Rust Core"),
+    ("let", "📌", "Rust Core"),
+    ("match", "🎯", "Rust Core"),
+    ("if", "❓", "Rust Core"),
+    ("else_branch", "🔄", "Rust Core"),
+    ("then_branch", "➡️", "Rust Core"),
+    ("for_loop", "🔁", "Rust Core"),
+    ("while", "🔂", "Rust Core"),
+    ("loop", "♾️", "Rust Core"),
+    ("return", "↩️", "Rust Core"),
+    ("break", "⛔", "Rust Core"),
+    ("continue", "▶️", "Rust Core"),
+    ("assign", "📝", "Rust Core"),
+    ("op", "⚙️", "Rust Core"),
+    ("unary", "➖", "Rust Core"),
+    ("binary", "➗", "Rust Core"),
+    ("cast", "🔀", "Rust Core"),
+    ("index", "📍", "Rust Core"),
+    ("range", "↔️", "Rust Core"),
+    ("slice", "🍰", "Rust Core"),
+    ("macro_rules", "📐", "Rust Core"),
+    ("group", "👥", "Rust Core"),
+    ("delim", "🚧", "Rust Core"),
+    ("punct", "‼️", "Rust Core"),
+    ("paren", "( )", "Rust Core"),
+    ("bracket", "[ ]", "Rust Core"),
+    ("brace", "{ }", "Rust Core"),
+    ("attr", "🖼️", "Rust Core"),
+    ("name_value", "🔑", "Rust Core"),
+    ("value", "💎", "Rust Core"),
+    ("style", "🎨", "Rust Core"),
+    ("method_call", "📲", "Rust Core"),
+    ("dyn", "🌀", "Rust Core"),
+    ("mut", "🔄", "Rust Core"),
+    ("ref", "🔗", "Rust Core"),
+    ("self_ty", "🆔", "Rust Core"),
+    ("super", "🌟", "Rust Core"),
+    ("crate", "🚚", "Rust Core"),
+    ("macro_input", "📥", "Rust Core"),
+    ("macro_output", "📦", "Rust Core"),
+    ("params", "⚙️", "Rust Core"),
+    ("args", "📢", "Rust Core"),
+    ("arguments", "🎙️", "Rust Core"),
+    ("arm", "🛡️", "Rust Core"),
+    ("arms", "🛠️", "Rust Core"),
+    ("variant", "🎭", "Rust Core"),
+    ("variants", "🔣", "Rust Core"),
+    ("fields_named", "🏷️", "Rust Core"),
+    ("fields_unnamed", "🌿", "Rust Core"),
+    ("pat", "🖼️", "Rust Core"),
+    ("stmt", "🖋️", "Rust Core"),
+    ("stmts", "📜", "Rust Core"),
+    ("ty", "🔖", "Rust Core"),
+    ("bound", "⛓️", "Rust Core"),
+    ("bounds", "🔗", "Rust Core"),
+    ("vis", "👀", "Rust Core"),
+    ("list", "✅", "Rust Core"),
+    ("token", "🎟️", "Rust Core"),
+    ("tree", "🌳", "Rust Core"),
+    ("segment", "🧩", "Rust Core"),
+    ("segments", "🧩", "Rust Core"),
+    ("assoc_type", "🔗", "Rust Core"),
+    ("async", "⏩", "Rust Core"),
+    ("await", "⏳", "Rust Core"),
+    ("base", "🏁", "Rust Core"),
+    ("body", "🏃", "Rust Core"),
+    ("colon_token", ":", "Rust Core"),
+    ("delimiter", "🚧", "Rust Core"),
+    ("angle_bracketed", "⟨⟩", "Rust Core"),
+    ("cond", "❓", "Rust Core"),
+    ("func", "🦀", "Rust Core"),
+    ("init", "🚦", "Rust Core"),
+    ("right", "👉", "Rust Core"),
+    ("semi", ";", "Rust Core"),
+    ("semi_token", ";", "Rust Core"),
+    ("spacing", "↔️", "Rust Core"),
+    ("start", "🔜", "Rust Core"),
+    ("stream", "🌊", "Rust Core"),
+    ("try", "🤞", "Rust Core"),
+    ("bare_fn", "🦀", "Rust Core"),
+    ("bounded_ty", "📏", "Rust Core"),
+    ("byte_str", "💾", "Rust Core"),
+    ("cases", "🎭", "Rust Core"),
+    ("dot2_token", "•", "Rust Core"),
+    ("elem", "📦", "Rust Core"),
+    ("elems", "📦", "Rust Core"),
+    ("end", "🔚", "Rust Core"),
+    ("impl_trait", "🧩", "Rust Core"),
+    ("left", "👈", "Rust Core"),
+    ("len", "📏", "Rust Core"),
+    ("limits", "📏", "Rust Core"),
+    ("move", "🚚", "Rust Core"),
+    ("named", "🏷️", "Rust Core"),
+    ("or", "🔀", "Rust Core"),
+    ("parenthesized", "( )", "Rust Core"),
+    ("reference", "🔗", "Rust Core"),
+    ("rename", "📝", "Rust Core"),
+    ("repeat", "🔁", "Rust Core"),
+    ("rest", "🔁", "Rust Core"),
+    ("restricted", "🚫", "Rust Core"),
+    ("turbofish", "🐟", "Rust Core"),
+    ("typed", "🏷️", "Rust Core"),
+    ("unnamed", "🏷️", "Rust Core"),
+    ("unsafe", "☢️", "Rust Core"),
+    // Web/CSS
+    ("px", "📏", "Web/CSS"), ("deg", "🧭", "Web/CSS"), ("em", "🔠", "Web/CSS"), ("rem", "🔡", "Web/CSS"), ("vh", "📐", "Web/CSS"), ("vw", "📏", "Web/CSS"), ("s", "⏱️", "Web/CSS"), ("ms", "⏲️", "Web/CSS"),
+    ("animation", "🎞️", "Web/CSS"), ("transition", "🔄", "Web/CSS"), ("absolute", "📐", "Web/CSS"), ("align", "📏", "Web/CSS"), ("app", "📱", "Web/CSS"), ("app_state", "🗄️", "Web/CSS"), ("accessibility", "♿", "Web/CSS"),
+    ("adapter", "🔌", "Web/CSS"), ("actions", "🎬", "Web/CSS"), ("action", "🎬", "Web/CSS"), ("active", "🔥", "Web/CSS"),
+    // Crypto/Security/Systems
+    ("aead", "🔒", "Crypto"), ("aeads", "🔒", "Crypto"), ("aes", "🔑", "Crypto"), ("argon2", "🧂", "Crypto"), ("arc", "🧲", "Crypto"), ("addr2line", "📍", "Crypto"), ("aarch64", "📦", "Crypto"), ("amd64", "💻", "Crypto"), ("armv8", "💪", "Crypto"),
+    ("crypto", "🔒", "Crypto"), ("curve25519", "➰", "Crypto"), ("ed25519", "📝", "Crypto"), ("elliptic", "➰", "Crypto"), ("fiat", "💵", "Crypto"), ("cbor", "📦", "Crypto"),
+    // Project-specific
+    ("agave", "🌵", "Project-Specific"), ("helius", "🌞", "Project-Specific"),
+    // Internationalization
+    ("icu4x", "🌐", "Internationalization"), ("cldr", "🌍", "Internationalization"), ("chinese", "🀄", "Internationalization"), ("hebrew", "✡️", "Internationalization"), ("coptic", "⛪", "Internationalization"), ("ethiopic", "🌄", "Internationalization"), ("calendar", "📅", "Internationalization"), ("datetime", "⏰", "Internationalization"),
+    // Testing/Benchmarking
+    ("criterion", "⏱️", "Testing"), ("benches", "🏋️", "Testing"), ("fuzz", "🧪", "Testing"), ("examples", "📚", "Testing"), ("docs", "📖", "Testing"),
+    // Misc/General
+    ("algebra", "➗", "General"), ("analysis", "🔍", "General"), ("analyze", "🔬", "General"), ("account", "👤", "General"), ("accounts", "👥", "General"),
+    // Suffixes for versioning/hashes
+    ("zm", "🧬", "Versioning"), ("h", "⏳", "Versioning"), ("v", "🔢", "Versioning"),
+    // Color codes (hex)
+    ("ff", "🎨", "Color"), ("00", "⚫", "Color"), ("ffffff", "⬜", "Color"), ("000000", "⬛", "Color"),
+    // Numbers (for fun)
+    ("0", "0️⃣", "Numbers"), ("1", "1️⃣", "Numbers"), ("2", "2️⃣", "Numbers"), ("3", "3️⃣", "Numbers"), ("4", "4️⃣", "Numbers"), ("5", "5️⃣", "Numbers"), ("6", "6️⃣", "Numbers"), ("7", "7️⃣", "Numbers"), ("8", "8️⃣", "Numbers"), ("9", "9️⃣", "Numbers"), ("10", "🔟", "Numbers"), ("100", "💯", "Numbers"), ("255", "🟧", "Numbers"),
+    // Emoji codepoints
+    ("1f3a8", "🎨", "Emoji"), ("1f4dd", "📝", "Emoji"), ("1f680", "🚀", "Emoji"), ("1f4a9", "💩", "Emoji"),
+    // Heuristic/structural
+    ("byte", "💾", "Numbers"), ("parenthes", "( )", "Rust Core"), ("case", "🎭", "Rust Core"), ("dot", "•", "General"), ("colon", ":", "General"), ("bounded", "📏", "General"),
+];
+
+fn emoji_for_type(ty: &str) -> (&'static str, &'static str) {
+    for &(name, emoji, category) in EMOJI_TYPE_MAP {
+        if ty == name {
+            return (emoji, category);
+        }
+    }
+    ("❓🤷", "Uncategorized")
+}
+
+fn extract_string_literals(value: &serde_json::Value, out: &mut Vec<String>) {
+    match value {
+        serde_json::Value::Object(map) => {
+            for (k, v) in map.iter() {
+                // Look for string literal keys
+                if (k == "lit" || k == "str") && v.is_string() {
+                    if let Some(s) = v.as_str() {
+                        out.push(s.to_string());
+                    }
+                }
+                extract_string_literals(v, out);
+            }
+        },
+        serde_json::Value::Array(arr) => {
+            for v in arr {
+                extract_string_literals(v, out);
+            }
+        },
+        _ => {}
+    }
+}
+
+fn split_words(s: &str) -> Vec<String> {
+    // Split on whitespace, punctuation, underscores
+    let mut words = Vec::new();
+    let re = Regex::new(r"[A-Za-z0-9]+_").unwrap(); // dummy, not used for splitting
+    for part in s.split(|c: char| !c.is_alphanumeric() && c != '_') {
+        if part.is_empty() { continue; }
+        // Manually split CamelCase
+        let mut last = 0;
+        let chars: Vec<char> = part.chars().collect();
+        for i in 1..chars.len() {
+            if chars[i].is_uppercase() && chars[i - 1].is_lowercase() {
+                words.push(chars[last..i].iter().collect::<String>().to_lowercase());
+                last = i;
+            }
+        }
+        if last < chars.len() {
+            words.push(chars[last..].iter().collect::<String>().to_lowercase());
+        }
+    }
+    words
+}
+
 fn main() {
+    // Print emoji mapping at startup
+    println!("=== AST Node Type Emoji Mapping ===");
+    for (name, emoji, category) in EMOJI_TYPE_MAP {
+        println!("{:>10}: {} ({})", name, emoji, category);
+    }
+    println!("");
+
     // 1. Discover all Rust files
     let mut files = HashMap::new();
+    let mut file_count = 0;
     for entry in WalkDir::new("src").into_iter().filter_map(Result::ok) {
         if entry.file_type().is_file() && entry.path().extension().map_or(false, |e| e == "rs") {
             let path = entry.path().to_string_lossy().to_string();
-            let content = fs::read_to_string(entry.path()).unwrap();
-            files.insert(path, content);
+            match fs::read_to_string(entry.path()) {
+                Ok(content) => {
+                    files.insert(path, content);
+                    file_count += 1;
+                },
+                Err(e) => {
+                    println!("[ERROR: could not read file: {}]", e);
+                }
+            }
         }
+    }
+    if files.is_empty() {
+        println!("[WARN] No Rust files found. Exiting.");
+        return;
     }
 
     // 2. Analyze all files
+    println!("[INFO] Initializing CodeAnalyzer ...");
     let mut analyzer = CodeAnalyzer::new(32, 0.8);
-    let analyses = analyzer.analyze_multiple_files(files).unwrap();
+    println!("[INFO] Analyzing files ...");
+    let analyses = match analyzer.analyze_multiple_files(files) {
+        Ok(a) => a,
+        Err(e) => {
+            println!("[ERROR] Failed to analyze files: {}", e);
+            return;
+        }
+    };
+    println!("[INFO] Analysis complete. {} files analyzed.", analyses.len());
 
     // 3. Collect and merge JSON ASTs (for now, just collect into an array)
     let mut asts = Vec::new();
-    for analysis in analyses {
-        let ast: serde_json::Value = serde_json::from_str(&analysis.json_ast).unwrap();
-        asts.push(ast);
+    let reports_dir = "reports";
+    if !Path::new(reports_dir).exists() {
+        match fs::create_dir_all(reports_dir) {
+            Ok(_) => println!("[INFO] Created reports directory: {}", reports_dir),
+            Err(e) => {
+                println!("[ERROR] Could not create reports directory: {}", e);
+                return;
+            }
+        }
+    }
+
+    fn count_types_recursive(value: &serde_json::Value, type_counts: &mut BTreeMap<String, usize>, total_nodes: &mut usize) {
+        match value {
+            serde_json::Value::Object(map) => {
+                *total_nodes += 1;
+                for (k, v) in map.iter() {
+                    *type_counts.entry(k.clone()).or_insert(0) += 1;
+                    count_types_recursive(v, type_counts, total_nodes);
+                }
+            },
+            serde_json::Value::Array(arr) => {
+                for v in arr {
+                    count_types_recursive(v, type_counts, total_nodes);
+                }
+            },
+            _ => {}
+        }
+    }
+    let mut dir_type_counts: HashMap<String, BTreeMap<String, usize>> = HashMap::new();
+    let mut total_type_counts: BTreeMap<String, usize> = BTreeMap::new();
+    let mut global_word_counts: BTreeMap<String, usize> = BTreeMap::new();
+    let mut global_word_emoji_counts: BTreeMap<String, usize> = BTreeMap::new();
+    for (i, analysis) in analyses.iter().enumerate() {
+        match serde_json::from_str::<serde_json::Value>(&analysis.json_ast) {
+            Ok(ast) => {
+                let mut type_counts = BTreeMap::new();
+                let mut total_nodes = 0;
+                count_types_recursive(&ast, &mut type_counts, &mut total_nodes);
+                // Extract string literals and process words
+                let mut string_literals = Vec::new();
+                extract_string_literals(&ast, &mut string_literals);
+                let mut word_counts = BTreeMap::new();
+                for s in &string_literals {
+                    for word in split_words(s) {
+                        *word_counts.entry(word).or_insert(0) += 1;
+                    }
+                }
+                // Map words to emojis
+                let mut word_emoji_counts = BTreeMap::new();
+                for (word, count) in &word_counts {
+                    let (emoji, category) = emoji_for_type(word);
+                    if emoji != "❓" && emoji != "❓🤷" {
+                        word_emoji_counts.entry(emoji).or_insert(0usize).saturating_add(*count);
+                    }
+                }
+                // Count emojis in string literals
+                let mut emoji_counts_in_strings = BTreeMap::new();
+                for s in &string_literals {
+                    for ch in s.chars() {
+                        if ch.len_utf8() > 2 { // crude emoji filter
+                            let e = ch.to_string();
+                            *emoji_counts_in_strings.entry(e).or_insert(0) += 1;
+                        }
+                    }
+                }
+                asts.push(ast.clone());
+                // Write enriched report file
+                let safe_name = analysis.file_path.replace('/', "_").replace('\\', "_").replace(':', "_");
+                let report_path = format!("{}/{}.json", reports_dir, safe_name);
+                let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+                let node_count = ast.as_object().map(|o| o.len()).unwrap_or(0);
+                let report = serde_json::json!({
+                    "file_path": analysis.file_path,
+                    "timestamp": timestamp,
+                    "summary": {
+                        "top_level_nodes": node_count,
+                        "total_nodes": total_nodes,
+                        "type_counts": type_counts,
+                        "string_literals": string_literals,
+                        "word_counts": word_counts,
+                        "word_emoji_counts": word_emoji_counts,
+                        "emoji_counts_in_strings": emoji_counts_in_strings
+                    },
+                    "ast": ast
+                });
+                // Directory aggregation
+                let dir = analysis.file_path.rsplit_once('/').map(|(d, _)| d).unwrap_or("");
+                let dir_entry = dir_type_counts.entry(dir.to_string()).or_default();
+                for (ty, count) in &type_counts {
+                    *dir_entry.entry(ty.clone()).or_insert(0) += *count;
+                    *total_type_counts.entry(ty.clone()).or_insert(0) += *count;
+                }
+                let filename = format!("{}.json", safe_name);
+                match fs::write(&report_path, serde_json::to_string_pretty(&report).unwrap()) {
+                    Ok(_) => {
+                        // Structure summary
+                        let mut emoji_counts = Vec::new();
+                        let mut emoji_summary = String::new();
+                        for (ty, count) in &type_counts {
+                            let (emoji, category) = emoji_for_type(ty);
+                            emoji_counts.push(format!("{}({})×{}", emoji, ty, count));
+                            emoji_summary.push_str(&emoji.repeat(*count.min(&10)));
+                        }
+                        let emoji_counts_str = emoji_counts.join(" ");
+                        if type_counts.is_empty() {
+                            println!("{} | none |", filename);
+                        } else {
+                            println!("{} | {} | {}", filename, emoji_counts_str, emoji_summary);
+                        }
+                        // Emojis found in string literals
+                        if !emoji_counts_in_strings.is_empty() {
+                            let mut emoji_strs = Vec::new();
+                            for (emoji, count) in &emoji_counts_in_strings {
+                                emoji_strs.push(format!("{}×{}", emoji, count));
+                            }
+                            println!("[emojis in strings] {}", emoji_strs.join(" "));
+                        }
+                        // Words mapped to emojis
+                        if !word_emoji_counts.is_empty() {
+                            let mut word_emoji_strs = Vec::new();
+                            for (emoji, count) in &word_emoji_counts {
+                                word_emoji_strs.push(format!("{}×{}", emoji, count));
+                            }
+                            println!("[words mapped to emojis] {}", word_emoji_strs.join(" "));
+                        }
+                        // Aggregate global word counts
+                        for (word, count) in &word_counts {
+                            *global_word_counts.entry(word.clone()).or_insert(0) += *count;
+                        }
+                        for (emoji, count) in &word_emoji_counts {
+                            *global_word_emoji_counts.entry(emoji.to_string()).or_insert(0) += *count;
+                        }
+                    },
+                    Err(e) => println!("[ERROR] Failed to write report {}: {}", report_path, e),
+                }
+            },
+            Err(e) => {
+                println!("[ERROR] Failed to parse AST: {}", e);
+            }
+        }
+    }
+    // Print per-directory summary table
+    println!("\n=== Directory Emoji Summary Table ===");
+    let mut dir_keys: Vec<_> = dir_type_counts.keys().collect();
+    dir_keys.sort();
+    for dir in dir_keys {
+        let type_counts = &dir_type_counts[dir];
+        let mut emoji_counts = Vec::new();
+        let mut emoji_summary = String::new();
+        for (ty, count) in type_counts {
+            let (emoji, category) = emoji_for_type(ty);
+            emoji_counts.push(format!("{}({})×{}", emoji, ty, count));
+            emoji_summary.push_str(&emoji.repeat((*count).min(10)));
+        }
+        let emoji_counts_str = emoji_counts.join(" ");
+        if type_counts.is_empty() {
+            println!("{:<30} | none |", dir);
+        } else {
+            println!("{:<30} | {} | {}", dir, emoji_counts_str, emoji_summary);
+        }
+    }
+    // Print total summary
+    println!("\n=== Total Emoji Summary ===");
+    let mut emoji_counts = Vec::new();
+    let mut emoji_summary = String::new();
+    for (ty, count) in &total_type_counts {
+        let (emoji, category) = emoji_for_type(ty);
+        emoji_counts.push(format!("{}({})×{}", emoji, ty, count));
+        emoji_summary.push_str(&emoji.repeat((*count).min(10)));
+    }
+    let emoji_counts_str = emoji_counts.join(" ");
+    if total_type_counts.is_empty() {
+        println!("TOTAL | none | ");
+    } else {
+        println!("TOTAL | {} | {}", emoji_counts_str, emoji_summary);
     }
     let merged_graph = serde_json::Value::Array(asts);
+    println!("[INFO] Merged ASTs into array. Total ASTs: {}", merged_graph.as_array().map(|a| a.len()).unwrap_or(0));
 
     // 4. Export or visualize merged_graph
-    println!("{}", serde_json::to_string_pretty(&merged_graph).unwrap());
+    let merged_path = format!("{}/merged_asts.json", reports_dir);
+    match fs::write(&merged_path, serde_json::to_string_pretty(&merged_graph).unwrap()) {
+        Ok(_) => println!("[INFO] Wrote merged ASTs to {}", merged_path),
+        Err(e) => println!("[ERROR] Failed to write merged ASTs: {}", e),
+    }
+
+    // Print global word report
+    println!("\n=== Global Word Report ===");
+    println!("{:<20} | {:<8} | {:<18} | {}", "word", "count", "category", "emoji");
+    let mut word_keys: Vec<_> = global_word_counts.keys().collect();
+    word_keys.sort();
+    let mut found_agave = false;
+    let mut found_css = false;
+    let mut found_crypto = false;
+    let mut found_version = false;
+    for word in word_keys.iter() {
+        let count = global_word_counts[*word];
+        let (emoji, category) = emoji_for_type(word);
+        if *word == "agave" { found_agave = true; }
+        if ["px", "deg", "em", "rem", "vh", "vw", "animation", "transition", "absolute", "align", "app", "app_state", "accessibility"].contains(&word.as_str()) { found_css = true; }
+        if ["aead", "aeads", "aes", "argon2", "arc", "addr2line", "aarch64", "amd64", "armv8", "crypto", "curve25519", "ed25519", "elliptic", "fiat", "cbor"].contains(&word.as_str()) { found_crypto = true; }
+        if ["zm", "h", "v"].contains(&word.as_str()) { found_version = true; }
+        if emoji != "❓" && emoji != "❓🤷" {
+            println!("{:<20} | {:<8} | {:<18} | {}", word, count, category, emoji);
+        } else {
+            println!("{:<20} | {:<8} | {:<18} |", word, count, category);
+        }
+    }
+    // Creative banners/messages
+    if found_agave {
+        println!("\n🌵🌵🌵 AGAVE detected! This project is spicy! 🌵🌵🌵");
+    }
+    if found_css {
+        println!("\n🎨 CSS/Frontend detected! Styling and animation everywhere!");
+    }
+    if found_crypto {
+        println!("\n🔒 Crypto detected! Security is strong in this codebase.");
+    }
+    if found_version {
+        println!("\n🔢 Versioning/Hash detected! Lots of unique IDs and versions.");
+    }
+
+    // Optionally, print a warning for any tokens still mapped to ❓
+    println!("\n=== Unrecognized Token Types (still mapped to ❓) ===");
+    let mut unrecognized = std::collections::BTreeSet::new();
+    for (ty, count) in &total_type_counts {
+        if emoji_for_type(ty).0 == "❓" || emoji_for_type(ty).0 == "❓🤷" {
+            unrecognized.insert(ty);
+        }
+    }
+    for ty in unrecognized {
+        let (suggested_emoji, suggested_cat) = if ty.contains("trait") {
+            ("🧩", "Rust Core")
+        } else if ty.contains("byte") {
+            ("💾", "Numbers")
+        } else if ty.contains("parenthes") || ty.contains("paren") {
+            ("( )", "Rust Core")
+        } else if ty.contains("unsafe") {
+            ("☢️", "Rust Core")
+        } else if ty.contains("case") {
+            ("🎭", "Rust Core")
+        } else if ty.contains("typed") {
+            ("🏷️", "Rust Core")
+        } else if ty.contains("move") {
+            ("🚚", "Rust Core")
+        } else if ty.contains("reference") || ty.contains("ref") {
+            ("🔗", "Rust Core")
+        } else if ty.contains("repeat") || ty.contains("rest") {
+            ("🔁", "General")
+        } else if ty.contains("left") {
+            ("👈", "General")
+        } else if ty.contains("right") {
+            ("👉", "General")
+        } else if ty.contains("or") {
+            ("🔀", "General")
+        } else if ty.contains("turbofish") {
+            ("🐟", "Rust Core")
+        } else if ty.contains("named") || ty.contains("unnamed") {
+            ("🏷️", "Rust Core")
+        } else if ty.contains("impl") {
+            ("🔨", "Rust Core")
+        } else if ty.contains("dot") {
+            ("•", "General")
+        } else if ty.contains("colon") {
+            (":", "General")
+        } else if ty.contains("len") || ty.contains("limits") {
+            ("📏", "Numbers")
+        } else if ty.contains("restricted") {
+            ("🚫", "General")
+        } else if ty.contains("bare_fn") {
+            ("🦀", "Rust Core")
+        } else if ty.contains("bounded") {
+            ("📏", "General")
+        } else if ty.contains("content") || ty.contains("elem") || ty.contains("elems") {
+            ("📦", "General")
+        } else if ty.contains("end") {
+            ("🔚", "General")
+        } else if ty.contains("start") {
+            ("🔜", "General")
+        } else if ty.contains("rename") {
+            ("📝", "General")
+        } else {
+            ("❓", "Uncategorized")
+        };
+        println!("{:<20} | suggestion: {} ({})", ty, suggested_emoji, suggested_cat);
+    }
+
+    // Category summary
+    let mut category_counts: BTreeMap<&str, usize> = BTreeMap::new();
+    for word in word_keys.iter() {
+        let count = global_word_counts[*word];
+        let (_, category) = emoji_for_type(word);
+        *category_counts.entry(category).or_insert(0) += count;
+    }
+    println!("\n=== Word Category Summary ===");
+    for (cat, count) in category_counts.iter() {
+        println!("{:<18} | {:<8}", cat, count);
+    }
 }
