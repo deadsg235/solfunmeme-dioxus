@@ -209,6 +209,7 @@ const EMOJI_TYPE_MAP: &[(&str, &str, &str)] = &[
     ("1f3a8", "🎨", "Emoji"), ("1f4dd", "📝", "Emoji"), ("1f680", "🚀", "Emoji"), ("1f4a9", "💩", "Emoji"),
     // Heuristic/structural
     ("byte", "💾", "Numbers"), ("parenthes", "( )", "Rust Core"), ("case", "🎭", "Rust Core"), ("dot", "•", "General"), ("colon", ":", "General"), ("bounded", "📏", "General"),
+    ("_", "⬜", "Rust Core"), ("colon2_token", ":", "Rust Core"), ("cond", "❓", "Rust Core"), ("content", "📦", "General"), ("if", "❓", "Rust Core"), ("where_clause", "📜", "Rust Core"),
 ];
 
 fn emoji_for_type(ty: &str) -> (&'static str, &'static str) {
@@ -266,11 +267,11 @@ fn split_words(s: &str) -> Vec<String> {
 
 fn main() {
     // Print emoji mapping at startup
-    println!("=== AST Node Type Emoji Mapping ===");
-    for (name, emoji, category) in EMOJI_TYPE_MAP {
-        println!("{:>10}: {} ({})", name, emoji, category);
-    }
-    println!("");
+    // println!("=== AST Node Type Emoji Mapping ===");
+    // for (name, emoji, category) in EMOJI_TYPE_MAP {
+    //     println!("{:>10}: {} ({})", name, emoji, category);
+    // }
+    // println!("");
 
     // 1. Discover all Rust files
     let mut files = HashMap::new();
@@ -361,7 +362,7 @@ fn main() {
                 for (word, count) in &word_counts {
                     let (emoji, category) = emoji_for_type(word);
                     if emoji != "❓" && emoji != "❓🤷" {
-                        word_emoji_counts.entry(emoji).or_insert(0usize).saturating_add(*count);
+                        *word_emoji_counts.entry(emoji).or_insert(0usize) += *count;
                     }
                 }
                 // Count emojis in string literals
@@ -454,6 +455,7 @@ fn main() {
     println!("\n=== Directory Emoji Summary Table ===");
     let mut dir_keys: Vec<_> = dir_type_counts.keys().collect();
     dir_keys.sort();
+    let mut global_dir_reports = Vec::new();
     for dir in dir_keys {
         let type_counts = &dir_type_counts[dir];
         let mut emoji_counts = Vec::new();
@@ -464,29 +466,101 @@ fn main() {
             emoji_summary.push_str(&emoji.repeat((*count).min(10)));
         }
         let emoji_counts_str = emoji_counts.join(" ");
+        let mut report = String::new();
+        report.push_str(&format!("=== Directory Emoji Summary: {} ===\n", dir));
         if type_counts.is_empty() {
-            println!("{:<30} | none |", dir);
+            report.push_str(&format!("none\n"));
         } else {
-            println!("{:<30} | {} | {}", dir, emoji_counts_str, emoji_summary);
+            report.push_str(&format!("{} | {}\n", emoji_counts_str, emoji_summary));
         }
+        // Per-directory word/category/emoji breakdown
+        let mut dir_word_counts: BTreeMap<String, usize> = BTreeMap::new();
+        let mut dir_word_emoji_counts: BTreeMap<String, usize> = BTreeMap::new();
+        // Aggregate words for this directory
+        for (i, analysis) in analyses.iter().enumerate() {
+            if let Some(file_dir) = analysis.file_path.rsplit_once('/').map(|(d, _)| d) {
+                if file_dir == dir {
+                    if let Ok(ast) = serde_json::from_str::<serde_json::Value>(&analysis.json_ast) {
+                        let mut string_literals = Vec::new();
+                        extract_string_literals(&ast, &mut string_literals);
+                        for s in &string_literals {
+                            for word in split_words(s) {
+                                *dir_word_counts.entry(word).or_insert(0) += 1;
+                            }
+                        }
+                        for (word, count) in &dir_word_counts {
+                            let (emoji, category) = emoji_for_type(word);
+                            if emoji != "❓" && emoji != "❓🤷" {
+                                dir_word_emoji_counts.entry(emoji.to_string()).or_insert(0usize).saturating_add(*count);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // Word report
+        report.push_str("\n=== Directory Word Report ===\n");
+        report.push_str(&format!("{:<20} | {:<8} | {:<18} | {}\n", "word", "count", "category", "emoji"));
+        let mut word_keys: Vec<_> = dir_word_counts.keys().collect();
+        word_keys.sort();
+        let mut found_agave = false;
+        let mut found_css = false;
+        let mut found_crypto = false;
+        let mut found_version = false;
+        for word in word_keys.iter() {
+            let count = dir_word_counts[*word];
+            let (emoji, category) = emoji_for_type(word);
+            if *word == "agave" { found_agave = true; }
+            if ["px", "deg", "em", "rem", "vh", "vw", "animation", "transition", "absolute", "align", "app", "app_state", "accessibility"].contains(&word.as_str()) { found_css = true; }
+            if ["aead", "aeads", "aes", "argon2", "arc", "addr2line", "aarch64", "amd64", "armv8", "crypto", "curve25519", "ed25519", "elliptic", "fiat", "cbor"].contains(&word.as_str()) { found_crypto = true; }
+            if ["zm", "h", "v"].contains(&word.as_str()) { found_version = true; }
+            if emoji != "❓" && emoji != "❓🤷" {
+                report.push_str(&format!("{:<20} | {:<8} | {:<18} | {}\n", word, count, category, emoji));
+            } else {
+                report.push_str(&format!("{:<20} | {:<8} | {:<18} |\n", word, count, category));
+            }
+        }
+        // Banners
+        if found_agave {
+            report.push_str("\n🌵🌵🌵 AGAVE detected! This project is spicy! 🌵🌵🌵\n");
+        }
+        if found_css {
+            report.push_str("\n🎨 CSS/Frontend detected! Styling and animation everywhere!\n");
+        }
+        if found_crypto {
+            report.push_str("\n🔒 Crypto detected! Security is strong in this codebase.\n");
+        }
+        if found_version {
+            report.push_str("\n🔢 Versioning/Hash detected! Lots of unique IDs and versions.\n");
+        }
+        // Write to file
+        let safe_dir = if dir.is_empty() { "root".to_string() } else { dir.replace('/', "_") };
+        let report_path = format!("{}/summary_{}.txt", reports_dir, safe_dir);
+        match fs::write(&report_path, &report) {
+            Ok(_) => println!("[INFO] Wrote directory summary to {}", report_path),
+            Err(e) => println!("[ERROR] Failed to write directory summary {}: {}", report_path, e),
+        }
+        global_dir_reports.push((dir.clone(), report_path));
     }
-    // Print total summary
-    println!("\n=== Total Emoji Summary ===");
-    let mut emoji_counts = Vec::new();
-    let mut emoji_summary = String::new();
-    for (ty, count) in &total_type_counts {
+    // Print total summary (minimal)
+    let mut total_report = String::new();
+    total_report.push_str("=== Total Emoji Summary Table ===\n");
+    total_report.push_str(&format!("{:<20} | {:<8} | {:<18} | {}\n", "Type", "Count", "Category", "Emoji"));
+    let mut type_keys: Vec<_> = total_type_counts.keys().collect();
+    type_keys.sort();
+    for ty in type_keys {
+        let count = total_type_counts[ty];
         let (emoji, category) = emoji_for_type(ty);
-        emoji_counts.push(format!("{}({})×{}", emoji, ty, count));
-        emoji_summary.push_str(&emoji.repeat((*count).min(10)));
-    }
-    let emoji_counts_str = emoji_counts.join(" ");
-    if total_type_counts.is_empty() {
-        println!("TOTAL | none | ");
-    } else {
-        println!("TOTAL | {} | {}", emoji_counts_str, emoji_summary);
+        total_report.push_str(&format!("{:<20} | {:<8} | {:<18} | {}\n", ty, count, category, emoji));
     }
     let merged_graph = serde_json::Value::Array(asts);
-    println!("[INFO] Merged ASTs into array. Total ASTs: {}", merged_graph.as_array().map(|a| a.len()).unwrap_or(0));
+    total_report.push_str(&format!("\n[INFO] Merged ASTs into array. Total ASTs: {}\n", merged_graph.as_array().map(|a| a.len()).unwrap_or(0)));
+    // Write total summary
+    let merged_path = format!("{}/summary_total.txt", reports_dir);
+    match fs::write(&merged_path, &total_report) {
+        Ok(_) => println!("[INFO] Wrote total summary to {}", merged_path),
+        Err(e) => println!("[ERROR] Failed to write total summary: {}", e),
+    }
 
     // 4. Export or visualize merged_graph
     let merged_path = format!("{}/merged_asts.json", reports_dir);
@@ -606,5 +680,16 @@ fn main() {
     println!("\n=== Word Category Summary ===");
     for (cat, count) in category_counts.iter() {
         println!("{:<18} | {:<8}", cat, count);
+    }
+
+    // Write the AST Node Type Emoji Mapping to reports/emoji_mapping.txt
+    let mut emoji_map_report = String::from("=== AST Node Type Emoji Mapping ===\n");
+    for (name, emoji, category) in EMOJI_TYPE_MAP {
+        emoji_map_report.push_str(&format!("{:>15}: {} ({})\n", name, emoji, category));
+    }
+    let emoji_map_path = format!("{}/emoji_mapping.txt", reports_dir);
+    match fs::write(&emoji_map_path, &emoji_map_report) {
+        Ok(_) => println!("[INFO] Wrote emoji mapping to {}", emoji_map_path),
+        Err(e) => println!("[ERROR] Failed to write emoji mapping: {}", e),
     }
 }
