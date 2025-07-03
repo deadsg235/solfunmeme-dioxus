@@ -1,7 +1,6 @@
 pub mod src;
 pub mod src_bin;
 pub mod src_bin_src;
-pub mod src_bin_src_generated;
 pub mod src_core;
 pub mod src_extractor;
 pub mod src_extractor_components;

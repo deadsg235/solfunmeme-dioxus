@@ -25,6 +25,9 @@ pub mod core;
 pub mod embedself;
 pub mod generated;
 
+pub mod project_algebra;
+pub mod project_reflector;
+pub mod solfunmeme_maps;
 fn main() {
     // Use the memes App component from views
 //    embedself::printall();
