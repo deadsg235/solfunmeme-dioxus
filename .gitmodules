@@ -997,3 +997,15 @@
 [submodule "vendor/syscall"]
 	path = vendor/syscall
 	url = https://gitlab.redox-os.org/redox-os/syscall
+[submodule "vendor/rust-bert"]
+	path = vendor/rust-bert
+	url = https://github.com/meta-introspector/rust-bert.git
+[submodule "vendor/fastembed-rs"]
+	path = vendor/fastembed-rs
+	url = https://github.com/Anush008/fastembed-rs.git
+[submodule "vendor/syn-serde-rust"]
+	path = vendor/syn-serde-rust
+	url = https://github.com/meta-introspector/syn-serde-rust.git
+[submodule "vendor/rust"]
+	path = vendor/rust
+	url = https://github.com/rust-lang/rust.git
