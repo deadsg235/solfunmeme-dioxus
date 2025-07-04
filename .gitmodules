@@ -1012,3 +1012,12 @@
 [submodule "hf_dataset"]
 	path = hf_dataset
 	url = https://huggingface.co/datasets/h4/solfunmeme-dioxus-reports
+[submodule "hg_datasets/microlean4"]
+	path = hg_datasets/microlean4
+	url = https://huggingface.co/datasets/introspector/MicroLean4
+[submodule "vendor/lean4"]
+	path = vendor/lean4
+	url = https://github.com/meta-introspector/lean4
+[submodule "vendor/rig-rust-llm-agents"]
+	path = vendor/rig-rust-llm-agents
+	url = https://github.com/meta-introspector/rig-rust-llm-agents/
