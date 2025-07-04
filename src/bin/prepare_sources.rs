@@ -246,7 +246,7 @@ fn extract_string_literals(value: &serde_json::Value, out: &mut Vec<String>) {
 fn split_words(s: &str) -> Vec<String> {
     // Split on whitespace, punctuation, underscores
     let mut words = Vec::new();
-    let re = Regex::new(r"[A-Za-z0-9]+_").unwrap(); // dummy, not used for splitting
+    let _re = Regex::new(r"[A-Za-z0-9]+_").unwrap(); // dummy, not used for splitting
     for part in s.split(|c: char| !c.is_alphanumeric() && c != '_') {
         if part.is_empty() { continue; }
         // Manually split CamelCase
@@ -295,7 +295,32 @@ fn main() {
         return;
     }
 
-    // 2. Analyze all files
+    // 2. Create HF dataset structure early
+    println!("\n[INFO] Creating Hugging Face dataset structure...");
+    let dataset_dir = "hf_dataset";
+    if !Path::new(dataset_dir).exists() {
+        match fs::create_dir_all(dataset_dir) {
+            Ok(_) => println!("[INFO] Created dataset directory: {}", dataset_dir),
+            Err(e) => {
+                println!("[ERROR] Could not create dataset directory: {}", e);
+                return;
+            }
+        }
+    }
+    
+    // Create HF reports directory
+    let hf_reports_dir = format!("{}/reports", dataset_dir);
+    if !Path::new(&hf_reports_dir).exists() {
+        match fs::create_dir_all(&hf_reports_dir) {
+            Ok(_) => println!("[INFO] Created HF reports directory: {}", hf_reports_dir),
+            Err(e) => {
+                println!("[ERROR] Could not create HF reports directory: {}", e);
+                return;
+            }
+        }
+    }
+
+    // 3. Analyze all files
     println!("[INFO] Initializing CodeAnalyzer ...");
     let mut analyzer = CodeAnalyzer::new(32, 0.8);
     println!("[INFO] Analyzing files ...");
@@ -308,8 +333,7 @@ fn main() {
     };
     println!("[INFO] Analysis complete. {} files analyzed.", analyses.len());
 
-    // 3. Collect and merge JSON ASTs (for now, just collect into an array)
-    let mut asts = Vec::new();
+    // 3. Set up reports directory
     let reports_dir = "reports";
     if !Path::new(reports_dir).exists() {
         match fs::create_dir_all(reports_dir) {
@@ -375,50 +399,87 @@ fn main() {
                         }
                     }
                 }
-                asts.push(ast.clone());
-                // Write enriched report file
-                let safe_name = analysis.file_path.replace('/', "_").replace('\\', "_").replace(':', "_");
-                let report_path = format!("{}/{}.json", reports_dir, safe_name);
-                let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
-                let node_count = ast.as_object().map(|o| o.len()).unwrap_or(0);
-                let report = serde_json::json!({
-                    "file_path": analysis.file_path,
-                    "timestamp": timestamp,
-                    "summary": {
-                        "top_level_nodes": node_count,
-                        "total_nodes": total_nodes,
-                        "type_counts": type_counts,
-                        "string_literals": string_literals,
-                        "word_counts": word_counts,
-                        "word_emoji_counts": word_emoji_counts,
-                        "emoji_counts_in_strings": emoji_counts_in_strings
-                    },
-                    "ast": ast
-                });
-                // Directory aggregation
-                let dir = analysis.file_path.rsplit_once('/').map(|(d, _)| d).unwrap_or("");
-                let dir_entry = dir_type_counts.entry(dir.to_string()).or_default();
-                for (ty, count) in &type_counts {
-                    *dir_entry.entry(ty.clone()).or_insert(0) += *count;
-                    *total_type_counts.entry(ty.clone()).or_insert(0) += *count;
-                }
-                let filename = format!("{}.json", safe_name);
-                match fs::write(&report_path, serde_json::to_string_pretty(&report).unwrap()) {
-                    Ok(_) => {
-                        // Structure summary
-                        let mut emoji_counts = Vec::new();
-                        let mut emoji_summary = String::new();
-                        for (ty, count) in &type_counts {
-                            let (emoji, category) = emoji_for_type(ty);
-                            emoji_counts.push(format!("{}({})×{}", emoji, ty, count));
-                            emoji_summary.push_str(&emoji.repeat(*count.min(&10)));
-                        }
-                        let emoji_counts_str = emoji_counts.join(" ");
-                        if type_counts.is_empty() {
-                            println!("{} | none |", filename);
-                        } else {
-                            println!("{} | {} | {}", filename, emoji_counts_str, emoji_summary);
-                        }
+                // Write enriched report file directly to HF dataset
+    let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+    let node_count = ast.as_object().map(|o| o.len()).unwrap_or(0);
+    let report = serde_json::json!({
+        "file_path": analysis.file_path,
+        "timestamp": timestamp,
+        "summary": {
+            "top_level_nodes": node_count,
+            "total_nodes": total_nodes,
+            "type_counts": type_counts,
+            "string_literals": string_literals,
+            "word_counts": word_counts,
+            "word_emoji_counts": word_emoji_counts,
+            "emoji_counts_in_strings": emoji_counts_in_strings
+        },
+        "ast": ast
+    });
+    
+    // Directory aggregation
+    let dir = analysis.file_path.rsplit_once('/').map(|(d, _)| d).unwrap_or("");
+    let dir_entry = dir_type_counts.entry(dir.to_string()).or_default();
+    for (ty, count) in &type_counts {
+        *dir_entry.entry(ty.clone()).or_insert(0) += *count;
+        *total_type_counts.entry(ty.clone()).or_insert(0) += *count;
+    }
+    
+        // Create compact directory structure for HF dataset reports
+    let path_parts: Vec<&str> = analysis.file_path.split(['/', '\\']).collect();
+    let subdir_name = if path_parts.len() >= 3 {
+        let name = format!("{}_{}_{}", path_parts[0], path_parts[1], path_parts[2]);
+        if name.len() > 50 { name[..50].to_string() } else { name }
+    } else if path_parts.len() == 2 {
+        let name = format!("{}_{}", path_parts[0], path_parts[1]);
+        if name.len() > 50 { name[..50].to_string() } else { name }
+    } else if path_parts.len() == 1 {
+        let name = path_parts[0].to_string();
+        if name.len() > 50 { name[..50].to_string() } else { name }
+    } else {
+        "root".to_string()
+    };
+    
+    // Create a shorter filename to avoid Windows path length limits
+    let original_filename = path_parts.last().unwrap_or(&"unknown");
+    let short_filename = if original_filename.len() > 30 {
+        // Truncate long filenames to 30 chars
+        format!("{}.json", &original_filename[..30])
+    } else {
+        format!("{}.json", original_filename)
+    };
+    let hf_report_path = format!("{}/reports/{}/{}", dataset_dir, subdir_name, short_filename);
+    
+    // Create the subdirectory if it doesn't exist
+    let subdir_path = format!("{}/reports/{}", dataset_dir, subdir_name);
+    if !Path::new(&subdir_path).exists() {
+        if let Err(e) = fs::create_dir_all(&subdir_path) {
+            println!("[ERROR] Failed to create directory {}: {}", subdir_path, e);
+            continue;
+        }
+    }
+    
+    let report_json = serde_json::to_string_pretty(&report).unwrap();
+    
+    // Write to HF dataset reports directory
+    match fs::write(&hf_report_path, &report_json) {
+        Ok(_) => {
+            
+            // Structure summary
+            let mut emoji_counts = Vec::new();
+            let mut emoji_summary = String::new();
+            for (ty, count) in &type_counts {
+                let (emoji, category) = emoji_for_type(ty);
+                emoji_counts.push(format!("{}({})×{}", emoji, ty, count));
+                emoji_summary.push_str(&emoji.repeat(*count.min(&10)));
+            }
+            let emoji_counts_str = emoji_counts.join(" ");
+            let filename = format!("{}.json", path_parts.last().unwrap_or(&"unknown"));
+            if type_counts.is_empty() {
+                println!("{} | none |", filename);
+            } else {
+                println!("{} | {} | {}", filename, emoji_counts_str, emoji_summary);
+            }
                         // Emojis found in string literals
                         if !emoji_counts_in_strings.is_empty() {
                             let mut emoji_strs = Vec::new();
@@ -443,7 +504,7 @@ fn main() {
                             *global_word_emoji_counts.entry(emoji.to_string()).or_insert(0) += *count;
                         }
                     },
-                    Err(e) => println!("[ERROR] Failed to write report {}: {}", report_path, e),
+                    Err(e) => println!("[ERROR] Failed to write report {}: {}", hf_report_path, e),
                 }
             },
             Err(e) => {
@@ -553,8 +614,7 @@ fn main() {
         let (emoji, category) = emoji_for_type(ty);
         total_report.push_str(&format!("{:<20} | {:<8} | {:<18} | {}\n", ty, count, category, emoji));
     }
-    let merged_graph = serde_json::Value::Array(asts);
-    total_report.push_str(&format!("\n[INFO] Merged ASTs into array. Total ASTs: {}\n", merged_graph.as_array().map(|a| a.len()).unwrap_or(0)));
+    total_report.push_str(&format!("\n[INFO] Total files processed: {}\n", analyses.len()));
     // Write total summary
     let merged_path = format!("{}/summary_total.txt", reports_dir);
     match fs::write(&merged_path, &total_report) {
@@ -562,134 +622,274 @@ fn main() {
         Err(e) => println!("[ERROR] Failed to write total summary: {}", e),
     }
 
-    // 4. Export or visualize merged_graph
-    let merged_path = format!("{}/merged_asts.json", reports_dir);
-    match fs::write(&merged_path, serde_json::to_string_pretty(&merged_graph).unwrap()) {
-        Ok(_) => println!("[INFO] Wrote merged ASTs to {}", merged_path),
-        Err(e) => println!("[ERROR] Failed to write merged ASTs: {}", e),
+    // 5. Create Hugging Face Dataset Structure
+    println!("\n[INFO] Creating Hugging Face dataset structure...");
+    
+    // Create dataset metadata
+    let dataset_info = serde_json::json!({
+        "description": "Rust codebase AST analysis with emoji mapping",
+        "license": "agpl-3.0",
+        "features": {
+            "file_path": {"dtype": "string"},
+            "timestamp": {"dtype": "int64"},
+            "ast": {"dtype": "string"},
+            "summary": {
+                "dtype": "map",
+                "mapping": {
+                    "top_level_nodes": {"dtype": "int64"},
+                    "total_nodes": {"dtype": "int64"},
+                    "type_counts": {"dtype": "map"},
+                    "string_literals": {"dtype": "sequence", "feature": {"dtype": "string"}},
+                    "word_counts": {"dtype": "map"},
+                    "word_emoji_counts": {"dtype": "map"},
+                    "emoji_counts_in_strings": {"dtype": "map"}
+                }
+            }
+        },
+        "builder_name": "rust_ast_emoji",
+        "config_name": "default",
+        "version": {"version_str": "0.1.0"},
+        "splits": {
+            "train": {
+                "name": "train",
+                "num_bytes": 0,
+                "num_examples": 0,
+                "shard_lengths": []
+            }
+        }
+    });
+
+    // Write dataset info
+    let info_path = format!("{}/dataset_info.json", dataset_dir);
+    match fs::write(&info_path, serde_json::to_string_pretty(&dataset_info).unwrap()) {
+        Ok(_) => println!("[INFO] Wrote dataset info to {}", info_path),
+        Err(e) => println!("[ERROR] Failed to write dataset info: {}", e),
     }
 
-    // Print global word report
-    println!("\n=== Global Word Report ===");
-    println!("{:<20} | {:<8} | {:<18} | {}", "word", "count", "category", "emoji");
-    let mut word_keys: Vec<_> = global_word_counts.keys().collect();
-    word_keys.sort();
-    let mut found_agave = false;
-    let mut found_css = false;
-    let mut found_crypto = false;
-    let mut found_version = false;
-    for word in word_keys.iter() {
-        let count = global_word_counts[*word];
-        let (emoji, category) = emoji_for_type(word);
-        if *word == "agave" { found_agave = true; }
-        if ["px", "deg", "em", "rem", "vh", "vw", "animation", "transition", "absolute", "align", "app", "app_state", "accessibility"].contains(&word.as_str()) { found_css = true; }
-        if ["aead", "aeads", "aes", "argon2", "arc", "addr2line", "aarch64", "amd64", "armv8", "crypto", "curve25519", "ed25519", "elliptic", "fiat", "cbor"].contains(&word.as_str()) { found_crypto = true; }
-        if ["zm", "h", "v"].contains(&word.as_str()) { found_version = true; }
-        if emoji != "❓" && emoji != "❓🤷" {
-            println!("{:<20} | {:<8} | {:<18} | {}", word, count, category, emoji);
-        } else {
-            println!("{:<20} | {:<8} | {:<18} |", word, count, category);
+    // Split ASTs into chunks and organize into subdirectories
+    let max_file_size = 1024 * 1024; // 1MB
+    let max_files_per_dir = 10000;
+    let mut current_chunk = Vec::new();
+    let mut current_chunk_size = 0;
+    let mut chunk_index = 0;
+    let mut file_index = 0;
+    let mut total_examples = 0;
+
+    // Create data directory
+    let data_dir = format!("{}/data", dataset_dir);
+    if !Path::new(&data_dir).exists() {
+        match fs::create_dir_all(&data_dir) {
+            Ok(_) => println!("[INFO] Created data directory: {}", data_dir),
+            Err(e) => {
+                println!("[ERROR] Could not create data directory: {}", e);
+                return;
+            }
         }
     }
-    // Creative banners/messages
-    if found_agave {
-        println!("\n🌵🌵🌵 AGAVE detected! This project is spicy! 🌵🌵🌵");
-    }
-    if found_css {
-        println!("\n🎨 CSS/Frontend detected! Styling and animation everywhere!");
-    }
-    if found_crypto {
-        println!("\n🔒 Crypto detected! Security is strong in this codebase.");
-    }
-    if found_version {
-        println!("\n🔢 Versioning/Hash detected! Lots of unique IDs and versions.");
-    }
 
-    // Optionally, print a warning for any tokens still mapped to ❓
-    println!("\n=== Unrecognized Token Types (still mapped to ❓) ===");
-    let mut unrecognized = std::collections::BTreeSet::new();
-    for (ty, count) in &total_type_counts {
-        if emoji_for_type(ty).0 == "❓" || emoji_for_type(ty).0 == "❓🤷" {
-            unrecognized.insert(ty);
+    // Copy reports to dataset
+    let reports_data_dir = format!("{}/reports", dataset_dir);
+    if !Path::new(&reports_data_dir).exists() {
+        match fs::create_dir_all(&reports_data_dir) {
+            Ok(_) => println!("[INFO] Created reports directory: {}", reports_data_dir),
+            Err(e) => {
+                println!("[ERROR] Could not create reports directory: {}", e);
+                return;
+            }
         }
     }
-    for ty in unrecognized {
-        let (suggested_emoji, suggested_cat) = if ty.contains("trait") {
-            ("🧩", "Rust Core")
-        } else if ty.contains("byte") {
-            ("💾", "Numbers")
-        } else if ty.contains("parenthes") || ty.contains("paren") {
-            ("( )", "Rust Core")
-        } else if ty.contains("unsafe") {
-            ("☢️", "Rust Core")
-        } else if ty.contains("case") {
-            ("🎭", "Rust Core")
-        } else if ty.contains("typed") {
-            ("🏷️", "Rust Core")
-        } else if ty.contains("move") {
-            ("🚚", "Rust Core")
-        } else if ty.contains("reference") || ty.contains("ref") {
-            ("🔗", "Rust Core")
-        } else if ty.contains("repeat") || ty.contains("rest") {
-            ("🔁", "General")
-        } else if ty.contains("left") {
-            ("👈", "General")
-        } else if ty.contains("right") {
-            ("👉", "General")
-        } else if ty.contains("or") {
-            ("🔀", "General")
-        } else if ty.contains("turbofish") {
-            ("🐟", "Rust Core")
-        } else if ty.contains("named") || ty.contains("unnamed") {
-            ("🏷️", "Rust Core")
-        } else if ty.contains("impl") {
-            ("🔨", "Rust Core")
-        } else if ty.contains("dot") {
-            ("•", "General")
-        } else if ty.contains("colon") {
-            (":", "General")
-        } else if ty.contains("len") || ty.contains("limits") {
-            ("📏", "Numbers")
-        } else if ty.contains("restricted") {
-            ("🚫", "General")
-        } else if ty.contains("bare_fn") {
-            ("🦀", "Rust Core")
-        } else if ty.contains("bounded") {
-            ("📏", "General")
-        } else if ty.contains("content") || ty.contains("elem") || ty.contains("elems") {
-            ("📦", "General")
-        } else if ty.contains("end") {
-            ("🔚", "General")
-        } else if ty.contains("start") {
-            ("🔜", "General")
-        } else if ty.contains("rename") {
-            ("📝", "General")
-        } else {
-            ("❓", "Uncategorized")
-        };
-        println!("{:<20} | suggestion: {} ({})", ty, suggested_emoji, suggested_cat);
+
+
+    
+    // Write summary files directly to HF dataset
+    let summary_files = [
+        "summary_total.txt",
+        "emoji_mapping.txt"
+    ];
+    
+    for summary_file in &summary_files {
+        let source_path = format!("{}/{}", reports_dir, summary_file);
+        let target_path = format!("{}/reports/{}", dataset_dir, summary_file);
+        
+        if Path::new(&source_path).exists() {
+            match fs::copy(&source_path, &target_path) {
+                Ok(_) => println!("[INFO] Copied summary file: {}", summary_file),
+                Err(e) => println!("[ERROR] Failed to copy {}: {}", summary_file, e),
+            }
+        }
     }
 
-    // Category summary
-    let mut category_counts: BTreeMap<&str, usize> = BTreeMap::new();
-    for word in word_keys.iter() {
-        let count = global_word_counts[*word];
-        let (_, category) = emoji_for_type(word);
-        *category_counts.entry(category).or_insert(0) += count;
-    }
-    println!("\n=== Word Category Summary ===");
-    for (cat, count) in category_counts.iter() {
-        println!("{:<18} | {:<8}", cat, count);
+    // Process each analysis and create chunks
+    for analysis in &analyses {
+        if let Ok(ast) = serde_json::from_str::<serde_json::Value>(&analysis.json_ast) {
+            let mut type_counts = BTreeMap::new();
+            let mut total_nodes = 0;
+            count_types_recursive(&ast, &mut type_counts, &mut total_nodes);
+            
+            let mut string_literals = Vec::new();
+            extract_string_literals(&ast, &mut string_literals);
+            let mut word_counts = BTreeMap::new();
+            for s in &string_literals {
+                for word in split_words(s) {
+                    *word_counts.entry(word).or_insert(0) += 1;
+                }
+            }
+            
+            let mut word_emoji_counts = BTreeMap::new();
+            for (word, count) in &word_counts {
+                let (emoji, category) = emoji_for_type(word);
+                if emoji != "❓" && emoji != "❓🤷" {
+                    *word_emoji_counts.entry(emoji).or_insert(0usize) += *count;
+                }
+            }
+            
+            let mut emoji_counts_in_strings = BTreeMap::new();
+            for s in &string_literals {
+                for ch in s.chars() {
+                    if ch.len_utf8() > 2 {
+                        let e = ch.to_string();
+                        *emoji_counts_in_strings.entry(e).or_insert(0) += 1;
+                    }
+                }
+            }
+
+            let example = serde_json::json!({
+                "file_path": analysis.file_path,
+                "timestamp": SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs(),
+                "ast": ast,
+                "summary": {
+                    "top_level_nodes": ast.as_object().map(|o| o.len()).unwrap_or(0),
+                    "total_nodes": total_nodes,
+                    "type_counts": type_counts,
+                    "string_literals": string_literals,
+                    "word_counts": word_counts,
+                    "word_emoji_counts": word_emoji_counts,
+                    "emoji_counts_in_strings": emoji_counts_in_strings
+                }
+            });
+
+            // Calculate the actual size this example will add to the chunk
+            let example_json = serde_json::to_string(&example).unwrap();
+            let example_size = example_json.len();
+            
+            // Debug: Print size information
+            if example_size > 1024 * 1024 { // If any single example is > 1MB
+                println!("[WARNING] Large example: {} bytes for {}", example_size, analysis.file_path);
+            }
+
+            // Check if adding this example would exceed the chunk size
+            if current_chunk_size + example_size > max_file_size && !current_chunk.is_empty() {
+                // Write current chunk
+                let subdir = file_index / max_files_per_dir;
+                let subdir_path = format!("{}/{:03}", data_dir, subdir);
+                if !Path::new(&subdir_path).exists() {
+                    match fs::create_dir_all(&subdir_path) {
+                        Ok(_) => println!("[INFO] Created subdirectory: {}", subdir_path),
+                        Err(e) => println!("[ERROR] Failed to create subdirectory: {}", e),
+                    }
+                }
+
+                let chunk_path = format!("{}/chunk_{:05}.json", subdir_path, chunk_index);
+                let chunk_data = serde_json::json!({
+                    "examples": current_chunk,
+                    "metadata": {
+                        "chunk_index": chunk_index,
+                        "num_examples": current_chunk.len(),
+                        "total_size_bytes": current_chunk_size
+                    }
+                });
+
+                match fs::write(&chunk_path, serde_json::to_string(&chunk_data).unwrap()) {
+                    Ok(_) => println!("[INFO] Wrote chunk {} to {} ({} examples, {} bytes)", chunk_index, chunk_path, current_chunk.len(), current_chunk_size),
+                    Err(e) => println!("[ERROR] Failed to write chunk {}: {}", chunk_index, e),
+                }
+
+                // Reset for next chunk
+                current_chunk.clear();
+                current_chunk_size = 0;
+                chunk_index += 1;
+            }
+
+            // Add example to current chunk
+            current_chunk.push(example);
+            current_chunk_size += example_size;
+            file_index += 1;
+            total_examples += 1;
+        }
     }
 
-    // Write the AST Node Type Emoji Mapping to reports/emoji_mapping.txt
-    let mut emoji_map_report = String::from("=== AST Node Type Emoji Mapping ===\n");
-    for (name, emoji, category) in EMOJI_TYPE_MAP {
-        emoji_map_report.push_str(&format!("{:>15}: {} ({})\n", name, emoji, category));
+    // Write final chunk if not empty
+    if !current_chunk.is_empty() {
+        let subdir = file_index / max_files_per_dir;
+        let subdir_path = format!("{}/{:03}", data_dir, subdir);
+        if !Path::new(&subdir_path).exists() {
+            match fs::create_dir_all(&subdir_path) {
+                Ok(_) => println!("[INFO] Created subdirectory: {}", subdir_path),
+                Err(e) => println!("[ERROR] Failed to create subdirectory: {}", e),
+            }
+        }
+
+        let chunk_path = format!("{}/chunk_{:05}.json", subdir_path, chunk_index);
+        let chunk_data = serde_json::json!({
+            "examples": current_chunk,
+            "metadata": {
+                "chunk_index": chunk_index,
+                "num_examples": current_chunk.len(),
+                "total_size_bytes": current_chunk_size
+            }
+        });
+
+        match fs::write(&chunk_path, serde_json::to_string(&chunk_data).unwrap()) {
+            Ok(_) => println!("[INFO] Wrote final chunk {} to {}", chunk_index, chunk_path),
+            Err(e) => println!("[ERROR] Failed to write final chunk {}: {}", chunk_index, e),
+        }
     }
-    let emoji_map_path = format!("{}/emoji_mapping.txt", reports_dir);
-    match fs::write(&emoji_map_path, &emoji_map_report) {
-        Ok(_) => println!("[INFO] Wrote emoji mapping to {}", emoji_map_path),
-        Err(e) => println!("[ERROR] Failed to write emoji mapping: {}", e),
+
+    // Create README for the dataset
+    let readme_content = format!("# Rust AST Emoji Dataset
+
+This dataset contains Rust codebase AST (Abstract Syntax Tree) analysis with emoji mapping for code understanding and visualization.
+
+## Dataset Structure
+
+- **Total Examples**: {}
+- **Total Chunks**: {}
+- **Max File Size**: 10KB per chunk
+- **Max Files per Directory**: 10,000
+
+## Features
+
+- `file_path`: Path to the original Rust source file
+- `timestamp`: Unix timestamp of analysis
+- `ast`: Full AST representation in JSON
+- `summary`: Analysis summary including:
+  - `top_level_nodes`: Number of top-level AST nodes
+  - `total_nodes`: Total number of AST nodes
+  - `type_counts`: Count of each AST node type
+  - `string_literals`: Extracted string literals
+  - `word_counts`: Word frequency analysis
+  - `word_emoji_counts`: Emoji mapping for words
+  - `emoji_counts_in_strings`: Emojis found in string literals
+
+## Usage
+
+This dataset can be used for:
+- Code understanding and visualization
+- AST pattern analysis
+- Emoji-based code summarization
+- Codebase domain detection (Crypto, Web, i18n, etc.)
+
+## License
+
+AGPL-3.0 License
+", total_examples, chunk_index + 1);
+
+    let readme_path = format!("{}/README.md", dataset_dir);
+    match fs::write(&readme_path, readme_content) {
+        Ok(_) => println!("[INFO] Wrote README to {}", readme_path),
+        Err(e) => println!("[ERROR] Failed to write README: {}", e),
     }
+
+    println!("[INFO] Hugging Face dataset created successfully in '{}'", dataset_dir);
+    println!("[INFO] Dataset contains {} examples across {} chunks", total_examples, chunk_index + 1);
 }

@@ -1009,3 +1009,6 @@
 [submodule "vendor/rust"]
 	path = vendor/rust
 	url = https://github.com/rust-lang/rust.git
+[submodule "hf_dataset"]
+	path = hf_dataset
+	url = https://huggingface.co/datasets/h4/solfunmeme-dioxus-reports
