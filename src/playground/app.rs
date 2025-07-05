@@ -180,6 +180,7 @@ pub fn PlaygroundApp() -> Element {
                 MenuOption::SolFunMeme => rsx!(SolFunNiceApp {}),
                 MenuOption::Extractor => rsx!(MarkdownCodeExtractor {}),
                         MenuOption::SourceBrowser => rsx!(SourceBrowser {}),
+                        MenuOption::EmojiMatrix => rsx!(EmojiMatrixView {}),
                         _ => rsx!(div { "TODO"})
                     }
                 }
