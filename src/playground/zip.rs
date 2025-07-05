@@ -19,7 +19,7 @@ fn create_zip(snippets: &[CodeSnippet]) -> Result<String, JsValue> {
         }
         let blob_parts = Array::new();
         blob_parts.push(&JsValue::from(js_sys::Uint8Array::from(buffer.as_slice())));
-        let mut blob_property_bag = BlobPropertyBag::new();
+        let blob_property_bag = BlobPropertyBag::new();
         blob_property_bag.set_type("application/zip");
         let blob = Blob::new_with_buffer_source_sequence_and_options(&blob_parts, &blob_property_bag).map_err(|e| JsValue::from(format!("{:?}", e)))?;
         let url = Url::create_object_url_with_blob(&blob).map_err(|e| JsValue::from(format!("{:?}", e)))?;

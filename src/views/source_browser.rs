@@ -31,8 +31,8 @@ We can imagine ever enum giving a certain prime emoji and each enum value anothe
 #[component]
 pub fn SourceBrowser() -> Element {
 //    crate::embedself::printall();
-    let mut selected_module = use_signal(|| "src".to_string());
-    let mut selected_file = use_signal(|| None::<String>);
+    let selected_module = use_signal(|| "src".to_string());
+    let selected_file = use_signal(|| None::<String>);
 
     let modules = vec![
         ("src", "Main Source"),

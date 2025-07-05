@@ -1,6 +1,5 @@
 use dioxus::prelude::*;
-use crate::emoji_matrix::{self, EmojiMatrix, EmojiMatrixEntry};
-use std::collections::HashMap;
+use crate::models::emoji_matrix::{self, EmojiMatrix, EmojiMatrixEntry};
 
 #[component]
 pub fn EmojiMatrixView() -> Element {

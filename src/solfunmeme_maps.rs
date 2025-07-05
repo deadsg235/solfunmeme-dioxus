@@ -1,4 +1,4 @@
-use crate::project_algebra::{Feature, Project};
+use crate::project_algebra::Feature;
 use crate::project_reflector::{ProjectReflection};
 
 // Each conceptual unit becomes a declaration: name, features, signature.

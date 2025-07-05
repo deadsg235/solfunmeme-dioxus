@@ -1,7 +1,4 @@
-use walkdir::WalkDir;
-use std::fs::{self, File};
-use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::collections::{HashMap, HashSet};
 
 pub fn path_to_camel_case(path: &std::path::Path) -> String {

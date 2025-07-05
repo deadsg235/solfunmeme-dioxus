@@ -1,6 +1,6 @@
 //mod project_algebra;
 
-use crate::project_algebra::{Feature, Project};
+use crate::project_algebra::Feature;
 use std::collections::HashMap;
 
 /// Reflection information for a declaration in code, linking its symbolic name to algebraic value.

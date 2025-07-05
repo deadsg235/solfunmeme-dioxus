@@ -8,7 +8,6 @@ use crate::ClusterName;
 use crate::ClustersSvg;
 use crate::LinkSvg;
 use crate::MyCluster;
-use crate::WalletSvg;
 use crate::storage::GLOBAL_MESSAGE;
 use crate::utils::get_cluster_svg;
 use crate::utils::trunk_cluster_name;
