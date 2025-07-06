@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 use reqwest;
-use crate::emoji_matrix::{parse_summary_total, parse_summary_root, rollup_emoji_matrix};
+use emoji_matrix_lib::{parse_summary_total, parse_summary_root, rollup_emoji_matrix, EmojiMatrix};
 
 #[tokio::test]
 async fn emoji_matrix_live_server_test() {
@@ -18,7 +18,7 @@ async fn emoji_matrix_live_server_test() {
     let root_text = root_res.text().await.expect("Failed to get text from summary_root.txt");
     combined_entries.extend(parse_summary_root(&root_text).entries);
 
-    let final_matrix = rollup_emoji_matrix(crate::emoji_matrix::EmojiMatrix { entries: combined_entries });
+    let final_matrix = rollup_emoji_matrix(EmojiMatrix { entries: combined_entries });
 
     // Assertions - you can add more specific assertions here based on expected data
     assert!(!final_matrix.entries.is_empty(), "Emoji matrix should not be empty");

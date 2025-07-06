@@ -11,7 +11,7 @@ use crate::MyCluster;
 use crate::storage::GLOBAL_MESSAGE;
 use crate::utils::get_cluster_svg;
 use crate::utils::trunk_cluster_name;
-
+use crate::playground::test_components::ComponentName::ClusterInfo as TestClusterInfo;
 use url::Url;
 
 //use crate::{
@@ -52,7 +52,7 @@ pub fn Clusters() -> Element {
     }
 }
 
-#[component(partial_eq = false)]
+#[component]
 pub fn ClusterInfo(connections: UseConnections) -> Element {
     let active_cluster_name = connections.active_entry();
     let clusters = connections.get_all_entries();

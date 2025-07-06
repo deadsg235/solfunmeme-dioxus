@@ -104,6 +104,9 @@ dioxus-html = "0.6.3"
 dioxus-logger = "0.6.2"
 scraper = "0.23.1"
 rrust_kontekst = {path = "rrust_kontekst"}
+orbital_sim_lib = {path = "crates/orbital_sim_lib"}
+core_data_lib = {path = "crates/core_data_lib"}
+emoji_matrix_lib = {path = "crates/emoji_matrix_lib"}
 rrust_kontekst_base = {path = "rrust_kontekst_base"}
 ctor = "0.4.2"
 tracing = "0.1.41"

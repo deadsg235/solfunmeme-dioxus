@@ -1,11 +1,7 @@
 use dioxus::prelude::*;
-use crate::models::emoji_matrix::{self, EmojiMatrix, EmojiMatrixEntry};
+use emoji_matrix_lib::{EmojiMatrix, EmojiMatrixEntry, EmojiCount, parse_summary_total, parse_summary_root, rollup_emoji_matrix};
 use log::info;
-use rust_embed::RustEmbed;
-
-#[derive(RustEmbed)]
-#[folder = "reports/"]
-struct EmbeddedReports;
+use dioxus_charts::BarChart;
 
 #[component]
 pub fn EmojiMatrixView() -> Element {
@@ -16,34 +12,16 @@ pub fn EmojiMatrixView() -> Element {
         let mut combined_entries: Vec<EmojiMatrixEntry> = Vec::new();
 
         // Read summary_total.txt
-        if let Some(file) = EmbeddedReports::get("summary_total.txt") {
-            if let Ok(text) = String::from_utf8(file.data.into_owned()) {
-                info!("Successfully read summary_total.txt.");
-                let total_matrix = emoji_matrix::parse_summary_total(&text);
-                combined_entries.extend(total_matrix.entries);
-            } else {
-                log::error!("Failed to convert summary_total.txt to UTF-8.");
-            }
-        } else {
-            log::error!("Failed to find summary_total.txt in embedded reports.");
-        }
+        let total_matrix = parse_summary_total();
+        combined_entries.extend(total_matrix.entries);
 
         // Read summary_root.txt
-        if let Some(file) = EmbeddedReports::get("summary_root.txt") {
-            if let Ok(text) = String::from_utf8(file.data.into_owned()) {
-                info!("Successfully read summary_root.txt.");
-                let root_matrix = emoji_matrix::parse_summary_root(&text);
-                combined_entries.extend(root_matrix.entries);
-            } else {
-                log::error!("Failed to convert summary_root.txt to UTF-8.");
-            }
-        } else {
-            log::error!("Failed to find summary_root.txt in embedded reports.");
-        }
+        let root_matrix = parse_summary_root();
+        combined_entries.extend(root_matrix.entries);
 
         let mut final_matrix = EmojiMatrix { entries: combined_entries };
         info!("Before rollup: {} entries", final_matrix.entries.len());
-        final_matrix = emoji_matrix::rollup_emoji_matrix(final_matrix);
+        final_matrix = rollup_emoji_matrix(final_matrix);
         info!("After rollup: {} entries", final_matrix.entries.len());
 
         emoji_matrix.set(Some(final_matrix));
@@ -79,10 +57,29 @@ pub fn EmojiMatrixView() -> Element {
                                 }
                                 td {
                                     class: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-                                    for (emoji, count) in &entry.emoji_counts {
+                                    for emoji_count in &entry.emoji_counts {
                                         span {
                                             class: "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2 mb-2",
-                                            "{emoji} ({count})"
+                                            "{emoji_count.emoji} {emoji_count.name} ({emoji_count.count})"
+                                        }
+                                    }
+                                }
+                            }
+                            if entry.path == "total" {
+                                tr {
+                                    td { colspan: 2,
+                                        BarChart {
+                                            padding_top: 30,
+                                            padding_left: 70,
+                                            padding_right: 50,
+                                            padding_bottom: 30,
+                                            bar_width: "8%",
+                                            series: vec![
+                                                entry.emoji_counts.iter().map(|ec| ec.count as f32).collect(),
+                                            ],
+                                            labels: entry.emoji_counts.iter().map(|ec| format!("{}: {}", ec.emoji, ec.name)).collect::<Vec<String>>(),
+                                            viewbox_width: 800,
+                                            viewbox_height: 400,
                                         }
                                     }
                                 }
