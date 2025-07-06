@@ -8,7 +8,13 @@ struct EmbeddedReports;
 
 pub fn parse_summary_total() -> EmojiMatrix {
     let file_content = if let Some(file) = EmbeddedReports::get("summary_total.txt") {
-        String::from_utf8(file.data.into_owned()).unwrap_or_default()
+        match String::from_utf8(file.data.into_owned()) {
+            Ok(content) => content,
+            Err(e) => {
+                error!("Failed to convert summary_total.txt to UTF-8: {}", e);
+                String::new()
+            }
+        }
     } else {
         error!("Failed to find summary_total.txt in embedded reports.");
         String::new()
@@ -18,7 +24,13 @@ pub fn parse_summary_total() -> EmojiMatrix {
 
 pub fn parse_summary_root() -> EmojiMatrix {
     let file_content = if let Some(file) = EmbeddedReports::get("summary_root.txt") {
-        String::from_utf8(file.data.into_owned()).unwrap_or_default()
+        match String::from_utf8(file.data.into_owned()) {
+            Ok(content) => content,
+            Err(e) => {
+                error!("Failed to convert summary_root.txt to UTF-8: {}", e);
+                String::new()
+            }
+        }
     } else {
         error!("Failed to find summary_root.txt in embedded reports.");
         String::new()

@@ -1,5 +1,5 @@
 use rust_embed::Embed;
 
 #[derive(Embed)]
-#[folder = "src/extractor/model"]
+#[folder = "crates/solfunmeme_extractor/src/model"]
 pub struct OurSrcExtractorModelExtractor;

@@ -12,7 +12,8 @@ publish = false
 ### git deps, could be submodules
 wallet-adapter = { git = "https://github.com/meta-introspector/SolanaWalletAdapter-zos", branch ="no-template"} # 
 syn-serde = { git = "https://github.com/meta-introspector/syn-serde-rust", branch="main", features = ["json"] }
-dioxus-charts = { git = "https://github.com/dioxus-community/dioxus-charts.git" ,  branch = "main" }
+#dioxus-charts = { git = "https://github.com/dioxus-community/dioxus-charts.git" ,  branch = "main" }
+dioxus-charts = { path = "vendor/dioxus-charts" }
 
 ## normal deps 
 inventory = "0.3"
@@ -86,7 +87,8 @@ tclifford = "0.1.0"
 linfa = "0.7.1"
 linfa-preprocessing = "0.7.1"
 linfa-reduction = "0.7.1"
-#dioxus-charts = { path = "../dioxus-charts" }
+linfa-clustering = "0.7.1"
+
 rust-embed = { version = "8.7.2", features = ["debug-embed"] , path = "vendor/rust-embed"}
 fastrand = "2.0.1"
 #getrandom = { version = "0.2.14", features = ["js"] }
@@ -108,6 +110,7 @@ orbital_sim_lib = {path = "crates/orbital_sim_lib"}
 core_data_lib = {path = "crates/core_data_lib"}
 emoji_matrix_lib = {path = "crates/emoji_matrix_lib"}
 rrust_kontekst_base = {path = "rrust_kontekst_base"}
+solfunmeme_extractor = {path = "crates/solfunmeme_extractor"}
 ctor = "0.4.2"
 tracing = "0.1.41"
 

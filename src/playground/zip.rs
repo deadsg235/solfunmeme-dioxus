@@ -1,4 +1,5 @@
-use crate::extractor::types::CodeSnippet;
+//use solfunmeme_extractor::components::extractor::types::CodeSnippet;
+use solfunmeme_extractor::types::CodeSnippet;
 use wasm_bindgen::JsValue;
 use zip::write::{ZipWriter, FileOptions};
 use js_sys::Array;

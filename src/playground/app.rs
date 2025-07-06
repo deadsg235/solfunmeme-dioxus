@@ -1,5 +1,6 @@
 use crate::model::lean::style::{Styles, THEME};
 use dioxus::prelude::*;
+use solfunmeme_extractor::components::extractor::MarkdownCodeExtractor;
 //use crate::app::{FAVICON, TAILWIND_CSS};
 use crate::{model::NotificationInfo, playground::solfunnice::SolFunNiceApp};
 //use crate::extractor::components::app::EmbeddingApp;
@@ -30,7 +31,7 @@ use crate::playground::{
 };
 
 use crate::{
-    extractor::components::extractor::MarkdownCodeExtractor,
+    //solfunmeme_extractor::components::extractor::MarkdownCodeExtractor,
     playground::{mcp::MCPPlaygroundApp, monster_meta_meme::MonsterMetaMemeApp},
 };
 
@@ -90,7 +91,7 @@ pub enum MenuOption {
     EmojiMatrix,
 }
 
-use crate::extractor::components::example::register_all_components;
+use solfunmeme_extractor::components::example::register_all_components;
 #[component]
 pub fn PlaygroundApp() -> Element {
 //    crate::embedself::printall;
