@@ -57,7 +57,7 @@ pub fn EmojiMatrixView() -> Element {
                 let current_series: Vec<f32> = total_entry.emoji_counts.iter()
                     .filter(|ec| {
                         let selected_cat = selected_category.read();
-                        *selected_cat == "All" || ec.name == *selected_cat
+                        *selected_cat == "All" || ec.category == *selected_cat
                     })
                     .map(|ec| {
                         if *log_scale_enabled.read() {
@@ -72,7 +72,7 @@ pub fn EmojiMatrixView() -> Element {
                 let current_labels: Vec<String> = total_entry.emoji_counts.iter()
                     .filter(|ec| {
                         let selected_cat = selected_category.read();
-                        *selected_cat == "All" || ec.name == *selected_cat
+                        *selected_cat == "All" || ec.category == *selected_cat
                     })
                     .map(|ec| format!("{} {}", ec.emoji, ec.name))
                     .collect();

@@ -89,6 +89,7 @@ pub enum MenuOption {
     Extractor,
     SourceBrowser,
     EmojiMatrix,
+    Mcp
 }
 
 use solfunmeme_extractor::components::example::register_all_components;
@@ -172,21 +173,23 @@ pub fn PlaygroundApp() -> Element {
                         MenuOption::Airdrop => rsx!(AirdropComponent { show_airdrop_modal: show_airdrop_modal }),
                         MenuOption::Accounts => rsx!(Accounts {}),
                         MenuOption::ComponentMemes => rsx!(ComponentMemeExplorer {}),
-    //                    MenuOption::Embedding => rsx!(EmbeddingApp {}),
+			//                    MenuOption::Embedding => rsx!(EmbeddingApp {}),
                         MenuOption::PerformanceCharts => rsx!(PerformanceCharts {}),
                         MenuOption::BertTest => rsx!(BertTestApp {}),
                         MenuOption::RustParser => rsx!(RustParserApp {}),
                         MenuOption::MonsterMetaMeme => rsx!(MonsterMetaMemeApp {}),
-                //                    MenuOption::SolFunMeme => rsx!(SolFunMemeApp {}),
-                MenuOption::SolFunMeme => rsx!(SolFunNiceApp {}),
-                MenuOption::Extractor => rsx!(MarkdownCodeExtractor {}),
+			//                    MenuOption::SolFunMeme => rsx!(SolFunMemeApp {}),
+			MenuOption::SolFunMeme => rsx!(SolFunNiceApp {}),
+			MenuOption::Extractor => rsx!(MarkdownCodeExtractor {}),
                         MenuOption::SourceBrowser => rsx!(SourceBrowser {}),
                         MenuOption::EmojiMatrix => rsx!(EmojiMatrixView {}),
-                        _ => rsx!(div { "TODO"})
+			MenuOption::Mcp => rsx!(MCPPlaygroundApp {}),
+			
+                        _ => rsx!(div {})
                     }
                 }
             }
 
-        MCPPlaygroundApp {}
+
         } // rsx
 }
