@@ -67,7 +67,7 @@ impl ProjectReflection {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use project_algebra::Feature;
+    use crate::project_algebra::Feature;
 
     #[test]
     fn reflection_works() {

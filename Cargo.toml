@@ -111,6 +111,9 @@ core_data_lib = {path = "crates/core_data_lib"}
 emoji_matrix_lib = {path = "crates/emoji_matrix_lib"}
 rrust_kontekst_base = {path = "rrust_kontekst_base"}
 solfunmeme_extractor = {path = "crates/solfunmeme_extractor"}
+component_builder_lib = {path = "crates/component_builder_lib"}
+component_registry_lib = {path = "crates/component_registry_lib"}
+component_emoji_lib = {path = "crates/component_emoji_lib"}
 ctor = "0.4.2"
 tracing = "0.1.41"
 

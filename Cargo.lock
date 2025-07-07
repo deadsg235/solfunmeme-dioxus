@@ -768,6 +768,33 @@ dependencies = [
 ]
 
 [[package]]
+name = "component_builder_lib"
+version = "0.1.0"
+dependencies = [
+ "component_emoji_lib",
+ "component_registry_lib",
+ "core_data_lib",
+ "dioxus",
+ "serde",
+]
+
+[[package]]
+name = "component_emoji_lib"
+version = "0.1.0"
+dependencies = [
+ "component_registry_lib",
+]
+
+[[package]]
+name = "component_registry_lib"
+version = "0.1.0"
+dependencies = [
+ "core_data_lib",
+ "dioxus",
+ "serde",
+]
+
+[[package]]
 name = "concurrent-queue"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6821,6 +6848,9 @@ dependencies = [
  "bs58",
  "chacha20poly1305",
  "chrono",
+ "component_builder_lib",
+ "component_emoji_lib",
+ "component_registry_lib",
  "console_log 1.0.0",
  "core_data_lib",
  "csv",
