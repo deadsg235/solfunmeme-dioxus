@@ -11,3 +11,4 @@ dioxus = { version = "0.6.3", features = ["router"] }
 component_registry_lib = { path = "../component_registry_lib" }
 component_emoji_lib = { path = "../component_emoji_lib" }
 core_data_lib = { path = "../core_data_lib" }
+signals_lib = { path = "../signals_lib" }

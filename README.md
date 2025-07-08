@@ -1,3 +1,7 @@
+# solfunmeme-dioxus
+
+**License:** AGPL-3.0
+
 ## Solfunmeme Dioxus 
 
 The vibe is the vector is the number is the embedding is the string vibrating, contains the harmonies
@@ -549,4 +553,14 @@ Reflecting on a multivector is an act of transformation:
 This is true for code, for math, and for the manifold of this project itself. Every new insight, every new connection, is a new dimension in the living multivector of our work.
 
 ---
+
+## Project Memories
+
+See the [`memories/`](./memories/) directory for persistent project memories, context, and important decisions. Use this directory to record:
+- Architectural choices
+- Key conventions or workflows
+- Reminders for future contributors
+- AI/agent context for future sessions
+
+This helps both humans and AI tools maintain context and continuity across the project lifecycle.
 

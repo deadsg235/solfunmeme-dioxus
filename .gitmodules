@@ -1021,3 +1021,27 @@
 [submodule "vendor/rig-rust-llm-agents"]
 	path = vendor/rig-rust-llm-agents
 	url = https://github.com/meta-introspector/rig-rust-llm-agents/
+[submodule "vendor/sophia_rs"]
+	path = vendor/sophia_rs
+	url = https://github.com/pchampin/sophia_rs.git
+[submodule "vendor/ai-agent-terraform"]
+	path = vendor/ai-agent-terraform
+	url = https://github.com/jmikedupont2/ai-agent-terraform
+[submodule "vendor/services"]
+	path = vendor/services
+	url = https://github.com/meta-introspector/services
+[submodule "vendor/meta-meme"]
+	path = vendor/meta-meme
+	url = https://github.com/meta-introspector/meta-meme
+[submodule "vendor/meta-meme.wiki"]
+	path = vendor/meta-meme.wiki
+	url = https://github.com/meta-introspector/meta-meme.wiki.git
+[submodule "vendor/forgejo-python"]
+	path = vendor/forgejo-python
+	url = https://github.com/meta-introspector/forgejo-python/
+[submodule "vendor/rustbert"]
+	path = vendor/rustbert
+	url = https://github.com/lukasmoellerch/rustbert
+[submodule "vendor/candle"]
+	path = vendor/candle
+	url = https://github.com/huggingface/candle

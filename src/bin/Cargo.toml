@@ -1,0 +1,9 @@
+[package]
+name = "prepare_sources"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sophia_turtle = "0.7"
+sophia_api = "0.7"
+sophia_inmem = "0.7" 

@@ -6,6 +6,8 @@ use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 use std::collections::BTreeMap;
 use regex::Regex;
+use std::io::Write;
+use std::env;
 
 /**
 idea : lets build a mini compiler right here
@@ -210,6 +212,175 @@ const EMOJI_TYPE_MAP: &[(&str, &str, &str)] = &[
     // Heuristic/structural
     ("byte", "💾", "Numbers"), ("parenthes", "( )", "Rust Core"), ("case", "🎭", "Rust Core"), ("dot", "•", "General"), ("colon", ":", "General"), ("bounded", "📏", "General"),
     ("_", "⬜", "Rust Core"), ("colon2_token", ":", "Rust Core"), ("cond", "❓", "Rust Core"), ("content", "📦", "General"), ("if", "❓", "Rust Core"), ("where_clause", "📜", "Rust Core"),
+    // Dependency Management
+    ("cargo", "📦", "Dependencies"), ("toml", "📋", "Dependencies"), ("lock", "🔒", "Dependencies"), ("deps", "🔗", "Dependencies"), ("dependencies", "🔗", "Dependencies"), ("dev_deps", "🧪", "Dependencies"), ("features", "✨", "Dependencies"), ("workspace", "🏢", "Dependencies"), ("member", "👤", "Dependencies"), ("path", "🛤️", "Dependencies"), ("git", "🐙", "Dependencies"), ("branch", "🌿", "Dependencies"), ("tag", "🏷️", "Dependencies"), ("version", "🔢", "Dependencies"), ("semver", "📊", "Dependencies"), ("patch", "🩹", "Dependencies"), ("minor", "📈", "Dependencies"), ("major", "🚀", "Dependencies"), ("optional", "❓", "Dependencies"), ("default_features", "⚙️", "Dependencies"), ("no_default_features", "🚫", "Dependencies"),
+    // Build System
+    ("build", "🔨", "Build"), ("target", "🎯", "Build"), ("release", "🚀", "Build"), ("debug", "🐛", "Build"), ("profile", "📊", "Build"), ("optimization", "⚡", "Build"), ("compiler", "⚙️", "Build"), ("linker", "🔗", "Build"), ("artifact", "🎨", "Build"), ("binary", "💻", "Build"), ("library", "📚", "Build"), ("static", "🪨", "Build"), ("dynamic", "🌊", "Build"), ("wasm", "🌐", "Build"), ("native", "🏠", "Build"), ("cross_compile", "🔄", "Build"), ("platform", "🖥️", "Build"), ("architecture", "🏗️", "Build"), ("triple", "🎯", "Build"), ("toolchain", "🔧", "Build"),
+    // Package Management
+    ("crate", "📦", "Packages"), ("package", "📦", "Packages"), ("registry", "📚", "Packages"), ("publish", "📤", "Packages"), ("yank", "🗑️", "Packages"), ("download", "📥", "Packages"), ("install", "⚙️", "Packages"), ("uninstall", "🗑️", "Packages"), ("update", "🔄", "Packages"), ("upgrade", "⬆️", "Packages"), ("downgrade", "⬇️", "Packages"), ("pin", "📌", "Packages"), ("unpin", "📌", "Packages"), ("vendor", "🏪", "Packages"), ("offline", "📴", "Packages"), ("mirror", "🪞", "Packages"), ("source", "📄", "Packages"), ("repository", "📚", "Packages"), ("fork", "🍴", "Packages"), ("clone", "📋", "Packages"),
+    // Module System
+    ("mod", "📦", "Modules"), ("module", "📦", "Modules"), ("pub", "👀", "Modules"), ("private", "🔒", "Modules"), ("re_export", "📤", "Modules"), ("use", "🔗", "Modules"), ("extern", "🌍", "Modules"), ("crate", "📦", "Modules"), ("super", "⬆️", "Modules"), ("self", "🆔", "Modules"), ("as", "🏷️", "Modules"), ("glob", "🌟", "Modules"), ("prelude", "🎭", "Modules"), ("lib", "📚", "Modules"), ("main", "🎯", "Modules"), ("bin", "💻", "Modules"), ("example", "📝", "Modules"), ("test", "🧪", "Modules"), ("bench", "🏋️", "Modules"), ("doc", "📖", "Modules"),
+    // Project Structure
+    ("src", "📁", "Structure"), ("tests", "🧪", "Structure"), ("examples", "📝", "Structure"), ("benches", "🏋️", "Structure"), ("docs", "📖", "Structure"), ("assets", "🎨", "Structure"), ("resources", "📦", "Structure"), ("config", "⚙️", "Structure"), ("scripts", "📜", "Structure"), ("tools", "🔧", "Structure"), ("build_scripts", "🔨", "Structure"), ("proc_macro", "🪄", "Structure"), ("macro_rules", "📐", "Structure"), ("derive", "🧬", "Structure"), ("attribute", "🏷️", "Structure"), ("annotation", "📝", "Structure"), ("metadata", "📊", "Structure"), ("manifest", "📋", "Structure"), ("license", "📜", "Structure"), ("readme", "📖", "Structure"), ("changelog", "📝", "Structure"),
+    ("binary", "⚫⚪", "Operators"),
+    ("unary", "➖", "Operators"),
+    ("embed", "📦✨", "Assets"),
+    ("our", "👥💖", "Pronouns"),
+    ("folder", "📁🌸", "Filesystem"),
+    ("rust_embed", "🦀📦🌟", "Assets"),
+    ("extractor", "🧲💎", "Processing"),
+    ("borsh", "📦🧩", "Serialization"),
+    ("windows", "🪟🌈", "Platform"),
+    ("crates", "📦🧰", "Rust"),
+    ("rs", "🦀🌟", "Rust"),
+    ("data", "💾📊", "Data"),
+    ("provider", "🤝🌟", "Service"),
+    ("size", "📏📐", "Measurement"),
+    ("idx", "#️⃣🔢", "Indexing"),
+    ("libs", "📚✨", "Rust"),
+    ("rust", "🦀💫", "Rust"),
+    ("de", "⬇️", "Serialization"),
+    ("ser", "⬆️", "Serialization"),
+    ("github", "🐙", "Platform"),
+    ("bincode", "🔢", "Serialization"),
+    ("report", "📄", "Reporting"),
+    ("speedy", "⚡", "Performance"),
+    ("curves", "➰", "Math"),
+    ("change", "🔄", "General"),
+    ("string", "🔤", "Data"),
+    ("leptos", "🌿", "Framework"),
+    ("class", "🏷️", "OOP"),
+    ("full", "🈵", "General"),
+    ("objc2", "🍏", "Platform"),
+    ("text", "📝", "Data"),
+    ("dioxus", "🧬", "Framework"),
+    ("emoji", "😀✨", "Meta"),
+    ("vector", "➡️🟦", "Math"),
+    ("mapping", "🗺️🔗", "Meta"),
+    ("profile", "👤📋", "Meta"),
+    ("pattern", "🔶🔍", "Meta"),
+    ("scanner", "🔎📡", "Tool"),
+    ("filter", "🚿🔬", "Tool"),
+    ("sort", "🔢⬆️", "Tool"),
+    ("frequency", "📊", "Stats"),
+    ("coverage", "🗺️🌈", "Stats"),
+    ("identifier", "🆔🔤", "Syntax"),
+    ("literal", "🔤💎", "Syntax"),
+    ("module", "📦🧩", "Code"),
+    ("pipeline", "⛓️🚀", "System"),
+    ("graph", "📈🔗", "System"),
+    ("incremental", "➕⏳", "System"),
+    ("compile", "⚙️🚦", "System"),
+    ("analysis", "🔬🧠", "System"),
+    ("GUI", "🖥️🎨", "UI"),
+    ("MCP", "🧩🛠️", "System"),
+    ("interactive", "🖱️💬", "UI"),
+    ("review", "👀📝", "Process"),
+    ("assign", "➡️🏷️", "Process"),
+    ("vocabulary", "📚🗣️", "Meta"),
+    ("automation", "🤖⚡", "System"),
+    ("beauty", "🌸✨", "Meta"),
+    ("layer", "🧅🎨", "Meta"),
+    ("rich", "💎🌈", "Meta"),
+    ("expressive", "🎭💬", "Meta"),
+    ("system", "🖧⚙️", "System"),
+    ("codebase", "💻🏗️", "Code"),
+    ("component", "🧩🏗️", "Code"),
+    ("crate", "📦🦀", "Rust"),
+    ("signal", "📶🔔", "State"),
+    ("state", "🔔🧠", "State"),
+    ("dynamic", "🔄⚡", "Meta"),
+    ("static", "🛑🏛️", "Meta"),
+    ("modular", "🧩🔗", "Meta"),
+    ("scan", "🔍📡", "Tool"),
+    ("extract", "🧲📤", "Tool"),
+    ("analyze", "🔬🧠", "Tool"),
+    ("visual", "👁️🎨", "UI"),
+    ("semantic", "🧠🔤", "Meta"),
+    ("syntax", "🔤📐", "Meta"),
+    ("ast", "🌳🧩", "Code"),
+    ("node", "🔗🌳", "Code"),
+    ("token", "🔖🔤", "Code"),
+    ("snippet", "✂️📄", "Code"),
+    ("example", "💡📄", "Meta"),
+    ("template", "📄🧩", "Meta"),
+    ("category", "🏷️📚", "Meta"),
+    ("term", "🔤🏷️", "Meta"),
+    ("unmapped", "❓🚫", "Stats"),
+    ("mapped", "✅🔗", "Stats"),
+    ("new", "✨", "Creation"),
+    ("transaction", "🔗💰", "Blockchain"),
+    ("solana", "⚡", "Blockchain"),
+    ("workflows", "🗺️", "Process"),
+    ("packages", "📦", "Packaging"),
+    ("property", "🔑", "Attribute"),
+    ("component", "🧩", "Architecture"),
+    ("framework", "🏗️", "Architecture"),
+    ("hashes", "#️⃣", "Crypto"),
+    ("programs", "⚙️", "Execution"),
+    ("11", "🔢🌟", "Math"),
+    // --- Meta/Workflow Concepts ---
+    ("refactor", "🛠️🔄", "Workflow"),
+    ("modular", "🧩🔗", "Workflow"),
+    ("vectorize", "➡️🟦", "Workflow"),
+    ("visualize", "👁️🎨", "Workflow"),
+    ("automate", "🤖⚡", "Workflow"),
+    ("dynamic", "🔄⚡", "Workflow"),
+    ("static", "🛑🏛️", "Workflow"),
+    ("interactive", "🖱️💬", "Workflow"),
+    ("pipeline", "⛓️🚀", "Workflow"),
+    ("graph", "📈🔗", "Workflow"),
+    ("scan", "🔍📡", "Workflow"),
+    ("extract", "🧲📤", "Workflow"),
+    ("analyze", "🔬🧠", "Workflow"),
+    ("filter", "🚿🔬", "Workflow"),
+    ("sort", "🔢⬆️", "Workflow"),
+    ("review", "👀📝", "Workflow"),
+    ("assign", "➡️🏷️", "Workflow"),
+    ("report", "📄📊", "Workflow"),
+    ("coverage", "🗺️🌈", "Workflow"),
+    ("frequency", "📊🔁", "Workflow"),
+    ("unmapped", "❓🚫", "Workflow"),
+    ("mapped", "✅🔗", "Workflow"),
+    // --- Rust/Codebase Concepts ---
+    ("crate", "📦🦀", "Rust"),
+    ("module", "📦🧩", "Rust"),
+    ("component", "🧩🏗️", "Rust"),
+    ("signal", "📶🔔", "Rust"),
+    ("state", "🔔🧠", "Rust"),
+    ("identifier", "🆔🔤", "Rust"),
+    ("literal", "🔤💎", "Rust"),
+    ("ast", "🌳🧩", "Rust"),
+    ("node", "🔗🌳", "Rust"),
+    ("token", "🔖🔤", "Rust"),
+    ("snippet", "✂️📄", "Rust"),
+    ("template", "📄🧩", "Rust"),
+    ("pattern", "🔶🔍", "Rust"),
+    ("function", "🦀⚙️", "Rust"),
+    ("struct", "🏛️🧱", "Rust"),
+    ("trait", "🏷️🧬", "Rust"),
+    ("macro", "🪄🦀", "Rust"),
+    ("prop", "🔑🏷️", "Rust"),
+    ("emoji", "😀✨", "Rust"),
+    ("vocabulary", "📚🗣️", "Rust"),
+    // --- System/Architecture Concepts ---
+    ("system", "🖧⚙️", "System"),
+    ("framework", "🏗️🌿", "System"),
+    ("GUI", "🖥️🎨", "System"),
+    ("MCP", "🧩🛠️", "System"),
+    ("beauty", "🌸✨", "System"),
+    ("layer", "🧅🎨", "System"),
+    ("expressive", "🎭💬", "System"),
+    ("rich", "💎🌈", "System"),
+    // --- Other/Playful Concepts ---
+    ("brainrot", "🧠🌪️", "Playful"),
+    ("meme", "😂📈", "Playful"),
+    ("italian", "🇮🇹🍝", "Playful"),
+    ("prime", "🌟🔢", "Playful"),
+    ("idea", "💡✨", "Playful"),
+    ("flow", "🌊➡️", "Playful"),
+    ("hero", "🦸‍♂️🗺️", "Playful"),
+    ("mythos", "📜🌌", "Playful"),
 ];
 
 fn emoji_for_type(ty: &str) -> (&'static str, &'static str) {
@@ -225,8 +396,14 @@ fn extract_string_literals(value: &serde_json::Value, out: &mut Vec<String>) {
     match value {
         serde_json::Value::Object(map) => {
             for (k, v) in map.iter() {
-                // Look for string literal keys
+                // Extract string literal values
                 if (k == "lit" || k == "str") && v.is_string() {
+                    if let Some(s) = v.as_str() {
+                        out.push(s.to_string());
+                    }
+                }
+                // Extract identifier-like fields
+                if ["ident", "name", "label", "var", "field", "path", "ty", "type", "kind", "value"].contains(&k.as_str()) && v.is_string() {
                     if let Some(s) = v.as_str() {
                         out.push(s.to_string());
                     }
@@ -266,33 +443,88 @@ fn split_words(s: &str) -> Vec<String> {
 }
 
 fn main() {
-    // Print emoji mapping at startup
-    // println!("=== AST Node Type Emoji Mapping ===");
-    // for (name, emoji, category) in EMOJI_TYPE_MAP {
-    //     println!("{:>10}: {} ({})", name, emoji, category);
-    // }
-    // println!("");
+    use std::env;
+    let mut args = env::args().skip(1);
+    let mut target_path: Option<String> = None;
+    let mut limit: Option<usize> = None;
+    while let Some(arg) = args.next() {
+        if arg == "--limit" {
+            if let Some(lim) = args.next() {
+                limit = lim.parse().ok();
+            }
+        } else {
+            target_path = Some(arg);
+        }
+    }
 
-    // 1. Discover all Rust files
     let mut files = HashMap::new();
     let mut file_count = 0;
-    for entry in WalkDir::new("src").into_iter().filter_map(Result::ok) {
-        if entry.file_type().is_file() && entry.path().extension().map_or(false, |e| e == "rs") {
-            let path = entry.path().to_string_lossy().to_string();
-            match fs::read_to_string(entry.path()) {
-                Ok(content) => {
-                    files.insert(path, content);
-                    file_count += 1;
-                },
-                Err(e) => {
-                    println!("[ERROR: could not read file: {}]", e);
+    let mut discovered_files = Vec::new();
+    if let Some(ref path) = target_path {
+        let path = Path::new(path);
+        if path.is_file() {
+            discovered_files.push(path.to_path_buf());
+        } else if path.is_dir() {
+            for entry in WalkDir::new(path).into_iter().filter_map(Result::ok) {
+                if entry.file_type().is_file() {
+                    discovered_files.push(entry.path().to_path_buf());
                 }
+            }
+        } else {
+            println!("[ERROR] Path not found: {}", path.display());
+            return;
+        }
+    } else {
+        for entry in WalkDir::new(".").into_iter().filter_map(Result::ok) {
+            if entry.file_type().is_file() {
+                discovered_files.push(entry.path().to_path_buf());
             }
         }
     }
-    if files.is_empty() {
-        println!("[WARN] No Rust files found. Exiting.");
-        return;
+    if let Some(lim) = limit {
+        discovered_files.truncate(lim);
+    }
+    println!("[INFO] Processing {} files:", discovered_files.len());
+    for f in &discovered_files {
+        println!("  - {}", f.display());
+    }
+    for path in discovered_files {
+        let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+        match ext.as_str() {
+            // Text/code formats
+            "rs" | "md" | "json" | "ttl" => {
+                match fs::read_to_string(&path) {
+                    Ok(content) => {
+                        let tokens: Vec<&str> = content.split_whitespace().collect();
+                        files.insert(path.to_string_lossy().to_string(), tokens.join(" "));
+                        file_count += 1;
+                    },
+                    Err(e) => {
+                        println!("[ERROR: could not read file: {}]", e);
+                    }
+                }
+            },
+            // Image formats
+            "png" | "jpg" | "jpeg" | "gif" | "svg" => {
+                println!("[TODO: Create AI description task for image file: {}]", path.display());
+            },
+            // Unknown/other formats
+            _ => {
+                match fs::read_to_string(&path) {
+                    Ok(content) => {
+                        let tokens: Vec<&str> = content.split_whitespace().collect();
+                        files.insert(path.to_string_lossy().to_string(), tokens.join(" "));
+                        file_count += 1;
+                    },
+                    Err(_) => {}
+                }
+            }
+        }
+        if let Some(lim) = limit {
+            if file_count >= lim {
+                break;
+            }
+        }
     }
 
     // 2. Create HF dataset structure early
@@ -381,10 +613,11 @@ fn main() {
                         *word_counts.entry(word).or_insert(0) += 1;
                     }
                 }
-                // Map words to emojis
+                // Map words (from literals and identifiers) to emojis
                 let mut word_emoji_counts = BTreeMap::new();
                 for (word, count) in &word_counts {
                     let (emoji, category) = emoji_for_type(word);
+                    // Always record the emoji mapping, even for identifiers and module names
                     if emoji != "❓" && emoji != "❓🤷" {
                         *word_emoji_counts.entry(emoji).or_insert(0usize) += *count;
                     }
@@ -400,86 +633,85 @@ fn main() {
                     }
                 }
                 // Write enriched report file directly to HF dataset
-    let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
-    let node_count = ast.as_object().map(|o| o.len()).unwrap_or(0);
-    let report = serde_json::json!({
-        "file_path": analysis.file_path,
-        "timestamp": timestamp,
-        "summary": {
-            "top_level_nodes": node_count,
-            "total_nodes": total_nodes,
-            "type_counts": type_counts,
-            "string_literals": string_literals,
-            "word_counts": word_counts,
-            "word_emoji_counts": word_emoji_counts,
-            "emoji_counts_in_strings": emoji_counts_in_strings
-        },
-        "ast": ast
-    });
-    
-    // Directory aggregation
-    let dir = analysis.file_path.rsplit_once('/').map(|(d, _)| d).unwrap_or("");
-    let dir_entry = dir_type_counts.entry(dir.to_string()).or_default();
-    for (ty, count) in &type_counts {
-        *dir_entry.entry(ty.clone()).or_insert(0) += *count;
-        *total_type_counts.entry(ty.clone()).or_insert(0) += *count;
-    }
-    
-        // Create compact directory structure for HF dataset reports
-    let path_parts: Vec<&str> = analysis.file_path.split(['/', '\\']).collect();
-    let subdir_name = if path_parts.len() >= 3 {
-        let name = format!("{}_{}_{}", path_parts[0], path_parts[1], path_parts[2]);
-        if name.len() > 50 { name[..50].to_string() } else { name }
-    } else if path_parts.len() == 2 {
-        let name = format!("{}_{}", path_parts[0], path_parts[1]);
-        if name.len() > 50 { name[..50].to_string() } else { name }
-    } else if path_parts.len() == 1 {
-        let name = path_parts[0].to_string();
-        if name.len() > 50 { name[..50].to_string() } else { name }
-    } else {
-        "root".to_string()
-    };
-    
-    // Create a shorter filename to avoid Windows path length limits
-    let original_filename = path_parts.last().unwrap_or(&"unknown");
-    let short_filename = if original_filename.len() > 30 {
-        // Truncate long filenames to 30 chars
-        format!("{}.json", &original_filename[..30])
-    } else {
-        format!("{}.json", original_filename)
-    };
-    let hf_report_path = format!("{}/reports/{}/{}", dataset_dir, subdir_name, short_filename);
-    
-    // Create the subdirectory if it doesn't exist
-    let subdir_path = format!("{}/reports/{}", dataset_dir, subdir_name);
-    if !Path::new(&subdir_path).exists() {
-        if let Err(e) = fs::create_dir_all(&subdir_path) {
-            println!("[ERROR] Failed to create directory {}: {}", subdir_path, e);
-            continue;
-        }
-    }
-    
-    let report_json = serde_json::to_string_pretty(&report).unwrap();
-    
-    // Write to HF dataset reports directory
-    match fs::write(&hf_report_path, &report_json) {
-        Ok(_) => {
-            
-            // Structure summary
-            let mut emoji_counts = Vec::new();
-            let mut emoji_summary = String::new();
-            for (ty, count) in &type_counts {
-                let (emoji, category) = emoji_for_type(ty);
-                emoji_counts.push(format!("{}({})×{}", emoji, ty, count));
-                emoji_summary.push_str(&emoji.repeat(*count.min(&10)));
-            }
-            let emoji_counts_str = emoji_counts.join(" ");
-            let filename = format!("{}.json", path_parts.last().unwrap_or(&"unknown"));
-            if type_counts.is_empty() {
-                println!("{} | none |", filename);
-            } else {
-                println!("{} | {} | {}", filename, emoji_counts_str, emoji_summary);
-            }
+                let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+                let node_count = ast.as_object().map(|o| o.len()).unwrap_or(0);
+                let report = serde_json::json!({
+                    "file_path": analysis.file_path,
+                    "timestamp": timestamp,
+                    "summary": {
+                        "top_level_nodes": node_count,
+                        "total_nodes": total_nodes,
+                        "type_counts": type_counts,
+                        "string_literals": string_literals,
+                        "word_counts": word_counts,
+                        "word_emoji_counts": word_emoji_counts,
+                        "emoji_counts_in_strings": emoji_counts_in_strings
+                    },
+                    "ast": ast
+                });
+                
+                // Directory aggregation
+                let dir = analysis.file_path.rsplit_once('/').map(|(d, _)| d).unwrap_or("");
+                let dir_entry = dir_type_counts.entry(dir.to_string()).or_default();
+                for (ty, count) in &type_counts {
+                    *dir_entry.entry(ty.clone()).or_insert(0) += *count;
+                    *total_type_counts.entry(ty.clone()).or_insert(0) += *count;
+                }
+                
+                // Create compact directory structure for HF dataset reports
+                let path_parts: Vec<&str> = analysis.file_path.split(['/', '\\']).collect();
+                let subdir_name = if path_parts.len() >= 3 {
+                    let name = format!("{}_{}_{}", path_parts[0], path_parts[1], path_parts[2]);
+                    if name.len() > 50 { name[..50].to_string() } else { name }
+                } else if path_parts.len() == 2 {
+                    let name = format!("{}_{}", path_parts[0], path_parts[1]);
+                    if name.len() > 50 { name[..50].to_string() } else { name }
+                } else if path_parts.len() == 1 {
+                    let name = path_parts[0].to_string();
+                    if name.len() > 50 { name[..50].to_string() } else { name }
+                } else {
+                    "root".to_string()
+                };
+                
+                // Create a shorter filename to avoid Windows path length limits
+                let original_filename = path_parts.last().unwrap_or(&"unknown");
+                let short_filename = if original_filename.len() > 30 {
+                    // Truncate long filenames to 30 chars
+                    format!("{}.json", &original_filename[..30])
+                } else {
+                    format!("{}.json", original_filename)
+                };
+                let hf_report_path = format!("{}/reports/{}/{}", dataset_dir, subdir_name, short_filename);
+                
+                // Create the subdirectory if it doesn't exist
+                let subdir_path = format!("{}/reports/{}", dataset_dir, subdir_name);
+                if !Path::new(&subdir_path).exists() {
+                    if let Err(e) = fs::create_dir_all(&subdir_path) {
+                        println!("[ERROR] Failed to create directory {}: {}", subdir_path, e);
+                        continue;
+                    }
+                }
+                
+                let report_json = serde_json::to_string_pretty(&report).unwrap();
+                
+                // Write to HF dataset reports directory
+                match fs::write(&hf_report_path, &report_json) {
+                    Ok(_) => {
+                        // Structure summary
+                        let mut emoji_counts = Vec::new();
+                        let mut emoji_summary = String::new();
+                        for (ty, count) in &type_counts {
+                            let (emoji, category) = emoji_for_type(ty);
+                            emoji_counts.push(format!("{}({})×{}", emoji, ty, count));
+                            emoji_summary.push_str(&emoji.repeat(*count.min(&10)));
+                        }
+                        let emoji_counts_str = emoji_counts.join(" ");
+                        let filename = format!("{}.json", path_parts.last().unwrap_or(&"unknown"));
+                        if type_counts.is_empty() {
+                            println!("{} | none |", filename);
+                        } else {
+                            println!("{} | {} | {}", filename, emoji_counts_str, emoji_summary);
+                        }
                         // Emojis found in string literals
                         if !emoji_counts_in_strings.is_empty() {
                             let mut emoji_strs = Vec::new();
@@ -488,7 +720,7 @@ fn main() {
                             }
                             println!("[emojis in strings] {}", emoji_strs.join(" "));
                         }
-                        // Words mapped to emojis
+                        // Words mapped to emojis (from literals and identifiers)
                         if !word_emoji_counts.is_empty() {
                             let mut word_emoji_strs = Vec::new();
                             for (emoji, count) in &word_emoji_counts {
@@ -892,4 +1124,105 @@ AGPL-3.0 License
 
     println!("[INFO] Hugging Face dataset created successfully in '{}'", dataset_dir);
     println!("[INFO] Dataset contains {} examples across {} chunks", total_examples, chunk_index + 1);
+}
+
+// Function to write emoji ontology as Turtle (RDF)
+fn write_emoji_ontology_turtle(path: &str) {
+    use std::fs::File;
+    use std::io::Write;
+    let mut file = File::create(path).expect("Failed to create emoji ontology turtle file");
+    writeln!(file, "@prefix em: <http://example.org/emoji#> .").ok();
+    for (term, emoji, category) in EMOJI_TYPE_MAP.iter() {
+        writeln!(file, "em:{} a em:Concept ; em:emoji \"{}\" ; em:category \"{}\" .", term.replace('-', "_"), emoji, category).ok();
+    }
+}
+
+// Function to import emoji ontology from Turtle (RDF) file
+fn import_emoji_ontology_turtle(path: &str) -> std::collections::HashMap<String, (String, String)> {
+    use std::fs::File;
+    use std::io::{BufRead, BufReader};
+    use std::collections::HashMap;
+    let file = File::open(path).expect("Failed to open emoji ontology turtle file");
+    let reader = BufReader::new(file);
+    let mut map = HashMap::new();
+    let mut current_term = None;
+    let mut emoji = None;
+    let mut category = None;
+    for line in reader.lines() {
+        let line = line.unwrap();
+        if line.starts_with("em:") {
+            // Parse subject
+            if let Some(idx) = line.find(' ') {
+                let term = line[3..idx].replace('_', "-");
+                current_term = Some(term);
+            }
+        }
+        if let Some(start) = line.find("em:emoji \"") {
+            let rest = &line[start + 10..];
+            if let Some(end) = rest.find('"') {
+                emoji = Some(rest[..end].to_string());
+            }
+        }
+        if let Some(start) = line.find("em:category \"") {
+            let rest = &line[start + 13..];
+            if let Some(end) = rest.find('"') {
+                category = Some(rest[..end].to_string());
+            }
+        }
+        if line.trim_end().ends_with('.') {
+            if let (Some(term), Some(e), Some(cat)) = (current_term.take(), emoji.take(), category.take()) {
+                map.insert(term, (e, cat));
+            }
+        }
+    }
+    map
+}
+
+// Example: Using Sophia to read and write the emoji ontology Turtle file
+#[allow(dead_code)]
+fn sophia_read_write_emoji_ontology() -> Result<(), Box<dyn std::error::Error>> {
+    // Use the vendored Sophia path
+    use sophia_turtle::parser::turtle;
+    use sophia_api::graph::Graph;
+    use sophia_inmem::graph::FastGraph;
+    use sophia_api::ns::Namespace;
+    //use sophia_api::term::SimpleIri;
+    use sophia_api::term::SimpleTerm;
+    use sophia_api::prelude::TripleSource;
+    use sophia_api::prelude::TripleSerializer;
+    use std::fs::File;
+    use std::io::{BufReader, BufWriter};
+    use sophia_api::prelude::Triple;
+    use sophia_api::graph::MutableGraph;
+    use sophia_api::ns::NsTerm;
+    
+    // Read the ontology
+    let file = File::open("reports/emoji_ontology.ttl")?;
+    let reader = BufReader::new(file);
+    let mut graph: FastGraph = turtle::parse_bufread(reader).collect_triples()?;
+
+    // Example: Iterate over all emoji concepts
+    let em = Namespace::new("http://example.org/emoji#")?;
+    let emoji_pred = em.get("emoji")?;
+    for triple in graph.triples_matching(None::<&NsTerm>, Some(&emoji_pred), None::<&NsTerm>) {
+        let t = triple?;
+        println!("Term: {:?}, Emoji: {:?}", t.s(), t.o());
+    }
+
+    // Example: Add a new triple
+    let new_term = em.get("example_term")?;
+    let emoji_pred = em.get("emoji")?;
+    let emoji_val = "🦀";
+    graph.insert(&new_term, &emoji_pred, emoji_val)?;
+
+    // Write the updated ontology
+    let out_file = File::create("reports/emoji_ontology_out.ttl")?;
+    let mut writer = BufWriter::new(out_file);
+    //sophia_turtle::serializer::turtle::TurtleConfig::new()
+    //.serialize_graph(&graph, &mut writer)?;
+    let mut serializer = sophia_turtle::serializer::turtle::TurtleSerializer::new_with_config(&mut writer, sophia_turtle::serializer::turtle::TurtleConfig::new());  
+    serializer.serialize_triples(graph.triples())?;
+
+    
+    Ok(())
 }
