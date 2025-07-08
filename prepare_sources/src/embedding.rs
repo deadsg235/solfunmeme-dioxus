@@ -4,6 +4,7 @@ use candle_nn::VarBuilder;
 use candle_transformers::models::bert::{BertModel, Config as BertConfig};
 use hf_hub::{api::sync::Api, Repo, RepoType};
 use serde_json;
+use tokenizers::Tokenizer;
 
 pub fn embed_text(text: &str) -> Result<Vec<f32>> {
     let api = Api::new()?;
@@ -12,7 +13,7 @@ pub fn embed_text(text: &str) -> Result<Vec<f32>> {
 
     let repo = api.repo(Repo::with_revision(model_id, RepoType::Model, revision));
     let config_filename = repo.get("config.json")?;
-    let _vocab_filename = repo.get("tokenizer.json")?;
+    let tokenizer_filename = repo.get("tokenizer.json")?;
     let weights_filename = repo.get("model.safetensors")?;
 
     let device = Device::Cpu;
@@ -21,15 +22,30 @@ pub fn embed_text(text: &str) -> Result<Vec<f32>> {
     let vb = unsafe { VarBuilder::from_mmaped_safetensors(&[weights_filename], DType::F32, &device)? };
     let model = BertModel::load(vb, &config)?;
 
-    // Tokenizer (simplified for demonstration)
-    // In a real application, you'd load a proper tokenizer.
-    let tokens = text.split_whitespace().map(|s| s.to_string()).collect::<Vec<String>>();
-    let token_ids = tokens.iter().map(|_| 0u32).collect::<Vec<u32>>(); // Placeholder
+    let tokenizer = Tokenizer::from_file(tokenizer_filename).map_err(|e| anyhow::anyhow!(e.to_string()))?;
 
-    let input_ids = Tensor::new(&token_ids[..], &device)?.unsqueeze(0)?;
-    let token_type_ids = input_ids.zeros_like()?; // Placeholder
+    let encoding = tokenizer.encode(text, true).map_err(|e| anyhow::anyhow!(e.to_string()))?;
+    let token_ids = encoding.get_ids().to_vec();
+    let attention_mask = encoding.get_attention_mask().to_vec();
 
-    let embeddings = model.forward(&input_ids, &token_type_ids, None)?;
+    // Truncate if necessary to max_position_embeddings
+    let max_len = config.max_position_embeddings;
+    let token_ids = if token_ids.len() > max_len {
+        token_ids[..max_len].to_vec()
+    } else {
+        token_ids
+    };
+    let attention_mask = if attention_mask.len() > max_len {
+        attention_mask[..max_len].to_vec()
+    } else {
+        attention_mask
+    };
+
+    let input_ids = Tensor::new(token_ids.as_slice(), &device)?.unsqueeze(0)?;
+    let token_type_ids = input_ids.zeros_like()?; // Assuming no token type ids for now
+    let attention_mask = Tensor::new(attention_mask.as_slice(), &device)?.unsqueeze(0)?;
+
+    let embeddings = model.forward(&input_ids, &token_type_ids, Some(&attention_mask))?;
 
     // Pool the embeddings (e.g., mean pooling)
     let (_n_sentence, n_tokens, _hidden_size) = embeddings.dims3()?;

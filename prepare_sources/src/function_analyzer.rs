@@ -28,7 +28,7 @@ pub fn analyze_rust_file(file_path: &Path) -> Vec<FunctionInfo> {
                 function_name,
                 code_snippet,
                 semantic_summary,
-                file_path: file_path.to_string_lossy().into_owned(),
+                file_path: file_path.to_string_lossy().replace("\\", "/").to_owned(),
                 multivector_str: String::new(), // Placeholder
                 sieve_address: String::new(),   // Placeholder
                 closest_emoji: String::new(),   // Placeholder
