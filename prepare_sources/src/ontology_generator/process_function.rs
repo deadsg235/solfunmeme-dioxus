@@ -1,4 +1,3 @@
-use anyhow::Result;
 use sophia::api::graph::MutableGraph;
 use sophia_api::prelude::{IriRef, Term};
 use sophia_api::term::SimpleTerm;
@@ -20,19 +19,19 @@ where
 
     // Function triples
     graph.insert(&func_iri, &ns.rdf.iri().unwrap(), &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}Function", ns.ex_iri.as_str()).into())))?;
-    graph.insert(&func_iri, &ns.rdfs.iri().unwrap().with_suffix("label").unwrap(), &func.function_name.to_string().into_term())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasCodeSnippet", ns.ex_iri.as_str()).into())), &func.code_snippet.to_string().into_term())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasSemanticSummary", ns.ex_iri.as_str()).into())), &func.semantic_summary.to_string().into_term())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasMultivectorEmbedding", ns.ex_iri.as_str()).into())), &func.multivector_str.to_string().into_term())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasSieveAddress", ns.ex_iri.as_str()).into())), &func.sieve_address.to_string().into_term())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasClosestEmoji", ns.ex_iri.as_str()).into())), &func.closest_emoji.to_string().into_term())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasEmojiCategory", ns.ex_iri.as_str()).into())), &func.emoji_category.to_string().into_term())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasEmojiDistance", ns.ex_iri.as_str()).into())), &func.emoji_distance.to_string().into_term())?;
+    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}label", ns.rdfs_iri.as_str()).into())), func.function_name.as_str())?;
+    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasCodeSnippet", ns.ex_iri.as_str()).into())), func.code_snippet.as_str())?;
+    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasSemanticSummary", ns.ex_iri.as_str()).into())), func.semantic_summary.as_str())?;
+    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasMultivectorEmbedding", ns.ex_iri.as_str()).into())), func.multivector_str.as_str())?;
+    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasSieveAddress", ns.ex_iri.as_str()).into())), func.sieve_address.as_str())?;
+    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasClosestEmoji", ns.ex_iri.as_str()).into())), func.closest_emoji.as_str())?;
+    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasEmojiCategory", ns.ex_iri.as_str()).into())), func.emoji_category.as_str())?;
+    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasEmojiDistance", ns.ex_iri.as_str()).into())), &(func.emoji_distance as f64).into_term::<SimpleTerm>())?;
     graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}isInFile", ns.ex_iri.as_str()).into())), &file_iri)?;
 
     // File triples
     graph.insert(&file_iri, &ns.rdf.iri().unwrap(), &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}CodeFile", ns.ex_iri.as_str()).into())))?;
-    graph.insert(&file_iri, &ns.rdfs.iri().unwrap().with_suffix("label").unwrap(), &func.file_path.to_string().into_term())?;
+    graph.insert(&file_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}label", ns.rdfs_iri.as_str()).into())), func.file_path.as_str())?;
 
     Ok(())
 }

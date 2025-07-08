@@ -1,168 +1,70 @@
-use anyhow::{Result, anyhow};
-use syn::{File, Item, ItemFn, ItemMod, Ident, Lit};
-use quote::ToTokens;
-use std::fs;
-use std::path::{Path, PathBuf};
+use syn::ReturnType;
+use std::path::Path;
+use walkdir::WalkDir;
 
 pub struct FunctionInfo {
-    pub name: String,
-    pub code: String,
+    pub function_name: String,
+    pub code_snippet: String,
     pub semantic_summary: String,
+    pub file_path: String,
+    pub multivector_str: String,
+    pub sieve_address: String,
+    pub closest_emoji: String,
+    pub emoji_category: String,
+    pub emoji_distance: f32,
 }
 
-pub fn analyze_rust_file(file_path: &Path) -> Result<Vec<FunctionInfo>> {
-    let source_code = fs::read_to_string(file_path)?;
-    
-    // Pre-process: remove lines with #[cfg(...)] attributes
-    let processed_code: String = source_code
-        .lines()
-        .filter(|line| !line.trim_start().starts_with("#[cfg("))
-        .collect::<Vec<&str>>()
-        .join("\n");
+pub fn analyze_rust_file(file_path: &Path) -> Vec<FunctionInfo> {
+    let mut functions_info = Vec::new();
+    let code = std::fs::read_to_string(file_path).expect("Failed to read file");
+    let syntax = syn::parse_file(&code).expect("Failed to parse file");
 
-    let syntax_tree: File = syn::parse_file(&processed_code)
-        .map_err(|e| anyhow!("Failed to parse Rust file {}: {}", file_path.display(), e))?;
-
-    let mut functions = Vec::new();
-    println!("DEBUG: Analyzing file: {}", file_path.display());
-    println!("DEBUG: Top-level items found: {}", syntax_tree.items.len());
-    extract_functions_from_items(syntax_tree.items.into_iter(), file_path.parent().unwrap_or(Path::new(".")), &mut functions);
-    Ok(functions)
-}
-
-fn extract_functions_from_items(items: impl Iterator<Item = Item>, base_dir: &Path, functions: &mut Vec<FunctionInfo>) {
-    for item in items {
-        match item {
-            Item::Fn(func) => {
-                println!("DEBUG: Found function: {}", func.sig.ident);
-                let mut semantic_tokens = Vec::new();
-                semantic_tokens.push(func.sig.ident.to_string()); // Function name
-
-                // Extract identifiers from signature
-                for input in &func.sig.inputs {
-                    if let syn::FnArg::Typed(pat_type) = input {
-                        if let syn::Pat::Ident(pat_ident) = &*pat_type.pat {
-                            semantic_tokens.push(pat_ident.ident.to_string());
-                        }
-                    }
-                }
-
-                // Extract identifiers and literals from function body
-                for stmt in &func.block.stmts {
-                    match stmt {
-                        syn::Stmt::Local(local) => {
-                            if let Some(init) = &local.init {
-                                extract_tokens_from_expr(&init.expr, &mut semantic_tokens);
-                            }
-                        }
-                        syn::Stmt::Expr(expr, _) => {
-                            extract_tokens_from_expr(expr, &mut semantic_tokens);
-                        }
-                        _ => {},
-                    }
-                }
-
-                let semantic_summary = semantic_tokens.join(" ");
-
-                functions.push(FunctionInfo {
-                    name: func.sig.ident.to_string(),
-                    code: func.to_token_stream().to_string(),
-                    semantic_summary,
-                });
-            }
-            Item::Mod(module) => {
-                println!("DEBUG: Found module: {}", module.ident);
-                if let Some((_, module_items)) = module.content {
-                    // Inline module
-                    extract_functions_from_items(module_items.into_iter(), base_dir, functions);
-                } else {
-                    // External module (e.g., `mod my_module;`)
-                    let module_name_str = module.ident.to_string();
-                    let module_file_path = base_dir.join(format!("{}.rs", module_name_str));
-                    let module_dir_path = base_dir.join(&module_name_str);
-
-                    if module_file_path.exists() {
-                        println!("DEBUG: Recursively analyzing external module file: {}", module_file_path.display());
-                        match analyze_rust_file(&module_file_path) {
-                            Ok(mut found_functions) => functions.append(&mut found_functions),
-                            Err(e) => eprintln!("ERROR: Failed to analyze module file {}: {}", module_file_path.display(), e),
-                        }
-                    } else if module_dir_path.exists() && module_dir_path.join("mod.rs").exists() {
-                        println!("DEBUG: Recursively analyzing external module directory: {}", module_dir_path.display());
-                        match analyze_rust_file(&module_dir_path.join("mod.rs")) {
-                            Ok(mut found_functions) => functions.append(&mut found_functions),
-                            Err(e) => eprintln!("ERROR: Failed to analyze module directory {}: {}", module_dir_path.display(), e),
-                        }
-                    } else {
-                        eprintln!("WARNING: Could not find module file or directory for: {}", module.ident);
-                    }
-                }
-            }
-            _ => {
-                println!("DEBUG: Found other item type.");
-            },
+    for item in syntax.items {
+        if let syn::Item::Fn(item_fn) = item {
+            let function_name = item_fn.sig.ident.to_string();
+            let code_snippet = quote::quote! { #item_fn }.to_string();
+            let semantic_summary = extract_semantic_summary(&item_fn);
+            functions_info.push(FunctionInfo {
+                function_name,
+                code_snippet,
+                semantic_summary,
+                file_path: file_path.to_string_lossy().into_owned(),
+                multivector_str: String::new(), // Placeholder
+                sieve_address: String::new(),   // Placeholder
+                closest_emoji: String::new(),   // Placeholder
+                emoji_category: String::new(),  // Placeholder
+                emoji_distance: 0.0,            // Placeholder
+            });
         }
     }
+    functions_info
 }
 
-fn extract_tokens_from_expr(expr: &syn::Expr, tokens: &mut Vec<String>) {
-    match expr {
-        syn::Expr::Lit(expr_lit) => {
-            if let Lit::Str(lit_str) = &expr_lit.lit {
-                tokens.push(lit_str.value());
-            } else if let Lit::Int(lit_int) = &expr_lit.lit {
-                tokens.push(lit_int.to_string());
-            } else if let Lit::Bool(lit_bool) = &expr_lit.lit {
-                tokens.push(lit_bool.value.to_string()); // Access the bool value directly
-            }
-        }
-        syn::Expr::Path(expr_path) => {
-            if let Some(ident) = expr_path.path.get_ident() {
-                tokens.push(ident.to_string());
-            }
-        }
-        syn::Expr::Call(expr_call) => {
-            extract_tokens_from_expr(&expr_call.func, tokens);
-            for arg in &expr_call.args {
-                extract_tokens_from_expr(arg, tokens);
-            }
-        }
-        syn::Expr::MethodCall(expr_method_call) => {
-            tokens.push(expr_method_call.method.to_string());
-            extract_tokens_from_expr(&expr_method_call.receiver, tokens);
-            for arg in &expr_method_call.args {
-                extract_tokens_from_expr(arg, tokens);
-            }
-        }
-        syn::Expr::Binary(expr_binary) => {
-            extract_tokens_from_expr(&expr_binary.left, tokens);
-            tokens.push(expr_binary.op.to_token_stream().to_string());
-            extract_tokens_from_expr(&expr_binary.right, tokens);
-        }
-        syn::Expr::Unary(expr_unary) => {
-            tokens.push(expr_unary.op.to_token_stream().to_string());
-            extract_tokens_from_expr(&expr_unary.expr, tokens);
-        }
-        syn::Expr::Assign(expr_assign) => {
-            extract_tokens_from_expr(&expr_assign.left, tokens);
-            extract_tokens_from_expr(&expr_assign.right, tokens);
-        }
-        syn::Expr::Block(expr_block) => {
-            for stmt in &expr_block.block.stmts {
-                match stmt {
-                    syn::Stmt::Local(local) => {
-                        if let Some(init) = &local.init {
-                            extract_tokens_from_expr(&init.expr, tokens);
-                        }
-                    }
-                    syn::Stmt::Expr(expr, _) => {
-                        extract_tokens_from_expr(expr, tokens);
-                    }
-                    _ => {},
+fn extract_semantic_summary(item_fn: &syn::ItemFn) -> String {
+    let mut summary = String::new();
+    // Extract identifiers and literals from the function to form a semantic summary
+    // This is a simplified example; a real implementation would traverse the AST more thoroughly.
+    summary.push_str(&item_fn.sig.ident.to_string());
+    for input in &item_fn.sig.inputs {
+        summary.push_str(&format!("{:?}", input));
+    }
+    if let ReturnType::Type(_, ty) = &item_fn.sig.output {
+        summary.push_str(&format!("{:?}", ty));
+    }
+    // Add more AST traversal logic here to extract meaningful information
+    summary
+}
+
+pub fn find_rust_files(project_root: &Path) -> Vec<String> {
+    let mut rust_files = Vec::new();
+    for entry in WalkDir::new(project_root).into_iter().filter_map(|e| e.ok()) {
+        if entry.file_type().is_file() {
+            if let Some(extension) = entry.path().extension() {
+                if extension == "rs" {
+                    rust_files.push(entry.path().to_string_lossy().into_owned());
                 }
             }
         }
-        // Add more Expr variants as needed for deeper semantic extraction
-        _ => {},
     }
+    rust_files
 }

@@ -1,17 +1,19 @@
 use anyhow::Result;
-use walkdir::WalkDir;
 use std::path::Path;
 
-use crate::function_analyzer::{analyze_rust_file, FunctionInfo};
-use crate::process_file::process_code;
-use crate::sieve::get_sieve_address;
+use crate::function_analyzer::analyze_rust_file;
 use crate::load_emoji_multivectors::load_emoji_multivectors;
+use crate::embedding::embed_text;
+use crate::clifford::{BertCliffordEncoder, SolMultivector};
+use crate::sieve::get_sieve_address;
+use crate::clifford::BertConfig;
+use crate::function_analyzer::FunctionInfo;
 
 pub struct AnalyzedFunction {
-    pub file_path: String,
     pub function_name: String,
     pub code_snippet: String,
     pub semantic_summary: String,
+    pub file_path: String,
     pub multivector_str: String,
     pub sieve_address: String,
     pub closest_emoji: String,
@@ -20,57 +22,47 @@ pub struct AnalyzedFunction {
 }
 
 pub fn analyze_project(project_root: &Path, ontology_path: &Path) -> Result<Vec<AnalyzedFunction>> {
-    let mut all_analyzed_functions = Vec::new();
-
+    let mut analyzed_functions = Vec::new();
     let emoji_multivectors = load_emoji_multivectors(ontology_path.to_str().unwrap())?;
+    let bert_encoder = BertCliffordEncoder::new(BertConfig::default());
 
-    for entry in WalkDir::new(project_root)
-        .into_iter()
-        .filter_map(|e| e.ok())
-    {
-        let path = entry.path();
-        if path.is_file() && path.extension().map_or(false, |ext| ext == "rs") {
-            println!("Analyzing Rust file: {}", path.display());
-            match analyze_rust_file(path) {
-                Ok(functions) => {
-                    for func_info in functions {
-                        match process_code(&func_info.semantic_summary) {
-                            Ok(func_multivector) => {
-                                let sieve_address = get_sieve_address(&func_multivector);
+    let rust_files = crate::function_analyzer::find_rust_files(project_root);
 
-                                let mut closest_emoji: Option<(String, String, f32)> = None;
-                                for (emoji_char, (emoji_mv, category)) in emoji_multivectors.iter() {
-                                    let distance = (0..8).map(|i| {
-                                        let diff = func_multivector.get_by_idx(1 << i) - emoji_mv.get_by_idx(1 << i);
-                                        diff * diff
-                                    }).sum::<f32>().sqrt();
+    for file_path_str in rust_files {
+        let file_path = Path::new(&file_path_str);
+        let functions_info_in_file = analyze_rust_file(file_path);
 
-                                    if closest_emoji.is_none() || distance < closest_emoji.as_ref().unwrap().2 {
-                                        closest_emoji = Some((emoji_char.clone(), category.clone(), distance));
-                                    }
-                                }
+        for func_info in functions_info_in_file {
+            let embedding = embed_text(&func_info.semantic_summary)?;
+            let multivector = bert_encoder.encode_embedding(&embedding)?;
+            let sieve_address = get_sieve_address(&multivector);
 
-                                if let Some((emoji, category, distance)) = closest_emoji {
-                                    all_analyzed_functions.push(AnalyzedFunction {
-                                        file_path: path.to_string_lossy().to_string(),
-                                        function_name: func_info.name,
-                                        code_snippet: func_info.code,
-                                        semantic_summary: func_info.semantic_summary,
-                                        multivector_str: format!("{:?}", func_multivector),
-                                        sieve_address,
-                                        closest_emoji: emoji,
-                                        emoji_category: category,
-                                        emoji_distance: distance,
-                                    });
-                                }
-                            }
-                            Err(e) => eprintln!("Error processing function {}: {}", func_info.name, e),
-                        }
-                    }
-                }
-                Err(e) => eprintln!("Error analyzing file {}: {}", path.display(), e),
-            }
+            let (closest_emoji, emoji_category, emoji_distance) = 
+                find_closest_emoji(&multivector, &emoji_multivectors);
+
+            analyzed_functions.push(AnalyzedFunction {
+                function_name: func_info.function_name,
+                code_snippet: func_info.code_snippet,
+                semantic_summary: func_info.semantic_summary,
+                file_path: func_info.file_path,
+                multivector_str: format!("{:?}", multivector),
+                sieve_address,
+                closest_emoji,
+                emoji_category,
+                emoji_distance,
+            });
         }
     }
-    Ok(all_analyzed_functions)
+
+    Ok(analyzed_functions)
+}
+
+fn find_closest_emoji(
+    _multivector: &SolMultivector,
+    _emoji_multivectors: &std::collections::HashMap<String, (SolMultivector, String)>,
+) -> (String, String, f32) {
+    // Placeholder for actual emoji matching logic
+    // This would involve calculating distances between multivectors
+    // and finding the closest emoji based on the ontology.
+    ("❓".to_string(), "Unknown".to_string(), 0.0)
 }

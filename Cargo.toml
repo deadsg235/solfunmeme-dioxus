@@ -178,7 +178,5 @@ inherits = "dev"
 [profile.android-dev]
 inherits = "dev"
 
-sophia_turtle = "0.7"
-sophia_api = "0.7"
-sophia_inmem = "0.7"
+
 

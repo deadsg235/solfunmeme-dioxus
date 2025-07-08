@@ -31,3 +31,12 @@ When working within `prepare_sources`, AI agents should prioritize:
     This will process the entire project and generate `project_ontology.ttl`.
 *   **Warning Handling**: Do not run `cargo check`. Unless critical errors prevent compilation or execution, warnings should generally be ignored. Proceed with execution with extreme aggression, using `cargo run` directly. The goal is to achieve a working system first, then refine.
 *   **API Usage**: Be meticulous when interacting with `sophia` and `tclifford` APIs, as their correct usage is critical for the project's core functionality.
+*   **Cargo Command Execution**: The AI agent should NOT execute `cargo` commands (e.g., `cargo run`, `cargo check`, `cargo build`, `cargo test`, `cargo update`, `cargo clean`). The user will execute these commands manually.
+
+## Lessons Learned (from recent debugging sessions)
+
+*   **Sophia `Term` Trait and `Sized` Types**: When converting string literals (`&str`) to `sophia_api::term::Term` types using `into_term()`, ensure the string is first converted to an owned `String` using `.to_string()`. This is because `&str` is not `Sized`, while `String` is. For example, use `func.function_name.to_string().into_term()` instead of `func.function_name.into_term()`.
+*   **`IriRef` and `with_suffix`**: The `with_suffix` method is not available on `IriRef<MownStr>`. Instead, construct the full IRI manually using `format!` and `IriRef::new_unchecked()`.
+*   **Sophia Serializer Traits**: For `TurtleSerializer` methods like `set_prefix` and `flush`, ensure that the `sophia_api::prefix::PrefixSink` and `sophia_api::serializer::StreamSerializer` traits are explicitly imported into the relevant file (e.g., `serialize.rs`).
+*   **Dependency Management**: When encountering unexpected compilation errors, especially related to type mismatches or missing methods, perform `cargo clean` followed by `cargo update` to ensure a clean build environment and updated dependencies.
+*   **Redundant Emoji Output**: The final list of emojis in the output is redundant and should be streamlined or removed to improve clarity and conciseness. This indicates a potential area for refinement in the output formatting or the emoji mapping logic itself.

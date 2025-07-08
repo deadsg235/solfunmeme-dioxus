@@ -1,12 +1,12 @@
-use sophia_api::serializer::{TripleSerializer, StreamSerializer, PrefixSink};
-use sophia_turtle::serializer::turtle::TurtleSerializer;
-use std::io::{Write, BufWriter};
+use sophia_api::serializer::TripleSerializer;
+use sophia_turtle::serializer::turtle::{TurtleSerializer, TurtleConfig};
+use std::io::{BufWriter};
 use std::fs::File;
 use sophia::api::graph::Graph;
 use sophia_api::prelude::IriRef;
 use std::path::Path;
-
-use crate::ontology_generator::namespaces::Namespaces;
+use sophia_api::prefix::{Prefix, PrefixMap};
+use sophia_iri::Iri;
 
 pub fn serialize_graph_to_file<G>(
     graph: &G,
@@ -20,15 +20,19 @@ where
     G: Graph,
     <G as Graph>::Error: Send + Sync + 'static,
 {
-    let mut writer = TurtleSerializer::new(BufWriter::new(File::create(output_path)?));
+    let mut prefix_map = TurtleConfig::default_prefix_map();
+    prefix_map.push((Prefix::new_unchecked("ex".into()), Iri::new_unchecked(ex_iri.as_str().into())));
+    prefix_map.push((Prefix::new_unchecked("rdf".into()), Iri::new_unchecked(rdf_iri.as_str().into())));
+    prefix_map.push((Prefix::new_unchecked("rdfs".into()), Iri::new_unchecked(rdfs_iri.as_str().into())));
+    prefix_map.push((Prefix::new_unchecked("em".into()), Iri::new_unchecked(em_iri.as_str().into())));
 
-    writer.set_prefix("ex", ex_iri.as_str())?;
-    writer.set_prefix("rdf", rdf_iri.as_str())?;
-    writer.set_prefix("rdfs", rdfs_iri.as_str())?;
-    writer.set_prefix("em", em_iri.as_str())?;
+    let config = TurtleConfig::new()
+        .with_pretty(true)
+        .with_own_prefix_map(prefix_map);
+
+    let mut writer = TurtleSerializer::new_with_config(BufWriter::new(File::create(output_path)?), config);
 
     writer.serialize_graph(&graph)?;
-    writer.flush()?;
 
     Ok(())
 }

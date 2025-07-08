@@ -6,7 +6,7 @@ pub mod sieve;
 pub mod function_analyzer;
 pub mod project_analyzer;
 pub mod ontology_generator;
-
+pub use self::function_analyzer::FunctionInfo;
 
 #[cfg(test)]
 pub mod tests;
