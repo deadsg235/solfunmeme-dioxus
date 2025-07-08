@@ -1,10 +1,9 @@
 use dioxus::prelude::*;
 use dioxus_motion::prelude::*;
 use gloo_timers::future::TimeoutFuture;
-use orbital_sim_lib::{get_orbit_nodes, simulate_orbit, ThemeNode};
-use std::collections::HashMap;
+use orbital_sim_lib::{simulate_orbit, ThemeNode};
 use emoji_matrix_lib::{parse_summary_total, parse_summary_root, rollup_emoji_matrix};
-use core_data_lib::{EmojiMatrix, EmojiMatrixEntry, EmojiCount};
+use core_data_lib::EmojiMatrix;
 use rand::Rng;
 
 // Function to convert EmojiMatrix data into ThemeNodes
@@ -199,7 +198,7 @@ fn generate_node_elements<'a>(
 // Main component for the 4D orbital network visualization
 #[component]
 pub fn ThemeOrbitalNetwork() -> Element {
-    let mut selected_node = use_signal(|| None::<usize>);
+    let selected_node = use_signal(|| None::<usize>);
     let k = 1.0; // Force constant
     let t_span = (0.0, 10.0);
     let n_steps = 1000;

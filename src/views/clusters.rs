@@ -11,7 +11,6 @@ use crate::MyCluster;
 use crate::storage::GLOBAL_MESSAGE;
 use crate::utils::get_cluster_svg;
 use crate::utils::trunk_cluster_name;
-use crate::playground::test_components::ComponentName::ClusterInfo as TestClusterInfo;
 use url::Url;
 
 //use crate::{

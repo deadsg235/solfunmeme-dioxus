@@ -1,39 +1,14 @@
-use crate::model::lean::style::{Styles, THEME};
 use dioxus::prelude::*;
-use solfunmeme_extractor::components::extractor::MarkdownCodeExtractor;
 //use crate::app::{FAVICON, TAILWIND_CSS};
-use crate::{model::NotificationInfo, playground::solfunnice::SolFunNiceApp};
 //use crate::extractor::components::app::EmbeddingApp;
 //use crate::extractor::system::clipboard::copy_all_snippets_combined;
 //ouse crate::extractor::error;
 //use crate::password_manager::DecryptedEntry;
 // use crate::playground::MenuOption::Airdrop;
 // todo rename : airdrop::Airdrop,
-use crate::views::{
-    accounts::Accounts, clusters::Clusters,
-    component_memes::ComponentMemeExplorer, connection_buttons::ConnectionButtons,
-    connections::Connections, core_buttons::CoreButtons, crypto_buttons::CryptoButtons,
-    dashboard::Dashboard, encryption::Encryption, expression_parsing::ExpressionParsing,
-    management_buttons::ManagementButtons, meme_management::MemeManagement,
-    meta_meme_operations::MetaMemeOperations,
-
-    // views
-    receive_sol::ReceiveSolComponent, send_sol::SendSolComponent,
-    styling_and_emojis::StylingAndEmojis, transaction_buttons::TransactionButtons,
-    airdrop::AirdropComponent,
-    source_browser::SourceBrowser,
-    emoji_matrix_view::EmojiMatrixView,
-};
 //pub mod embedding;
 //use crate::playground::embedding::EmbeddingApp;
-use crate::playground::{
-    bert_test::BertTestApp, performance_charts::PerformanceCharts, rust_parser::RustParserApp,
-};
 
-use crate::{
-    //solfunmeme_extractor::components::extractor::MarkdownCodeExtractor,
-    playground::{mcp::MCPPlaygroundApp, monster_meta_meme::MonsterMetaMemeApp},
-};
 
 use signals_lib::rdf_signal::{new_rdf_signal_from_turtle, query_triples};
 use std::fs;
@@ -95,7 +70,6 @@ pub enum MenuOption {
     Mcp
 }
 
-use solfunmeme_extractor::components::example::register_all_components;
 #[component]
 pub fn PlaygroundApp() -> Element {
     // Load Turtle files for menu and components

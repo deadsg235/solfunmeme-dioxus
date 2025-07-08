@@ -7,7 +7,6 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use std::collections::BTreeMap;
 use regex::Regex;
 use std::io::Write;
-use std::env;
 
 /**
 idea : lets build a mini compiler right here
@@ -1187,7 +1186,7 @@ fn sophia_read_write_emoji_ontology() -> Result<(), Box<dyn std::error::Error>> 
     use sophia_inmem::graph::FastGraph;
     use sophia_api::ns::Namespace;
     //use sophia_api::term::SimpleIri;
-    use sophia_api::term::SimpleTerm;
+    
     use sophia_api::prelude::TripleSource;
     use sophia_api::prelude::TripleSerializer;
     use std::fs::File;

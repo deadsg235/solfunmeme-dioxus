@@ -1,8 +1,7 @@
 use dioxus::prelude::*;
-use emoji_matrix_lib::{EmojiMatrix, EmojiMatrixEntry, EmojiCount, parse_summary_total, parse_summary_root, rollup_emoji_matrix};
+use emoji_matrix_lib::{EmojiMatrix, EmojiMatrixEntry, parse_summary_total, parse_summary_root, rollup_emoji_matrix};
 use log::info;
 use dioxus_charts::BarChart;
-use std::collections::HashMap;
 
 #[component]
 pub fn EmojiMatrixView() -> Element {
@@ -32,7 +31,7 @@ pub fn EmojiMatrixView() -> Element {
         info!("After rollup: {} entries", final_matrix.entries.len());
 
         // Prepare categories for filtering
-        let mut unique_categories: std::collections::HashSet<String> = final_matrix.entries.iter()
+        let unique_categories: std::collections::HashSet<String> = final_matrix.entries.iter()
             .flat_map(|entry| entry.emoji_counts.iter().map(|ec| ec.category.clone()))
             .collect::<std::collections::HashSet<String>>();
         let mut unique_categories_vec: Vec<String> = unique_categories.into_iter().collect();

@@ -2,7 +2,7 @@ use sophia::api::graph::MutableGraph;
 use sophia_api::prelude::{IriRef, Term};
 use sophia_api::term::SimpleTerm;
 
-use crate::project_analyzer::AnalyzedFunction;
+use crate::project_analyzer::{AnalyzedFunction, ClosestEmojiInfo};
 use super::namespaces::Namespaces;
 
 pub fn process_analyzed_function<G>(
@@ -24,9 +24,16 @@ where
     graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasSemanticSummary", ns.ex_iri.as_str()).into())), func.semantic_summary.as_str())?;
     graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasMultivectorEmbedding", ns.ex_iri.as_str()).into())), func.multivector_str.as_str())?;
     graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasSieveAddress", ns.ex_iri.as_str()).into())), func.sieve_address.as_str())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasClosestEmoji", ns.ex_iri.as_str()).into())), func.closest_emoji.as_str())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasEmojiCategory", ns.ex_iri.as_str()).into())), func.emoji_category.as_str())?;
-    graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasEmojiDistance", ns.ex_iri.as_str()).into())), &(func.emoji_distance as f64).into_term::<SimpleTerm>())?;
+    
+    // Add closest emojis
+    for (i, emoji_info) in func.closest_emojis.iter().enumerate() {
+        let emoji_iri = SimpleTerm::Iri(IriRef::new_unchecked(format!("{}closestEmoji/{}", ns.ex_iri.as_str(), i).into()));
+        graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}hasClosestEmojiInfo", ns.ex_iri.as_str()).into())), &emoji_iri)?;
+        graph.insert(&emoji_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}emojiChar", ns.ex_iri.as_str()).into())), emoji_info.emoji.as_str())?;
+        graph.insert(&emoji_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}emojiCategory", ns.ex_iri.as_str()).into())), emoji_info.category.as_str())?;
+        graph.insert(&emoji_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}emojiDistance", ns.ex_iri.as_str()).into())), &(emoji_info.distance as f64).into_term::<SimpleTerm>())?;
+    }
+
     graph.insert(&func_iri, &SimpleTerm::Iri(IriRef::new_unchecked(format!("{}isInFile", ns.ex_iri.as_str()).into())), &file_iri)?;
 
     // File triples
