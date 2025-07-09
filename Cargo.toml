@@ -194,10 +194,24 @@ members = [
     "crates/emoji_lang_plugin",
     "crates/jsonld_plugin",
     "crates/emoji_workflow_macro",
-    "crates/quickwit_plugin"
+    # "crates/rust_sbert_plugin",
+    "crates/llms_from_scratch_rs_plugin",
+    "crates/gline_rs_plugin",
+    # "crates/extractous_plugin",
+    "crates/model2vec_rs_plugin",
+    "crates/layered_nlp_plugin",
+    "crates/vibrato_plugin",
+    "crates/keyword_extraction_rs_plugin",
+    # "crates/rust_sentence_transformers_plugin",
+    "crates/eliza_rs_plugin",
+    "crates/bm25_plugin",
+    "crates/vaporetto_plugin",
+    "crates/tongrams_rs_plugin",
+    "crates/solana_airdrop_service_plugin",
+    "crates/json_ld_plugin",
+    "crates/rhai_plugin",
+    "crates/steel_plugin"
 ]
-
-
 
 # Server-side dependencies (excluded from WASM)
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]

@@ -36,7 +36,7 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
             Ok(content) => {
                 let chunk = CodeChunk {
                     path: path.to_string_lossy().to_string(),
-                    content,
+                    content: content.clone(),
                     emoji: "❓".to_string(), // Placeholder emoji
                     line_start: 1,
                     line_end: content.lines().count() as u32,

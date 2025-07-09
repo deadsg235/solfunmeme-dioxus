@@ -3,16 +3,10 @@ use std::path::Path;
 use std::fs;
 use walkdir::WalkDir;
 use std::collections::HashMap;
+use shared_analysis_types::CodeChunk;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone)]
-pub struct CodeChunk {
-    pub path: String,
-    pub content: String,
-    pub emoji: String, // Placeholder for now
-    pub line_start: u32,
-    pub line_end: u32,
-    pub chunk_type: String,
-}
+
 
 pub fn analyze_project(project_root: &Path) -> Result<Vec<CodeChunk>> {
     let mut code_chunks = Vec::new();

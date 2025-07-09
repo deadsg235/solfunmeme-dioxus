@@ -31,3 +31,4 @@ emoji_workflow_macro = { path = "../../crates/emoji_workflow_macro" }
 ctor = "0.1"
 workflow_manager = { path = "../../crates/workflow_manager" }
 emoji_lang_plugin = { path = "../../crates/emoji_lang_plugin" }
+solfunmeme_input_fs = { path = "../../crates/solfunmeme_input_fs" }

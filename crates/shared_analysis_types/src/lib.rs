@@ -264,3 +264,13 @@ impl Default for LanguageConfig {
         }
     }
 }
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CodeChunk {
+    pub path: String,
+    pub content: String,
+    pub emoji: String, // Placeholder for now
+    pub line_start: u32,
+    pub line_end: u32,
+    pub chunk_type: String,
+}
