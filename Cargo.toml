@@ -116,6 +116,8 @@ emoji_matrix_lib = {path = "crates/emoji_matrix_lib"}
 rrust_kontekst_base = {path = "crates/rrust_kontekst_base"}
 solfunmeme_extractor = {path = "crates/solfunmeme_extractor"}
 solfunmeme_wallet_integration = {path = "crates/solfunmeme_wallet_integration"}
+shared_analysis_types = {path = "crates/shared_analysis_types"}
+gitaccount = { path = "crates/gitaccount" }
 component_builder_lib = {path = "crates/component_builder_lib"}
 component_registry_lib = {path = "crates/component_registry_lib"}
 component_emoji_lib = {path = "crates/component_emoji_lib"}
@@ -177,7 +179,12 @@ members = [
     "crates/rdf_processing_lib",
     "crates/rrust_kontekst",
     "crates/rrust_kontekst_base",
-    "crates/shared_analysis_types"
+    "crates/shared_analysis_types",
+    "crates/gitaccount",
+    "crates/solfunmeme_clifford",
+    "crates/solfunmeme_embedding",
+    "crates/solfunmeme_solana_data",
+    "crates/solfunmeme_function_analysis"
 ]
 
 

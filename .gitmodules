@@ -1096,3 +1096,12 @@
 [submodule "vendor/tongrams-rs"]
 	path = vendor/tongrams-rs
 	url = https://github.com/kampersanda/tongrams-rs
+[submodule "vendor/agave-solana-validator"]
+	path = vendor/agave-solana-validator
+	url = https://github.com/meta-introspector/agave-solana-validator.git
+[submodule "vendor/SOLFUNMEME"]
+	path = vendor/SOLFUNMEME
+	url = https://codeberg.org/introspector/SOLFUNMEME/
+[submodule "vendor/solana-airdrop-service"]
+	path = vendor/solana-airdrop-service
+	url = https://github.com/oguzhaniptes/solana-airdrop-service.git

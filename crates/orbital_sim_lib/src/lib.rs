@@ -100,8 +100,6 @@ pub fn simulate_orbit(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fs::File;
-    use csv::Writer;
 
     #[test]
     fn test_4d_orbit_simulation() {

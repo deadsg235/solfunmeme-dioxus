@@ -9,38 +9,19 @@ name = "prepare_sources"
 path = "src/bin/prepare_sources.rs"
 
 [dependencies]
-solana_integration_lib = { path = "../solana_integration_lib" }
-rdf_processing_lib = { path = "../rdf_processing_lib" }
 shared_analysis_types = { path = "../shared_analysis_types" }
+
 anyhow = "1.0"
-borsh = "0.10"
-bs58 = "0.5"
-candle-core = { version = "0.9.1", default-features = false }
-candle-nn = { version = "0.9.1", default-features = false }
-candle-transformers = { version = "0.9.1", default-features = false }
-hf-hub = { version = "0.3", default-features = false, features = ["online"] }
 indicatif = "0.17"
-md5 = "0.7"
-nalgebra = "0.33.2"
-orbital_sim_lib = { path = "../orbital_sim_lib" }
-quote = "1.0"
-rayon = "1.10"
+regex = "1.10"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 sha2 = "0.10"
-solana-client = "2.3"
-solana-program = { version = "2.3", features = ["borsh"] }
-solana-sdk = "2.3"
-sophia_api = "0.8"
-sophia_turtle = "0.8"
 syn = { version = "2.0", features = ["full", "extra-traits"] }
-tclifford = "0.1"
-tokenizers = "0.15"
-tracing = "0.1"
+quote = "1.0"
+tantivy = "0.24"
 walkdir = "2.3"
-rand = "0.8"
+rayon = "1.10"
 
 [features]
-gpu_backend = [
-    "rdf_processing_lib/gpu_backend",
-]
+# No gpu_backend feature if candle is removed

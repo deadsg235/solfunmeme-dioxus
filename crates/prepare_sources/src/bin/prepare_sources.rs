@@ -7,6 +7,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use std::collections::BTreeMap;
 use regex::Regex;
 use std::io::Write;
+use crate::search_index::{SearchIndex, BagOfWords};
 
 /**
 idea : lets build a mini compiler right here
@@ -446,13 +447,52 @@ fn main() {
     let mut args = env::args().skip(1);
     let mut target_path: Option<String> = None;
     let mut limit: Option<usize> = None;
+    let mut search_query: Option<String> = None;
+    let mut search_index_path: Option<String> = None;
+    let mut build_index = false;
+    
     while let Some(arg) = args.next() {
-        if arg == "--limit" {
-            if let Some(lim) = args.next() {
-                limit = lim.parse().ok();
+        match arg.as_str() {
+            "--limit" => {
+                if let Some(lim) = args.next() {
+                    limit = lim.parse().ok();
+                }
             }
-        } else {
-            target_path = Some(arg);
+            "--search" => {
+                if let Some(query) = args.next() {
+                    search_query = Some(query);
+                }
+            }
+            "--index-path" => {
+                if let Some(path) = args.next() {
+                    search_index_path = Some(path);
+                }
+            }
+            "--build-index" => {
+                build_index = true;
+            }
+            "--help" | "-h" => {
+                println!("Usage: prepare_sources [OPTIONS] [PATH]");
+                println!();
+                println!("Options:");
+                println!("  --limit N           Limit processing to N files");
+                println!("  --search QUERY      Search the codebase for QUERY");
+                println!("  --index-path PATH   Use search index at PATH (default: ./search_index)");
+                println!("  --build-index       Build a new search index from the codebase");
+                println!("  --help, -h          Show this help message");
+                println!();
+                println!("Examples:");
+                println!("  prepare_sources .                    # Process current directory");
+                println!("  prepare_sources --limit 100 .        # Process first 100 files");
+                println!("  prepare_sources --build-index .      # Build search index");
+                println!("  prepare_sources --search \"function\"  # Search for functions");
+                return;
+            }
+            _ => {
+                if target_path.is_none() {
+                    target_path = Some(arg);
+                }
+            }
         }
     }
 
@@ -524,6 +564,114 @@ fn main() {
                 break;
             }
         }
+    }
+
+    // Handle search functionality
+    if let Some(query) = search_query {
+        let index_path = search_index_path.unwrap_or_else(|| "./search_index".to_string());
+        let index_path = Path::new(&index_path);
+        
+        if !index_path.exists() {
+            println!("[ERROR] Search index not found at: {}", index_path.display());
+            println!("[INFO] Use --build-index to create a search index first");
+            return;
+        }
+        
+        match SearchIndex::new(index_path) {
+            Ok(index) => {
+                println!("[INFO] Searching for: '{}'", query);
+                match index.search(&query, 20) {
+                    Ok(results) => {
+                        println!("[INFO] Found {} results:", results.len());
+                        for (i, result) in results.iter().enumerate() {
+                            println!("{}. {} (lines {}-{}) [{}]", 
+                                i + 1, result.path, result.line_start, result.line_end, result.emoji);
+                            println!("   Score: {:.3}", result.score);
+                            println!("   Content: {}", result.content.lines().next().unwrap_or("").trim());
+                            println!();
+                        }
+                    }
+                    Err(e) => {
+                        println!("[ERROR] Search failed: {}", e);
+                        return;
+                    }
+                }
+            }
+            Err(e) => {
+                println!("[ERROR] Failed to open search index: {}", e);
+                return;
+            }
+        }
+        return;
+    }
+
+    // Handle index building
+    if build_index {
+        let index_path = search_index_path.unwrap_or_else(|| "./search_index".to_string());
+        let index_path = Path::new(&index_path);
+        
+        println!("[INFO] Building search index at: {}", index_path.display());
+        
+        match SearchIndex::new(index_path) {
+            Ok(mut index) => {
+                let mut chunk_count = 0;
+                
+                // Process files and add to index
+                for (file_path, content) in &files {
+                    // Create code chunks from the content
+                    let lines: Vec<&str> = content.lines().collect();
+                    let chunk_size = 50; // Lines per chunk
+                    
+                    for (i, chunk_lines) in lines.chunks(chunk_size).enumerate() {
+                        let start_line = i * chunk_size + 1;
+                        let end_line = start_line + chunk_lines.len() - 1;
+                        
+                        // Determine emoji based on content
+                        let (emoji, _) = emoji_for_type(chunk_lines.first().unwrap_or(&""));
+                        
+                        let chunk = crate::project_analyzer::CodeChunk {
+                            path: file_path.clone(),
+                            content: chunk_lines.join("\n"),
+                            emoji: emoji.to_string(),
+                            line_start: start_line as u32,
+                            line_end: end_line as u32,
+                            chunk_type: "code".to_string(),
+                        };
+                        
+                        if let Err(e) = index.add_chunk(&chunk) {
+                            println!("[WARNING] Failed to add chunk to index: {}", e);
+                        } else {
+                            chunk_count += 1;
+                        }
+                    }
+                }
+                
+                if let Err(e) = index.commit() {
+                    println!("[ERROR] Failed to commit index: {}", e);
+                    return;
+                }
+                
+                println!("[INFO] Search index built successfully with {} chunks", chunk_count);
+                
+                // Show some stats
+                match index.get_stats() {
+                    Ok(stats) => {
+                        println!("[INFO] Index statistics:");
+                        for (emoji, count) in stats.iter().take(10) {
+                            println!("  {}: {} chunks", emoji, count);
+                        }
+                    }
+                    Err(e) => {
+                        println!("[WARNING] Could not get index stats: {}", e);
+                    }
+                }
+            }
+            Err(e) => {
+                println!("[ERROR] Failed to create search index: {}", e);
+                return;
+            }
+        }
+        return;
     }
 
     // 2. Create HF dataset structure early

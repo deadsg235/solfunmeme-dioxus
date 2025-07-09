@@ -14,6 +14,16 @@ use tracing::instrument;
 
 use shared_analysis_types::{AnalyzedFunction, AnalyzedDocument, AnalyzedToken, ClosestEmojiInfo, CodeSnippet};
 
+#[derive(Debug, Clone)]
+pub struct CodeChunk {
+    pub path: String,
+    pub content: String,
+    pub emoji: String,
+    pub line_start: u32,
+    pub line_end: u32,
+    pub chunk_type: String,
+}
+
 #[instrument(skip(pb, ontology_path))]
 pub fn analyze_project(project_root: &Path, ontology_path: &Path, use_gpu: bool, pb: &ProgressBar) -> Result<Vec<AnalyzedFunction>> {
     let emoji_multivectors = load_emoji_multivectors(ontology_path.to_str().unwrap())?;

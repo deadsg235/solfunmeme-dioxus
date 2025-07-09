@@ -251,8 +251,8 @@ args                 | 5809     | Rust Core          | 📢
         let entry1 = EmojiMatrixEntry {
             path: "src/models".to_string(),
             emoji_counts: vec![
-                EmojiCount { emoji: "⬜".to_string(), name: "White Large Square".to_string(), count: 10 },
-                EmojiCount { emoji: "🔗".to_string(), name: "Link".to_string(), count: 5 },
+                EmojiCount { emoji: "⬜".to_string(), name: "White Large Square".to_string(), count: 10, category: Some("shapes".to_string()) },
+                EmojiCount { emoji: "🔗".to_string(), name: "Link".to_string(), count: 5, category: Some("symbols".to_string()) },
             ],
         };
         let entry2 = EmojiMatrixEntry {
@@ -265,7 +265,12 @@ args                 | 5809     | Rust Core          | 📢
         let entry3 = EmojiMatrixEntry {
             path: "src/models/sub".to_string(),
             emoji_counts: vec![
-                EmojiCount { emoji: "⬜".to_string(), name: "White Large Square".to_string(), count: 2 },
+                EmojiCount { 
+                    emoji: "⬜".to_string(), 
+                    name: "White Large Square".to_string(), 
+                    count: 2, 
+                    category: Some("shapes".to_string()),
+                },
             ],
         };
 
