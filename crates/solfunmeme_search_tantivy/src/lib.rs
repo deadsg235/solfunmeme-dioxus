@@ -1,3 +1,4 @@
+use tantivy::schema::TantivyDocument;
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -7,9 +8,8 @@ use tantivy::doc;
 use tantivy::query::QueryParser;
 use tantivy::schema::*;
 use tantivy::{Index, IndexWriter};
-use tantivy::Term;
 
-use crate::project_analyzer::CodeChunk;
+use shared_analysis_types::CodeChunk;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchResult {
@@ -100,23 +100,23 @@ impl SearchIndex {
         
         let mut results = Vec::new();
         for (score, doc_address) in top_docs {
-            let doc: tantivy::Document = searcher.doc(doc_address)?;
+            let doc: TantivyDocument = searcher.doc(doc_address)?;
             
             let path = doc
                 .get_first(self.schema.get_field("path")?)
-                .and_then(|v| v.as_text())
+                .and_then(|v| v.as_value().as_str())
                 .unwrap_or("")
                 .to_string();
                 
             let content = doc
                 .get_first(self.schema.get_field("content")?)
-                .and_then(|v| v.as_text())
+                .and_then(|v| v.as_value().as_str())
                 .unwrap_or("")
                 .to_string();
                 
             let emoji = doc
                 .get_first(self.schema.get_field("emoji")?)
-                .and_then(|v| v.as_text())
+                .and_then(|v| v.as_value().as_str())
                 .unwrap_or("")
                 .to_string();
                 
@@ -159,11 +159,15 @@ impl SearchIndex {
         
         let mut stats = HashMap::new();
         
-        // Count by emoji - simplified approach
-        let emoji_field = self.schema.get_field("emoji")?;
+        let content_field = self.schema.get_field("content")?;
         
-        // For now, just return empty stats since the terms API is complex
-        // TODO: Implement proper term counting
+        for segment_reader in reader.iter() {
+            let term_dict = segment_reader.fast_fields().text(content_field).expect("Failed to get term dict");
+            for (term, _doc_freq) in term_dict.terms() {
+                let term_str = term.text();
+                *stats.entry(term_str.to_string()).or_insert(0) += 1;
+            }
+        }
         
         Ok(stats)
     }
@@ -280,4 +284,4 @@ mod tests {
         
         Ok(())
     }
-} 
+}

@@ -15380,6 +15380,7 @@ dependencies = [
  "solana-sdk",
  "solfunmeme_core_logic",
  "solfunmeme_input_fs",
+ "solfunmeme_search_tantivy",
  "solfunmeme_wallet_integration",
  "views_lib",
  "wallet-adapter",

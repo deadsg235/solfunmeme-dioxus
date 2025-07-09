@@ -32,6 +32,11 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
 
     let mut code_chunks = Vec::new();
     for path in discovered_files {
+        let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+        if !matches!(ext.as_str(), "rs" | "md") {
+            // Only process .rs and .md files for now
+            continue;
+        }
         match fs::read_to_string(&path) {
             Ok(content) => {
                 let chunk = CodeChunk {
