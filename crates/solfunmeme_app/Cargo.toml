@@ -32,3 +32,4 @@ ctor = "0.1"
 workflow_manager = { path = "../../crates/workflow_manager" }
 emoji_lang_plugin = { path = "../../crates/emoji_lang_plugin" }
 solfunmeme_input_fs = { path = "../../crates/solfunmeme_input_fs" }
+solfunmeme_search_tantivy = { path = "../../crates/solfunmeme_search_tantivy" }

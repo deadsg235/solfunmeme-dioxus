@@ -1,23 +1,24 @@
+# `prepare_sources`
+
+This crate is responsible for processing source code files and extracting them into structured `CodeChunk`s.
+
+## Purpose
+
+It serves as the initial step in the code analysis pipeline, preparing raw source code for further processing, indexing, and semantic analysis within the Solfunmeme ecosystem.
+
 ## Usage
 
 To run the tool, use the following command:
 
+```bash
+cargo run --bin prepare_sources -- <path_to_directory_or_file>
 ```
-cargo run -- <file_path>
-```
 
-This will process the specified file and:
+This will process the specified files and output `CodeChunk`s in JSON format to standard output.
 
-1.  Generate a BERT embedding for its content.
-2.  Reduce the BERT embedding to an 8-dimensional Clifford multivector.
-3.  Calculate a sieve address based on the multivector's components.
-4.  Find the closest emoji representation based on a semantic ontology.
+Example Output (simplified):
 
-Example Output:
-
-```
-Processing file: src/lib.rs
-Successfully generated multivector for file: MultivectorBase { ... }
-Sieve Address: 00111010
-Closest emoji: ➡️🟦 (Math) with distance: 0.04577425
+```json
+{"path":"src/lib.rs","content":"fn main() {\n    println!(\"Hello, world!\");\n}","emoji":"📄","line_start":1,"line_end":3,"chunk_type":"code"}
+{"path":"src/main.rs","content":"// Another chunk\nfn some_func() {\n    // ...\n}","emoji":"📄","line_start":1,"line_end":4,"chunk_type":"code"}
 ```
