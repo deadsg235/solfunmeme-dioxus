@@ -70,3 +70,4 @@ flycheck_*.el
 /report.txt
 /target-wasm-solfunmeme/*
 *.txt
+commit_message.txt
