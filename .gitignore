@@ -71,3 +71,4 @@ flycheck_*.el
 /target-wasm-solfunmeme/*
 *.txt
 commit_message.txt
+founding_documents/internal/
