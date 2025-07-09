@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 //use crate::extractor::ExtractedFile;
-use crate::types::ExtractedFile;
+use shared_analysis_types::ExtractedFile;
 use std::collections::HashSet;
 
 #[component]

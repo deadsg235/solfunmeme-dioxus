@@ -1,7 +1,6 @@
-
-use crate::model::extract::extract_code_snippets::extract_code_snippets as extract_code_snippets_fn;
-use crate::model::extract_html::extract_code_snippets_from_html;
-use crate::types::{ExtractedFile, ProcessingFile};
+use crate::model::snippets::extract_markdown_snippets as extract_code_snippets_fn;
+// use crate::model::extract_html::extract_code_snippets_from_html;
+use shared_analysis_types::{ExtractedFile, ProcessingFile};
 use dioxus::{
     html::FileEngine,
     signals::{Signal, Writable},
@@ -36,13 +35,14 @@ where
                     TimeoutFuture::new(10).await;
                 }
             }
-            let snippets = extract_code_snippets_fn(&content);
-            let mut all_snippets = snippets;
-            all_snippets.extend(extract_code_snippets_from_html(&content));
+            let snippets = extract_code_snippets_fn(&content).unwrap();
+            let mut all_snippets: Vec<shared_analysis_types::CodeSnippet> = snippets.into_iter().map(|s| s.into()).collect();
+            //            let html_code_snippets = extract_code_snippets_from_html(&content);
+//            all_snippets.extend(html_code_snippets);
             // Finally push one combined ExtractedFile
             extracted_files.push(ExtractedFile {
                 name: file_name.clone(),
-                snippets: all_snippets,
+                snippets: all_snippets.into_iter().map(|s| s.into()).collect(),
                 total_lines,
             });
         }
@@ -101,10 +101,16 @@ pub async fn process_files(
                 }
             }
 
-            let snippets = extract_code_snippets_fn(&content);
+            let snippets = match extract_code_snippets_fn(&content) {
+                Ok(s) => s,
+                Err(e) => {
+                    eprintln!("Error extracting markdown snippets from {}: {}", file_name, e);
+                    Vec::new()
+                }
+            };
             files.write().push(ExtractedFile {
                 name: file_name.clone(),
-                snippets,
+                snippets: snippets.into_iter().map(|s| s.into()).collect(),
                 total_lines,
             });
         }
@@ -154,11 +160,17 @@ pub fn create_file_reader(
                         }
                     }
 
-                    let snippets = extract_code_snippets_fn(&content);
+                    let snippets = match extract_code_snippets_fn(&content) {
+                        Ok(s) => s,
+                        Err(e) => {
+                            eprintln!("Error extracting markdown snippets from {}: {}", file_name, e);
+                            Vec::new()
+                        }
+                    };
 
                     files.write().push(ExtractedFile {
                         name: file_name.clone(),
-                        snippets,
+                        snippets: snippets.into_iter().map(|s| s.into()).collect(),
                         total_lines,
                     });
                 }

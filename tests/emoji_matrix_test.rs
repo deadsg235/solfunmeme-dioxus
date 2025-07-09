@@ -1,6 +1,6 @@
+use emoji_matrix_lib::{parse_summary_total, parse_summary_root, rollup_emoji_matrix, EmojiMatrix};
 use dioxus::prelude::*;
 use reqwest;
-use emoji_matrix_lib::{parse_summary_total, parse_summary_root, rollup_emoji_matrix, EmojiMatrix};
 
 #[tokio::test]
 async fn emoji_matrix_live_server_test() {
@@ -10,13 +10,13 @@ async fn emoji_matrix_live_server_test() {
     let total_url = format!("{}/reports/summary_total.txt", base_url);
     let total_res = reqwest::get(&total_url).await.expect("Failed to fetch summary_total.txt");
     let total_text = total_res.text().await.expect("Failed to get text from summary_total.txt");
-    let mut combined_entries = parse_summary_total(&total_text).entries;
+    let mut combined_entries = parse_summary_total().entries;
 
     // Fetch summary_root.txt
     let root_url = format!("{}/reports/summary_root.txt", base_url);
     let root_res = reqwest::get(&root_url).await.expect("Failed to fetch summary_root.txt");
     let root_text = root_res.text().await.expect("Failed to get text from summary_root.txt");
-    combined_entries.extend(parse_summary_root(&root_text).entries);
+    combined_entries.extend(parse_summary_root().entries);
 
     let final_matrix = rollup_emoji_matrix(EmojiMatrix { entries: combined_entries });
 

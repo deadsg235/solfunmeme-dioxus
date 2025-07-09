@@ -1,7 +1,8 @@
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::window;
 
-use crate::{model::files::create_download_filename, types::CodeSnippet};
+use crate::model::files::create_download_filename;
+use shared_analysis_types::CodeSnippet;
 //use crate::extractor::CodeSnippet;
 pub fn download_rust_snippets_as_file(snippets: &[CodeSnippet]) {
     let rust_snippets: Vec<_> = snippets

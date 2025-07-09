@@ -4,10 +4,10 @@ use crate::{
         filedisplay::FileDisplay, fileinput::FileInput, progress::ProcessingIndicator,
         welcome::WelcomeMessage,
     },
-    model::extract::process_file_engine::process_file_engine,
+    model::files::process_files,
     styles::STYLE,
-    types::{ExtractedFile, ProcessingFile},
 };
+use shared_analysis_types::{ExtractedFile, ProcessingFile, AnnotatedWord};
 use dioxus::prelude::*;
 use dioxus::html::FileEngine;
 use dioxus_html::HasFileData;
@@ -29,7 +29,7 @@ pub fn MarkdownCodeExtractor() -> Element {
 
     // File processing handlers
     let read_files = move |file_engine: Arc<dyn FileEngine>| async move {
-        process_file_engine(file_engine, files, processing_file).await; // also extract snippets
+        process_files(file_engine, files, processing_file).await;
     };
 
     let upload_files = move |evt: FormEvent| async move {

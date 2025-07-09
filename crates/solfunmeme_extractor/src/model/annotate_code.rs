@@ -1,4 +1,4 @@
-use crate::types::CodeSnippet;
+use shared_analysis_types::CodeSnippet;
 //use tclifford::Multivector
 
 pub fn annotate_code_snippet(_snippet: &CodeSnippet) {}

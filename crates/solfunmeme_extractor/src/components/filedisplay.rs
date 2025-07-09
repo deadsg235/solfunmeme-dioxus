@@ -5,8 +5,9 @@ use std::collections::HashSet;
 //use crate::extractor::CodeSnippet;
 use crate::{
     components::{codesnippet::CodeSnippetComponent, filesummary::FileSummary},
-    types::{ExtractedFile},
 };
+use shared_analysis_types::{ExtractedFile, CodeSnippet};
+
 #[component]
 pub fn FileDisplay(
     file: ExtractedFile,

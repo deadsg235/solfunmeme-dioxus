@@ -109,12 +109,13 @@ dioxus-clipboard = "0.2.0"
 dioxus-html = "0.6.3"
 dioxus-logger = "0.6.2"
 scraper = "0.23.1"
-rrust_kontekst = {path = "rrust_kontekst"}
+rrust_kontekst = {path = "crates/rrust_kontekst"}
 orbital_sim_lib = {path = "crates/orbital_sim_lib"}
 core_data_lib = {path = "crates/core_data_lib"}
 emoji_matrix_lib = {path = "crates/emoji_matrix_lib"}
-rrust_kontekst_base = {path = "rrust_kontekst_base"}
+rrust_kontekst_base = {path = "crates/rrust_kontekst_base"}
 solfunmeme_extractor = {path = "crates/solfunmeme_extractor"}
+solfunmeme_wallet_integration = {path = "crates/solfunmeme_wallet_integration"}
 component_builder_lib = {path = "crates/component_builder_lib"}
 component_registry_lib = {path = "crates/component_registry_lib"}
 component_emoji_lib = {path = "crates/component_emoji_lib"}
@@ -123,6 +124,9 @@ views_lib = {path = "crates/views_lib"}
 model_lib = {path = "crates/model_lib"}
 shared_types_lib = {path = "crates/shared_types_lib"}
 signals_lib = {path = "crates/signals_lib"}
+prepare_sources = { path = "crates/prepare_sources" }
+solana_integration_lib = { path = "crates/solana_integration_lib" }
+rdf_processing_lib = { path = "crates/rdf_processing_lib" }
 ctor = "0.4.2"
 tracing = "0.1.41"
 
@@ -149,13 +153,32 @@ features = [
 [features]
 default = ["web"]
 web = ["dioxus/web"]
+gpu_backend = []
 bincodev2 = []
 bincodev1 = []
 
 # Exclude vendor from certain cargo operations
 [workspace]
 exclude = ["vendor"]
-members = [ "task_manager", "crates/model_lib","crates/playground_lib", "crates/shared_types_lib", "crates/views_lib", "crates/signals_lib", "prepare_sources"]
+members = [
+    "crates/solfunmeme_app",
+    "crates/solfunmeme_wallet_integration",
+    "crates/solfunmeme_core_logic",
+    "crates/solfunmeme_generated",
+    "crates/solfunmeme_tools",
+    "crates/task_manager",
+    "crates/model_lib",
+    "crates/playground_lib",
+    "crates/shared_types_lib",
+    "crates/views_lib",
+    "crates/signals_lib",
+    "crates/prepare_sources",
+    "crates/solana_integration_lib",
+    "crates/rdf_processing_lib",
+    "crates/rrust_kontekst",
+    "crates/rrust_kontekst_base",
+    "crates/shared_analysis_types"
+]
 
 
 

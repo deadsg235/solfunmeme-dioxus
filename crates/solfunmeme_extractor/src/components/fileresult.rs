@@ -3,8 +3,8 @@ use dioxus::prelude::*;
 //use crate::extractor::ExtractedFile;
 use crate::{
     components::codesnippet::CodeSnippetView,
-    types::{CodeSnippet, ExtractedFile},
 };
+use shared_analysis_types::{CodeSnippet, ExtractedFile};
 
 #[component]
 pub fn FileResults(

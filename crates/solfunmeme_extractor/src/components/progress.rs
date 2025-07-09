@@ -1,10 +1,10 @@
 use dioxus::prelude::*;
 
-use crate::types::ProcessingFile;
+use shared_analysis_types::ProcessingFile;
 //use crate::extractor::ProcessingFile;
 #[component]
 pub fn ProcessingIndicator(processing_file: ReadOnlySignal<Option<ProcessingFile>>) -> Element {
-    if let Some(pf) = processing_file() {
+    if let Some(pf) = (*processing_file)() {
         rsx! {
             div { class: "processing-indicator",
                 h3 { "🔄 Processing: {pf.name}" }

@@ -2,9 +2,9 @@
 
 use crate::model::content_hash::create_content_hash;
 use markdown::mdast::Node;
-use crate::model::extract::estimate_token_count::estimate_token_count;
+use crate::model::estimate_token_count::estimate_token_count;
 //use crate::extractor::model::token_count::estimate_token_count;
-use crate::types::CodeSnippet;
+use shared_analysis_types::CodeSnippet;
 
 /// Recursively walks the AST to find code snippets.  
 pub fn walk_ast(node: &Node, snippets: &mut Vec<CodeSnippet>) {

@@ -1,0 +1,30 @@
+[package]
+name = "solfunmeme_tools"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "test_runner"
+path = "src/bin/test_runner.rs"
+
+[[bin]]
+name = "doc_test_generator"
+path = "src/bin/doc_test_generator.rs"
+
+[[bin]]
+name = "doc_processor"
+path = "src/bin/doc_processor.rs"
+
+[[bin]]
+name = "prepare_sources_sh"
+path = "src/bin/prepare.sources.sh"
+
+[[bin]]
+name = "chat_processor"
+path = "src/bin/chat_processor.rs"
+
+[dependencies]
+solfunmeme_core_logic = { path = "../solfunmeme_core_logic" }
+model_lib = { path = "../model_lib" }
+regex = "1.10"
+solfunmeme_extractor = { path = "../solfunmeme_extractor" }

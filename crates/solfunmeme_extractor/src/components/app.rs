@@ -8,13 +8,13 @@ use crate::styles::STYLE;
 use dioxus::html::FileEngine;
 //use crate::extractor::error;
 //use crate::extractor::ProcessingFile;
-use crate::types::UploadedFile;
-use crate::types::DocumentSummary;
+use shared_analysis_types::UploadedFile;
+use shared_analysis_types::DocumentSummary;
 //use crate::types::UploadedFile;
 
-use crate::types::CodeSnippet;
-use crate::types::{ProcessingFile};
-use crate::types::AnnotatedWord;
+use shared_analysis_types::CodeSnippet;
+use shared_analysis_types::{ProcessingFile};
+use shared_analysis_types::AnnotatedWord;
 
 async fn read_files(
     file_engine: Arc<dyn FileEngine>,

@@ -1,4 +1,6 @@
-use solfunmeme_dioxus::core::*;
+use solfunmeme_extractor::{CodeVectorizer, DeclarationSplitter, DuplicateDetector, CodeAnalyzer, MemeGenerator};
+use shared_analysis_types::{Declaration, DeclarationType, CodeVector};
+use solfunmeme_wallet_integration::wallet_manager::WalletManager;
 
 #[test]
 fn test_vectorization() {

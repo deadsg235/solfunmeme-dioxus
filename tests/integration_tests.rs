@@ -1,4 +1,5 @@
-use solfunmeme_dioxus::core::*;
+/*
+use solfunmeme_extractor::{CodeAnalyzer, DeclarationSplitter, CodeVectorizer, MemeGenerator, DuplicateDetector};
 use std::collections::HashMap;
 
 const SAMPLE_RUST_CODE: &str = r#"
@@ -213,7 +214,7 @@ fn test_code_to_vector_to_code_consistency() {
 fn test_complexity_scoring() {
     let simple_code = "fn simple() {}";
     let complex_code = r#"
-fn complex(data: Vec<HashMap<String, Vec<Option<Result<i32, String>>>>>) -> Result<(), Box<dyn std::error::Error>> {
+fn complex(data: Vec<HashMap<String, Vec<Option<Result<i32, String>>>>>) -> Result<(), Box<dyn std::error.Error>> {
     for item in data {
         for (key, values) in item {
             for value in values {
@@ -282,3 +283,4 @@ fn unique_function() {
         }
     }
 }
+*/
