@@ -161,7 +161,7 @@ impl SearchIndex {
         
         let content_field = self.schema.get_field("content")?;
         
-        for segment_reader in reader.iter() {
+        for segment_reader in reader.segments() {
             let term_dict = segment_reader.fast_fields().text(content_field).expect("Failed to get term dict");
             for (term, _doc_freq) in term_dict.terms() {
                 let term_str = term.text();

@@ -170,4 +170,16 @@ fn main() {
     } else {
         println!("Failed to execute index_codebase_workflow via manager.");
     }
+
+    if let Ok(_) = manager.execute_workflow("top_term_report_workflow") {
+        println!("Successfully executed top_term_report_workflow via manager.");
+    } else {
+        println!("Failed to execute top_term_report_workflow via manager.");
+    }
+
+    if let Ok(_) = manager.execute_workflow("search_emojis_workflow") {
+        println!("Successfully executed search_emojis_workflow via manager.");
+    } else {
+        println!("Failed to execute search_emojis_workflow via manager.");
+    }
 }

@@ -210,7 +210,8 @@ members = [
     "crates/solana_airdrop_service_plugin",
     "crates/json_ld_plugin",
     "crates/rhai_plugin",
-    "crates/steel_plugin"
+    "crates/steel_plugin",
+    "crates/solfunmeme_tantivy_report"
 ]
 
 # Server-side dependencies (excluded from WASM)

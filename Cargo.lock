@@ -15564,6 +15564,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "solfunmeme_tantivy_report"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "solfunmeme_search_tantivy",
+]
+
+[[package]]
 name = "solfunmeme_tools"
 version = "0.1.0"
 dependencies = [
