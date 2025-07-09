@@ -113,6 +113,17 @@ idea
 #### Nix/Guix
 #### Github Actions
 
+### Core Plugins
+- **`rdf_output`**: A crate for generating RDF (Resource Description Framework) from processed code chunks, enabling semantic representation of code.
+- **`solfunmeme_search_tantivy`**: The project's indexing plugin, responsible for creating and managing search indexes for code analysis.
+- **`git_plugin`**: Provides functionalities for interacting with Git repositories, including cloning, pulling, committing, and pushing changes.
+- **`zip_plugin`**: Handles the creation and extraction of Zip archives, useful for bundling and distributing code or data.
+- **`s3_plugin`**: Integrates with Amazon S3 for cloud storage operations, allowing for scalable storage and retrieval of project assets.
+- **`jsonld_plugin`**: Offers generic processing capabilities for JSON-LD (JavaScript Object Notation for Linked Data), facilitating semantic data handling.
+- **`workflow_manager`**: A core component for defining, registering, and executing various processing workflows within the system.
+- **`emoji_lang_plugin`**: Enables the definition of workflows using emoji strings, with support for URL encoding/decoding and integration with the `solfunmem.jsonld` ontology for semantic interpretation.
+- **`emoji_workflow_macro`**: A procedural macro that allows developers to annotate Rust functions with emoji strings, automatically generating and registering workflows based on these annotations.
+
 ### Languages
 #### Rust
 #### Lean

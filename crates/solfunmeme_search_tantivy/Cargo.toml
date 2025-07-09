@@ -1,0 +1,11 @@
+[package]
+name = "solfunmeme_search_tantivy"
+version = "0.1.0"
+edition = "2024"
+license = "AGPL-3.0"
+
+[dependencies]
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tantivy = "0.24"
+shared_analysis_types = { path = "../shared_analysis_types" }

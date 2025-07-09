@@ -184,7 +184,17 @@ members = [
     "crates/solfunmeme_clifford",
     "crates/solfunmeme_embedding",
     "crates/solfunmeme_solana_data",
-    "crates/solfunmeme_function_analysis"
+    "crates/solfunmeme_function_analysis",
+    "crates/solfunmeme_search_tantivy",
+    "crates/rdf_output",
+    "crates/git_plugin",
+    "crates/zip_plugin",
+    "crates/s3_plugin",
+    "crates/workflow_manager",
+    "crates/emoji_lang_plugin",
+    "crates/jsonld_plugin",
+    "crates/emoji_workflow_macro",
+    "crates/quickwit_plugin"
 ]
 
 

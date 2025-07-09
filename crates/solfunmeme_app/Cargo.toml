@@ -27,3 +27,7 @@ solfunmeme_wallet_integration = { path = "../solfunmeme_wallet_integration" }
 solfunmeme_core_logic = { path = "../solfunmeme_core_logic" }
 views_lib = { path = "../../crates/views_lib" }
 model_lib = { path = "../../crates/model_lib" }
+emoji_workflow_macro = { path = "../../crates/emoji_workflow_macro" }
+ctor = "0.1"
+workflow_manager = { path = "../../crates/workflow_manager" }
+emoji_lang_plugin = { path = "../../crates/emoji_lang_plugin" }

@@ -10,18 +10,22 @@ path = "src/bin/prepare_sources.rs"
 
 [dependencies]
 shared_analysis_types = { path = "../shared_analysis_types" }
+solfunmeme_search_tantivy = { path = "../solfunmeme_search_tantivy" }
+solfunmeme_embedding = { path = "../solfunmeme_embedding" }
+solfunmeme_function_analysis = { path = "../solfunmeme_function_analysis" }
+solfunmeme_clifford = { path = "../solfunmeme_clifford" }
+solfunmeme_solana_data = { path = "../solfunmeme_solana_data" }
+solfunmeme_input_fs = { path = "../solfunmeme_input_fs" }
 
 anyhow = "1.0"
 indicatif = "0.17"
-regex = "1.10"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
 sha2 = "0.10"
 syn = { version = "2.0", features = ["full", "extra-traits"] }
 quote = "1.0"
-tantivy = "0.24"
 walkdir = "2.3"
 rayon = "1.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 
 [features]
 # No gpu_backend feature if candle is removed

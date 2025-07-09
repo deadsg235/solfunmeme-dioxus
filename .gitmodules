@@ -1105,3 +1105,12 @@
 [submodule "vendor/solana-airdrop-service"]
 	path = vendor/solana-airdrop-service
 	url = https://github.com/oguzhaniptes/solana-airdrop-service.git
+[submodule "vendor/json-ld"]
+	path = vendor/json-ld
+	url = https://github.com/meta-introspector/json-ld
+[submodule "vendor/rhai"]
+	path = vendor/rhai
+	url = https://github.com/rhaiscript/rhai
+[submodule "vendor/steel"]
+	path = vendor/steel
+	url = https://github.com/mattwparas/steel
