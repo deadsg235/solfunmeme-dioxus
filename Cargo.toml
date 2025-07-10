@@ -129,6 +129,12 @@ signals_lib = {path = "crates/signals_lib"}
 prepare_sources = { path = "crates/prepare_sources" }
 solana_integration_lib = { path = "crates/solana_integration_lib" }
 rdf_processing_lib = { path = "crates/rdf_processing_lib" }
+# New refactored crates
+solfunmeme_extractor_system = { path = "crates/solfunmeme_extractor_system" }
+solfunmeme_models = { path = "crates/solfunmeme_models" }
+solfunmeme_views = { path = "crates/solfunmeme_views" }
+solfunmeme_playground = { path = "crates/solfunmeme_playground" }
+solfunmeme_state = { path = "crates/solfunmeme_state" }
 ctor = "0.4.2"
 tracing = "0.1.41"
 
@@ -198,6 +204,12 @@ members = [
     "crates/llms_from_scratch_rs_plugin",
     "crates/gline_rs_plugin",
     # "crates/extractous_plugin",
+    # New refactored crates
+    "crates/solfunmeme_extractor_system",
+    "crates/solfunmeme_models",
+    "crates/solfunmeme_views",
+    "crates/solfunmeme_playground",
+    "crates/solfunmeme_state",
     "crates/model2vec_rs_plugin",
     "crates/layered_nlp_plugin",
     "crates/vibrato_plugin",

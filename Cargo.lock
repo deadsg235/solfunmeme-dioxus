@@ -15335,6 +15335,11 @@ dependencies = [
  "solana-transaction-error 3.0.0-canary.7040146",
  "solana_integration_lib",
  "solfunmeme_extractor",
+ "solfunmeme_extractor_system",
+ "solfunmeme_models",
+ "solfunmeme_playground",
+ "solfunmeme_state",
+ "solfunmeme_views",
  "solfunmeme_wallet_integration",
  "sophia_api 0.8.0",
  "sophia_inmem 0.8.0",
@@ -15516,6 +15521,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "solfunmeme_extractor_system"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "log",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.12",
+]
+
+[[package]]
 name = "solfunmeme_function_analysis"
 version = "0.1.0"
 dependencies = [
@@ -15538,6 +15554,71 @@ dependencies = [
  "anyhow",
  "shared_analysis_types",
  "walkdir",
+]
+
+[[package]]
+name = "solfunmeme_models"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bs58",
+ "chrono",
+ "log",
+ "serde",
+ "serde_json",
+ "solana-sdk",
+ "thiserror 2.0.12",
+ "uuid",
+]
+
+[[package]]
+name = "solfunmeme_playground"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bs58",
+ "chrono",
+ "csv",
+ "dioxus",
+ "dioxus-html",
+ "dioxus-logger",
+ "dioxus-motion",
+ "dioxus-router",
+ "dioxus-web",
+ "emojis",
+ "fastrand",
+ "getrandom 0.3.3",
+ "gloo",
+ "gloo-net 0.5.0",
+ "gloo-storage",
+ "gloo-timers",
+ "gloo-utils 0.2.0",
+ "js-sys",
+ "linfa",
+ "linfa-clustering",
+ "linfa-preprocessing",
+ "linfa-reduction",
+ "log",
+ "markdown",
+ "ndarray 0.15.6",
+ "percent-encoding",
+ "pulldown-cmark",
+ "qrcodegen",
+ "rand 0.8.5",
+ "rand_core 0.6.4",
+ "regex",
+ "rust-embed 8.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "scraper 0.23.1",
+ "serde",
+ "serde_json",
+ "tclifford 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror 2.0.12",
+ "url",
+ "urlencoding",
+ "uuid",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
 ]
 
 [[package]]
@@ -15564,6 +15645,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "solfunmeme_state"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "dioxus",
+ "gloo-storage",
+ "gloo-timers",
+ "log",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.12",
+ "uuid",
+]
+
+[[package]]
 name = "solfunmeme_tantivy_report"
 version = "0.1.0"
 dependencies = [
@@ -15579,6 +15676,42 @@ dependencies = [
  "regex",
  "solfunmeme_core_logic",
  "solfunmeme_extractor",
+]
+
+[[package]]
+name = "solfunmeme_views"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bs58",
+ "chrono",
+ "dioxus",
+ "dioxus-clipboard",
+ "dioxus-html",
+ "dioxus-logger",
+ "dioxus-motion",
+ "dioxus-router",
+ "dioxus-web",
+ "gloo",
+ "gloo-net 0.5.0",
+ "gloo-storage",
+ "gloo-timers",
+ "gloo-utils 0.2.0",
+ "js-sys",
+ "log",
+ "markdown",
+ "percent-encoding",
+ "pulldown-cmark",
+ "qrcodegen",
+ "regex",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.12",
+ "url",
+ "uuid",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
 ]
 
 [[package]]
