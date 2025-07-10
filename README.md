@@ -16,148 +16,13 @@ See [Project Status](doc/status.md) for current development status.
 See [Project Functionality](doc/functionality.md) for details on features and supported data formats.
 
 ## Project Architecture
+See [Project Architecture](doc/architecture.md) for a detailed breakdown of the project's crate structure.
 
-The Solfunmeme Dioxus project is organized into a comprehensive ecosystem of specialized crates, each serving distinct purposes within the Code-Math Manifold framework. For a detailed overview of all crates, see [Crates Overview](./crates/README.md).
+## Languages
+See [Supported Languages](doc/languages.md) for a list of programming languages and formats supported.
 
-For information on external dependencies managed as Git submodules, see [Vendor Submodules Overview](./vendor/README.md).
-
-### Core Application Crates
-- **`solfunmeme_app`**: Main application entry point orchestrating UI components, data models, and blockchain interactions
-- **`workflow_manager`**: Central hub for defining, registering, and executing processing workflows
-- **`task_manager`**: Manages project state, task tracking, and coordination with semantic RDF/Turtle integration
-- **`playground_lib`**: Interactive sandbox environment for experimenting with project features
-
-### Data & Analysis Core
-- **`core_data_lib`**: Fundamental data structures (Meme, ZOS, ReifiedState) used across the project
-- **`shared_analysis_types`**: Common data structures for code analysis (CodeChunk, AnalyzedFunction, etc.)
-- **`shared_types_lib`**: General-purpose shared types and utilities
-- **`model_lib`**: Core data models for user data, project information, and system states
-- **`solfunmeme_core_logic`**: Central business logic for processing, analyzing, and transforming data
-
-### Code Analysis & Processing
-- **`prepare_sources`**: Processes source code files into structured CodeChunks
-- **`solfunmeme_extractor`**: Extracts code snippets, functions, and relevant information from source files
-- **`solfunmeme_function_analysis`**: Detailed analysis of individual functions with AST traversal and semantic summaries
-- **`solfunmeme_input_fs`**: Filesystem input layer for reading code files and converting to CodeChunks
-- **`solfunmeme_search_tantivy`**: Full-text search capabilities using Tantivy search engine
-- **`solfunmeme_generated`**: Container for automatically generated code
-
-### Mathematical & Embedding Systems
-- **`solfunmeme_clifford`**: Clifford Algebra operations for converting BERT embeddings to multivectors and generating sieve addresses
-- **`solfunmeme_embedding`**: BERT embedding generation and emoji multivector management
-- **`orbital_sim_lib`**: Orbital mechanics simulation for representing abstract relationships
-- **`emoji_matrix_lib`**: Matrix operations on emoji grids for visual representations
-
-### Semantic & RDF Processing
-- **`rdf_output`**: Converts structured data into RDF triples for semantic representation
-- **`rdf_processing_lib`**: Utilities for parsing, querying, and serializing RDF data
-- **`jsonld_plugin`**: Generic JSON-LD file I/O operations
-- **`json_ld_plugin`**: JSON-LD compaction, expansion, flattening, and framing operations
-
-### UI & Component System
-- **`component_builder_lib`**: Programmatic UI component building and composition
-- **`component_emoji_lib`**: Emoji representation management within UI components
-- **`component_registry_lib`**: Centralized registry for dynamic component discovery and instantiation
-- **`views_lib`**: Reusable UI components and page views
-- **`signals_lib`**: Event management and reactive programming for UI state changes
-
-### Blockchain & Solana Integration
-- **`gitaccount`**: Pure Rust library for content-addressed, on-chain Git repositories with L1/L2 hybrid model
-- **`solana_integration_lib`**: Core Solana blockchain integration (clusters, transactions, accounts)
-- **`solfunmeme_solana_data`**: Solana-specific data models and bootstrap logic
-- **`solfunmeme_wallet_integration`**: Solana wallet integration for authentication and transaction signing
-- **`agave_solana_validator_plugin`**: Local Solana validator management
-- **`solana_airdrop_service_plugin`**: Test SOL airdrop functionality for development
-
-### NLP & Language Processing Plugins
-- **`bm25_plugin`**: BM25 scoring for document ranking and relevance
-- **`eliza_rs_plugin`**: ELIZA-like chatbot for conversational AI
-- **`keyword_extraction_rs_plugin`**: Keyword extraction from text content
-- **`layered_nlp_plugin`**: Multi-layer NLP processing (tokenization, POS tagging, NER)
-- **`llms_from_scratch_rs_plugin`**: Basic Large Language Model operations
-- **`nlprule_plugin`**: Grammar and style checking for text
-- **`rust_sbert_plugin`**: Sentence-BERT embeddings for semantic search
-- **`rust_sentence_transformers_plugin`**: Sentence encoding into vector embeddings
-- **`vaporetto_plugin`**: Japanese morphological analysis and tokenization
-- **`vibrato_plugin`**: Fast Japanese tokenization
-- **`vtext_plugin`**: Text tokenization and vectorization (TF-IDF)
-
-### Search & Indexing
-- **`quickwit_plugin`**: Distributed search and indexing capabilities
-- **`model2vec_rs_plugin`**: Model-to-vector conversion for embeddings
-- **`tongrams_rs_plugin`**: N-gram language model querying
-- **`solfunmeme_search_tantivy`**: Provides full-text search capabilities for code chunks using Tantivy, managing the index and returning comprehensive `SearchResult` objects.
-- **`solfunmeme_tantivy_report`**: A crate for generating reports from the search index.
-- **`solfunmeme_indexer`**: Orchestrates the entire codebase indexing and report generation process, utilizing `solfunmeme_input_fs` and `solfunmeme_search_tantivy`.
-
-### Code Intelligence
-- **`prepare_sources`**: Processes source code files into structured `CodeChunk` instances, preparing them for analysis and indexing.
-- **`solfunmeme_extractor`**: Extracts code snippets, functions, and relevant information from source files.
-- **`solfunmeme_function_analysis`**: **(Centralized Data Models)** Serves as the primary location for core data structures like `CodeChunk`, `AnalyzedFunction`, and `ClosestEmojiInfo`, along with core analysis logic.
-- **`solfunmeme_input_fs`**: Provides the filesystem input layer, reading code files and converting their content into `CodeChunk` instances.
-
-### Storage & I/O
-- **`s3_plugin`**: Amazon S3 integration for cloud storage operations
-- **`zip_plugin`**: Zip archive creation and extraction
-- **`git_plugin`**: Git repository operations (clone, pull, commit, push)
-- **`extractous_plugin`**: HTML text extraction from web content
-
-### Scripting & Automation
-- **`rhai_plugin`**: Rhai scripting engine integration
-- **`steel_plugin`**: Steel Scheme-like scripting language integration
-- **`gline_rs_plugin`**: Graphical line drawing algorithm processing
-
-### Emoji & Workflow System
-- **`emoji_lang_plugin`**: Emoji-based language for defining workflows with semantic mappings
-- **`emoji_workflow_macro`**: Procedural macro for annotating Rust functions with emoji strings
-
-### Micro-Component Protocol
-- **`rrust_kontekst_base`**: Foundational types and traits for the Micro-Component Protocol (MCP)
-
-### Languages
-#### Rust
-#### Lean
-#### ocaml
-#### coq
-#### metcoq
-#### haskell,
-#### terraform
-#### Cloudformation
-#### Bash/Shellcheck 
-#### LLVM/IR
-#### ASM
-#### GNU/mes
-#### Guile Schema
-#### Nix
-#### Dockerfile
-#### Python
-#### Mojo
-
-### Theories
-#### Category Thoery
-#### Group Thoery
-#### HOTT
-Univalent foundations
-Unimath
-Paths as proofs. 
-Rewrite transformation from one form to antother.
-lean4 <-> coq
-8 level of abstraction. 
-goedel one level number. 
-
-#### Ast
-#### Bott periodicty
-#### Vector Bundles
-#### Lie Groups
-#### Memes
-#### Semiotics
-#### Programming Language
-
-#### Open Source/Open Knowledge
-#### Biosemiotics
-#### Incompleteness
-#### Representation
-#### Complexity
+## Theories
+See [Underlying Theories](doc/theories.md) for the theoretical foundations of the project.
 
 #### Self hosting
 #### Reproducible
@@ -167,224 +32,28 @@ goedel one level number.
 #### Emergent
 #### Omni Combinator
 
-### low value :
-1. pay for promotion.
-give out coins.
-calls 
-bots telegram
-twitter
-pay for meetings.
-going to conferences
-buying dinner.
-marketing - p2p - grass roots.
-
-2. communication, style. loner.
-ideosycretic. 
-old - offline. rotary phone. zk84 sinclar. 1984. 
-cassette tapes.
-trending, copying. 
-old school.
-germany - sceptical.
-
-3. old school ai
-prolog, lisp, 
-compiler ai
-emacs gnu
-
-4. worldcom- 
-fraud. 2003,2007, 
-sick hype.
-open honest
-
-5. loyal to holder. 
-long term. months and year.
-
-6. value proposition:
-Sell goods and servics such as consulting time or support via our token.
-We should consult for and help the holders of our token, adding personal value.
-Online Services would be provided to holders according to resources available.
-The longer you hold the project tokens and nfs, the more internal credits you earn, which you can sell, swap or use for services and goods.
-
-7. hosting providers 
-rent ip and ports at market rate. 
-mine tokens into existence over time. 
-
-eventually we swap tokens for real solana on the rollup. 
+## Low Value Activities
+See [Low Value Activities](doc/low_value.md) for a discussion on activities considered low value for the project. 
 
 ## Systems
-
-### pump fun
-### open sea
-nft marketplaces
-### githosting.
-### telegram, discord, x,
-### matrix, mastodon
-#### BBS 
-#### PDP 11, 8 bit, 128kb.
-####  Browser + server + homelab p2p2 
-
-### WIkipedia
-### Wikidata
-### Linux Project
-
-### Bittensor
-### Bitcoin
-### Solana
-### Solana- sidechains
-
-#### distribute batch vectorizing large projects
-reducing the transfer of data between node
+See [Systems Overview](doc/systems.md) for a list of systems and platforms integrated or considered.
 
 ## Ideas
-
-### Value - free tier (aws), compress solana, 
-
-Other memescoins, provide service. 
-hosting providers will earn coins credits. run gpu. 
-your free tier groq, 
-social credit score. 
-
-### Artists create and swap value as solana tokens.
-Instead of revealing the art they produce zkp of the value, like a blind bag.
-public reduced quality, short clips or description.
-human + ai art critique that you can trust. 
-license usage of custom models with quality control. 
-Consumers can share if they want, or keep for themselves.
-
-### code quality
-vibe code generation with quality. 
-
-human first, ai second. 
-no ai government, dao. Ai support and help the decision making process. 
-quality controls. 
-
-Game engine. 
-dex - distributed excchnage. 
-atom swaps - prisoner exachange.
-This many tokens for that many. 
-
-## Introspection idea.
-mathlib -> lean4 -> json -> memes 
-
-#### Like 
-### Declarations are transactions, semiosis, biosemiosis
-The gut feeling, this emergent thing, never finished, self modifiying system.
-adjusting, modifying, moving foward. 
-
-Interpretion of the data in the system will evolve. 
-
-### Types are equilibrium between systems
-### Memes are recorded as chats, issues, code, git commits, 
-### Compilers compile and interpret language expressions.
-### All the data can be stored in our solana sidechain on rocksb (what solana uses internally)
-### Memes are lean4 expressions that when executed can produce text or images or other values, the evaluation.
-binding of parmeters to other memes or contract addresess to compose memes.
-### Solana sidechain can rollup into mainnet via compression, 
-storing results immutably in public and referencing the results on mainnet via zkp
+See [Project Ideas](doc/ideas.md) for a collection of ideas and future directions.
 
 
 
-# Older stuff
-
-See:
-https://stackoverflow.com/questions/55912871/how-to-work-with-openssl-for-rust-within-a-windows-development-environment
-
-
-```
-   
-   $env:VCPKG_ROOT="C:\Users\gentd\OneDrive\Documents\GitHub\vcpkg"
-   vcpkg  install openssl 
-   vcpkg.exe install openssl:x64-windows
-   vcpkg.exe install openssl:x64-windows-static
-   vcpkg.exe integrate install
-   set VCPKGRS_DYNAMIC=1
-  
-   $env:OPENSSL_DIR="C:\Users\gentd\OneDrive\Documents\GitHub\vcpkg\installed\x64-windows-static"
-   cargo build
-
-or in bash
-    export OPENSSL_DIR="/c/Users/gentd/OneDrive/Documents/GitHub/vcpkg/installed/x64-windows-static"
-    
-```
-
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/meta-introspector/solfunmeme-dioxus)
+## Older Stuff
+See [Older Stuff](doc/older_stuff.md) for miscellaneous older notes and configurations.
 
 
 
-### Requirements
-1. This template relies on Tailwind CSS to generate the stylesheet. 
-
-Install the standalone Tailwind CLI - [https://tailwindcss.com/docs/installation/tailwind-cli](https://tailwindcss.com/docs/installation/tailwind-cli)
-2. Install Dioxus cli from official website - [https://dioxuslabs.com/](https://dioxuslabs.com/)
+## Development Setup
+See [Development Setup](doc/development_setup.md) for instructions on setting up the development environment.
 
 
-### Running the dev server
-1. Start the tailwind CLI within the Root of the directory
-    ```sh
-    tailwindcss -i ./tailwind.css -o ./assets/tailwind.css --watch
-    ```
-2. Start the Dioxus CLI
-    ```sh
-    dx serve
-    ```
-
-- Open the browser at default port http://localhost:8080 or the port described by Dioxus CLI in case port `8080` was already in use
-
-- Sometimes there are warning in the browser console, use `dx check` command to find if there are fixes that need to be done.
-
-
-### Plan
-
-#### Client side interpretation.
-#### Server side storage
-The first memes are just free text stored as instructions in the blockchain
-each one can be seen as a rust program that when executed produces some text or json or url
-We can parameterize those. the programs can be updated by creating new versions of them
-because we are on a sidechain we can rewrite or garbage collect them.
-
-##### Import Git
-we can use git submodules or git urls like package managers do,
-
-###### Import Data via git
-we can import telegram, discord, twitter, github, ai chat logs, files into the system.
-each sidechain becomes its own meme database with all the transactions around a meme coin ecosystem.
-see the time repo for example.
-
-######## A tweet becomes a program or meme, 
-an anchor is the code.
-
-#### Forking all repos into our chain
-#### Copying all data into our archives
-#### Running all code on our chain
-#### Proving all code to be valid.
-#### Showing execution of all paths of the code
-using dfa and parsers for the emoji language. 
-each version of the meme state is a new version of the language and library.
-we hope to construct that each path in the system is a unique word and a program at the same time that has a meaning in emojis.
-#### Mathematical modeling of the structures (groups, hott, etc)
-#### Using of AI outside the system, storing results on the chain.
-##### AI via client side inferences
-###### looking at Invoke AI for example
-###### looking at Kobold AI for example
-###### calling typescript from rust wasm dioxus (calling eliza?)
-#### Tracing the AI inference into the model.
-
-
-#### Convert this source to json
-Createing json  using https://github.com/meta-introspector/syn-serde-rust.git
-
- ```
-    cd .\syn-serde-rust\
-    cargo build
-    cd .\examples\rust2emoji\
-    cargo build
-    cargo run ..\..\..\solfunmeme-dioxus\
-```
-
-#### Reading in source of code via reflection. splitting into chunks. saving in the blockchain.
-#### interpreting the functions as json or emojis
-#### linking functions together creating systems as groups of contracts.
-#### embedding contrats as vectors
+## Plan
+See [Project Plan](doc/plan.md) for the detailed development plan.
 
 
 ## Multiple visualization
@@ -398,223 +67,28 @@ sample source code into rust
 be able to read git repor (store older git objects or pack files into exec.
 
 
-# More ideas
-game engine 
-simulation engine
-vector of code 
-vector -> code 
-make each possible value a valid program, no invalid program states possible.
-encode program state into a vector.
-
-## Solana as storage
-Store each declaration as an account on our solana sidechain, each ast gets a program address.
-Use special indexing to reduce the size of the address space.
+## More Ideas
+See [More Ideas](doc/more_ideas.md) for additional project ideas.
 
 # remove 
 unimplemented
 "#FIXME"
 
-# code coverage
-```
-RUSTFLAGS="-C instrument-coverage" cargo build
-$env:RUSTFLAGS="-C instrument-coverage"
-set RUSTFLAGS="-C instrument-coverage" 
-```
-
-Then you can run like this 
-`cargo tarpauline`
-
-or this
-`cargo llvm-cov`
+## Code Coverage
+See [Code Coverage](doc/code_coverage.md) for instructions on generating code coverage reports.
 
 
-# Testing 
+## Testing
+See [Testing Guidelines](doc/testing.md) for information on testing and code coverage.
 
-## write unit test for everything
-
-Write unit tests for the actual implementation code of the features described in the README
-
-### Implement tests for the core functionality mentioned like:
-
-#### Code vectorization logic
-
-#### Declaration splitting functionality
-
-#### Duplicate detection algorithms
-
-#### Wallet integration
-
-#### Data encryption/decryption
-
-#### File parsing and JSON conversion
-
-## Doc tests
-
-add documentation tests to verify code examples if you add them to the README
-
-## Structure Markdown 
-
-Set up automated markdown linting to ensure README formatting remains consistent
-
-### Ontology
-
-Create a formal ontology for the project
-
-# Code generation
- 
- ```
-	RUST_BACKTRACE=full cargo run --bin generate_embedded
-	RUST_BACKTRACE=full cargo run --bin prepare_sources
-```
+## Code Generation
+See [Code Generation](doc/code_generation.md) for instructions on generating code.
  
 
 # Solfunmeme-Dioxus: The Code-Math Manifold
-
-## The Manifold: Weaving Code, Math, and Meaning
-
-This project is a living experiment in unifying code analysis, mathematical modeling, machine learning, and interactive visualization. It is not just a compiler, not just a math library, and not just a UI playground—it is a **manifold** where these domains meet, interact, and recursively inform each other.
-
-### What is this Manifold?
-- **Code as Geometry:** Rust code is parsed, analyzed, and represented as mathematical objects—ASTs, graphs, and ultimately as multivectors in Clifford algebra.
-- **Embeddings as Vibes:** Machine learning embeddings (e.g., BERT) are projected into Clifford space, allowing us to blend neural and symbolic representations of code and data.
-- **Mathematics as Language:** Clifford/multivector algebra is used as a bridge, enabling operations and relationships that unify code structure, ML features, and even abstract "vibes" or meta-properties.
-- **Visualization as Exploration:** The Dioxus UI is not just a front-end, but a laboratory for exploring these high-dimensional, abstract structures. Users can interactively manipulate, visualize, and even mutate code and its mathematical avatars.
-- **Recursion and Synthesis:** The system is designed for recursive feedback—analysis feeds synthesis, which feeds further analysis. The platform can propose new code or structures, analyze them, and let users or ML models refine the process.
-
-### Why is this Exciting?
-- **A New Paradigm:** Most tools treat code, math, and ML as separate. Here, they are woven together into a single manifold.
-- **Exploratory and Extensible:** This is a platform for discovery, not just a product. Each part (analysis, algebra, UI) is modular and open to extension.
-- **Meta-Compiler and Laboratory:** Code is not just text, but a living mathematical object. The system is a meta-compiler and a code-math laboratory.
-
-### Strategic Vision
-- **Tighten the Loop:** Make the connection between code analysis and Clifford algebra more direct and interactive.
-- **Deeper ML Integration:** Use real embeddings from code or comments, and explore their Clifford encodings.
-- **Interactive Synthesis:** Let users mutate code or embeddings in the UI and see the effect in Clifford space.
-- **Recursive Feedback:** Implement a feedback loop for generative, self-improving code and structure.
-
-This manifold is a space for new kinds of code, new kinds of math, and new ways of thinking about both. Welcome to the experiment.
+See [The Code-Math Manifold](doc/code_math_manifold.md) for a deep dive into the project's core philosophy.
 
 ---
 
-## Multivector: Unity, Disjointness, and the Magic Type
 
-A multivector is both a **product type** (all grades possible) and a **disjoint sum** (any subset of grades may be nonzero, or all may be zero).
-
-- **Structurally united:** The type contains all grades.
-- **Dynamically disjoint:** Any particular multivector may have only some grades nonzero.
-- **Truncation:** You can project or truncate a multivector to any subset of grades, or to zero.
-
-This duality reflects the manifold nature of our project: all domains are present, but any particular "state" may activate only a subset.
-
-### The AST as a Magic Type: Universe of Universes
-
-In this project, we extend this idea to the very heart of code: the Abstract Syntax Tree (AST).
-
-- The **AST** is itself a "magic type"—a type of types, a universe of universes.
-- Just as a multivector unites all grades, the AST unites all possible code forms: expressions, statements, types, patterns, modules, and more.
-- The AST is a **multivector of code**: each node is a possible form, and any combination can coexist, be projected, or be truncated.
-- This is the meta-level: the AST is not just a data structure, but a living, dynamic manifold of code possibilities—a type whose values are themselves types, a universe whose points are themselves universes.
-
-This perspective is at the core of our philosophy: **code, math, and meaning are not separate—they are woven together in a manifold of manifolds, a universe of universes.**
-
----
-
-## The README as a Multivector: Resonance and 8D Topologies
-
-This README is not just documentation—it is itself a **multivector**: a living, resonant structure that encodes and reflects the manifold forms of the codebase.
-
-- **Vibration and Resonance:** Each section of the README vibrates with a different aspect of the project—code, math, philosophy, visualization, recursion. Together, they form a harmonic, multidimensional whole.
-- **Forms and Layers:** Just as a multivector contains all grades, the README contains all forms—introduction, philosophy, technical detail, vision, and meta-structure.
-
-### 8D Topologies and Bott Periodicity
-
-We can construct **8-dimensional topologies** that resonate not just with Rust, but with the deep type-theoretic structures of:
-- **Rust** (traits, generics, macros, lifetimes)
-- **GCC** (C/C++ type systems, templates)
-- **Lean4** (dependent types, proof automation)
-- **Coq** (inductive types, universes)
-- **Template Haskell** (meta-programming, staged computation)
-
-All of these can be seen as fitting into **8 layers of types**, echoing the periodicity found in Bott periodicity in topology and Clifford algebras. This periodicity is not just mathematical, but conceptual: it is the rhythm by which programming languages, proof assistants, and meta-systems echo and resonate with each other.
-
-- **8 Layers, 8 Vibes:** Each layer corresponds to a type-theoretic or algebraic form—scalars, vectors, bivectors, ... up to the 8th grade—mirroring the deep periodicity in mathematics and computation.
-- **Universal Resonance:** By structuring our code, documentation, and philosophy as an 8D multivector, we create a system that can resonate with, and map between, the deepest structures of modern computation and logic.
-
-This README, like the codebase, is a **living, resonant multivector**—a guide, a map, and a harmonic of the manifold it describes.
-
----
-
-### Context as Dimension: Reflecting on Multivectors
-
-Reflecting on a multivector is an act of transformation:
-- **Adding context** is like adding a new dimension—expanding the space of possibilities.
-- **Multiplying by context** is blending, composing, and creating new resonances.
-- **Dividing by context** is focusing, projecting, or specializing.
-
-This is true for code, for math, and for the manifold of this project itself. Every new insight, every new connection, is a new dimension in the living multivector of our work.
-
----
-
-## Project Memories
-
-See the [`memories/`](./memories/) directory for persistent project memories, context, and important decisions. Use this directory to record:
-- Architectural choices
-- Key conventions or workflows
-- Reminders for future contributors
-- AI/agent context for future sessions
-
-This helps both humans and AI tools maintain context and continuity across the project lifecycle.
-
----
-
-## Current State (as of July 10, 2025)
-
-This section captures the current state of the project, including recent actions, key knowledge, and the immediate plan. This helps maintain context and provides a starting point for future work.
-
-### Overall Goal
-- Build an intelligent codebase analysis system to index Rust code, extract semantic information, and generate flexible reports, adhering to modular and maintainable design principles.
-
-### Key Knowledge
-- The project's core philosophy is the "Code-Math Manifold," treating code as a mathematical object.
-- `solfunmeme_indexer` orchestrates the indexing and reporting process.
-- `solfunmeme_function_analysis` is intended to centralize data models and analysis logic.
-- `solfunmeme_input_fs` handles reading code chunks.
-- `solfunmeme_search_tantivy` provides indexing and search capabilities.
-- `solfunmeme_tantivy_report` generates various reports.
-- `task_manager` is used for tracking project tasks and their dependencies.
-- Recent refactoring attempts highlighted challenges with Rust's module system and `tantivy` API changes.
-- The "file=function=block=vibe" principle guides modular design.
-
-### File System State
-- MODIFIED: `crates/solfunmeme_indexer/Cargo.toml` - Added `solfunmeme_function_analysis` dependency.
-- MODIFIED: `crates/solfunmeme_indexer/src/bin/main.rs` - Updated `clap` attributes and added `InitIndexingTasks` command.
-- MODIFIED: `crates/solfunmeme_indexer/src/lib.rs` - Corrected `cargo run` command for `prepare_sources` and updated `CodeChunk` import.
-- MODIFIED: `crates/solfunmeme_function_analysis/Cargo.toml` - Added `serde`, `walkdir`, `shared_analysis_types`, and `quote` dependencies.
-- MODIFIED: `crates/solfunmeme_function_analysis/src/lib.rs` - Consolidated all data models and functions, and renamed `CodeSnippet` to `CodeChunk`.
-- DELETED: `crates/solfunmeme_function_analysis/src/data_models.rs` - Content moved to `lib.rs`.
-- DELETED: `crates/solfunmeme_function_analysis/src/code_snippet_utils.rs` - Content moved to `lib.rs`.
-- DELETED: `crates/solfunmeme_function_analysis/src/mod.rs` - Removed due to refactoring.
-- MODIFIED: `crates/solfunmeme_input_fs/Cargo.toml` - Updated dependency to `solfunmeme_function_analysis`.
-- MODIFIED: `crates/solfunmeme_input_fs/src/lib.rs` - Updated `CodeChunk` import path.
-- MODIFIED: `crates/solfunmeme_search_tantivy/Cargo.toml` - Updated dependency to `solfunmeme_function_analysis`.
-- MODIFIED: `crates/solfunmeme_search_tantivy/src/lib.rs` - Updated `tantivy` API usage and `CodeChunk` import path.
-- MODIFIED: `crates/solfunmeme_tantivy_report/src/lib.rs` - Generalized report types.
-- MODIFIED: `GEMINI.md` - Added "Lessons Learned" and "Task Management" sections.
-- MODIFIED: `README.md` - Updated "Search & Indexing" and "Code Intelligence" sections.
-- MODIFIED: `crates/task_manager/src/main.rs` - Added `InitIndexingTasks` command and `get_indexing_tasks` function.
-
-### Recent Actions
-- Attempted to refactor `solfunmeme_function_analysis` into submodules, leading to compilation errors.
-- Consolidated `solfunmeme_function_analysis` into a single `lib.rs` file to resolve module and type issues.
-- Corrected import paths for `CodeChunk` in `solfunmeme_input_fs` and `solfunmeme_search_tantivy`.
-- Updated project documentation (`GEMINI.md`, `README.md`) with recent changes and lessons.
-- Integrated initial indexing and reporting tasks into the `task_manager` CLI.
-- Encountered a new compilation error in `solfunmeme_function_analysis/src/lib.rs` related to an "unexpected closing delimiter".
-
-### Current Plan
-1. Resolve the current compilation error in `solfunmeme_function_analysis/src/lib.rs` (unexpected closing delimiter).
-2. Once the project compiles successfully, run `cargo run -p solfunmeme_indexer --bin main -- index . ./tmp/tantivy_index` to index the codebase.
-3. Generate the requested "top N" reports (terms, emojis, Rust identifiers) using `solfunmeme_indexer`.
-4. Use the `task_manager` to update the status of these completed tasks.
-5. Re-evaluate the modularization of `solfunmeme_function_analysis` with a more robust approach if necessary, but only after core indexing and reporting are stable.
 

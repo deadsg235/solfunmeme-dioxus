@@ -1114,3 +1114,6 @@
 [submodule "vendor/steel"]
 	path = vendor/steel
 	url = https://github.com/mattwparas/steel
+[submodule "vendor/task_manager"]
+	path = vendor/task_mangager
+	url = https://github.com/jmikedupont2/task_manager
