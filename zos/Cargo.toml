@@ -1,0 +1,12 @@
+[package]
+name = "zos"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+rustyline = "13"
+
+[[bin]]
+name = "zos"
+path = "src/main.rs"
