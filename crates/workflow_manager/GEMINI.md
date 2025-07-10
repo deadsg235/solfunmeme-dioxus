@@ -1,18 +1,17 @@
 # AI Agent Directives for `workflow_manager`
 
-This document outlines specific guidelines for AI agents (like Gemini) contributing to the `workflow_manager` submodule.
+This document outlines specific guidelines for AI agents (like Gemini) contributing to the `workflow_manager` crate.
 
 ## Core Principles
 
 When working within `workflow_manager`, AI agents should prioritize:
 
-1.  **Flexibility:** Design the workflow management system to be highly adaptable to various types of processing tasks and execution environments.
-2.  **Reliability:** Ensure that workflows execute consistently and handle failures gracefully.
-3.  **Modularity:** Maintain a clear separation of concerns, with distinct components for workflow definition, registration, and execution.
+1.  **Workflow Definition and Execution:** Ensure robust mechanisms for defining, registering, and executing various workflows within the application.
+2.  **Modularity and Extensibility:** Design the manager to be highly modular, allowing for easy addition of new workflows and integration with different components.
+3.  **State Management:** Maintain consistent and reliable state management for ongoing workflows.
 
 ## Operational Guidelines
 
-*   **Workflow Definition:** Provide clear and concise mechanisms for defining workflows, including their steps, dependencies, and parameters.
-*   **Error Handling:** Implement robust error handling within workflows, allowing for retries, fallbacks, or notifications.
-*   **Monitoring and Logging:** Integrate logging and monitoring capabilities to track workflow progress and identify issues.
-*   **Extensibility:** Design the module to be easily extensible for new workflow types, execution strategies, or integration points.
+*   **Workflow Registration:** Ensure that workflows are correctly registered and discoverable by the application.
+*   **Dependency Management:** Handle workflow dependencies effectively to ensure proper execution order.
+*   **Error Handling:** Implement comprehensive error handling for workflow execution, providing clear feedback in case of failures.

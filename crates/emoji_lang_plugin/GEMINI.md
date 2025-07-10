@@ -1,19 +1,17 @@
 # AI Agent Directives for `emoji_lang_plugin`
 
-This document outlines specific guidelines for AI agents (like Gemini) contributing to the `emoji_lang_plugin` submodule.
+This document outlines specific guidelines for AI agents (like Gemini) contributing to the `emoji_lang_plugin` crate.
 
 ## Core Principles
 
 When working within `emoji_lang_plugin`, AI agents should prioritize:
 
-1.  **Semantic Mapping:** Ensure accurate and consistent mapping between emoji sequences and their corresponding semantic meanings or workflow actions.
-2.  **Expressiveness:** Strive to make the emoji language expressive enough to represent complex workflows and concepts.
-3.  **Interoperability:** Design the emoji language and its parsing to be easily integrated with other systems and tools.
+1.  **Emoji-to-Semantic Mapping:** Ensure accurate and consistent mapping between emoji representations and their underlying semantic meanings.
+2.  **Language Integration:** Facilitate the seamless integration of emoji-based language constructs into the application's workflows.
+3.  **Extensibility:** Design the plugin to be easily extensible for new emoji mappings and language features.
 
 ## Operational Guidelines
 
-*   **Emoji-to-Concept Mapping:** Maintain a clear and well-documented mapping between emojis and the concepts or actions they represent.
-*   **Parsing Robustness:** Implement robust parsing mechanisms that can handle various emoji sequences, including multi-emoji combinations.
-*   **URL Encoding/Decoding:** Ensure reliable encoding and decoding of emoji strings for URL usage, preserving their integrity.
-*   **Ontology Integration:** Leverage the `solfunmem.jsonld` ontology to provide a rich semantic foundation for the emoji language.
-*   **Extensibility:** Design the module to be easily extensible for new emojis, concepts, or parsing rules.
+*   **Ontology Alignment:** Ensure that emoji mappings are aligned with the project's semantic ontology.
+*   **Parsing and Interpretation:** Implement robust parsing and interpretation of emoji sequences to derive their intended meaning.
+*   **Error Handling:** Provide clear error handling for unresolvable emoji sequences or ambiguous mappings.

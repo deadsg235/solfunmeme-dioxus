@@ -153,15 +153,32 @@ impl SearchIndex {
         self.search(&query, limit)
     }
     
-    pub fn get_stats(&self) -> Result<HashMap<String, usize>> {
+    pub fn get_stats_by_emojis(&self) -> Result<HashMap<String, usize>> {
         let reader = self.index.reader()?;
-        let searcher = reader.searcher();
+        
+        let mut stats = HashMap::new();
+        
+        let emoji_field = self.schema.get_field("emoji")?;
+        
+        for segment_reader in reader.iter_segments() {
+            let term_dict = segment_reader.fast_fields().text(emoji_field).expect("Failed to get term dict");
+            for (term, _doc_freq) in term_dict.terms() {
+                let term_str = term.text();
+                *stats.entry(term_str.to_string()).or_insert(0) += 1;
+            }
+        }
+        
+        Ok(stats)
+    }
+
+    pub fn get_stats_by_terms(&self) -> Result<HashMap<String, usize>> {
+        let reader = self.index.reader()?;
         
         let mut stats = HashMap::new();
         
         let content_field = self.schema.get_field("content")?;
         
-        for segment_reader in reader.segments() {
+        for segment_reader in reader.iter_segments() {
             let term_dict = segment_reader.fast_fields().text(content_field).expect("Failed to get term dict");
             for (term, _doc_freq) in term_dict.terms() {
                 let term_str = term.text();
@@ -170,6 +187,11 @@ impl SearchIndex {
         }
         
         Ok(stats)
+    }
+
+    pub fn get_stats_by_hex_codes(&self) -> Result<HashMap<String, usize>> {
+        // This is a placeholder. Actual implementation would involve extracting hex codes.
+        Ok(HashMap::new())
     }
 }
 

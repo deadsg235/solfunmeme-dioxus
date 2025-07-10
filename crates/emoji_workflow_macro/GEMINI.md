@@ -1,19 +1,17 @@
 # AI Agent Directives for `emoji_workflow_macro`
 
-This document outlines specific guidelines for AI agents (like Gemini) contributing to the `emoji_workflow_macro` submodule.
+This document outlines specific guidelines for AI agents (like Gemini) contributing to the `emoji_workflow_macro` crate.
 
 ## Core Principles
 
 When working within `emoji_workflow_macro`, AI agents should prioritize:
 
-1.  **Correctness:** Ensure that the macro correctly parses input, generates valid Rust code, and integrates seamlessly with the `workflow_manager` and `emoji_lang_plugin`.
-2.  **Usability:** Design the macro to be intuitive and easy for developers to use, providing clear error messages when necessary.
-3.  **Efficiency:** Optimize the macro's performance to minimize compilation times.
+1.  **Macro Correctness:** Ensure that the procedural macro correctly transforms emoji-based annotations into valid Rust code.
+2.  **Syntax and Semantics:** Maintain strict adherence to Rust's syntax and semantics during macro expansion.
+3.  **Usability:** Design the macro to be intuitive and easy to use for defining workflows with emojis.
 
 ## Operational Guidelines
 
-*   **Attribute Parsing:** Implement robust parsing of macro attributes, extracting emoji strings and other relevant metadata.
-*   **AST Transformation:** Use `syn` and `quote` effectively to transform the annotated Rust code, inserting workflow registration logic.
-*   **Error Reporting:** Provide informative and actionable error messages to guide developers in correct macro usage.
-*   **Compatibility:** Ensure compatibility with different Rust versions and compiler features.
-*   **Extensibility:** Design the macro to be easily extensible for new annotation types or code generation patterns.
+*   **Attribute Parsing:** Implement robust parsing of custom attributes to correctly interpret emoji annotations.
+*   **Code Generation:** Generate idiomatic and efficient Rust code that integrates seamlessly with the `workflow_manager`.
+*   **Error Reporting:** Provide clear and helpful error messages for incorrect macro usage or invalid emoji patterns.
