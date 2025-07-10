@@ -50,4 +50,5 @@ This `GEMINI.md` file serves as a starting point. As the project evolves, so too
 *   **`tclifford::Multivector` Dimension**: The `MultivectorBase` struct (aliased as `SolMultivector`) does not have a `.len()` or `.dimension()` method directly. The dimension of the Clifford algebra should be accessed via `SolCl::dim()`. Ensure `SolCl` is imported from `crate::clifford`.
 *   **Unresolved Imports**: Always ensure all necessary types and traits are correctly imported from their respective modules. Pay close attention to the full path of the import (e.g., `sophia_iri::Iri` vs. `sophia_api::Iri`).
 *   **Unused Manifest Keys**: Remove unused profile configurations from `Cargo.toml` to clean up warnings (e.g., `profile.android-dev.sophia_*`).
+*   **Vendored Dependencies**: This project may use vendored dependencies located in the `/vendor` directory. When a user specifies using a vendored dependency, update the `Cargo.toml` to use a path dependency (e.g., `libloading = { path = "../vendor/rust_libloading" }`) instead of a version from a registry.
 

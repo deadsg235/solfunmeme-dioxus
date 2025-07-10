@@ -73,3 +73,6 @@ flycheck_*.el
 commit_message.txt
 founding_documents/internal/
 /codebase_index/
+/zos/plugins/*.so
+/zos/plugins/*.dll
+/zos/plugins/*.dylib

@@ -1,6 +1,9 @@
+pub mod plugins;
+
 use clap::{Parser, Subcommand};
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
+use plugins::PluginManager;
 
 #[derive(Parser)]
 #[command(name = "zos")]
@@ -92,6 +95,9 @@ fn run_pipeline(grep_pattern: &str, do_sort: bool, do_uniq: bool, head: Option<u
 
 fn run_repl() {
     let mut rl = Editor::<(), _>::new().unwrap();
+    let mut plugin_manager = PluginManager::new();
+    plugin_manager.load_plugins("plugins");
+
     println!("Welcome to zos interactive CLI! Type 'help' for commands, 'exit' to quit.");
     loop {
         let readline = rl.readline("zos> ");
@@ -105,7 +111,7 @@ fn run_repl() {
                     }
                     "help" => print_help(),
                     "" => {},
-                    _ => println!("Unknown command: {}. Type 'help' for a list of commands.", cmd),
+                    _ => plugin_manager.execute(cmd),
                 }
             }
             Err(ReadlineError::Interrupted) | Err(ReadlineError::Eof) => {
