@@ -35,3 +35,11 @@ When contributing to this project, AI agents should:
 *   **Document Everything:** Given the abstract nature of this project, clear and concise documentation is essential. Document your code, your data, and your ideas.
 
 This `GEMINI.md` file serves as a starting point. As the project evolves, so too will this protocol. Welcome to the manifold.
+
+## Lessons Learned (from recent refactoring)
+
+*   **Centralized Data Models:** The `shared_analysis_types` crate has been deprecated. Its functionalities and data models, particularly `CodeChunk`, have been consolidated into `solfunmeme_function_analysis`. This centralizes core data structures, preventing fragmentation and improving consistency across the project.
+*   **Expanded `CodeChunk` Structure:** The `CodeChunk` data model has been significantly expanded to include more detailed metadata such as `language`, `content_hash`, `token_count`, `line_count`, `char_count`, and `test_result`. This enriches the information available for indexing and analysis.
+*   **New `solfunmeme_indexer` Crate:** A new `solfunmeme_indexer` crate has been introduced to manage the indexing of code chunks into a Tantivy search index and generate reports. This modularizes the indexing process.
+*   **Simplified `prepare_sources`:** The `prepare_sources` crate has been simplified by removing conditional compilation attributes related to `gpu_backend` features and stubbing out the `calculate_orbital_path` function. This streamlines the codebase and focuses `prepare_sources` on its core task of preparing source code for analysis.
+

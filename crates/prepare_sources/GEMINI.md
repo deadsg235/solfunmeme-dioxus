@@ -21,6 +21,9 @@ When working within `prepare_sources`, AI agents should prioritize:
     *   It orchestrates the embedding and multivector conversion for individual code snippets.
     *   Recursive function extraction from Rust files, including handling external modules and pre-processing `#[cfg(...)]` attributes, is managed by `src/function_analyzer.rs`.
     *   `FunctionInfo` now includes a `semantic_summary` derived from AST traversal (using the `syn` crate) by flattening identifiers and literals.
+    *   The `process_rust_file` and `process_markdown_file` functions have been simplified by removing conditional compilation attributes related to `gpu_backend` features.
+    *   The `calculate_orbital_path` function has been stubbed out.
+    *   The `project_analyzer` now uses `CodeChunk` directly from `solfunmeme_function_analysis` and includes new fields like `language`, `content_hash`, `token_count`, `line_count`, `char_count`, and `test_result`.
 *   **Ontology Generation**: The `ontology_generator` module (`src/ontology_generator/`) is responsible for creating RDF ontologies in Turtle format from analyzed function data. Special attention must be paid to `sophia` API usage (specifically version 0.8.x) for `IriRef` type annotations, `SimpleTerm::Literal` construction, and `TurtleSerializer` methods.
 *   **Usage**: To run the full project analysis and ontology generation, use the following command:
 
