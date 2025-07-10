@@ -8855,6 +8855,7 @@ dependencies = [
  "core_data_lib",
  "dioxus",
  "serde",
+ "solfunmeme_core_logic",
 ]
 
 [[package]]
@@ -15647,7 +15648,6 @@ dependencies = [
  "log",
  "markdown",
  "markdown-meta-parser",
- "model_lib",
  "nalgebra 0.33.2",
  "ndarray 0.15.6",
  "nom 8.0.0",
@@ -15670,6 +15670,7 @@ dependencies = [
  "shared_types_lib",
  "signals_lib",
  "solfunmeme_extractor",
+ "solfunmeme_models",
  "sophia_api 0.8.0",
  "sophia_inmem 0.8.0",
  "sophia_turtle 0.8.0",
@@ -15790,15 +15791,15 @@ dependencies = [
 name = "solfunmeme_models"
 version = "0.1.0"
 dependencies = [
- "anyhow",
- "bs58",
- "chrono",
- "log",
+ "aes-gcm",
+ "base64 0.22.1",
+ "core_data_lib",
+ "dioxus",
+ "rand 0.8.5",
+ "rand_core 0.6.4",
  "serde",
  "serde_json",
- "solana-sdk",
- "thiserror 2.0.12",
- "uuid",
+ "sha2 0.10.9",
 ]
 
 [[package]]
@@ -15902,10 +15903,15 @@ dependencies = [
 name = "solfunmeme_tools"
 version = "0.1.0"
 dependencies = [
- "model_lib",
+ "glob",
+ "markdown",
  "regex",
+ "rust-embed 8.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "solfunmeme_core_logic",
  "solfunmeme_extractor",
+ "solfunmeme_models",
+ "thiserror 1.0.69",
+ "walkdir",
 ]
 
 [[package]]

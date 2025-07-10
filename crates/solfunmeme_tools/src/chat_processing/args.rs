@@ -1,4 +1,5 @@
 use std::path::PathBuf;
+use std::env;
 
 #[derive(Debug)]
 pub struct ChatProcessorArgs {
@@ -9,7 +10,6 @@ pub struct ChatProcessorArgs {
 
 impl ChatProcessorArgs {
     pub fn from_env() -> Result<Self, Box<dyn std::error::Error>> {
-        use std::env;
         let mut args = env::args().skip(1);
         let mut target_path: Option<String> = None;
         let mut limit: Option<usize> = None;

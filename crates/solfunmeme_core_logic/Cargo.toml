@@ -67,7 +67,7 @@ component_registry_lib = {path = "../../crates/component_registry_lib"}
 component_emoji_lib = {path = "../../crates/component_emoji_lib"}
 playground_lib = {path = "../../crates/playground_lib"}
 views_lib = {path = "../../crates/views_lib"}
-model_lib = {path = "../../crates/model_lib"}
+solfunmeme_models = {path = "../../crates/solfunmeme_models"}
 shared_types_lib = {path = "../../crates/shared_types_lib"}
 signals_lib = {path = "../../crates/signals_lib"}
 ctor = "0.4.2"

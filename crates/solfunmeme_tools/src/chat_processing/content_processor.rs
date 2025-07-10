@@ -1,22 +1,15 @@
 use regex::Regex;
-use std::fs;
-use std::path::Path;
+use solfunmeme_extractor::model::clean_html::clean_html;
 
-pub fn process_content(input_path: &Path) -> Result<String, Box<dyn std::error::Error>> {
-    let content = fs::read_to_string(input_path)?;
-    let html_tag_regex = Regex::new(r"<[^>]*>")?;
-    let cleaned_content = html_tag_regex.replace_all(&content, "");
+pub fn process_content(content: &str) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+    let cleaned_content = clean_html(content);
     
-    let turns: Vec<&str> = cleaned_content
+    // Split into conversation turns
+    let turns: Vec<String> = cleaned_content
         .split("### ")
         .filter(|s| !s.trim().is_empty())
+        .map(|s| s.to_string())
         .collect();
 
-    let processed_content = turns
-        .into_iter()
-        .map(super::turn_processor::process_turn)
-        .collect::<Vec<_>>()
-        .join("\n\n");
-
-    Ok(processed_content)
+    Ok(turns)
 }

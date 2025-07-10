@@ -6,12 +6,12 @@ license = "AGPL-3.0"
 publish = false
 
 [dependencies]
+dioxus = { version = "0.6.3", features = ["router"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-thiserror = "2.0.12"
-log = "0.4.21"
-anyhow = "1.0"
-solana-sdk = { version = "2.3.0" }
-bs58 = "0.5.1"
-chrono = { version = "0.4", features = ["serde"] }
-uuid = { version = "1.17.0", features = ["v4", "js", "rng-getrandom", "rng-rand"] } 
+core_data_lib = { path = "../core_data_lib" }
+aes-gcm = "0.10.3"
+base64 = "0.22.1"
+sha2 = "0.10.9"
+rand = "0.8.5"
+rand_core = { version = "0.6.4", features = ["std"] } 

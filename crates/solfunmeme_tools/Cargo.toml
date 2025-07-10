@@ -5,26 +5,30 @@ edition = "2021"
 
 [[bin]]
 name = "test_runner"
-path = "src/bin/test_runner.rs"
+path = "src/bin/test_runner_cli.rs"
 
 [[bin]]
 name = "doc_test_generator"
-path = "src/bin/doc_test_generator.rs"
+path = "src/bin/doc_test_generator_cli.rs"
 
 [[bin]]
 name = "doc_processor"
-path = "src/bin/doc_processor.rs"
+path = "src/bin/doc_processor_cli.rs"
 
-[[bin]]
-name = "prepare_sources_sh"
-path = "src/bin/prepare.sources.sh"
+
 
 [[bin]]
 name = "chat_processor"
-path = "src/bin/chat_processor.rs"
+path = "src/bin/chat_processor_cli.rs"
 
 [dependencies]
 solfunmeme_core_logic = { path = "../solfunmeme_core_logic" }
-model_lib = { path = "../model_lib" }
+solfunmeme_models = { path = "../solfunmeme_models" }
 regex = "1.10"
 solfunmeme_extractor = { path = "../solfunmeme_extractor" }
+walkdir = "2.5"
+glob = "0.3.1"
+thiserror = "1.0"
+markdown = "1.0"
+rust-embed = { version = "8.7.2", features = ["debug-embed"] }
+

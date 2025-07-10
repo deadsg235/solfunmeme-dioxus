@@ -1,8 +1,8 @@
-mod args;
-mod file_finder;
-mod content_processor;
-mod turn_processor;
-mod output_handler;
+pub mod args;
+pub mod file_finder;
+pub mod content_processor;
+pub mod turn_processor;
+pub mod output_handler;
 
 pub use args::ChatProcessorArgs;
 pub use file_finder::find_chat_files;
