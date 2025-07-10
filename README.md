@@ -182,15 +182,15 @@ The Solfunmeme Dioxus project is organized into a comprehensive ecosystem of spe
 - **`quickwit_plugin`**: Distributed search and indexing capabilities
 - **`model2vec_rs_plugin`**: Model-to-vector conversion for embeddings
 - **`tongrams_rs_plugin`**: N-gram language model querying
-- **`solfunmeme_search_tantivy`**: Full-text search capabilities using Tantivy search engine
-- **`solfunmeme_tantivy_report`**: A crate for generating reports from the search index
-- **`solfunmeme_indexer`**: Orchestrates codebase indexing and report generation.
+- **`solfunmeme_search_tantivy`**: Provides full-text search capabilities for code chunks using Tantivy, managing the index and returning comprehensive `SearchResult` objects.
+- **`solfunmeme_tantivy_report`**: A crate for generating reports from the search index.
+- **`solfunmeme_indexer`**: Orchestrates the entire codebase indexing and report generation process, utilizing `solfunmeme_input_fs` and `solfunmeme_search_tantivy`.
 
 ### Code Intelligence
-- **`prepare_sources`**: Processes source code files into structured CodeChunks
-- **`solfunmeme_extractor`**: Extracts code snippets, functions, and relevant information from source files
-- **`solfunmeme_function_analysis`**: **(Refactored)** Now centralizes data models and core analysis logic for code snippets and functions.
-- **`solfunmeme_input_fs`**: Filesystem input layer for reading code files and converting to CodeChunks
+- **`prepare_sources`**: Processes source code files into structured `CodeChunk` instances, preparing them for analysis and indexing.
+- **`solfunmeme_extractor`**: Extracts code snippets, functions, and relevant information from source files.
+- **`solfunmeme_function_analysis`**: **(Centralized Data Models)** Serves as the primary location for core data structures like `CodeChunk`, `AnalyzedFunction`, and `ClosestEmojiInfo`, along with core analysis logic.
+- **`solfunmeme_input_fs`**: Provides the filesystem input layer, reading code files and converting their content into `CodeChunk` instances.
 
 ### Storage & I/O
 - **`s3_plugin`**: Amazon S3 integration for cloud storage operations

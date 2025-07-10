@@ -1,35 +1,16 @@
 # `solana_integration_lib`
 
-This crate provides core functionalities for integrating with the Solana blockchain, enabling the Solfunmeme project to interact with on-chain data and programs.
+This crate provides data models and functions for integrating with the Solana blockchain, specifically for representing code-related entities and managing buy orders on-chain.
 
-## Purpose
+## Key Data Structures
 
-It serves as the primary interface for connecting to Solana clusters, sending transactions, querying account data, and managing blockchain-related operations, forming the backbone of decentralized features within the application.
+### Structs:
 
-## Core Functionalities
+*   **`Ontology`**: Represents an ontology on the Solana blockchain, defining its ID, classes, properties, creator, and timestamp.
+*   **`CodeFile`**: Stores information about a code file, including its name, path, references to functions and buy orders, associated ontology, creator, and timestamp.
+*   **`Term`**: Represents a term with its text, description, references to emojis and functions, associated buy order, ontology, creator, and timestamp.
+*   **`BuyOrder`**: Defines a buy order with a unique ID, source code chunk, vectorized result, reference to the instance, status, associated ontology, creator, creator, and timestamp.
 
--   **Connect to Cluster**: Establish a connection to a Solana RPC endpoint (e.g., devnet, mainnet-beta).
--   **Send Transactions**: Construct and send transactions to the Solana network.
--   **Query Accounts**: Retrieve data from Solana accounts.
--   **Program Interaction**: Interact with Solana programs deployed on-chain.
+### Enums:
 
-## Usage (Conceptual)
-
-```rust
-// use solana_integration_lib::{SolanaClient, Cluster};
-// use solana_sdk::signature::Keypair;
-
-// #[tokio::main]
-// async fn main() {
-//     let client = SolanaClient::new(Cluster::Devnet);
-//     let payer = Keypair::new(); // Example keypair
-
-//     // Example: Get account balance
-//     // let balance = client.get_balance(&payer.pubkey()).await.expect("Failed to get balance");
-//     // println!("Payer balance: {}", balance);
-
-//     // Example: Send a simple transaction
-//     // let recipient = Keypair::new().pubkey();
-//     // client.transfer(&payer, &recipient, 1_000_000).await.expect("Failed to transfer");
-// }
-```
+*   **`BuyOrderStatus`**: Defines the possible states of a buy order: `Open`, `OfferReceived`, and `Fulfilled`.

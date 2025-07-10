@@ -1,28 +1,9 @@
 # `solfunmeme_input_fs`
 
-This crate provides functionalities for reading code files from the filesystem and converting their content into structured `CodeChunk`s.
+This crate provides the filesystem input layer for the `solfunmeme-dioxus` project. Its primary responsibility is to read code files from specified directories and convert their content into `CodeChunk` instances for further processing.
 
-## Purpose
+## Key Functionality
 
-It serves as the primary input layer for the code analysis pipeline, abstracting away the complexities of file system interaction and providing a standardized way to ingest source code for further processing.
+*   **`read_code_chunks`**: Traverses a given directory, reads the content of code files, and creates `CodeChunk` objects. It populates fields such as `language`, `content`, `line_start`, `line_end`, `content_hash`, `token_count`, `line_count`, `char_count`, and `test_result`.
 
-## Core Functionalities
-
--   **Read Code Chunks**: Reads files from a specified path (or current directory) and generates a vector of `CodeChunk` instances, each representing a segment of the code.
-
-## Usage
-
-```rust
-use solfunmeme_input_fs::read_code_chunks;
-
-fn main() {
-    // Read code chunks from the current directory (conceptual)
-    let code_chunks = read_code_chunks(None, Some(10)).expect("Failed to read code chunks");
-    println!("Read {} code chunks.", code_chunks.len());
-
-    for chunk in code_chunks {
-        println!("Path: {}, Lines: {}-{}", chunk.path, chunk.line_start, chunk.line_end);
-        // println!("Content:\n{}", chunk.content);
-    }
-}
-```
+This crate does not define any new structs or enums; it primarily utilizes the `CodeChunk` data model from `solfunmeme_function_analysis`.
