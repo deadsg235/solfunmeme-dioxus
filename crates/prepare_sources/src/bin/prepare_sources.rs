@@ -2,7 +2,7 @@ use serde_json;
 use serde::{Deserialize, Serialize};
 use solfunmeme_input_fs::read_code_chunks;
 
-use solfunmeme_function_analysis::data_models::CodeChunk;
+use solfunmeme_function_analysis::CodeChunk;
 
 fn main() {
     use std::env;
@@ -45,9 +45,11 @@ fn main() {
         }
     };
 
-    println!("[INFO] Processing {} files:", code_chunks.len());
+    eprintln!("[INFO] Processing {} files:", code_chunks.len());
 
     for chunk in code_chunks {
-        println!("{}", serde_json::to_string(&chunk).unwrap());
+        let json_chunk = serde_json::to_string(&chunk).unwrap();
+        eprintln!("[DEBUG] Serialized chunk: {}", json_chunk);
+        println!("{}", json_chunk);
     }
 }

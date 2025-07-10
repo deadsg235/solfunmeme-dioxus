@@ -2,7 +2,7 @@ use walkdir::WalkDir;
 use std::fs;
 use std::path::Path;
 use anyhow::Result;
-use solfunmeme_function_analysis::CodeSnippet;
+use solfunmeme_function_analysis::CodeChunk;
 
 pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Result<Vec<CodeChunk>> {
     let mut discovered_files = Vec::new();
@@ -40,12 +40,15 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
         match fs::read_to_string(&path) {
             Ok(content) => {
                 let chunk = CodeChunk {
-                    path: path.to_string_lossy().to_string(),
+                    language: ext.clone(), // Use file extension as language
                     content: content.clone(),
-                    emoji: "❓".to_string(), // Placeholder emoji
                     line_start: 1,
-                    line_end: content.lines().count() as u32,
-                    chunk_type: "file".to_string(),
+                    line_end: content.lines().count(),
+                    content_hash: format!("{:x}", md5::compute(&content)), // Placeholder hash
+                    token_count: content.split_whitespace().count(), // Placeholder token count
+                    line_count: content.lines().count(),
+                    char_count: content.chars().count(),
+                    test_result: Some("Untested".to_string()), // Placeholder test result
                 };
                 code_chunks.push(chunk);
             },

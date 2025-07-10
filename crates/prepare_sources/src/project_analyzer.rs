@@ -2,9 +2,7 @@ use anyhow::Result;
 use std::path::Path;
 use std::fs;
 use walkdir::WalkDir;
-use std::collections::HashMap;
-use shared_analysis_types::CodeChunk;
-use serde::{Deserialize, Serialize};
+use solfunmeme_function_analysis::CodeChunk;
 
 
 
@@ -29,12 +27,15 @@ pub fn analyze_project(project_root: &Path) -> Result<Vec<CodeChunk>> {
                             let end_line = start_line + chunk_lines.len() - 1;
 
                             let chunk = CodeChunk {
-                                path: file_path.to_string_lossy().to_string(),
+                                language: ext.clone(),
                                 content: chunk_lines.join("\n"),
-                                emoji: "📄".to_string(), // Generic document emoji
-                                line_start: start_line as u32,
-                                line_end: end_line as u32,
-                                chunk_type: "code".to_string(),
+                                line_start: start_line,
+                                line_end: end_line,
+                                content_hash: format!("{:x}", md5::compute(chunk_lines.join("\n"))),
+                                token_count: chunk_lines.join(" ").split_whitespace().count(),
+                                line_count: chunk_lines.len(),
+                                char_count: chunk_lines.join("\n").chars().count(),
+                                test_result: Some("Untested".to_string()),
                             };
                             code_chunks.push(chunk);
                         }

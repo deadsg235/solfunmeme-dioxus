@@ -9,15 +9,19 @@ use tantivy::query::QueryParser;
 use tantivy::schema::*;
 use tantivy::{Index, IndexWriter};
 
-use solfunmeme_function_analysis::CodeSnippet;
+use solfunmeme_function_analysis::CodeChunk;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchResult {
-    pub path: String,
+    pub language: String,
     pub content: String,
-    pub emoji: String,
-    pub line_start: u32,
-    pub line_end: u32,
+    pub line_start: usize,
+    pub line_end: usize,
+    pub content_hash: String,
+    pub token_count: usize,
+    pub line_count: usize,
+    pub char_count: usize,
+    pub test_result: Option<String>,
     pub score: f32,
 }
 
@@ -33,15 +37,15 @@ impl SearchIndex {
         let mut schema_builder = Schema::builder();
         
         // Fields for indexing
-        let path_field = schema_builder.add_text_field("path", TEXT | STORED);
+        let language_field = schema_builder.add_text_field("language", TEXT | STORED);
         let content_field = schema_builder.add_text_field("content", TEXT | STORED);
-        let emoji_options = TextOptions::default()
-            .set_indexing_options(TextFieldIndexing::default().set_tokenizer("raw").set_index_option(IndexRecordOption::WithFreqsAndPositions))
-            .set_stored();
-        let emoji_field = schema_builder.add_text_field("emoji", emoji_options);
         let line_start_field = schema_builder.add_u64_field("line_start", STORED);
         let line_end_field = schema_builder.add_u64_field("line_end", STORED);
-        let chunk_type_field = schema_builder.add_text_field("chunk_type", TEXT | STORED);
+        let content_hash_field = schema_builder.add_text_field("content_hash", TEXT | STORED);
+        let token_count_field = schema_builder.add_u64_field("token_count", STORED);
+        let line_count_field = schema_builder.add_u64_field("line_count", STORED);
+        let char_count_field = schema_builder.add_u64_field("char_count", STORED);
+        let test_result_field = schema_builder.add_text_field("test_result", TEXT | STORED);
         
         let schema = schema_builder.build();
         
@@ -63,20 +67,26 @@ impl SearchIndex {
     }
     
     pub fn add_chunk(&mut self, chunk: &CodeChunk) -> Result<()> {
-        let path_field = self.schema.get_field("path")?;
+        let language_field = self.schema.get_field("language")?;
         let content_field = self.schema.get_field("content")?;
-        let emoji_field = self.schema.get_field("emoji")?;
         let line_start_field = self.schema.get_field("line_start")?;
         let line_end_field = self.schema.get_field("line_end")?;
-        let chunk_type_field = self.schema.get_field("chunk_type")?;
-        
+        let content_hash_field = self.schema.get_field("content_hash")?;
+        let token_count_field = self.schema.get_field("token_count")?;
+        let line_count_field = self.schema.get_field("line_count")?;
+        let char_count_field = self.schema.get_field("char_count")?;
+        let test_result_field = self.schema.get_field("test_result")?;
+
         let doc = doc!(
-            path_field => chunk.path.clone(),
+            language_field => chunk.language.clone(),
             content_field => chunk.content.clone(),
-            emoji_field => chunk.emoji.clone(),
             line_start_field => chunk.line_start as u64,
             line_end_field => chunk.line_end as u64,
-            chunk_type_field => chunk.chunk_type.clone(),
+            content_hash_field => chunk.content_hash.clone(),
+            token_count_field => chunk.token_count as u64,
+            line_count_field => chunk.line_count as u64,
+            char_count_field => chunk.char_count as u64,
+            test_result_field => chunk.test_result.clone().unwrap_or_default(),
         );
         
         self.writer.add_document(doc)?;
@@ -105,8 +115,8 @@ impl SearchIndex {
         for (score, doc_address) in top_docs {
             let doc: TantivyDocument = searcher.doc(doc_address)?;
             
-            let path = doc
-                .get_first(self.schema.get_field("path")?)
+            let language = doc
+                .get_first(self.schema.get_field("language")?)
                 .and_then(|v| v.as_value().as_str())
                 .unwrap_or("")
                 .to_string();
@@ -117,28 +127,52 @@ impl SearchIndex {
                 .unwrap_or("")
                 .to_string();
                 
-            let emoji = doc
-                .get_first(self.schema.get_field("emoji")?)
-                .and_then(|v| v.as_value().as_str())
-                .unwrap_or("")
-                .to_string();
-                
             let line_start = doc
                 .get_first(self.schema.get_field("line_start")?)
                 .and_then(|v| v.as_u64())
-                .unwrap_or(0) as u32;
+                .unwrap_or(0) as usize;
                 
             let line_end = doc
                 .get_first(self.schema.get_field("line_end")?)
                 .and_then(|v| v.as_u64())
-                .unwrap_or(0) as u32;
+                .unwrap_or(0) as usize;
+
+            let content_hash = doc
+                .get_first(self.schema.get_field("content_hash")?)
+                .and_then(|v| v.as_value().as_str())
+                .unwrap_or("")
+                .to_string();
+
+            let token_count = doc
+                .get_first(self.schema.get_field("token_count")?)
+                .and_then(|v| v.as_u64())
+                .unwrap_or(0) as usize;
+
+            let line_count = doc
+                .get_first(self.schema.get_field("line_count")?)
+                .and_then(|v| v.as_u64())
+                .unwrap_or(0) as usize;
+
+            let char_count = doc
+                .get_first(self.schema.get_field("char_count")?)
+                .and_then(|v| v.as_u64())
+                .unwrap_or(0) as usize;
+
+            let test_result = doc
+                .get_first(self.schema.get_field("test_result")?)
+                .and_then(|v| v.as_value().as_str())
+                .map(|s| s.to_string());
             
             results.push(SearchResult {
-                path,
+                language,
                 content,
-                emoji,
                 line_start,
                 line_end,
+                content_hash,
+                token_count,
+                line_count,
+                char_count,
+                test_result,
                 score,
             });
         }

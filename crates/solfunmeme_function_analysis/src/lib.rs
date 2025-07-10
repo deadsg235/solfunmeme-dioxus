@@ -6,6 +6,25 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ClosestEmojiInfo {
+    pub emoji: String,
+    pub category: String,
+    pub distance: f32,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AnalyzedFunction {
+    pub function_name: String,
+    pub code_snippet: String,
+    pub semantic_summary: String,
+    pub file_path: String,
+    pub multivector_str: String,
+    pub sieve_address: String,
+    pub closest_emojis: Vec<ClosestEmojiInfo>,
+    pub orbital_path: Option<Vec<(f64, f64)>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionInfo {
     pub function_name: String,
     pub code_snippet: String,

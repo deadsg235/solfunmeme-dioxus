@@ -5,6 +5,7 @@ edition = "2024"
 license = "AGPL-3.0"
 
 [dependencies]
+md5 = "0.7"
 walkdir = "2.3"
 anyhow = "1.0"
 solfunmeme_function_analysis = { path = "../solfunmeme_function_analysis" }

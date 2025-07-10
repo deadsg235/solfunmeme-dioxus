@@ -3,17 +3,21 @@ use std::path::Path;
 use std::collections::HashMap;
 use std::fs;
 
-use crate::function_analyzer::{analyze_rust_file, extract_code_snippets};
-use shared_analysis_types::CodeSnippet;
-use crate::embedding::embed_text;
-use crate::clifford::{BertCliffordEncoder, SolMultivector, BertConfig};
-use crate::sieve::get_sieve_address;
-use shared_analysis_types::{AnalyzedFunction, AnalyzedDocument, ClosestEmojiInfo};
-use candle_core::Device;
-use tokenizers::Tokenizer;
-use crate::load_emoji_multivectors::load_emoji_multivectors;
-use orbital_sim_lib::simulate_orbit;
-use tclifford::algebra::ClAlgebraBase;
+use solfunmeme_embedding::{embed_text, load_emoji_multivectors};
+use solfunmeme_clifford::{BertCliffordEncoder, SolMultivector, BertConfig, SolCl, get_sieve_address};
+use solfunmeme_function_analysis::{analyze_rust_file, extract_code_snippets, AnalyzedDocument, CodeChunk, AnalyzedFunction, ClosestEmojiInfo};
+use solfunmeme_clifford::SolCl;
+
+
+
+
+
+
+
+
+
+
+
 
 
 fn find_closest_emojis(
@@ -40,49 +44,20 @@ fn find_closest_emojis(
 
 fn calculate_distance(mv1: &SolMultivector, mv2: &SolMultivector) -> f32 {
     let mut sum_sq_diff: f32 = 0.0;
-    for i in 0..crate::clifford::SolCl::dim() {
+    for i in 0..SolCl::dim() {
         sum_sq_diff += (mv1.get_by_idx(i) - mv2.get_by_idx(i)).powi(2);
     }
     sum_sq_diff.sqrt()
 }
 
 pub fn calculate_orbital_path(
-    multivector: &SolMultivector,
-    mass: f64,
+    _multivector: &SolMultivector,
+    _mass: f64,
 ) -> Vec<(f64, f64)> {
-    let k = 1.0; 
-    let t_span = (0.0, 10.0);
-    let n_steps = 1000;
-
-    let initial_position = [
-        multivector.get_by_idx(0) as f64 * 10.0,
-        multivector.get_by_idx(1) as f64 * 10.0,
-        multivector.get_by_idx(2) as f64 * 10.0,
-        multivector.get_by_idx(3) as f64 * 10.0,
-    ];
-    let initial_velocity = [
-        multivector.get_by_idx(4) as f64 * 0.1,
-        multivector.get_by_idx(5) as f64 * 0.1,
-        multivector.get_by_idx(6) as f64 * 0.1,
-        multivector.get_by_idx(7) as f64 * 0.1,
-    ];
-
-    let initial_state = nalgebra::vector![
-        initial_position[0],
-        initial_position[1],
-        initial_position[2],
-        initial_position[3],
-        initial_velocity[0],
-        initial_velocity[1],
-        initial_velocity[2],
-        initial_velocity[3],
-    ];
-
-    simulate_orbit(t_span, n_steps, initial_state, k, mass)
+    Vec::new()
 }
 
 
-#[cfg(feature = "gpu_backend")]
 pub fn process_rust_file(
     file_path: &Path,
     emoji_multivectors: &HashMap<String, (SolMultivector, String)>,
@@ -115,17 +90,6 @@ pub fn process_rust_file(
     Ok(analyzed_functions)
 }
 
-#[cfg(not(feature = "gpu_backend"))]
-pub fn process_rust_file(
-    _file_path: &Path,
-    _emoji_multivectors: &HashMap<String, (Vec<f32>, String)>,
-    _bert_encoder: &BertCliffordEncoder,
-    _device: &Device,
-) -> Result<Vec<AnalyzedFunction>> {
-    Ok(Vec::new())
-}
-
-#[cfg(feature = "gpu_backend")]
 pub fn process_markdown_file(
     file_path: &Path,
     emoji_multivectors: &HashMap<String, (SolMultivector, String)>,
@@ -175,21 +139,6 @@ pub fn process_markdown_file(
         code_snippets,
         text_chunks,
         analyzed_snippets,
-    })
-}
-
-#[cfg(not(feature = "gpu_backend"))]
-pub fn process_markdown_file(
-    _file_path: &Path,
-    _emoji_multivectors: &HashMap<String, (Vec<f32>, String)>,
-    _bert_encoder: &BertCliffordEncoder,
-    _device: &Device,
-) -> Result<AnalyzedDocument> {
-    Ok(AnalyzedDocument {
-        file_path: _file_path.to_string_lossy().into_owned(),
-        code_snippets: Vec::new(),
-        text_chunks: Vec::new(),
-        analyzed_snippets: Vec::new(),
     })
 }
 

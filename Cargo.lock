@@ -8810,6 +8810,22 @@ dependencies = [
 
 [[package]]
 name = "nalgebra"
+version = "0.32.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7b5c17de023a86f59ed79891b2e5d5a94c705dbe904a5b5c9c952ea6221b03e4"
+dependencies = [
+ "approx 0.5.1",
+ "matrixmultiply",
+ "nalgebra-macros",
+ "num-complex 0.4.6",
+ "num-rational 0.4.2",
+ "num-traits",
+ "simba 0.8.1",
+ "typenum",
+]
+
+[[package]]
+name = "nalgebra"
 version = "0.33.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "26aecdf64b707efd1310e3544d709c5c0ac61c13756046aaaba41be5c4f66a3b"
@@ -8820,7 +8836,7 @@ dependencies = [
  "num-complex 0.4.6",
  "num-rational 0.4.2",
  "num-traits",
- "simba",
+ "simba 0.9.0",
  "typenum",
 ]
 
@@ -9516,7 +9532,7 @@ name = "orbital_sim_lib"
 version = "0.1.0"
 dependencies = [
  "emojis",
- "nalgebra",
+ "nalgebra 0.33.2",
 ]
 
 [[package]]
@@ -10735,13 +10751,16 @@ name = "prepare_sources"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "candle-core 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "indicatif",
+ "md5",
+ "nalgebra 0.32.6",
+ "orbital_sim_lib",
  "quote",
  "rayon",
  "serde",
  "serde_json",
  "sha2 0.10.9",
- "shared_analysis_types",
  "solfunmeme_clifford",
  "solfunmeme_embedding",
  "solfunmeme_function_analysis",
@@ -10749,6 +10768,8 @@ dependencies = [
  "solfunmeme_search_tantivy",
  "solfunmeme_solana_data",
  "syn 2.0.104",
+ "tclifford 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tokenizers 0.15.2",
  "walkdir",
 ]
 
@@ -13008,6 +13029,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "77549399552de45a898a580c1b41d445bf730df867cc44e6c0233bbc4b8329de"
 dependencies = [
  "rand_core 0.6.4",
+]
+
+[[package]]
+name = "simba"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "061507c94fc6ab4ba1c9a0305018408e312e17c041eb63bef8aa726fa33aceae"
+dependencies = [
+ "approx 0.5.1",
+ "num-complex 0.4.6",
+ "num-traits",
+ "paste",
+ "wide",
 ]
 
 [[package]]
@@ -15303,7 +15337,7 @@ dependencies = [
  "markdown",
  "markdown-meta-parser",
  "model_lib",
- "nalgebra",
+ "nalgebra 0.33.2",
  "ndarray 0.15.6",
  "nom 8.0.0",
  "orbital_sim_lib",
@@ -15441,7 +15475,7 @@ dependencies = [
  "markdown",
  "markdown-meta-parser",
  "model_lib",
- "nalgebra",
+ "nalgebra 0.33.2",
  "ndarray 0.15.6",
  "nom 8.0.0",
  "orbital_sim_lib",
@@ -15491,6 +15525,7 @@ dependencies = [
  "candle-transformers 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "hf-hub 0.3.2",
  "rand 0.8.5",
+ "serde_json",
  "solfunmeme_clifford",
  "sophia_api 0.8.0",
  "sophia_inmem 0.8.0",
@@ -15573,6 +15608,7 @@ name = "solfunmeme_input_fs"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "md5",
  "solfunmeme_function_analysis",
  "walkdir",
 ]

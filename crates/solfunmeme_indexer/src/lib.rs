@@ -1,5 +1,5 @@
 use anyhow::Result;
-use solfunmeme_function_analysis::data_models::CodeChunk;
+use solfunmeme_function_analysis::CodeChunk;
 use solfunmeme_search_tantivy::SearchIndex;
 use solfunmeme_tantivy_report::{get_top_entries, ReportType};
 use std::io::{self, BufRead};

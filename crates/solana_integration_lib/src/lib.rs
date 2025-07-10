@@ -22,30 +22,7 @@ pub struct CodeFile {
     pub timestamp: i64,
 }
 
-#[derive(BorshSerialize, BorshDeserialize, Debug, Clone)]
-pub struct Function {
-    pub name: String, // Max 32 chars
-    pub semantic_summary: String, // Max 256 chars
-    pub code_snippet: String, // Max 512 chars
-    pub sieve_address: String, // 8 chars
-    pub embedding_hash: [u8; 32], // Hashed multivector
-    pub file: Pubkey,
-    pub emoji_refs: Vec<Pubkey>, // Dynamic size for now, consider fixed array for on-chain
-    pub emoji_distances: Vec<f64>,
-    pub buy_order_ref: Pubkey, // Link to buy order
-    pub ontology: Pubkey,
-    pub creator: Pubkey,
-    pub timestamp: i64,
-}
 
-#[derive(BorshSerialize, BorshDeserialize, Debug, Clone)]
-pub struct ClosestEmojiInfo {
-    pub symbol: String, // Max 8 chars
-    pub category: String, // Max 16 chars
-    pub ontology: Pubkey,
-    pub creator: Pubkey,
-    pub timestamp: i64,
-}
 
 #[derive(BorshSerialize, BorshDeserialize, Debug, Clone)]
 pub struct Term {
