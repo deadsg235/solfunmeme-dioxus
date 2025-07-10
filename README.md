@@ -182,6 +182,15 @@ The Solfunmeme Dioxus project is organized into a comprehensive ecosystem of spe
 - **`quickwit_plugin`**: Distributed search and indexing capabilities
 - **`model2vec_rs_plugin`**: Model-to-vector conversion for embeddings
 - **`tongrams_rs_plugin`**: N-gram language model querying
+- **`solfunmeme_search_tantivy`**: Full-text search capabilities using Tantivy search engine
+- **`solfunmeme_tantivy_report`**: A crate for generating reports from the search index
+- **`solfunmeme_indexer`**: Orchestrates codebase indexing and report generation.
+
+### Code Intelligence
+- **`prepare_sources`**: Processes source code files into structured CodeChunks
+- **`solfunmeme_extractor`**: Extracts code snippets, functions, and relevant information from source files
+- **`solfunmeme_function_analysis`**: **(Refactored)** Now centralizes data models and core analysis logic for code snippets and functions.
+- **`solfunmeme_input_fs`**: Filesystem input layer for reading code files and converting to CodeChunks
 
 ### Storage & I/O
 - **`s3_plugin`**: Amazon S3 integration for cloud storage operations
@@ -651,4 +660,57 @@ See the [`memories/`](./memories/) directory for persistent project memories, co
 - AI/agent context for future sessions
 
 This helps both humans and AI tools maintain context and continuity across the project lifecycle.
+
+---
+
+## Current State (as of July 10, 2025)
+
+This section captures the current state of the project, including recent actions, key knowledge, and the immediate plan. This helps maintain context and provides a starting point for future work.
+
+### Overall Goal
+- Build an intelligent codebase analysis system to index Rust code, extract semantic information, and generate flexible reports, adhering to modular and maintainable design principles.
+
+### Key Knowledge
+- The project's core philosophy is the "Code-Math Manifold," treating code as a mathematical object.
+- `solfunmeme_indexer` orchestrates the indexing and reporting process.
+- `solfunmeme_function_analysis` is intended to centralize data models and analysis logic.
+- `solfunmeme_input_fs` handles reading code chunks.
+- `solfunmeme_search_tantivy` provides indexing and search capabilities.
+- `solfunmeme_tantivy_report` generates various reports.
+- `task_manager` is used for tracking project tasks and their dependencies.
+- Recent refactoring attempts highlighted challenges with Rust's module system and `tantivy` API changes.
+- The "file=function=block=vibe" principle guides modular design.
+
+### File System State
+- MODIFIED: `crates/solfunmeme_indexer/Cargo.toml` - Added `solfunmeme_function_analysis` dependency.
+- MODIFIED: `crates/solfunmeme_indexer/src/bin/main.rs` - Updated `clap` attributes and added `InitIndexingTasks` command.
+- MODIFIED: `crates/solfunmeme_indexer/src/lib.rs` - Corrected `cargo run` command for `prepare_sources` and updated `CodeChunk` import.
+- MODIFIED: `crates/solfunmeme_function_analysis/Cargo.toml` - Added `serde`, `walkdir`, `shared_analysis_types`, and `quote` dependencies.
+- MODIFIED: `crates/solfunmeme_function_analysis/src/lib.rs` - Consolidated all data models and functions, and renamed `CodeSnippet` to `CodeChunk`.
+- DELETED: `crates/solfunmeme_function_analysis/src/data_models.rs` - Content moved to `lib.rs`.
+- DELETED: `crates/solfunmeme_function_analysis/src/code_snippet_utils.rs` - Content moved to `lib.rs`.
+- DELETED: `crates/solfunmeme_function_analysis/src/mod.rs` - Removed due to refactoring.
+- MODIFIED: `crates/solfunmeme_input_fs/Cargo.toml` - Updated dependency to `solfunmeme_function_analysis`.
+- MODIFIED: `crates/solfunmeme_input_fs/src/lib.rs` - Updated `CodeChunk` import path.
+- MODIFIED: `crates/solfunmeme_search_tantivy/Cargo.toml` - Updated dependency to `solfunmeme_function_analysis`.
+- MODIFIED: `crates/solfunmeme_search_tantivy/src/lib.rs` - Updated `tantivy` API usage and `CodeChunk` import path.
+- MODIFIED: `crates/solfunmeme_tantivy_report/src/lib.rs` - Generalized report types.
+- MODIFIED: `GEMINI.md` - Added "Lessons Learned" and "Task Management" sections.
+- MODIFIED: `README.md` - Updated "Search & Indexing" and "Code Intelligence" sections.
+- MODIFIED: `crates/task_manager/src/main.rs` - Added `InitIndexingTasks` command and `get_indexing_tasks` function.
+
+### Recent Actions
+- Attempted to refactor `solfunmeme_function_analysis` into submodules, leading to compilation errors.
+- Consolidated `solfunmeme_function_analysis` into a single `lib.rs` file to resolve module and type issues.
+- Corrected import paths for `CodeChunk` in `solfunmeme_input_fs` and `solfunmeme_search_tantivy`.
+- Updated project documentation (`GEMINI.md`, `README.md`) with recent changes and lessons.
+- Integrated initial indexing and reporting tasks into the `task_manager` CLI.
+- Encountered a new compilation error in `solfunmeme_function_analysis/src/lib.rs` related to an "unexpected closing delimiter".
+
+### Current Plan
+1. Resolve the current compilation error in `solfunmeme_function_analysis/src/lib.rs` (unexpected closing delimiter).
+2. Once the project compiles successfully, run `cargo run -p solfunmeme_indexer --bin main -- index . ./tmp/tantivy_index` to index the codebase.
+3. Generate the requested "top N" reports (terms, emojis, Rust identifiers) using `solfunmeme_indexer`.
+4. Use the `task_manager` to update the status of these completed tasks.
+5. Re-evaluate the modularization of `solfunmeme_function_analysis` with a more robust approach if necessary, but only after core indexing and reporting are stable.
 

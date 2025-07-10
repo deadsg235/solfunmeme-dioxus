@@ -9,7 +9,7 @@ use tantivy::query::QueryParser;
 use tantivy::schema::*;
 use tantivy::{Index, IndexWriter};
 
-use shared_analysis_types::CodeChunk;
+use solfunmeme_function_analysis::CodeSnippet;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchResult {
@@ -35,7 +35,10 @@ impl SearchIndex {
         // Fields for indexing
         let path_field = schema_builder.add_text_field("path", TEXT | STORED);
         let content_field = schema_builder.add_text_field("content", TEXT | STORED);
-        let emoji_field = schema_builder.add_text_field("emoji", TEXT | STORED);
+        let emoji_options = TextOptions::default()
+            .set_indexing_options(TextFieldIndexing::default().set_tokenizer("raw").set_index_option(IndexRecordOption::WithFreqsAndPositions))
+            .set_stored();
+        let emoji_field = schema_builder.add_text_field("emoji", emoji_options);
         let line_start_field = schema_builder.add_u64_field("line_start", STORED);
         let line_end_field = schema_builder.add_u64_field("line_end", STORED);
         let chunk_type_field = schema_builder.add_text_field("chunk_type", TEXT | STORED);
@@ -153,40 +156,31 @@ impl SearchIndex {
         self.search(&query, limit)
     }
     
-    pub fn get_stats_by_emojis(&self) -> Result<HashMap<String, usize>> {
+    pub fn get_stats_by_field(&self, field_name: &str) -> Result<HashMap<String, usize>> {
         let reader = self.index.reader()?;
-        
         let mut stats = HashMap::new();
-        
-        let emoji_field = self.schema.get_field("emoji")?;
-        
-        for segment_reader in reader.iter_segments() {
-            let term_dict = segment_reader.fast_fields().text(emoji_field).expect("Failed to get term dict");
-            for (term, _doc_freq) in term_dict.terms() {
-                let term_str = term.text();
+        let field = self.schema.get_field(field_name)?;
+
+        let searcher = reader.searcher();
+        for segment_reader in searcher.segment_readers() {
+            let inverted_index = segment_reader.inverted_index(field)?;
+            let term_dict = inverted_index.terms();
+            let mut term_stream = term_dict.stream()?;
+            while let Some((term, _doc_freq)) = term_stream.next() {
+                let term_str = String::from_utf8_lossy(term).to_string();
                 *stats.entry(term_str.to_string()).or_insert(0) += 1;
             }
         }
-        
+
         Ok(stats)
     }
 
+    pub fn get_stats_by_emojis(&self) -> Result<HashMap<String, usize>> {
+        self.get_stats_by_field("emoji")
+    }
+
     pub fn get_stats_by_terms(&self) -> Result<HashMap<String, usize>> {
-        let reader = self.index.reader()?;
-        
-        let mut stats = HashMap::new();
-        
-        let content_field = self.schema.get_field("content")?;
-        
-        for segment_reader in reader.iter_segments() {
-            let term_dict = segment_reader.fast_fields().text(content_field).expect("Failed to get term dict");
-            for (term, _doc_freq) in term_dict.terms() {
-                let term_str = term.text();
-                *stats.entry(term_str.to_string()).or_insert(0) += 1;
-            }
-        }
-        
-        Ok(stats)
+        self.get_stats_by_field("content")
     }
 
     pub fn get_stats_by_hex_codes(&self) -> Result<HashMap<String, usize>> {

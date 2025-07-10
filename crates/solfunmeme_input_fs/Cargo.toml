@@ -7,4 +7,4 @@ license = "AGPL-3.0"
 [dependencies]
 walkdir = "2.3"
 anyhow = "1.0"
-shared_analysis_types = { path = "../shared_analysis_types" }
+solfunmeme_function_analysis = { path = "../solfunmeme_function_analysis" }

@@ -2,7 +2,7 @@ use serde_json;
 use serde::{Deserialize, Serialize};
 use solfunmeme_input_fs::read_code_chunks;
 
-use crate::project_analyzer::CodeChunk;
+use solfunmeme_function_analysis::data_models::CodeChunk;
 
 fn main() {
     use std::env;

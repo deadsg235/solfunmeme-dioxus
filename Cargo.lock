@@ -15399,7 +15399,9 @@ dependencies = [
 name = "solfunmeme_clifford"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "rand 0.8.5",
+ "serde",
  "tclifford 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -15537,7 +15539,11 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "md5",
+ "quote",
+ "serde",
+ "shared_analysis_types",
  "syn 2.0.104",
+ "walkdir",
 ]
 
 [[package]]
@@ -15548,11 +15554,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "solfunmeme_indexer"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "serde",
+ "serde_json",
+ "solfunmeme_function_analysis",
+ "solfunmeme_input_fs",
+ "solfunmeme_search_tantivy",
+ "solfunmeme_tantivy_report",
+ "tempfile",
+]
+
+[[package]]
 name = "solfunmeme_input_fs"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "shared_analysis_types",
+ "solfunmeme_function_analysis",
  "walkdir",
 ]
 
@@ -15627,7 +15648,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "serde",
- "shared_analysis_types",
+ "solfunmeme_function_analysis",
  "tantivy",
 ]
 

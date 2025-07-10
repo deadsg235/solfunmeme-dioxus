@@ -4,18 +4,14 @@ use std::collections::HashMap;
 use std::path::Path;
 
 pub enum ReportType {
-    Terms,
-    Emojis,
-    HexCodes,
+    Field(String),
 }
 
 pub fn get_top_entries(index_path: &Path, report_type: ReportType, limit: usize) -> Result<Vec<(String, usize)>> {
     let search_index = SearchIndex::new(index_path)?;
     
     let stats = match report_type {
-        ReportType::Terms => search_index.get_stats_by_terms()?,
-        ReportType::Emojis => search_index.get_stats_by_emojis()?,
-        ReportType::HexCodes => search_index.get_stats_by_hex_codes()?,
+        ReportType::Field(field_name) => search_index.get_stats_by_field(&field_name)?,
     };
 
     let mut sorted_entries: Vec<(String, usize)> = stats.into_iter().collect();

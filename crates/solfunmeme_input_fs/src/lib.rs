@@ -2,7 +2,7 @@ use walkdir::WalkDir;
 use std::fs;
 use std::path::Path;
 use anyhow::Result;
-use shared_analysis_types::CodeChunk;
+use solfunmeme_function_analysis::CodeSnippet;
 
 pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Result<Vec<CodeChunk>> {
     let mut discovered_files = Vec::new();

@@ -35,7 +35,6 @@ pub struct AnalyzedToken {
     pub orbital_path: Option<Vec<(f64, f64)>>,
 }
 
-// Simplified CodeSnippet struct for prepare_sources
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CodeSnippet {
     pub language: String,
@@ -46,99 +45,7 @@ pub struct CodeSnippet {
     pub token_count: usize,
     pub line_count: usize,
     pub char_count: usize,
-    pub test_result: Option<String>, // Simplified from original
-}
-
-// Placeholder for generate_content_hash
-pub fn generate_content_hash(content: &str) -> String {
-    // Simple placeholder hash for now
-    format!("{:x}", md5::compute(content))
-}
-
-// Placeholder for estimate_token_count
-pub fn estimate_token_count(content: &str) -> usize {
-    content.split_whitespace().count()
-}
-
-// Placeholder for create_default_test_result
-pub fn create_default_test_result() -> String {
-    "Untested".to_string()
-}
-
-pub fn extract_code_snippets(content: &str) -> Vec<CodeSnippet> {
-    let mut snippets = Vec::new();
-    let lines: Vec<&str> = content.lines().collect();
-    let mut in_code_block = false;
-    let mut current_language = String::new();
-    let mut current_content = String::new();
-    let mut start_line = 0;
-
-    for (i, line) in lines.iter().enumerate() {
-        if line.starts_with("```") {
-            if in_code_block {
-                // End of code block
-                if !current_content.trim().is_empty() {
-                    let snippet = create_code_snippet(
-                        current_language.clone(),
-                        current_content.clone(),
-                        start_line,
-                        i,
-                    );
-                    snippets.push(snippet);
-                }
-                current_content.clear();
-                in_code_block = false;
-            } else {
-                // Start of code block
-                current_language = line[3..].trim().to_string();
-                if current_language.is_empty() {
-                    current_language = "text".to_string();
-                }
-                current_content.clear();
-                start_line = i + 1;
-                in_code_block = true;
-            }
-        } else if in_code_block {
-            if !current_content.is_empty() {
-                current_content.push('\n');
-            }
-            current_content.push_str(line);
-        }
-    }
-
-    // Handle unclosed code block
-    if in_code_block && !current_content.trim().is_empty() {
-        let snippet =
-            create_code_snippet(current_language, current_content, start_line, lines.len());
-        snippets.push(snippet);
-    }
-
-    snippets
-}
-
-pub fn create_code_snippet(
-    language: String,
-    content: String,
-    line_start: usize,
-    line_end: usize,
-) -> CodeSnippet {
-    let content_hash = generate_content_hash(&content);
-    let token_count = estimate_token_count(&content);
-    let line_count = content.lines().count();
-    let char_count = content.chars().count();
-    let test_result = Some(create_default_test_result());
-
-    CodeSnippet {
-        language,
-        content,
-        line_start,
-        line_end,
-        content_hash,
-        token_count,
-        line_count,
-        char_count,
-        test_result,
-    }
+    pub test_result: Option<String>,
 }
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
@@ -163,7 +70,6 @@ pub struct ProcessingFile {
     pub summary: Option<DocumentSummary>,
 }
 
-// Test execution results
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct TestResult {
     pub passed: bool,
@@ -172,7 +78,6 @@ pub struct TestResult {
     pub output: Option<String>,
 }
 
-// Document analysis and summary
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct DocumentSummary {
     pub total_turns: usize,
@@ -182,7 +87,6 @@ pub struct DocumentSummary {
     pub content_hashes: Vec<String>,
 }
 
-// Conversation processing
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ConversationTurn {
     pub author: String,
@@ -190,7 +94,6 @@ pub struct ConversationTurn {
     pub code_snippets: Vec<CodeSnippet>,
 }
 
-// File upload and processing
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct UploadedFile {
     pub name: String,
@@ -200,7 +103,6 @@ pub struct UploadedFile {
     pub zip_url: Option<String>,
 }
 
-// Advanced text processing with embeddings
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct AnnotatedWord {
     pub word: String,
@@ -211,7 +113,6 @@ pub struct AnnotatedWord {
     pub multivector: Multivector,
 }
 
-// Processing states and statistics
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProcessingStats {
     pub files_processed: usize,
@@ -221,7 +122,6 @@ pub struct ProcessingStats {
     pub languages_detected: Vec<String>,
 }
 
-// Error handling
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum ProcessingError {
     FileReadError(String),
@@ -243,7 +143,6 @@ impl std::fmt::Display for ProcessingError {
 
 impl std::error::Error for ProcessingError {}
 
-// Language-specific configuration
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LanguageConfig {
     pub name: String,
@@ -263,14 +162,4 @@ impl Default for LanguageConfig {
             syntax_highlighter: None,
         }
     }
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CodeChunk {
-    pub path: String,
-    pub content: String,
-    pub emoji: String, // Placeholder for now
-    pub line_start: u32,
-    pub line_end: u32,
-    pub chunk_type: String,
 }
