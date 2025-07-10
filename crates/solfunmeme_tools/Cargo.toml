@@ -30,5 +30,5 @@ walkdir = "2.5"
 glob = "0.3.1"
 thiserror = "1.0"
 markdown = "1.0"
-rust-embed = { version = "8.7.2", features = ["debug-embed"] }
+rust-embed = { version = "8.7.2", features = ["debug-embed", "include-exclude"] }
 
