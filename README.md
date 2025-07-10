@@ -4,118 +4,22 @@
 
 ## Solfunmeme Dioxus 
 
-The vibe is the vector is the number is the embedding is the string vibrating, contains the harmonies
-which describe the structure contained in the number. Each prime factor contributes an exponent, multiple, or ratio, an addition or substration, in an operation 
-that can be considered as a matrix or group or ring, or lava or category or topological or matematical or abstract or neuron or biosemiosis operation.
+See [Introduction to Solfunmeme Dioxus](doc/introduction.md) for an overview of the project's philosophy and goals.
 
-The system can refactor and rewrite itself into smaller and more useful components, or integrating open source libraries
-to offload the work onto tested intefaces. 
+## Overview
+See [Project Overview](doc/overview.md) for a summary of the project's core concepts and goals. 
 
-Eventaully we can construct a single multi dimensional matrix that lets us apprehend
-the entire project at a single glance, this dashboard can be seen as the throne or drivers seat
-the main OODA loop, the playground where the kids can play without breaking the system.
-
-This matrix will have a key that is traceable back to the sources, we can show for each patch what influenced it.
-
-## Overview  
-
-Solfunmeme Dioxus is an ambitious project that combines code analysis, vectorization, and blockchain technology to create a comprehensive code visualization and execution platform.  
-  
-### Core Concepts  
-- **Code Vectorization**: Transform source code into executable vector representations  
-- **Modular Architecture**: Split declarations into individual files for better organization  
-- **Duplicate Detection**: Identify and manage code duplicates across canonical directories  
-
-### Goals
-
-Automatically split each declaration to own file, each declaration is a meme, a biosemiotic entity that appears in multiple forms,
-like a higher dimensioal being, projected into a lower dimension, a content addressable entity.
-
-vectorize -> emit code from vector
-vector = code = binary 
-executable vectors
-look for duplicates
-cannonical directories
-
-### auto populate menu
-### embed code in app
-### embed json version of code in app
-### embed bert embedding of code and json in app
-### create emojis for every item in app
-
-idea
-
-1. dynamically generate the menu
-2. to do so query the code at runtime
-3. to do so embed the source in the app
-4. parse the source with syn to json
-5. embed the source and the json into the app
-6. later we will vectorize both into a dimensional structure. use dummy embedding for now.
-7. then we assign an emoji to each item.
-8. then we can visualze the code as a hyperspace. 
-
-# Status
-
-1. setting up testing and coverage for code
-2. removing warnings
-3. removing unused code
-4. creating coverage
+## Status
+See [Project Status](doc/status.md) for current development status.
 
 ## Functionality
-
-### Login with wallet
-#### Create secrets for access to apis
-#### Encrypt secrets locally with secondary password
-
-#### Store secrets on aws ssm parameters
-##### AWS Credentials
-##### Github
-##### Huggingface
-##### Openstreetmap
-##### Archive.org
-##### Wikidata
-##### Codeberg
-##### Gitlab
-##### Gitgud
-
-##### AI Credentials
-###### Grok
-###### Groq
-###### OpenAI
-###### Google
-###### Bedrock
-##### Solana
-##### SSH Keys
-
-#### Store public data
-##### SSH keys
-##### On solana
-##### On git 
-
-#### Interpreting data :
-
-### Formats
-#### JSON
-#### xml schema
-#### turtle/rdf
-#### Emojis
-#### Tickets
-#### Org Mode
-#### Markdown  - pandoc
-#### Wikidata
-#### Wikimedia
-#### JPG/PNG
-#### Video
-#### Trace
-#### Corefile
-#### Elf
-#### Dwarf
-#### Nix/Guix
-#### Github Actions
+See [Project Functionality](doc/functionality.md) for details on features and supported data formats.
 
 ## Project Architecture
 
-The Solfunmeme Dioxus project is organized into a comprehensive ecosystem of specialized crates, each serving distinct purposes within the Code-Math Manifold framework.
+The Solfunmeme Dioxus project is organized into a comprehensive ecosystem of specialized crates, each serving distinct purposes within the Code-Math Manifold framework. For a detailed overview of all crates, see [Crates Overview](./crates/README.md).
+
+For information on external dependencies managed as Git submodules, see [Vendor Submodules Overview](./vendor/README.md).
 
 ### Core Application Crates
 - **`solfunmeme_app`**: Main application entry point orchestrating UI components, data models, and blockchain interactions
