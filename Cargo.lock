@@ -15917,10 +15917,14 @@ dependencies = [
 name = "solfunmeme_tools"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "clap",
  "glob",
  "markdown",
+ "rayon",
  "regex",
  "rust-embed 8.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json",
  "solfunmeme_core_logic",
  "solfunmeme_extractor",
  "solfunmeme_models",

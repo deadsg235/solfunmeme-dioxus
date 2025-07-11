@@ -1117,3 +1117,6 @@
 [submodule "vendor/task_manager"]
 	path = vendor/task_mangager
 	url = https://github.com/jmikedupont2/task_manager
+[submodule "vendor/path-clean"]
+	path = vendor/path-clean
+	url = https://github.com/danreeves/path-clean

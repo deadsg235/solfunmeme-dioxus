@@ -1,61 +1,60 @@
-use regex::Regex;
-use solfunmeme_extractor::model::clean_html::clean_html;
-use solfunmeme_extractor::model::snippets::extract_markdown_snippets;
-use crate::Error;
+use std::fs;
+use std::path::PathBuf;
+use crate::utils;
 
-pub fn process_document(content: &str) -> Result<String, Error> {
-    let cleaned_content = clean_html(content);
-    let mut processed = String::new();
+pub fn process_documentation_files(target_path: &PathBuf, output_dir: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    // Find all markdown files
+    let md_files = utils::find_files_with_pattern(target_path, ".*", "md", None);
+    
+    println!("[INFO] Found {} markdown files to process", md_files.len());
+    
+    for file_path in md_files {
+        println!("[INFO] Processing: {}", file_path.display());
+        
+        // Read the file content
+        let content = fs::read_to_string(&file_path)?;
+        
+        // Clean the content (remove HTML tags, normalize whitespace)
+        let cleaned_content = clean_markdown_content(&content);
+        
+        // Create output filename
+        let output_filename = utils::create_output_filename(&file_path, "cleaned");
+        let output_path = output_dir.join(output_filename);
+        
+        // Save the cleaned content
+        utils::save_content_to_file(&cleaned_content, &output_path)?;
+        
+        println!("[INFO] Saved cleaned file to: {}", output_path.display());
+    }
+    
+    Ok(())
+}
 
-    // Extract code snippets
-    let code_snippets = extract_markdown_snippets(&cleaned_content)
-        .map_err(|e| Error::MarkdownError(e.to_string()))?;
-    
-    // Split content into lines
-    let lines: Vec<&str> = cleaned_content.lines().collect();
-    let mut i = 0;
-    
-    while i < lines.len() {
-        let line = lines[i].trim();
-        
-        // Skip empty lines at the start
-        if processed.is_empty() && line.is_empty() {
-            i += 1;
-            continue;
-        }
-        
-        // Handle LaTeX blocks
-        if line.starts_with("\\documentclass") {
-            let mut latex_block = Vec::new();
-            while i < lines.len() && !lines[i].trim().is_empty() {
-                latex_block.push(lines[i]);
-                i += 1;
+fn clean_markdown_content(content: &str) -> String {
+    // Remove HTML tags
+    let html_cleaned = content
+        .lines()
+        .map(|line| {
+            // Simple HTML tag removal
+            let mut cleaned = line.to_string();
+            while let Some(start) = cleaned.find('<') {
+                if let Some(end) = cleaned[start..].find('>') {
+                    cleaned.remove(start);
+                    cleaned.remove(start + end - 1);
+                } else {
+                    break;
+                }
             }
-            processed.push_str("```latex\n");
-            processed.push_str(&latex_block.join("\n"));
-            processed.push_str("\n```\n\n");
-            continue;
-        }
-        
-        // Handle regular text
-        if !line.is_empty() {
-            processed.push_str(line);
-            processed.push_str("\n");
-        } else if !processed.ends_with("\n\n") {
-            processed.push_str("\n");
-        }
-        
-        i += 1;
-    }
+            cleaned
+        })
+        .collect::<Vec<_>>()
+        .join("\n");
     
-    // Append code snippets if found
-    if !code_snippets.is_empty() {
-        processed.push_str("\n### Code Snippets\n\n");
-        for snippet in code_snippets {
-            processed.push_str(&format!("```{}\n{}\n```\n\n", 
-                snippet.language, snippet.content));
-        }
-    }
-    
-    Ok(processed)
+    // Normalize whitespace
+    html_cleaned
+        .lines()
+        .map(|line| line.trim())
+        .filter(|line| !line.is_empty())
+        .collect::<Vec<_>>()
+        .join("\n")
 }

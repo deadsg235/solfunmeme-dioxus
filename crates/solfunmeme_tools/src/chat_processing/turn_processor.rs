@@ -1,5 +1,26 @@
-use solfunmeme_extractor::model::snippets::extract_markdown_snippets;
-use crate::Error;
+use regex::Regex;
+use std::fmt;
+
+#[derive(Debug)]
+pub enum Error {
+    MarkdownError(String),
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Error::MarkdownError(msg) => write!(f, "Markdown error: {}", msg),
+        }
+    }
+}
+
+impl std::error::Error for Error {}
+
+#[derive(Debug)]
+pub struct CodeSnippet {
+    pub language: String,
+    pub content: String,
+}
 
 pub fn process_turn(turn_content: &str) -> Result<(String, String), Error> {
     let (speaker, content) = extract_speaker_and_content(turn_content);
@@ -18,26 +39,42 @@ fn extract_speaker_and_content(turn: &str) -> (&str, &str) {
     }
 }
 
+fn extract_markdown_snippets(content: &str) -> Result<Vec<CodeSnippet>, Error> {
+    let code_block_regex = Regex::new(r"```(\w+)?\n(.*?)```").map_err(|e| Error::MarkdownError(e.to_string()))?;
+    let mut snippets = Vec::new();
+    
+    for cap in code_block_regex.captures_iter(content) {
+        let language = cap.get(1).map(|m| m.as_str().to_string()).unwrap_or_else(|| "text".to_string());
+        let code_content = cap.get(2).map(|m| m.as_str().to_string()).unwrap_or_default();
+        
+        snippets.push(CodeSnippet {
+            language,
+            content: code_content,
+        });
+    }
+    
+    Ok(snippets)
+}
+
 fn process_message_content(content: &str) -> Result<String, Error> {
     let mut processed = String::new();
     
     // Extract code snippets
-    let code_snippets = extract_markdown_snippets(content)
-        .map_err(|e| Error::MarkdownError(e.to_string()))?;
+    let code_snippets = extract_markdown_snippets(content)?;
     
     // Split content into lines
     let lines: Vec<&str> = content.lines().collect();
     let mut i = 0;
-    
+
     while i < lines.len() {
         let line = lines[i].trim();
-        
+
         // Skip empty lines at the start
         if processed.is_empty() && line.is_empty() {
             i += 1;
             continue;
         }
-        
+
         // Handle LaTeX blocks
         if line.starts_with("\\documentclass") {
             let mut latex_block = Vec::new();
@@ -50,7 +87,7 @@ fn process_message_content(content: &str) -> Result<String, Error> {
             processed.push_str("\n```\n\n");
             continue;
         }
-        
+
         // Handle regular text
         if !line.is_empty() {
             processed.push_str(line);
@@ -58,18 +95,18 @@ fn process_message_content(content: &str) -> Result<String, Error> {
         } else if !processed.ends_with("\n\n") {
             processed.push_str("\n");
         }
-        
+
         i += 1;
     }
-    
+
     // Append code snippets if found
     if !code_snippets.is_empty() {
         processed.push_str("\n### Code Snippets\n\n");
         for snippet in code_snippets {
-            processed.push_str(&format!("```{}\n{}\n```\n\n", 
+            processed.push_str(&format!("```{}\n{}\n```\n\n",
                 snippet.language, snippet.content));
         }
     }
-    
+
     Ok(processed)
 }

@@ -1,4 +1,4 @@
-use crate::chat_processing::*;
+use solfunmeme_tools::chat_processing::*;
 use std::path::Path;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

@@ -13,5 +13,5 @@ rustyline = "13"
 libloading = { path = "../vendor/rust_libloading" }
 
 [[bin]]
-name = "zos"
+name = "zos-driver"
 path = "src/main.rs"

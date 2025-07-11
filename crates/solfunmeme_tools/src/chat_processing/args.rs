@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 use std::env;
+use crate::utils;
 
 #[derive(Debug)]
 pub struct ChatProcessorArgs {
@@ -38,8 +39,8 @@ impl ChatProcessorArgs {
         }
 
         Ok(Self {
-            target_path: PathBuf::from(target_path.unwrap_or_else(|| ".".to_string())),
-            output_dir: PathBuf::from(output_dir.unwrap_or_else(|| "processed_chats".to_string())),
+            target_path: utils::normalize_path(&PathBuf::from(target_path.unwrap_or_else(|| ".".to_string()))),
+            output_dir: utils::normalize_path(&PathBuf::from(output_dir.unwrap_or_else(|| "processed_chats".to_string()))),
             limit,
         })
     }
