@@ -1,4 +1,4 @@
-use crate::doc_processing::*;
+use solfunmeme_tools::doc_processing::*;
 use std::fs;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -11,7 +11,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("[INFO] Processing file: {}", doc_file.display());
         
         let content = fs::read_to_string(&doc_file)?;
-        let processed_content = process_document(&content)?;
+        let processed_content = process_document(&content);
 
         let output_path = save_processed_document(&processed_content, &doc_file, &args.output_dir)?;
         

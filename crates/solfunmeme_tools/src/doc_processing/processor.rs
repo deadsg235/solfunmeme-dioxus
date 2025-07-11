@@ -15,7 +15,7 @@ pub fn process_documentation_files(target_path: &PathBuf, output_dir: &PathBuf) 
         let content = fs::read_to_string(&file_path)?;
         
         // Clean the content (remove HTML tags, normalize whitespace)
-        let cleaned_content = clean_markdown_content(&content);
+        let cleaned_content = process_document(&content);
         
         // Create output filename
         let output_filename = utils::create_output_filename(&file_path, "cleaned");
@@ -30,7 +30,7 @@ pub fn process_documentation_files(target_path: &PathBuf, output_dir: &PathBuf) 
     Ok(())
 }
 
-fn clean_markdown_content(content: &str) -> String {
+pub fn process_document(content: &str) -> String {
     // Remove HTML tags
     let html_cleaned = content
         .lines()

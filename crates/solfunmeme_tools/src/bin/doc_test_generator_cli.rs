@@ -1,4 +1,4 @@
-use crate::doc_test_generation::*;
+use solfunmeme_tools::doc_test_generation::*;
 use std::fs;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

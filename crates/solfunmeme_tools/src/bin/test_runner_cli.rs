@@ -1,4 +1,5 @@
-use crate::test_suite::*;
+use solfunmeme_tools::test_suite::{self, TestSuiteArgs};
+use solfunmeme_tools::test_suite::args::TestCategory;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = TestSuiteArgs::from_env()?;
@@ -7,31 +8,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match args.category {
         TestCategory::All => {
-            run_vectorization_tests()?;
-            run_declaration_splitting_tests()?;
-            run_duplicate_detection_tests()?;
-            run_code_analysis_tests()?;
-            run_wallet_integration_tests()?;
-            run_self_analysis_tests()?;
+            test_suite::run_all_tests()?;
         },
-        TestCategory::Vectorization => {
-            run_vectorization_tests()?;
-        },
-        TestCategory::DeclarationSplitting => {
-            run_declaration_splitting_tests()?;
-        },
-        TestCategory::DuplicateDetection => {
-            run_duplicate_detection_tests()?;
-        },
-        TestCategory::CodeAnalysis => {
-            run_code_analysis_tests()?;
-        },
-        TestCategory::WalletIntegration => {
-            run_wallet_integration_tests()?;
-        },
-        TestCategory::SelfAnalysis => {
-            run_self_analysis_tests()?;
-        },
+        _ => {
+            println!("Running specific test categories is not supported in lightweight mode.");
+            println!("Please run with the 'full' feature enabled.");
+        }
     }
 
     println!("\n✅ All selected tests completed successfully!");

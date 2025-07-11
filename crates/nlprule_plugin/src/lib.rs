@@ -10,8 +10,8 @@ pub struct NlpRulePlugin {
 
 impl NlpRulePlugin {
     pub fn new() -> Result<Self> {
-        let tokenizer = Tokenizer::new().unwrap(); // TODO: Handle errors properly
-        let rules = Rules::new().unwrap(); // TODO: Handle errors properly
+        let tokenizer = Tokenizer::new("en_US.bin").map_err(|e| anyhow::anyhow!(e.to_string()))?;
+        let rules = Rules::new("en_US.bin").map_err(|e| anyhow::anyhow!(e.to_string()))?;
         Ok(NlpRulePlugin { tokenizer, rules })
     }
 

@@ -1,4 +1,48 @@
-# solfunmeme-dioxus
+# Solfunmeme-Dioxus Project
+
+Welcome to the Solfunmeme-Dioxus codebase! This project is a modular, semantic, and extensible system for code, meme, and knowledge management on Solana and beyond.
+
+---
+
+## 🟢 OODA Dashboard: Crate Matrix (Observer Phase)
+
+We are currently in the **Observer** phase of the OODA (Observe, Orient, Decide, Act) loop: indexing, introspecting, and mapping the system.
+
+| Crate Name                  | Emoji  | Function / OODA Phase         | Description                                                      |
+|-----------------------------|--------|-------------------------------|------------------------------------------------------------------|
+| solfunmeme_tools            | 🧰     | Observer (Utility)            | General utilities, logging, error handling, string/data helpers   |
+| solfunmeme_indexer          | 🗂️     | Observer (Indexing)           | Indexes code chunks, builds search indices, generates reports     |
+| solfunmeme_core_logic       | 🧠     | Orient (Core Logic)           | Core business/data logic, main algorithms                        |
+| solfunmeme_function_analysis| 🔬     | Observer (Analysis)           | Analyzes and extracts functions from code                        |
+| solfunmeme_input_fs         | 📂     | Observer (Input)              | Handles file system input, code chunking                         |
+| solfunmeme_search_tantivy   | 🔎     | Observer (Search)             | Full-text search and indexing with Tantivy                       |
+| solfunmeme_state            | 🗃️     | Orient (State)                | Project state management                                         |
+| solfunmeme_playground       | 🧪     | Orient (Experimentation)      | Interactive playground for testing and prototyping               |
+| solfunmeme_models           | 🏗️     | Orient (Models)               | Data models and types                                            |
+| solfunmeme_extractor_system | 🏷️     | Observer (Extraction)         | System for extracting and labeling code/data                     |
+| solfunmeme_embedding        | 🧬     | Orient (Embedding)            | Embedding and vectorization tools                                |
+| solfunmeme_clifford         | 🧮     | Orient (Math)                 | Clifford algebra and mathematical operations                     |
+| solfunmeme_app              | 🖥️     | Act (App/UI)                  | Main application and user interface                              |
+| solfunmeme_wallet_integration| 💳    | Act (Blockchain)              | Solana wallet and blockchain integration                         |
+| solfunmeme_solana_data      | 🔗     | Act (Blockchain Data)         | On-chain data and Solana-specific logic                          |
+| solfunmeme_views            | 🪟     | Act (UI Components)           | UI components and views                                          |
+| solfunmeme_tantivy_report   | 📊     | Orient (Reporting)            | Reporting and analytics from search/index                        |
+| solfunmeme_broken_tantivy   | 🛠️     | Orient (Experimental)         | Experimental/legacy Tantivy integration                          |
+| task_manager                | ✅     | Orient (Task Management)      | Task and workflow management                                     |
+| workflow_manager            | 🔄     | Orient (Workflow)             | Workflow orchestration                                           |
+| ...                         | ...    | ...                           | ...                                                              |
+
+> **Legend:**
+> - 🟢 Observer: Indexing, introspection, analysis
+> - 🟡 Orient: Data modeling, logic, experimentation
+> - 🟠 Decide: (not yet implemented)
+> - 🔴 Act: UI, blockchain, user-facing actions
+
+---
+
+For a full semantic index and glossary, see [crates/README.md](crates/README.md) and [founding_documents/GEMINI.md](founding_documents/GEMINI.md).
+
+This dashboard will be updated as the project evolves and new crates or features are added.
 
 **License:** AGPL-3.0
 
@@ -41,7 +85,8 @@ See [Systems Overview](doc/systems.md) for a list of systems and platforms integ
 ## Ideas
 See [Project Ideas](doc/ideas.md) for a collection of ideas and future directions.
 
-
+## Next Steps
+See [Next Steps & Roadmap](doc/next_steps.md) for the current development roadmap and immediate priorities.
 
 ## Older Stuff
 See [Older Stuff](doc/older_stuff.md) for miscellaneous older notes and configurations.
@@ -282,4 +327,84 @@ $ find -name bin
 ./vendor/vibrato/examples/wasm/src/bin
 ./vendor/wasm-bindgen/crates/cli/src/bin
 ./vendor/wit-bindgen/src/bin
+
+
+## Vendor/Input Crates Matrix
+
+Below are some of the key input and vendor crates used in this project. These provide foundational functionality, NLP, search, and integration capabilities.
+
+| Vendor Crate                | Emoji  | Function / OODA Phase         | Description                                                      |
+|-----------------------------|--------|-------------------------------|------------------------------------------------------------------|
+| path-clean                  | 🧹     | Observer (Utility)            | Path normalization and cleaning utilities                        |
+| agave-solana-validator      | 🛡️     | Act (Blockchain)              | Solana validator integration and testing tools                   |
+| time                        | ⏰     | Observer (Time)               | Time and date utilities                                          |
+| steel                       | 🏗️     | Orient (Math/Logic)           | Mathematical and logic programming utilities                     |
+| rhai                        | 📜     | Orient (Scripting)            | Embedded scripting engine for automation                         |
+| json-ld                     | 🧾     | Orient (Semantic)             | JSON-LD and semantic web processing                              |
+| eliza-rs                    | 🤖     | Orient (NLP)                  | ELIZA chatbot and NLP tools                                      |
+| rust-sentence-transformers  | 🧬     | Orient (Embedding)            | Sentence transformer embeddings                                  |
+| keyword-extraction-rs       | 🏷️     | Observer (NLP)                | Keyword extraction utilities                                     |
+| vibrato                     | 🎵     | Orient (NLP)                  | Text segmentation and tokenization                               |
+| tantivy                     | 🔎     | Observer (Search)             | Full-text search engine                                          |
+| quickwit                    | ⚡     | Observer (Search)             | Fast search/indexing engine                                      |
+| sophia_rs                   | 🕸️     | Orient (Semantic)             | RDF and semantic web processing                                  |
+| lean4                       | 📐     | Orient (Proof/Logic)          | Lean 4 theorem prover integration                                |
+| ...                         | ...    | ...                           | ...                                                              |
+
+> This is a representative sample. The `vendor/` directory contains many more crates for NLP, search, semantic web, blockchain, and utility functions.
+
+---
+
+## 🔍 Codebase Analysis Tools
+
+### Codebase Analyzer CLI
+
+The `codebase_analyzer_cli` provides powerful analysis capabilities for your indexed codebase using the existing Tantivy search infrastructure.
+
+**Usage:**
+```bash
+# Show top words by frequency
+cargo run --bin codebase_analyzer_cli word-freq 50
+
+# Show top emojis by frequency  
+cargo run --bin codebase_analyzer_cli emoji-freq 20
+
+# Show file types by count
+cargo run --bin codebase_analyzer_cli file-types 20
+
+# Search codebase content
+cargo run --bin codebase_analyzer_cli search "function" 10
+
+# Show overall statistics
+cargo run --bin codebase_analyzer_cli stats
+```
+
+**Features:**
+- **Word Frequency Analysis:** Find most common terms in your codebase
+- **Emoji Statistics:** Analyze emoji usage patterns across code
+- **File Type Analysis:** Understand your project's file composition
+- **Full-Text Search:** Search through indexed code content
+- **Comprehensive Stats:** Get overview of indexed data
+
+**Example Output:**
+```
+Top 20 words in codebase:
+  1. function              - 1,234
+  2. struct                - 987
+  3. impl                  - 876
+  4. pub                   - 654
+  5. let                   - 543
+  ...
+
+Top 10 emojis in codebase:
+  1. 🔧  - 45
+  2. 📝  - 32
+  3. 🚀  - 28
+  4. 🐛  - 25
+  5. ✨  - 22
+  ...
+```
+
+This tool leverages your existing `codebase_index/` Tantivy index, providing fast analysis without reprocessing files.
+
 
