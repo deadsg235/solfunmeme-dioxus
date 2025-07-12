@@ -4,9 +4,10 @@ use std::collections::HashMap;
 use std::fs;
 
 use solfunmeme_embedding::{embed_text, load_emoji_multivectors};
-use solfunmeme_clifford::{BertCliffordEncoder, SolMultivector, BertConfig, get_sieve_address};
+use solfunmeme_clifford::{BertCliffordEncoder, SolMultivector, BertConfig, get_sieve_address, SolCl};
+use tclifford::algebra::ClAlgebraBase;
 use solfunmeme_function_analysis::{analyze_rust_file, extract_code_snippets, AnalyzedDocument, CodeChunk, AnalyzedFunction, ClosestEmojiInfo};
-use solfunmeme_clifford::SolCl;
+
 use candle_core::Device;
 use tokenizers::Tokenizer;
 

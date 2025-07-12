@@ -37,8 +37,9 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
             // Only process .rs and .md files for now
             continue;
         }
-        match fs::read_to_string(&path) {
-            Ok(content) => {
+        match fs::read(&path) {
+            Ok(bytes) => {
+                let content = String::from_utf8_lossy(&bytes).to_string();
                 let chunk = CodeChunk {
                     language: ext.clone(), // Use file extension as language
                     content: content.clone(),
@@ -53,7 +54,7 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
                 code_chunks.push(chunk);
             },
             Err(e) => {
-                eprintln!("[ERROR: could not read file: {}]", e);
+                eprintln!("[ERROR] Failed to read file {} (possibly non-UTF-8 or binary): {}", path.display(), e);
             }
         }
     }

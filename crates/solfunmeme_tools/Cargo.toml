@@ -58,6 +58,7 @@ solfunmeme_extractor = { path = "../solfunmeme_extractor", optional = true }
 rust-embed = { version = "8.7.2", features = ["debug-embed", "include-exclude"], optional = true }
 solfunmeme_search_tantivy = { path = "../solfunmeme_search_tantivy" }
 solfunmeme_tantivy_report = { path = "../solfunmeme_tantivy_report" }
+solfunmeme_indexer = { path = "../solfunmeme_indexer" }
 
 [dev-dependencies]
 tempfile = "3.10"

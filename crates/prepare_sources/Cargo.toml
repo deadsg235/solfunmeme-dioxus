@@ -17,6 +17,7 @@ solfunmeme_solana_data = { path = "../solfunmeme_solana_data" }
 solfunmeme_input_fs = { path = "../solfunmeme_input_fs" }
 
 anyhow = "1.0"
+clap = { version = "4", features = ["derive"] }
 indicatif = "0.17"
 sha2 = "0.10"
 syn = { version = "2.0", features = ["full", "extra-traits"] }

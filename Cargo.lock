@@ -10980,6 +10980,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "candle-core 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clap",
  "indicatif",
  "md5",
  "nalgebra 0.32.6",
@@ -16005,6 +16006,7 @@ dependencies = [
  "serde_json",
  "solfunmeme_core_logic",
  "solfunmeme_extractor",
+ "solfunmeme_indexer",
  "solfunmeme_models",
  "solfunmeme_search_tantivy",
  "solfunmeme_tantivy_report",

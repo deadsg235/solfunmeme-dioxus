@@ -1,8 +1,7 @@
-use syn::{ItemFn, ReturnType};
+use syn::ReturnType;
 use std::path::Path;
 use walkdir::WalkDir;
 use md5;
-use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -42,7 +41,7 @@ pub struct AnalyzedDocument {
     pub file_path: String,
     pub code_snippets: Vec<CodeChunk>,
     pub text_chunks: Vec<String>,
-    pub analyzed_snippets: Vec<FunctionInfo>, // Reusing FunctionInfo for snippets
+    pub analyzed_snippets: Vec<AnalyzedFunction>, // Changed from FunctionInfo to AnalyzedFunction
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
