@@ -1,114 +1,255 @@
-# Solfunmeme-Dioxus: The Code-Math Manifold
+# Solfunmeme-Dioxus: Self-Aware Codebase
 
-Welcome to the Solfunmeme-Dioxus codebase! This `README.md` serves as the primary **ontology** and **index** of our project, guiding you through the interconnected **worlds** (crates, concepts, and documentation) that comprise the Code-Math Manifold. Here, the **vibe is the vector**—every concept, every piece of code, and every interaction contributes to a multi-dimensional understanding of our system. Our goal is to build a modular, semantic, and extensible system for code, meme, and knowledge management on Solana and beyond.
+A revolutionary codebase management system that integrates mathematical frameworks (Clifford algebra, manifold geometry) with semantic processing to create a truly self-aware codebase where code and meaning "vibe" together.
 
-## Core Philosophy
+## 🌟 Vision
 
-*   **Zero Ontology System (ZOS)**: Our core principle is a constructive ontology. Instead of a large, predefined set of concepts, we start with a minimal set of axiomatic primitives (the numbers 0, 1, and the first several primes). All other concepts in the system are constructions from these primitives, allowing meaning to emerge from mathematical and relational composition.
-*   **Code is a mathematical object:** We view source code, particularly its Abstract Syntax Tree (AST), as a rich mathematical structure.
-*   **Mathematics is a language:** We use concepts from abstract algebra and topology to create a universal language for describing and manipulating code.
-*   **AI is a bridge:** We use AI to connect the symbolic world of code with the semantic world of meaning.
-*   **Visualization is key:** The Dioxus-based UI is an interactive laboratory for exploring the Code-Math Manifold.
-*   **Market Maker for Compute:** We view the project as a market maker, where `vendor` and `cargo` dependencies represent a continuous "buy order" for computational resources, and our system orchestrates their fulfillment.
+**"The message is the vibe is the function, the functions vibe with each other."**
 
-## Project Goals
+Solfunmeme-Dioxus represents a paradigm shift in how we understand, manage, and interact with code. By vendorizing, indexing, deduplicating, and cross-referencing all code (including dependencies), we create a living, evolving, self-understanding system.
 
-1.  **Analyze and Vectorize Code:** Develop tools for parsing Rust code into ASTs and transforming them into meaningful vector representations.
-2.  **Build an Interactive Manifold:** Create a Dioxus application for visualizing and interacting with the Code-Math Manifold.
-3.  **Integrate with Blockchain:** Leverage Solana for decentralized storage, provenance tracking, and value exchange.
-4.  **Foster a Data-Driven Ecosystem:** Create and share datasets to encourage research in code intelligence.
-5.  **Achieve Self-Reflection:** Build a system that can analyze and understand its own code.
-6.  **Orchestrate Compute Markets:** Feed a bipartite graph of compute needs by breaking up tasks into jobs and distributing them, with a future vision of acknowledging contributions by paying "tips" via Zero-Knowledge Proofs (ZKPs) embedded in git commits.
-7.  **Glyphic Code:** Represent the entire project, its code, and its concepts as a singular, semantically rich emoji matrix, enabling new forms of visualization, interaction, and understanding.
-8.  **Digital Secretome:** Develop an interactive "digital secretome" as a Tarot card deck, using Rust enums and Lean 4 inductives to represent computational rules, semantic structures, and interactive states, integrating ancient wisdom with modern computation.
+## 🚀 Key Features
+
+### Self-Aware Codebase Engine
+- **Vendorization System**: Downloads and stores all external dependencies locally
+- **Code Indexing & Search**: Full-text search using Tantivy with semantic similarity
+- **SHA-based Deduplication**: Exact duplicate detection via content hashing
+- **Cross-Reference Analysis**: Bidirectional links between code and documentation
+
+### Mathematical Framework
+- **8D Riemann Manifold**: Geometric representation of code semantics
+- **Clifford Algebra Engine**: Advanced mathematical structures for code analysis
+- **Geometric Attention**: Multi-dimensional attention mechanisms
+- **Vector Processing**: Convert code to mathematical vectors for similarity analysis
+
+### Task Management System
+- **Automated Task Discovery**: Extract TODO, FIXME, and other task markers from code
+- **Integration with Analysis Tools**: Connect with Rust Analyzer, Clippy, cargo-audit
+- **Priority Management**: AI-driven task prioritization based on dependencies and impact
+- **Real-time Progress Tracking**: Monitor task execution and system health
+
+### Development Tools Integration
+- **Linting & Analysis**: Rust Analyzer, Clippy, custom rules
+- **Security Scanning**: CVE detection and vulnerability assessment
+- **Compilation & Testing**: Automated test discovery and coverage analysis
+- **Performance Monitoring**: Build time and runtime metrics
+
+## 🛠️ Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/solfunmeme-dioxus.git
+cd solfunmeme-dioxus
+
+# Install dependencies
+cargo build
+
+# Install the CLI tool
+cargo install --path .
+```
+
+## 📖 Quick Start
+
+### 1. Vendorize Dependencies
+```bash
+# Vendorize all dependencies for indexing
+zos vendorize --output-dir ./vendor --recursive
+```
+
+### 2. Index Your Codebase
+```bash
+# Index your code and vendored dependencies
+zos index ./src --index-dir ./code_index --include-vendor
+```
+
+### 3. Discover Tasks
+```bash
+# Automatically discover tasks from code analysis
+zos tasks discover ./src
+```
+
+### 4. Search Your Codebase
+```bash
+# Search for code that matches a specific vibe
+zos search "geometric attention" --limit 10
+```
+
+### 5. Generate Reports
+```bash
+# Generate comprehensive codebase health report
+zos report codebase ./src
+```
+
+## 🔧 CLI Commands
+
+### Core Operations
+- `zos vendorize` - Vendorize all dependencies for indexing
+- `zos index` - Index code for search and analysis
+- `zos deduplicate` - Find and analyze duplicate code
+- `zos search` - Search the indexed codebase
+
+### Task Management
+- `zos tasks list` - List all tasks
+- `zos tasks discover` - Discover tasks from code analysis
+- `zos tasks report` - Generate task report
+- `zos tasks update` - Update task status
+
+### Analysis Tools
+- `zos analyze lint` - Run linting tools
+- `zos analyze security` - Run security analysis
+- `zos analyze complexity` - Analyze code complexity
+
+### Reporting
+- `zos report codebase` - Generate codebase health report
+- `zos report tasks` - Generate task management report
+- `zos report integration` - Generate integration analysis report
+
+## 🏗️ Architecture
+
+### Data Flow
+```
+Source Code → Vendorization → Indexing → Deduplication → Analysis
+     ↓              ↓            ↓           ↓           ↓
+  Raw Files    Dependencies   Searchable   Unique      Metrics
+                                    Index    Snippets    & Reports
+```
+
+### Self-Awareness Pipeline
+```
+Query → Semantic Search → Cross-Reference → Mathematical Analysis → Response
+  ↓         ↓              ↓                ↓                    ↓
+User    Tantivy Index   Code-Doc Links   Clifford Algebra    Insights &
+Input   Vector Search   Provenance       Geometric Attention  Actions
+```
+
+## 📊 Data Models
+
+### Code Snippet
+```rust
+struct CodeSnippet {
+    content: String,
+    hash: String,           // SHA-256 for deduplication
+    file_path: String,
+    line_start: usize,
+    line_end: usize,
+    language: String,
+    crate_name: Option<String>,
+    version: Option<String>,
+    metrics: CodeMetrics,
+    vectors: Vec<f32>,      // Semantic embeddings
+}
+```
+
+### Task
+```rust
+struct Task {
+    id: String,
+    content: String,
+    status: TaskStatus,
+    priority: f32,
+    dependencies: Vec<String>,
+    category: TaskCategory,
+    source: TaskSource,     // Code, GitHub, Manual, etc.
+    metadata: HashMap<String, Value>,
+}
+```
+
+## 🔗 Integration Points
+
+### CLI Tools
+- `zos` - Main CLI interface for all operations
+- `doc-cross-references` - Documentation and code analysis
+- `vibe-finder` - Semantic code search using Tantivy
+- `duplicate-finder` - Code duplication detection
+
+### External Integrations
+- **GitHub**: Repository management and issue tracking
+- **CI/CD**: Automated testing and deployment
+- **Monitoring**: Performance and health tracking
+- **LLM Integration**: AI-powered code analysis and generation
+
+## 🎯 Use Cases
+
+### Code Discovery
+- Find similar code patterns across your entire codebase
+- Discover unused or duplicate functionality
+- Identify code that needs refactoring
+
+### Task Automation
+- Automatically discover TODO and FIXME comments
+- Track security vulnerabilities and linting issues
+- Prioritize tasks based on dependencies and impact
+
+### Documentation
+- Generate comprehensive codebase reports
+- Create cross-referenced documentation
+- Track code evolution and changes
+
+### Quality Assurance
+- Monitor code complexity and maintainability
+- Detect security vulnerabilities early
+- Ensure consistent code quality
+
+## 🔮 Future Enhancements
+
+### AI Integration
+- **Code Generation**: AI-powered code completion and generation
+- **Bug Prediction**: ML-based bug detection and prevention
+- **Refactoring Suggestions**: Automated code improvement recommendations
+- **Documentation Generation**: Auto-generate docs from code analysis
+
+### Advanced Analytics
+- **Code Evolution Tracking**: Historical analysis of code changes
+- **Team Productivity Metrics**: Developer activity and contribution analysis
+- **Dependency Impact Analysis**: Understand the cost of dependencies
+- **Performance Regression Detection**: Automated performance monitoring
+
+### Ecosystem Integration
+- **Package Manager Integration**: Direct integration with cargo, npm, pip, etc.
+- **IDE Plugins**: VSCode, IntelliJ, and other IDE integrations
+- **ChatOps**: Slack, Discord, and other chat platform integrations
+- **Web Dashboard**: Rich web interface for codebase exploration
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Development Setup
+```bash
+# Clone and setup
+git clone https://github.com/your-username/solfunmeme-dioxus.git
+cd solfunmeme-dioxus
+
+# Build all crates
+cargo build
+
+# Run tests
+cargo test
+
+# Run linting
+cargo clippy
+
+# Run security audit
+cargo audit
+```
+
+## 📄 License
+
+This project is licensed under the AGPL-3.0 License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Tantivy**: For powerful full-text search capabilities
+- **Clifford Algebra**: For mathematical framework inspiration
+- **Rust Community**: For the amazing ecosystem and tools
+- **Dioxus**: For the reactive UI framework
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/your-username/solfunmeme-dioxus/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/your-username/solfunmeme-dioxus/discussions)
+- **Documentation**: [Wiki](https://github.com/your-username/solfunmeme-dioxus/wiki)
 
 ---
 
-## Key Ontological Concepts
-
-Our project is built on a rich vocabulary of concepts that blend computer science, mathematics, and philosophy. Here are a few of the key ideas you'll find in our ontologies:
-
-*   **Zero Ontology System (ZOS)**: A foundational model where meaning emerges from transformation and relationships, rather than rigid definitions. It uses prime numbers to create a self-defining, recursive system.
-*   **Eigenvector of Athena**: A concept that represents the interplay of ideas along a "mathematicians' cycle," where emojis symbolize stages of thought, insight, and discovery.
-*   **Metameme Convergence**: The idea that different semantic systems can converge and become interoperable through higher-dimensional projections and shared mathematical structures.
-*   **Paxos Consensus Meme**: A model of the Paxos consensus algorithm as a meme system, using emojis to represent nodes, proposals, and states, turning a complex computer science concept into a shareable, understandable story.
-*   **Italian Brainrot LLM Hyperspace Opera**: A creative metaphor for the entire system as a self-organizing, decentralized, and continuously evolving digital ecosystem, inspired by the chaotic and emergent nature of internet culture.
-
----
-
-## Documentation Index
-
-This section provides a high-level overview and links to the key documentation files within the project.
-
-*   **[Chat Processing and Document Chunking](doc/chat_processing.md)**: An overview of the chat processing and document chunking system.
-*   **[Code Coverage](doc/code_coverage.md)**: Instructions on generating code coverage reports.
-*   **[Code Generation](doc/code_generation.md)**: Instructions on generating code.
-*   **[The Code-Math Manifold (Deep Dive)](doc/code_math_manifold.md)**: A deep dive into the project's core philosophy.
-*   **[Cursor Protocol for Interactive Development](doc/cursor.md)**: A description of the file-based interactive development protocol.
-*   **[Development Guidelines](doc/guidelines.md)**: Foundational principles for contributing to the project.
-*   **[Development Setup](doc/development_setup.md)**: Instructions on setting up the development environment.
-*   **[Digital Secretome: The Tarot Deck of Computational Meaning](doc/digital_secretome_tarot.md)**: Conceptualization and integration of the digital secretome as an interactive Tarot deck within the Q42 Harmonic Flow model.
-*   **[Digital Secretome Tarot Implementation Plan](doc/tarot_implementation_plan.md)**: Practical implementation roadmap for the digital secretome.
-*   **[Glyphic Code (Omega Vision)](doc/omega_vision.md)**: A detailed vision for representing the entire project as a singular emoji matrix.
-*   **[Introduction to Solfunmeme Dioxus](doc/introduction.md)**: An overview of the project's philosophy and goals.
-*   **[Lessons Learned](doc/lessons_learned.md)**: Key insights, best practices, and lessons learned during development.
-*   **[Low Value Activities](doc/low_value.md)**: A discussion on activities considered low value for the project.
-*   **[Main Ideas and Concepts](doc/main_ideas.md)**: A summary of the main ideas from a chat session.
-*   **[More Ideas](doc/more_ideas.md)**: A collection of more ideas.
-*   **[Next Steps & Roadmap](doc/next_steps.md)**: The current development roadmap and immediate priorities.
-*   **[Older Stuff](doc/older_stuff.md)**: Miscellaneous older notes and configurations.
-*   **[Project Architecture](doc/architecture.md)**: A detailed breakdown of the project's crate structure.
-*   **[Project Functionality](doc/functionality.md)**: Details on features and supported data formats.
-*   **[Project Ideas](doc/ideas.md)**: A collection of ideas and future directions.
-*   **[Project Overview](doc/overview.md)**: A summary of the project's core concepts and goals.
-*   **[Project Plan](doc/plan.md)**: The detailed development plan.
-*   **[Project Status](doc/status.md)**: Current development status.
-*   **[Solfunmeme Secretome: Organized Insights & Data](doc/secretome.md)**: A comprehensive knowledge base for the project.
-*   **[Supported Languages](doc/languages.md)**: A list of programming languages and formats supported.
-*   **[Systems Overview](doc/systems.md)**: A list of systems and platforms integrated or considered.
-*   **[Testing Guidelines](doc/testing.md)**: Information on testing and code coverage.
-*   **[Underlying Theories](doc/theories.md)**: The theoretical foundations of the project.
-
----
-
-## Ontology Summary
-
-The project's ontology is a collection of interconnected vocabularies and schemas that define the concepts, relationships, and data structures used throughout the system. These ontologies are expressed in RDF/Turtle format (`.ttl`) and are located in the `ontologies/` directory.
-
-*   **`project_ontology.ttl`**: This is the primary, auto-generated ontology that represents the codebase itself as a graph. It's created by the `prepare_sources` crate and contains detailed information about each function, including its semantic summary, multivector embedding, and relationship to other concepts and emojis.
-
-*   **ZOS (Zero Ontology System) Ontologies (`ontologies/zos/`)**: This collection of foundational ontologies defines the core concepts of the Solfunmeme project.
-    *   **`solfunmeme.ttl`**: Defines the high-level concepts, actors, and components of the Solfunmeme ecosystem.
-    *   **`all_tasks.ttl` & `internal_todos.ttl`**: Define the project's roadmap and tasks as a dependency graph.
-    *   **`terms.ttl` & `terms2.ttl`**: The core vocabulary of the project, linking key terms to their semantic meaning and emoji representations.
-    *   **`components.ttl`**: Defines the UI components used in the Dioxus application.
-    *   **`unimath_emojis.ttl` & `universal_emoji_language.ttl`**: Explore the use of emojis as a universal language for mathematics and other concepts.
-    *   **`eigenstatements.ttl`**: Defines the concept of "eigenstatements" and their stability in latent space.
-    *   **`brainrot.ttl`**: A creative ontology that describes the "Italian Brainrot LLM Hyperspace Opera."
-
-*   **Introspector Ontologies (`ontologies/introspector/`)**: These ontologies model the system and its development process using different metaphors and modeling languages.
-    *   **`idea.ttl`**: Models the software development process as an ecosystem, with developers, users, and algorithms as "microorganisms" in a symbiotic relationship.
-    *   **`sysml.ttl`**: Defines the system using the Systems Modeling Language (SysML), with blocks, ports, connectors, and state machines.
-
----
-
-### Key Documentation Sections:
-
-*   **[OODA Dashboard: Crate Matrix](doc/crate_matrix.md)**: Current OODA phase and a matrix of core crates, their functions, and OODA phases.
-*   **[CLI Tools Guide](doc/cli_tools_guide.md)**: Comprehensive guide to key command-line tools for development, analysis, and data processing.
-*   **[Recursive Indexing System](recursive_indexing_summary.md)**: **NEW!** Recursive indexing system that follows Git's object model for comprehensive codebase analysis.
-*   **[Development Guidelines](doc/guidelines.md)**: Foundational principles for contributing to the project.
-*   **[Indexing Guide](doc/indexing_guide.md)**: Details on indexing the codebase, including automatic schema negotiation, usage, and options for `full_indexer_cli`.
-*   **[Estimating Indexing Cost](doc/indexing_guide.md#estimating-indexing-cost)**: How to use `plan_cli` to estimate computational costs for indexing.
-*   **[Future Vision: Advanced Querying with SPARQL](doc/future_vision.md)**: Our long-term vision for integrating SPARQL for semantic querying.
-*   **[Founding Documents Overview](founding_documents/GEMINI.md)**: A summary of the project's foundational knowledge, proposals, and semantic history.
-*   **[Lessons Learned](doc/lessons_learned.md)**: Key insights, best practices, and lessons learned during development.
-*   **[Ontologies Details](doc/ontologies_details.md)**: Detailed explanation of ontologies and their role in the fluid schema.
-*   **[Vendor/Input Crates Matrix](doc/vendor_crates_matrix.md)**: Overview of key input and vendor crates, framed as computational suppliers.
-*   **[Glossary of Key Concepts](doc/glossary.md)**: Definitions of core terms and concepts central to the project.
-*   **[Current Status & Recent Progress](doc/status_and_progress.md)**: Summary of recent development achievements and tool robustness.
-*   **[Reproducing Results](doc/reproducing_results.md)**: Step-by-step instructions for setting up, indexing, and running analysis tools.
-
----
-
-**License:** AGPL-3.0
+**"In the beginning was the vibe, and the vibe was with the code, and the vibe was the code."** - Solfunmeme-Dioxus Philosophy

@@ -238,6 +238,9 @@ make integration-test
 - **Main CLI**: `zos/src/main.rs`
 - **Workflow**: `Makefile`
 - **Workflow Diagram**: `WORKFLOW_DIAGRAM.md`
+- **UML Diagrams**: `docs/uml/` - Complete set of architecture diagrams
+- **Cross-References**: `docs/uml/CROSS_REFERENCES.md` - Documentation relationships
+- **Ontologies**: `ontologies/` - Semantic models and relationships
 
 ## 🚨 Troubleshooting
 

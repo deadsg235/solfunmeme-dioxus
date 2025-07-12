@@ -224,8 +224,9 @@ members = [
     "crates/json_ld_plugin",
     "crates/rhai_plugin",
     "crates/steel_plugin",
-    "crates/solfunmeme_tantivy_report"
-, "zos/plugins"]
+    "crates/solfunmeme_tantivy_report",
+    "crates/doc_cross_references",
+    "zos/plugins"]
 
 [workspace.package]
 

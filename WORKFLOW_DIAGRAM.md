@@ -297,4 +297,13 @@ make nlp
 make integration-test
 ```
 
-This workflow diagram shows how the Solfunmeme-Dioxus system implements the 8 factorial steps from the systems design, creating a comprehensive platform for code analysis, semantic processing, and blockchain integration through autopoetic rewrites and LLM-powered transformations. 
+This workflow diagram shows how the Solfunmeme-Dioxus system implements the 8 factorial steps from the systems design, creating a comprehensive platform for code analysis, semantic processing, and blockchain integration through autopoetic rewrites and LLM-powered transformations.
+
+## 🔗 Related Documentation
+
+- **Systems Design**: `vendor/meta-meme.wiki/SystemsDesign.md` - Original 8 factorial steps concept
+- **Architecture**: `doc/architecture.md` - Detailed system architecture
+- **UML Diagrams**: `docs/uml/` - Visual architecture representations
+- **Cross-References**: `docs/uml/CROSS_REFERENCES.md` - Documentation relationships
+- **Quick Reference**: `QUICK_REFERENCE.md` - Essential commands and workflows
+- **Makefile**: `Makefile` - Automated workflow implementation 
