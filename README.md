@@ -167,9 +167,99 @@ This project includes several powerful command-line tools to help with developme
 *   **`solfunmeme_tools`**: A collection of essential utilities for managing and interacting with the Solfunmeme-Dioxus ecosystem.
     *   **`chat_processor`**: Processes and structures chat logs, extracting valuable information and insights.
 *   **`solfunmeme_indexer`**: Manages the indexing of your codebase, enabling powerful search and analysis capabilities.
-    *   **`indexer_cli`**: The command-line interface for the indexer, allowing you to build, manage, and query your search indices.
+    *   **`full_indexer_cli`**: The command-line interface for the indexer, allowing you to build, manage, and query your search indices.
 *   **`prepare_sources`**: Prepares your source code for analysis and indexing, ensuring it's in the optimal format for the Solfunmeme-Dioxus tools.
 *   **`codebase_analyzer_cli`**: Provides a suite of tools for analyzing your indexed codebase, including word frequency, emoji usage, and semantic search.
+*   **`plan_cli`**: Estimates the cost of indexing by analyzing file counts, lines, and estimated chunks.
+
+---
+
+## Indexing the Codebase
+
+The `full_indexer_cli` tool is used to index your codebase into a Tantivy search index. This process involves reading source files, chunking them, and adding them to the index for later analysis and querying. The indexer includes **automatic schema negotiation**: if an existing index is found to be corrupted or have a mismatched schema, it will be automatically recreated to ensure data integrity and compatibility.
+
+**Usage:**
+```bash
+cargo run --bin full_indexer_cli <directory1> [directory2 ...] [--overwrite] [--sandbox] [--debug-backtrace]
+```
+
+**Options:**
+*   `<directory1> [directory2 ...]`: One or more paths to directories you want to index (e.g., `crates/`, `vendor/`).
+*   `--overwrite`: If specified, deletes the existing `codebase_index` directory before re-indexing. Use this for a clean re-index.
+*   `--sandbox`: Creates the index in a temporary directory, preventing pollution of your main `codebase_index`. Useful for testing or one-off analyses.
+*   `--debug-backtrace`: Enables `RUST_BACKTRACE=full` for subprocesses (like `prepare_sources`), providing detailed error traces if a crash occurs during indexing.
+
+**Example:**
+```bash
+cargo run --bin full_indexer_cli crates/ vendor/ --overwrite --debug-backtrace
+```
+This command will re-index both the `crates/` and `vendor/` directories, overwriting any existing index, and provide detailed backtraces on errors.
+
+---
+
+## Current Status & Recent Progress
+
+We have made significant progress in developing our core codebase analysis and indexing tools:
+
+*   **`full_indexer_cli`**: This tool is now robust, capable of indexing large directories like `crates/` and `vendor/`. It includes automatic schema negotiation to handle corrupted or mismatched Tantivy indexes, ensuring a smooth indexing process.
+*   **`plan_cli`**: This new tool provides valuable estimations of indexing costs, helping to plan computational resources.
+*   **Comprehensive Emoji Reports**: We can now generate detailed emoji frequency reports across the entire indexed codebase, providing insights into code patterns and themes.
+
+---
+
+## Reproducing Results
+
+To reproduce our current indexing and emoji analysis results, follow these steps:
+
+1.  **Prerequisites**: Ensure you have Rust and Cargo installed. You may also need `git` if you haven't cloned the repository.
+
+2.  **Clone the Repository (if not already done)**:
+    ```bash
+    git clone https://github.com/your-repo/solfunmeme-dioxus.git
+    cd solfunmeme-dioxus
+    ```
+
+3.  **Build the Tools**: Navigate to the `solfunmeme_tools` crate and build the necessary binaries:
+    ```bash
+    cd crates/solfunmeme_tools
+    cargo build --release --bins
+    cd ../..
+    ```
+
+4.  **Index the Codebase**: Run the `full_indexer_cli` to index the `crates/` and `vendor/` directories. The `--overwrite` flag ensures a clean index, and `--debug-backtrace` provides detailed error logs if any issues occur.
+    ```bash
+    ./target/release/full_indexer_cli crates/ vendor/ --overwrite --debug-backtrace
+    ```
+    *Note: This step can take a significant amount of time due to the large number of files in the `vendor/` directory. Progress updates will be printed to stderr.*
+
+5.  **Generate the Emoji Frequency Report**: Once indexing is complete, run the `codebase_analyzer_cli` to generate the emoji report. The `9999` limit ensures all unique emojis are captured.
+    ```bash
+    ./target/release/codebase_analyzer_cli emoji-freq 9999
+    ```
+    This will print the top emojis and their occurrences to your console.
+
+---
+
+## Estimating Indexing Cost
+
+Before performing a full index, you can use the `plan_cli` tool to estimate the computational cost:
+
+**Usage:**
+```bash
+./target/release/plan_cli <directory1> [directory2 ...]
+```
+
+**Example:**
+```bash
+./target/release/plan_cli crates/ vendor/
+```
+This command will provide a summary of files, lines, and estimated chunks for the specified directories.
+
+---
+
+## Future: Advanced Querying with SPARQL
+
+Our long-term vision includes integrating SPARQL for advanced, semantic querying of the indexed codebase. This will allow for more complex and expressive queries against the rich RDF ontology generated from your code, moving beyond simple keyword searches to truly understand the relationships and meaning within the Code-Math Manifold.
 
 ## Founding Documents Overview
 
@@ -197,11 +287,11 @@ The `founding_documents/` directory contains the foundational knowledge, proposa
 
 ## Ontologies
 
-Ontologies are central to the Code-Math Manifold, providing a structured, semantic understanding of code and its relationships. They define the concepts, properties, and relationships within our domain, enabling advanced analysis, reasoning, and visualization.
+Ontologies are central to the Code-Math Manifold, providing a structured, semantic understanding of code and its relationships. They define the concepts, properties, and relationships within our domain, enabling advanced analysis, reasoning, and visualization. Crucially, these ontologies will directly inform and be used in the project's evolving data schema, which is designed to be fluid and adaptable.
 
-*   **`ontologies/project_ontology.ttl`**: The main project ontology in Turtle format, generated from analyzed code. *Refer here to understand the semantic structure derived from the codebase.*
-*   **`ontologies/solfunmem.jsonld`**: A JSON-LD representation of core semantic concepts. *Refer here for a JSON-LD view of foundational semantic elements.*
-*   **`ontologies/zos/`**: Contains ZOS-specific ontology definitions. *Refer here for ontologies related to the ZOS (Zero-One-Space) framework.*
+*   **`ontologies/project_ontology.ttl`**: The main project ontology in Turtle format, generated from analyzed code. *Refer here to understand the semantic structure derived from the codebase, which directly influences our fluid schema.*
+*   **`ontologies/solfunmem.jsonld`**: A JSON-LD representation of core semantic concepts. *Refer here for a JSON-LD view of foundational semantic elements that contribute to the schema's flexibility.*
+*   **`ontologies/zos/`**: Contains ZOS-specific ontology definitions. *Refer here for ontologies related to the ZOS (Zero-One-Space) framework, which will also be integrated into the fluid schema.*
 
 ## Vendor/Input Crates Matrix
 

@@ -8960,6 +8960,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8bc45ce96192b5d8b20cffb10ccd85cc431c283a7d171a0d843ac0bd7d444598"
 
 [[package]]
+name = "mownstr"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b33dce847b8623c1f2e473ed3a05e43d0c395e3b93fab62378b6ae94b0a1c42c"
+
+[[package]]
 name = "murmurhash32"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -9888,6 +9894,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "54b4ed3a7192fa19f5f48f99871f2755047fabefd7f222f12a1df1773796a102"
 
 [[package]]
+name = "oxrdf"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a04761319ef84de1f59782f189d072cbfc3a9a40c4e8bded8667202fbd35b02a"
+dependencies = [
+ "oxilangtag",
+ "oxiri",
+ "rand 0.8.5",
+ "thiserror 2.0.12",
+]
+
+[[package]]
 name = "p256"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10052,6 +10070,33 @@ dependencies = [
  "thiserror 1.0.69",
  "utf8-decode",
 ]
+
+[[package]]
+name = "peg"
+version = "0.8.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9928cfca101b36ec5163e70049ee5368a8a1c3c6efc9ca9c5f9cc2f816152477"
+dependencies = [
+ "peg-macros",
+ "peg-runtime",
+]
+
+[[package]]
+name = "peg-macros"
+version = "0.8.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6298ab04c202fa5b5d52ba03269fb7b74550b150323038878fe6c372d8280f71"
+dependencies = [
+ "peg-runtime",
+ "proc-macro2",
+ "quote",
+]
+
+[[package]]
+name = "peg-runtime"
+version = "0.8.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "132dca9b868d927b35b5dd728167b2dee150eb1ad686008fc71ccb298b776fca"
 
 [[package]]
 name = "pem"
@@ -13160,6 +13205,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha1_smol"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbfa15b3dddfee50a0fff136974b3e1bde555604ba463834a7eb7deb6417705d"
+
+[[package]]
 name = "sha2"
 version = "0.9.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -15949,6 +16000,7 @@ dependencies = [
  "anyhow",
  "serde",
  "solfunmeme_function_analysis",
+ "sophia_sparql",
  "tantivy 0.24.1",
 ]
 
@@ -16133,6 +16185,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "sophia_api"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "103a4138290bec38b9b10e0682b613173a102bca9fd2a74b3db25346e22599a3"
+dependencies = [
+ "lazy_static",
+ "mownstr 0.3.1",
+ "regex",
+ "resiter 0.5.0",
+ "serde",
+ "sophia_iri 0.9.0",
+ "thiserror 2.0.12",
+]
+
+[[package]]
 name = "sophia_c14n"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -16176,6 +16243,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "sophia_inmem"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ebacba4fa7baed53f89844a5c9e5962d6232a449d5b450b9de72bb67f0203332"
+dependencies = [
+ "sophia_api 0.9.0",
+ "thiserror 2.0.12",
+]
+
+[[package]]
 name = "sophia_iri"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -16198,6 +16275,19 @@ dependencies = [
  "regex",
  "serde",
  "thiserror 1.0.69",
+]
+
+[[package]]
+name = "sophia_iri"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7675ff44ad920ac07fde1b61ff20d3c832d8cb65395416906df90b76631ea95f"
+dependencies = [
+ "lazy_static",
+ "oxiri",
+ "regex",
+ "serde",
+ "thiserror 2.0.12",
 ]
 
 [[package]]
@@ -16263,6 +16353,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "sophia_sparql"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6393da350dacc9f1d9bf57df4ccbf39f9c1c8e10554747d91bd1321413b10a82"
+dependencies = [
+ "bigdecimal",
+ "chrono",
+ "num-bigint 0.4.6",
+ "oxiri",
+ "rand 0.8.5",
+ "sophia_api 0.9.0",
+ "sophia_inmem 0.9.0",
+ "sophia_iri 0.9.0",
+ "sophia_term 0.9.0",
+ "spargebra",
+ "thiserror 2.0.12",
+ "uuid",
+]
+
+[[package]]
 name = "sophia_term"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -16286,6 +16396,16 @@ checksum = "ca3a77f8523038dc1204a59dd461f27322cbe14bea3da873d41b6cc40c3e63e9"
 dependencies = [
  "lazy_static",
  "sophia_api 0.8.0",
+]
+
+[[package]]
+name = "sophia_term"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "51f4c42480d50d14ac7128ad738d28b68368938cb6f507c9505f68875fd0e4db"
+dependencies = [
+ "lazy_static",
+ "sophia_api 0.9.0",
 ]
 
 [[package]]
@@ -16328,6 +16448,20 @@ name = "space"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e990cc6cb89a82d70fe722cd7811dbce48a72bbfaebd623e58f142b6db28428f"
+
+[[package]]
+name = "spargebra"
+version = "0.3.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8907e262be4b4b363218f4688f5654d423a958aa4b8d7c7a7f898be591fa474e"
+dependencies = [
+ "oxilangtag",
+ "oxiri",
+ "oxrdf",
+ "peg",
+ "rand 0.8.5",
+ "thiserror 2.0.12",
+]
 
 [[package]]
 name = "spin"
@@ -18247,6 +18381,7 @@ dependencies = [
  "js-sys",
  "rand 0.9.1",
  "serde",
+ "sha1_smol",
  "uuid-rng-internal",
  "wasm-bindgen",
 ]

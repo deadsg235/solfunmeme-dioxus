@@ -35,6 +35,10 @@ path = "src/bin/emoji_extractor_cli.rs"
 name = "tantivy_analyzer_cli"
 path = "src/bin/tantivy_analyzer_cli.rs"
 
+[[bin]]
+name = "plan_cli"
+path = "src/bin/plan_cli.rs"
+
 [dependencies]
 anyhow = "1.0"
 tantivy = { path = "../../vendor/tantivy", default-features = false, features = ["mmap", "lz4-compression"] }

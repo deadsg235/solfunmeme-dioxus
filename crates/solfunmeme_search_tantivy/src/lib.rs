@@ -51,15 +51,36 @@ impl SearchIndex {
         let schema = schema_builder.build();
         
         // Create or open index
-        let index = if index_path.exists() {
-            Index::open(MmapDirectory::open(index_path)?)?
-        } else {
-            std::fs::create_dir_all(index_path)
-                .map_err(|e| anyhow::anyhow!("Failed to create index directory {}: {}", index_path.display(), e))?;
-            let directory = MmapDirectory::open(index_path)
-                .map_err(|e| anyhow::anyhow!("Failed to open MmapDirectory at {}: {}", index_path.display(), e))?;
-            Index::create(directory, schema.clone(), IndexSettings::default())
-                .map_err(|e| anyhow::anyhow!("Failed to create Tantivy index at {}: {}", index_path.display(), e))?
+        let index = match Index::open(MmapDirectory::open(index_path)?) {
+            Ok(existing_index) => {
+                if existing_index.schema() == schema {
+                    eprintln!("[INFO] Opened existing Tantivy index at: {}", index_path.display());
+                    existing_index
+                } else {
+                    eprintln!("[WARN] Existing index schema mismatch at: {}. Recreating index.", index_path.display());
+                    std::fs::remove_dir_all(index_path)
+                        .map_err(|e| anyhow::anyhow!("Failed to remove old index directory {}: {}", index_path.display(), e))?;
+                    std::fs::create_dir_all(index_path)
+                        .map_err(|e| anyhow::anyhow!("Failed to create index directory {}: {}", index_path.display(), e))?;
+                    let directory = MmapDirectory::open(index_path)
+                        .map_err(|e| anyhow::anyhow!("Failed to open MmapDirectory at {}: {}", index_path.display(), e))?;
+                    Index::create(directory, schema.clone(), IndexSettings::default())
+                        .map_err(|e| anyhow::anyhow!("Failed to create Tantivy index at {}: {}", index_path.display(), e))?
+                }
+            },
+            Err(e) => {
+                eprintln!("[WARN] Failed to open existing Tantivy index at {}: {}. Recreating index.", index_path.display(), e);
+                if index_path.exists() {
+                    std::fs::remove_dir_all(index_path)
+                        .map_err(|e| anyhow::anyhow!("Failed to remove old index directory {}: {}", index_path.display(), e))?;
+                }
+                std::fs::create_dir_all(index_path)
+                    .map_err(|e| anyhow::anyhow!("Failed to create index directory {}: {}", index_path.display(), e))?;
+                let directory = MmapDirectory::open(index_path)
+                    .map_err(|e| anyhow::anyhow!("Failed to open MmapDirectory at {}: {}", index_path.display(), e))?;
+                Index::create(directory, schema.clone(), IndexSettings::default())
+                    .map_err(|e| anyhow::anyhow!("Failed to create Tantivy index at {}: {}", index_path.display(), e))?
+            }
         };
         
         let writer = index.writer(50_000_000)?; // 50MB buffer

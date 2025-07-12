@@ -120,7 +120,7 @@ fn main() -> Result<()> {
                 
                 if let Some(content) = doc.get_first(content_field) {
                     if let Some(content_str) = content.as_value().as_str() {
-                        println!("     Content: {}...", &content_str[..content_str.len().min(100)]);
+                        println!("     Content: {}", content_str);
                     }
                 }
                 println!();
@@ -153,28 +153,39 @@ fn analyze_emoji_frequency(limit: usize) -> Result<()> {
     let searcher = reader.searcher();
     let schema = index.schema();
 
-    // Try to get emoji field, fall back to content field
-    let emoji_field = schema.get_field("emoji").or_else(|_| schema.get_field("content"))?;
-    let query_parser = tantivy::query::QueryParser::for_index(&index, vec![emoji_field]);
-    let query = query_parser.parse_query("*")?;
-    let top_docs = searcher.search(&query, &tantivy::collector::TopDocs::with_limit(1000))?;
+    let content_field = schema.get_field("content")?;
+    let emoji_field_opt = schema.get_field("emoji"); // Check if emoji field exists
 
     println!("Top {} emojis in codebase:", limit);
     println!("==========================");
 
     let mut emoji_counts: HashMap<String, usize> = HashMap::new();
 
-    for (_score, doc_address) in top_docs {
-        let doc: tantivy::TantivyDocument = searcher.doc(doc_address)?;
-        if let Some(content) = doc.get_first(emoji_field) {
-            if let Some(content_str) = content.as_value().as_str() {
-                // Extract emojis from content using regex
-                let emoji_regex = Regex::new(r"[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]")?;
+    for segment_reader in searcher.segment_readers() {
+        let store_reader = segment_reader.get_store_reader(100)?;
+        for doc_id in 0..segment_reader.num_docs() {
+            let doc: TantivyDocument = store_reader.get(doc_id)?;
+            
+            let content_str = if let Ok(emoji_field) = emoji_field_opt {
+                // Try to get from emoji field first
+                doc.get_first(emoji_field)
+                    .and_then(|v| v.as_value().as_str())
+                    .unwrap_or("")
+                    .to_string()
+            } else {
+                // Fallback to content field if emoji field doesn't exist
+                doc.get_first(content_field)
+                    .and_then(|v| v.as_value().as_str())
+                    .unwrap_or("")
+                    .to_string()
+            };
 
-                for emoji_match in emoji_regex.find_iter(content_str) {
-                    let emoji = emoji_match.as_str();
-                    *emoji_counts.entry(emoji.to_string()).or_insert(0) += 1;
-                }
+            // Extract emojis from content using regex
+            let emoji_regex = Regex::new(r"[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]")?;
+
+            for emoji_match in emoji_regex.find_iter(&content_str) {
+                let emoji = emoji_match.as_str();
+                *emoji_counts.entry(emoji.to_string()).or_insert(0) += 1;
             }
         }
     }
