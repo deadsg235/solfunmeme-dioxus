@@ -1,5 +1,6 @@
 use anyhow::Result;
 use tantivy::{Index, query::QueryParser, collector::TopDocs, TantivyDocument, schema::Value};
+use tantivy::directory::MmapDirectory;
 use std::path::Path;
 use std::collections::HashMap;
 use regex::Regex;
@@ -29,7 +30,7 @@ fn main() -> Result<()> {
     }
     
     // Open the existing index
-    let index = Index::open(index_path)?;
+    let index = Index::open(MmapDirectory::open(index_path)?)?;
     let reader = index.reader()?;
     let searcher = reader.searcher();
     let schema = index.schema();
@@ -147,7 +148,7 @@ fn analyze_emoji_frequency(limit: usize) -> Result<()> {
         return Ok(());
     }
 
-    let index = Index::open(index_path)?;
+    let index = Index::open(MmapDirectory::open(index_path)?)?;
     let reader = index.reader()?;
     let searcher = reader.searcher();
     let schema = index.schema();
@@ -197,7 +198,7 @@ fn show_stats() -> Result<()> {
         return Ok(());
     }
     
-    let index = Index::open(index_path)?;
+    let index = Index::open(MmapDirectory::open(index_path)?)?;
     let reader = index.reader()?;
     let searcher = reader.searcher();
     let schema = index.schema();

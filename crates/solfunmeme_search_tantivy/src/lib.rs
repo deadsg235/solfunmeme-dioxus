@@ -7,7 +7,8 @@ use tantivy::collector::TopDocs;
 use tantivy::doc;
 use tantivy::query::QueryParser;
 use tantivy::schema::*;
-use tantivy::{Index, IndexWriter};
+use tantivy::{Index, IndexWriter, IndexSettings};
+use tantivy::directory::MmapDirectory;
 
 use solfunmeme_function_analysis::CodeChunk;
 
@@ -51,10 +52,10 @@ impl SearchIndex {
         
         // Create or open index
         let index = if index_path.exists() {
-            Index::open_in_dir(index_path)?
+            Index::open(MmapDirectory::open(index_path)?)?
         } else {
             std::fs::create_dir_all(index_path)?;
-            Index::create_in_dir(index_path, schema.clone())?
+            Index::create(MmapDirectory::open(index_path)?, schema.clone(), IndexSettings::default())?
         };
         
         let writer = index.writer(50_000_000)?; // 50MB buffer

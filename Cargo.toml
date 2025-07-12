@@ -228,7 +228,7 @@ members = [
 , "zos/plugins"]
 
 [workspace.package]
-default-run = "zos"
+
 
 # Server-side dependencies (excluded from WASM)
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
