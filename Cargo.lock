@@ -13266,7 +13266,10 @@ dependencies = [
 name = "shared_types_lib"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "rand 0.8.5",
  "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -15934,6 +15937,7 @@ version = "0.1.0"
 dependencies = [
  "aes-gcm",
  "base64 0.22.1",
+ "chrono",
  "core_data_lib",
  "dioxus",
  "rand 0.8.5",
@@ -15941,6 +15945,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2 0.10.9",
+ "shared_types_lib",
 ]
 
 [[package]]
@@ -16049,13 +16054,16 @@ dependencies = [
  "chrono",
  "clap",
  "emojis",
+ "git2",
  "glob",
  "markdown",
  "notify",
  "rayon",
  "regex",
  "rust-embed 8.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
  "serde_json",
+ "sha2 0.10.9",
  "solfunmeme_core_logic",
  "solfunmeme_extractor",
  "solfunmeme_indexer",

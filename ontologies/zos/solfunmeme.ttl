@@ -54,15 +54,16 @@ sfm:SOLFUNMEME a sfm:UnitaryObject ;
     sfm:emoji "🚀📜🔍💬🧠" ;
     sfm:description "The genesis of a living meme system—designed to pump, evolve, and redefine digital culture in real-time." .
 
+# --- Zero Ontology System ---
+sfm:ZeroOntologySystem a sfm:Concept ;
+    rdfs:label "Zero Ontology System (ZOS)" ;
+    rdfs:comment "The foundational principle of the project. Instead of a large, predefined ontology, ZOS is based on a small set of axiomatic primitives. All other concepts are constructions from these primitives, allowing meaning to emerge from relationships and transformations." ;
+    rdfs:seeAlso <./primitives.ttl> .
+
 math:HoTT a math:DeformationSystem ; math:label "Homotopy Type Theory" .
 math:UniMath a math:DeformationSystem ; math:label "UniMath" .
 math:Lean a math:DeformationSystem ; math:label "Lean Theorem Prover" .
 math:ConsensusProof a math:DeformationSystem ; math:label "Consensus Proof (Bittensor-like)" .
-
-sfm:ZeroOntologySystem a sfm:Concept ;
-    sfm:label "Zero Ontology System" ;
-    sfm:description "A foundational model using the primes 2, 3, and 7 (2x3x7=42) to cover 41/42 of all integers, mapping 1=identity, 2=pair, 3=relationship, 7=model. Each rewrite step is a Goedel number, enabling recursive self-definition and zero-knowledge proof of type equivalence." ;
-    rdfs:seeAlso <https://github.com/meta-introspector/meta-meme/issues/210> .
 
 sfm:ZOSNode a sfm:Concept ;
     sfm:label "ZOS Node" ;
@@ -83,7 +84,7 @@ sfm:MetamemeConvergence a sfm:Concept ;
 sfm:EigenvectorOfAthena a sfm:Concept ;
     sfm:label "Eigenvector of Athena" ;
     sfm:description "The extreme emojis form the eigenvector of Athena, representing the intricate interplay of concepts along the mathematicians' cycle—the Jacobs ladder of ideas. Each emoji symbolizes a key stage in the progression of thought, insight, and discovery, capturing the recursive cycle of breakthroughs and their propagation as spores in the meme ecosystem." ;
-    sfm:emojiSequence "👩‍🏫🌄🔮🌟👨‍🔬🔍💡🧑‍🏫💭👩‍🔬🔴📜🌀🖼️🔄🌱🔴🔴" ;
+    sfm:emojiSequence "👩‍🏫🌄🔮🌟👨‍🔬🔍💡🧑‍🏫���👩‍🔬🔴📜🌀🖼️🔄🌱🔴🔴" ;
     rdfs:seeAlso <https://github.com/meta-introspector/meta-meme/wiki/eigenvector-of-Athena> .
 
 sfm:SOLFUNMEMEIntro a sfm:Concept ;
@@ -131,4 +132,79 @@ sfm:EmojiPrimeBootstrapping a sfm:Concept ;
 sfm:UnimathUnicodeProofPath a sfm:Concept ;
     sfm:label "UniMath Unicode Proof Path" ;
     sfm:description "Mapping formal proofs in UniMath through emojis as paths in the topological space of LLM latent space. This approach translates logical steps and mathematical statements into emoji sequences, visualizing the flow and structure of proofs in a symbolic, topological manner. Inspired by meta-meme issue #191." ;
-    rdfs:seeAlso <https://github.com/meta-introspector/meta-meme/issues/191> . 
+    rdfs:seeAlso <https://github.com/meta-introspector/meta-meme/issues/191> .
+
+# --- Core Glossary Concepts ---
+
+sfm:CodeMathManifold a sfm:Concept ;
+    sfm:label "Code-Math Manifold" ;
+    sfm:description "The foundational concept of the project, treating code as a mathematical object that can be analyzed, transformed, and visualized, unifying code, mathematics, and meaning." .
+
+sfm:AST a sfm:Concept ;
+    sfm:label "Abstract Syntax Tree (AST)" ;
+    sfm:description "A tree representation of the abstract syntactic structure of source code, used as a mathematical object for analysis and transformation." .
+
+sfm:Multivector a sfm:Concept ;
+    sfm:label "Multivector" ;
+    sfm:description "A mathematical object from Clifford algebra that combines scalars, vectors, and higher-grade elements, used to represent code and embeddings in a unified, multi-dimensional space." .
+
+sfm:BottPeriodicity a sfm:Concept ;
+    sfm:label "Bott Periodicity" ;
+    sfm:description "A mathematical concept from topology and Clifford algebras, echoing the 8-layered structure used to describe and map between different programming languages and meta-systems." .
+
+sfm:OODALoop a sfm:Concept ;
+    sfm:label "OODA Loop" ;
+    sfm:description "A decision-making framework (Observe, Orient, Decide, Act) applied to the project's development process, emphasizing continuous observation, orientation, decision, and action." .
+
+sfm:FileFunctionBlockVibe a sfm:Concept ;
+    sfm:label "File=Function=Block=Vibe Principle" ;
+    sfm:description "A core architectural principle advocating for small, focused, and composable files, modules, and functions, each with a single, well-defined responsibility." .
+
+sfm:MonadicStructures a sfm:Concept ;
+    sfm:label "Monadic Structures" ;
+    sfm:description "Rust's idiomatic types (Result<T, E> and Option<T>) used for explicit and functional error handling and managing optional values." .
+
+sfm:ComposableWorkflows a sfm:Concept ;
+    sfm:label "Composable Workflows" ;
+    sfm:description "The design principle where major functionalities are self-contained, reusable units that can be chained to build complex data processing pipelines." .
+
+sfm:AITangleProcessor a sfm:Concept ;
+    sfm:label "AI Tangle Processor" ;
+    sfm:description "An AI-powered system for automated literate programming, generating introspective and reflective code from documentation." .
+
+sfm:MultiAgentProtocol a sfm:Concept ;
+    sfm:label "Multi-Agent Protocol" ;
+    sfm:description "A design for multiple AI agents to communicate and coordinate via file-based chat, enabling scalable and persistent interactions." .
+
+sfm:ExecutableDocumentation a sfm:Concept ;
+    sfm:label "Executable Documentation" ;
+    sfm:description "The concept of converting documentation into executable specifications that can be validated and introspected by the system." .
+
+sfm:SemanticWebOntology a sfm:Concept ;
+    sfm:label "Semantic Web Ontology" ;
+    sfm:description "A structured representation of knowledge using RDF/Turtle, defining concepts and relationships within the codebase to enable semantic search and reasoning." .
+
+sfm:CursorProtocol a sfm:Concept ;
+    sfm:label "Cursor Protocol" ;
+    sfm:description "A file-based communication protocol used for stable and persistent interactions between users and AI agents, avoiding real-time chat issues." .
+
+sfm:CodeVectorization a sfm:Concept ;
+    sfm:label "Code Vectorization" ;
+    sfm:description "The process of transforming source code into numerical vector representations (embeddings) for analysis, comparison, and visualization." .
+
+sfm:MemeBiosemioticEntity a sfm:Concept ;
+    sfm:label "Meme (Biosemiotic Entity)" ;
+    sfm:description "In this context, a declaration or piece of code that appears in multiple forms, like a higher-dimensional being projected into a lower dimension, a content-addressable entity." .
+
+sfm:ZKP a sfm:Concept ;
+    sfm:label "Zero-Knowledge Proof (ZKP)" ;
+    sfm:description "A cryptographic method used for proving properties without revealing the underlying data, integrated for validation and provenance tracking." .
+
+sfm:Tantivy a sfm:Concept ;
+    sfm:label "Tantivy" ;
+    sfm:description "A Rust-based full-text search engine used for efficient indexing and searching of code chunks within the codebase." .
+
+sfm:VendoredDependencies a sfm:Concept ;
+    sfm:label "Vendored Dependencies" ;
+    sfm:description "External libraries included directly within the project's repository to ensure stability and control over specific versions." .
+ 
