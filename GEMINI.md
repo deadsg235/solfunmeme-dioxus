@@ -24,6 +24,7 @@ Our primary goals are to:
 3.  **Integrate with Blockchain:** Leverage the Solana blockchain for decentralized storage, provenance tracking, and value exchange related to code and its analysis.
 4.  **Foster a Data-Driven Ecosystem:** Create and share datasets (like the `rust_ast_emoji` dataset) to encourage research and development in the field of code intelligence.
 5.  **Achieve Self-Reflection:** Build a system that can analyze and understand its own code, leading to a recursive feedback loop of improvement and discovery.
+6.  **Integrate Internal Tools:** Evolve internal codebase analysis and search tools (e.g., `codebase_analyzer_cli`) to eventually replace external search functionalities within the AI agent's operational toolbox, enabling deeper, context-aware code understanding.
 
 ## Operational Directives for AI Agents
 
