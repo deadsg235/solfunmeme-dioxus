@@ -76,3 +76,4 @@ founding_documents/internal/
 /zos/plugins/*.so
 /zos/plugins/*.dll
 /zos/plugins/*.dylib
+codebase_index/

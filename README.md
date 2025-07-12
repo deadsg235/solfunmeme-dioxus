@@ -8,6 +8,7 @@ Welcome to the Solfunmeme-Dioxus codebase! This `README.md` serves as the primar
 *   **Mathematics is a language:** We use concepts from abstract algebra and topology to create a universal language for describing and manipulating code.
 *   **AI is a bridge:** We use AI to connect the symbolic world of code with the semantic world of meaning.
 *   **Visualization is key:** The Dioxus-based UI is an interactive laboratory for exploring the Code-Math Manifold.
+*   **Market Maker for Compute:** We view the project as a market maker, where `vendor` and `cargo` dependencies represent a continuous "buy order" for computational resources, and our system orchestrates their fulfillment.
 
 ## Project Goals
 
@@ -16,6 +17,7 @@ Welcome to the Solfunmeme-Dioxus codebase! This `README.md` serves as the primar
 3.  **Integrate with Blockchain:** Leverage Solana for decentralized storage, provenance tracking, and value exchange.
 4.  **Foster a Data-Driven Ecosystem:** Create and share datasets to encourage research in code intelligence.
 5.  **Achieve Self-Reflection:** Build a system that can analyze and understand its own code.
+6.  **Orchestrate Compute Markets:** Feed a bipartite graph of compute needs by breaking up tasks into jobs and distributing them, with a future vision of acknowledging contributions by paying "tips" via Zero-Knowledge Proofs (ZKPs) embedded in git commits.
 
 ---
 
@@ -203,7 +205,7 @@ Ontologies are central to the Code-Math Manifold, providing a structured, semant
 
 ## Vendor/Input Crates Matrix
 
-Below are some of the key input and vendor crates used in this project. Each vendor crate represents a **recursive world** or **sphere of functionality**, a self-contained ecosystem that contributes to the broader Code-Math Manifold. These provide foundational functionality, NLP, search, and integration capabilities.
+Below are some of the key input and vendor crates used in this project. Each vendor crate represents a **recursive world** or **sphere of functionality**, acting as a **computational supplier** or **service provider** within our broader compute market. These provide foundational functionality, NLP, search, and integration capabilities.
 
 | Vendor Crate                | Emoji  | Function / OODA Phase         | Description                                                      |
 |-----------------------------|--------|-------------------------------|------------------------------------------------------------------|

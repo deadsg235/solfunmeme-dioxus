@@ -8,7 +8,7 @@ use std::process::{Command, Stdio};
 use std::fs::File;
 use tempfile::NamedTempFile;
 
-pub fn index_directory(path: &Path, index_path: &Path) -> Result<()> {
+pub fn index_directory(path: &Path, index_path: &Path, debug_backtrace: bool) -> Result<()> {
     let mut search_index = SearchIndex::new(index_path)?;
 
     // Create a temporary file to capture prepare_sources output
@@ -16,8 +16,8 @@ pub fn index_directory(path: &Path, index_path: &Path) -> Result<()> {
     let temp_output_path = temp_output_file.path().to_path_buf();
 
     eprintln!("[INFO] Running prepare_sources for: {}", path.display());
-    let child = Command::new("cargo")
-        .args([
+    let mut command = Command::new("cargo");
+    command.args([
             "run",
             "-p",
             "prepare_sources",
@@ -29,8 +29,13 @@ pub fn index_directory(path: &Path, index_path: &Path) -> Result<()> {
             temp_output_path.to_str().unwrap(),
         ])
         .stdout(Stdio::null()) // Suppress stdout from prepare_sources
-        .stderr(Stdio::inherit()) // Inherit stderr to see progress messages
-        .spawn()?;
+        .stderr(Stdio::inherit()); // Inherit stderr to see progress messages
+
+    if debug_backtrace {
+        command.env("RUST_BACKTRACE", "full");
+    }
+
+    let child = command.spawn()?;
 
     let output = child.wait_with_output()?;
 

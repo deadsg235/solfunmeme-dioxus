@@ -35,7 +35,7 @@ pub fn analyze_project(project_root: &Path) -> Result<Vec<CodeChunk>> {
                                 token_count: chunk_lines.join(" ").split_whitespace().count(),
                                 line_count: chunk_lines.len(),
                                 char_count: chunk_lines.join("\n").chars().count(),
-                                test_result: Some("Untested".to_string()),
+                                test_result: "Untested".to_string(),
                             };
                             code_chunks.push(chunk);
                         }

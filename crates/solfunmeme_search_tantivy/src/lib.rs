@@ -22,7 +22,7 @@ pub struct SearchResult {
     pub token_count: usize,
     pub line_count: usize,
     pub char_count: usize,
-    pub test_result: Option<String>,
+    pub test_result: String,
     pub score: f32,
 }
 
@@ -54,8 +54,12 @@ impl SearchIndex {
         let index = if index_path.exists() {
             Index::open(MmapDirectory::open(index_path)?)?
         } else {
-            std::fs::create_dir_all(index_path)?;
-            Index::create(MmapDirectory::open(index_path)?, schema.clone(), IndexSettings::default())?
+            std::fs::create_dir_all(index_path)
+                .map_err(|e| anyhow::anyhow!("Failed to create index directory {}: {}", index_path.display(), e))?;
+            let directory = MmapDirectory::open(index_path)
+                .map_err(|e| anyhow::anyhow!("Failed to open MmapDirectory at {}: {}", index_path.display(), e))?;
+            Index::create(directory, schema.clone(), IndexSettings::default())
+                .map_err(|e| anyhow::anyhow!("Failed to create Tantivy index at {}: {}", index_path.display(), e))?
         };
         
         let writer = index.writer(50_000_000)?; // 50MB buffer
@@ -87,7 +91,7 @@ impl SearchIndex {
             token_count_field => chunk.token_count as u64,
             line_count_field => chunk.line_count as u64,
             char_count_field => chunk.char_count as u64,
-            test_result_field => chunk.test_result.clone().unwrap_or_default(),
+            test_result_field => chunk.test_result.clone(),
         );
         
         self.writer.add_document(doc)?;
@@ -162,7 +166,8 @@ impl SearchIndex {
             let test_result = doc
                 .get_first(self.schema.get_field("test_result")?)
                 .and_then(|v| v.as_value().as_str())
-                .map(|s| s.to_string());
+                .unwrap_or("")
+                .to_string();
             
             results.push(SearchResult {
                 language,

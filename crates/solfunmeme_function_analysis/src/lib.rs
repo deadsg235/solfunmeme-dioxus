@@ -62,7 +62,7 @@ pub struct CodeChunk {
     pub token_count: usize,
     pub line_count: usize,
     pub char_count: usize,
-    pub test_result: Option<String>,
+    pub test_result: String,
 }
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
@@ -246,7 +246,7 @@ pub fn create_code_snippet(
     let token_count = content.split_whitespace().count();
     let line_count = content.lines().count();
     let char_count = content.chars().count();
-    let test_result = Some("Untested".to_string());
+    let test_result = "Untested".to_string();
 
     CodeChunk {
         language,

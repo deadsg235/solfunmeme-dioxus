@@ -49,7 +49,7 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
                     token_count: content.split_whitespace().count(), // Placeholder token count
                     line_count: content.lines().count(),
                     char_count: content.chars().count(),
-                    test_result: Some("Untested".to_string()), // Placeholder test result
+                    test_result: "Untested".to_string(), // Placeholder test result
                 };
                 code_chunks.push(chunk);
             },

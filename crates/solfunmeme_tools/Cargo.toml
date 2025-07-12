@@ -60,8 +60,9 @@ solfunmeme_search_tantivy = { path = "../solfunmeme_search_tantivy" }
 solfunmeme_tantivy_report = { path = "../solfunmeme_tantivy_report" }
 solfunmeme_indexer = { path = "../solfunmeme_indexer" }
 
-[dev-dependencies]
 tempfile = "3.10"
+
+[dev-dependencies]
 glob = "0.3.1"
 
 [features]
