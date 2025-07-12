@@ -1,6 +1,21 @@
-# Solfunmeme-Dioxus Project
+# Solfunmeme-Dioxus: The Code-Math Manifold
 
-Welcome to the Solfunmeme-Dioxus codebase! This project is a modular, semantic, and extensible system for code, meme, and knowledge management on Solana and beyond.
+Welcome to the Solfunmeme-Dioxus codebase! This `README.md` serves as the primary **ontology** and **index** of our project, guiding you through the interconnected **worlds** (crates, concepts, and documentation) that comprise the Code-Math Manifold. Here, the **vibe is the vector**—every concept, every piece of code, and every interaction contributes to a multi-dimensional understanding of our system. Our goal is to build a modular, semantic, and extensible system for code, meme, and knowledge management on Solana and beyond.
+
+## Core Philosophy
+
+*   **Code is a mathematical object:** We view source code, particularly its Abstract Syntax Tree (AST), as a rich mathematical structure.
+*   **Mathematics is a language:** We use concepts from abstract algebra and topology to create a universal language for describing and manipulating code.
+*   **AI is a bridge:** We use AI to connect the symbolic world of code with the semantic world of meaning.
+*   **Visualization is key:** The Dioxus-based UI is an interactive laboratory for exploring the Code-Math Manifold.
+
+## Project Goals
+
+1.  **Analyze and Vectorize Code:** Develop tools for parsing Rust code into ASTs and transforming them into meaningful vector representations.
+2.  **Build an Interactive Manifold:** Create a Dioxus application for visualizing and interacting with the Code-Math Manifold.
+3.  **Integrate with Blockchain:** Leverage Solana for decentralized storage, provenance tracking, and value exchange.
+4.  **Foster a Data-Driven Ecosystem:** Create and share datasets to encourage research in code intelligence.
+5.  **Achieve Self-Reflection:** Build a system that can analyze and understand its own code.
 
 ---
 
@@ -143,195 +158,52 @@ See [The Code-Math Manifold](doc/code_math_manifold.md) for a deep dive into the
 
 
 
-### bins
+### Key Command-Line Tools
 
-$ find -name bin
-./crates/prepare_sources/src/bin
-./crates/solfunmeme_generated/src/bin
-./crates/solfunmeme_indexer/src/bin
-./crates/solfunmeme_tools/src/bin
-./crates/task_manager/src/bin
-./node_modules/cssesc/bin
-./node_modules/jiti/bin
-./node_modules/nanoid/bin
-./node_modules/resolve/bin
-./node_modules/sucrase/bin
-./node_modules/which/bin
-./src/bin
-./target/debug/build/torch-sys-ef246f433224a574/out/libtorch/libtorch/bin
-./vendor/addr2line/src/bin
-./vendor/agave/faucet/src/bin
-./vendor/agave/install/src/bin
-./vendor/agave/validator/src/bin
-./vendor/agave-solana-validator/faucet/src/bin
-./vendor/agave-solana-validator/install/src/bin
-./vendor/agave-solana-validator/net-utils/src/bin
-./vendor/agave-solana-validator/validator/src/bin
-./vendor/BLAKE3/test_vectors/src/bin
-./vendor/candle/candle-wasm-examples/bert/src/bin
-./vendor/candle/candle-wasm-examples/blip/src/bin
-./vendor/candle/candle-wasm-examples/llama2-c/src/bin
-./vendor/candle/candle-wasm-examples/moondream/src/bin
-./vendor/candle/candle-wasm-examples/phi/src/bin
-./vendor/candle/candle-wasm-examples/segment-anything/src/bin
-./vendor/candle/candle-wasm-examples/t5/src/bin
-./vendor/candle/candle-wasm-examples/whisper/src/bin
-./vendor/candle/candle-wasm-examples/yolo/src/bin
-./vendor/data-encoding/bin
-./vendor/formats/x509-cert/fuzz/src/bin
-./vendor/gimli/crates/examples/src/bin
-./vendor/gloo/examples/file-hash/src/bin
-./vendor/gloo/examples/markdown/src/bin
-./vendor/gloo/examples/prime/src/bin
-./vendor/lean4/doc/bin
-./vendor/lean4/src/bin
-./vendor/lean4/stage0/src/bin
-./vendor/llms-from-scratch-rs/src/bin
-./vendor/miniz_oxide/benches/data/bin
-./vendor/nlprule/nlprule/src/bin
-./vendor/objc2/crates/header-translator/src/bin
-./vendor/object/crates/examples/src/bin
-./vendor/quickwit/quickwit/quickwit-lambda/src/bin
-./vendor/quickwit/quickwit/quickwit-metastore-utils/src/bin
-./vendor/rhai/src/bin
-./vendor/rust/src/bootstrap/src/bin
-./vendor/rust/src/doc/book/packages/mdbook-trpl/src/bin
-./vendor/rust/src/doc/book/packages/tools/src/bin
-./vendor/rust/src/gcc/contrib/reghunt/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_libcxx_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_ndk_tree/aarch64-linux-android/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_ndk_tree/arm-linux-androideabi/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_ndk_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_ndk_tree/i686-linux-android/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_ndk_tree/mips64el-linux-android/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_ndk_tree/mipsel-linux-android/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_ndk_tree/x86_64-linux-android/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_tree/aarch64-linux-android/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_tree/arm-linux-androideabi/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_android_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_avr_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_baremetal_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_cross_hurd_tree/usr/i686-gnu/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_cross_hurd_tree/usr/x86_64-gnu/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_cross_linux_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_cross_linux_tree/usr/i386-unknown-linux-gnu/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_cross_linux_tree/usr/x86_64-unknown-linux-gnu/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_darwin_toolchain/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_darwin_toolchain_no_libcxx/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_freebsd64_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_freebsd_libcxx_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_freebsd_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_fuchsia_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_linux_libcxxv2_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_linux_libcxx_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_linux_libstdcxx_libcxxv2_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_linux_libstdcxx_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_msp430_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_openbsd_libcxx_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_riscv32_nogcc_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_riscv32_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_riscv64_nogcc_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_riscv64_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/basic_ve_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA/usr/local/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA-macosx/usr/local/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA-new/usr/local/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA-nolibdevice/usr/local/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA-symlinks/opt/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA-symlinks/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA-unknown/usr/local/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA-windows/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA_102/usr/local/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA_111/usr/local/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA_80/usr/local/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/CUDA_90/usr/local/cuda/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/debian_per_target_tree/usr/lib/llvm-14/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/fake_install_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/gcc_version_parsing1/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/gcc_version_parsing2/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/gcc_version_parsing3/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/gcc_version_parsing4/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/gcc_version_parsing5/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/hexagon_tree/Tools/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/hipspv/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_cs_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_fsf_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_tree/mips-img-linux-gnu/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_tree/sysroot/el/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_tree/sysroot/mips64r6/64/el/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_tree/sysroot/mips64r6/64/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_tree/sysroot/mips64r6/el/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_tree/sysroot/mips64r6/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_tree/sysroot/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_v2_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_img_v2_tree/mips-img-linux-gnu/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_mti_tree/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/mips_mti_tree/mips-mti-linux-gnu/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_32bit_linux_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_32bit_linux_tree/usr/i386-unknown-linux/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_64bit_linux_tree/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_64bit_linux_tree/usr/x86_64-unknown-linux/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_csky_linux_sdk/csky-linux-gnuabiv2/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_loongarch_linux_sdk/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_loongarch_linux_sdk/loongarch64-unknown-linux-gnu/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_riscv_elf_sdk/riscv64-unknown-elf/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_riscv_linux_sdk/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/multilib_riscv_linux_sdk/riscv64-unknown-linux-gnu/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/ohos_native_tree/llvm/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/rhel_7_tree/opt/rh/devtoolset-7/root/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/rocm/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/rocm-invalid/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/rocm-spack/hip-4.0.0-5f63slrursbrvfe2txrrjkynbsywsob5/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/rocm-spack/llvm-amdgpu-4.0.0-ieagcs7inf7runpyfvepqkurasoglq4z/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/Windows/ARM/8.1/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Driver/Inputs/Windows/usr/bin
-./vendor/rust/src/llvm-project/clang/test/Tooling/Inputs/mock-libcxx/bin
-./vendor/rust/src/llvm-project/clang/tools/scan-build/bin
-./vendor/rust/src/llvm-project/clang/tools/scan-build-py/bin
-./vendor/rust/src/llvm-project/clang/tools/scan-view/bin
-./vendor/rust/src/llvm-project/clang-tools-extra/test/clang-tidy/infrastructure/Inputs/mock-libcxx/bin
-./vendor/rust/src/llvm-project/flang/test/Driver/Inputs/basic_cross_linux_tree/usr/bin
-./vendor/rust/src/llvm-project/flang/test/Driver/Inputs/basic_cross_linux_tree/usr/i386-unknown-linux-gnu/bin
-./vendor/rust/src/llvm-project/flang/test/Driver/Inputs/basic_cross_linux_tree/usr/x86_64-unknown-linux-gnu/bin
-./vendor/rust/src/llvm-project/flang/test/Driver/Inputs/rocm/bin
-./vendor/rust/src/llvm-project/lldb/test/API/functionalities/object-file/bin
-./vendor/rust/src/tools/cargo/benches/benchsuite/src/bin
-./vendor/rust/src/tools/cargo/src/bin
-./vendor/rust/src/tools/compiletest/src/bin
-./vendor/rust/src/tools/llvm-bitcode-linker/src/bin
-./vendor/rust/src/tools/miri/src/bin
-./vendor/rust/src/tools/rust-analyzer/crates/rust-analyzer/src/bin
-./vendor/rust/src/tools/rust-installer/test/image1/bin
-./vendor/rust/src/tools/rust-installer/test/image2/bin
-./vendor/rust/src/tools/rust-installer/test/image3/bin
-./vendor/rust/src/tools/rustc-perf/collector/compile-benchmarks/cargo-0.87.1/src/bin
-./vendor/rust/src/tools/rustc-perf/collector/src/bin
-./vendor/rust/src/tools/rustc-perf/database/src/bin
-./vendor/rust/src/tools/rustc-perf/site/src/bin
-./vendor/rust/src/tools/rustfmt/src/bin
-./vendor/rust-phf/phf_generator/src/bin
-./vendor/rust-sbert/src/bin
-./vendor/rustls/examples/src/bin
-./vendor/sharded-slab/bin
-./vendor/sprs/suitesparse_bindings/suitesparse-src/SuiteSparse/bin
-./vendor/tinyvec/fuzz/src/bin
-./vendor/tokio/tests-integration/src/bin
-./vendor/tracing/bin
-./vendor/utils/blobby/src/bin
-./vendor/vaporetto/examples/wasm/src/bin
-./vendor/vcpkg-rs/test-data/no-status/installed/x64-windows/bin
-./vendor/vcpkg-rs/test-data/normalized/installed/x64-windows/bin
-./vendor/vcpkg-rs/test-data/normalized/installed/x64-windows/debug/bin
-./vendor/vcpkg-rs/test-data/normalized/installed/x86-windows/bin
-./vendor/vibrato/examples/wasm/src/bin
-./vendor/wasm-bindgen/crates/cli/src/bin
-./vendor/wit-bindgen/src/bin
+This project includes several powerful command-line tools to help with development, analysis, and data processing. For detailed setup and usage instructions, see the [Development Setup](doc/development_setup.md) guide. Here are some of the most important ones:
 
+*   **`solfunmeme_tools`**: A collection of essential utilities for managing and interacting with the Solfunmeme-Dioxus ecosystem.
+    *   **`chat_processor`**: Processes and structures chat logs, extracting valuable information and insights.
+*   **`solfunmeme_indexer`**: Manages the indexing of your codebase, enabling powerful search and analysis capabilities.
+    *   **`indexer_cli`**: The command-line interface for the indexer, allowing you to build, manage, and query your search indices.
+*   **`prepare_sources`**: Prepares your source code for analysis and indexing, ensuring it's in the optimal format for the Solfunmeme-Dioxus tools.
+*   **`codebase_analyzer_cli`**: Provides a suite of tools for analyzing your indexed codebase, including word frequency, emoji usage, and semantic search.
+
+## Founding Documents Overview
+
+The `founding_documents/` directory contains the foundational knowledge, proposals, and semantic history of the project. Here's a summary of its key contents:
+
+*   **[ALGORITHM_DOCUMENTATION.md](founding_documents/ALGORITHM_DOCUMENTATION.md)**: Details the algorithm for generating RDF ontologies from Rust code. *Refer here to understand the core logic behind code-to-ontology transformation.*
+*   **[GEMINI.md](founding_documents/GEMINI.md)**: This guide and semantic index for the `founding_documents` directory. *Refer here for an overview of the foundational documents and their structure.*
+*   **`chat_logs/`**: Contains chat logs and transcripts. *Refer here for historical conversations and discussions related to the project.*
+*   **`chat/`**: Contains chat-related documents and notes. *Refer here for general notes and documents pertaining to project discussions.*
+*   **`internal/solfunmeme/april/`**: Contains the earliest creation documents, audio files, and chat logs from April 2025. *Refer here for initial project ideas, early discussions, and foundational artifacts from April 2025.*
+*   **`internal/solfunmeme/may/`**: Contains May 2025 proposals, RFPs (including RFP 1), and creation notes. *Refer here for project proposals, requests for proposals, and development notes from May 2025.*
+*   **`internal/solfunmeme/june/`**: Ongoing development, discussions, and artifacts from June 2025. *Refer here for continuous development updates, discussions, and artifacts from June 2025.*
+*   **`internal/solfunmeme/july/`**: Most recent updates, expansions, and discussions from July 2025. *Refer here for the latest project updates, expansions, and discussions from July 2025.*
+*   **[grok-chat.md](founding_documents/2025/07/08/grok-chat.md)**: Large chat transcript. *Refer here for a comprehensive chat log, likely containing detailed discussions and decisions.*
+*   **[e8-grok-chat.md](founding_documents/2025/07/08/e8-grok-chat.md)**: E8 group and meme theory discussions. *Refer here for specific discussions on the E8 group and its relation to meme theory within the project context.*
+*   **`part_1.txt ... part_10.txt`**: Large text dumps, possibly segmented transcripts. *Refer here for raw, segmented text data, potentially containing unrefined information or transcripts.*
+*   **`plantuml_*.puml`**: PlantUML diagrams for system architecture, consensus, and equivalence use cases. *Refer here for visual representations of the system's architecture, consensus mechanisms, and equivalence proofs.*
+*   **[semantic_code_graph.md](founding_documents/semantic_code_graph.md)**: Documentation of the semantic code graph. *Refer here to understand how code is represented as a semantic graph and its underlying principles.*
+*   **[solfunmeme_maps.md](founding_documents/solfunmeme_maps.md)**: Visual maps and diagrams of the solfunmeme system. *Refer here for high-level visual maps and diagrams illustrating the overall Solfunmeme system.*
+*   **[idea.md](founding_documents/idea.md)**: Idea log and brainstorming. *Refer here for a collection of project ideas, brainstorming sessions, and potential future directions.*
+*   **[model_view_refactor.md](founding_documents/model_view_refactor.md)**: Model-view refactor notes. *Refer here for notes and discussions related to the model-view refactoring efforts.*
+*   **[refactor.md](founding_documents/refactor.md)**: Refactoring log. *Refer here for a chronological log of refactoring activities and their rationale.*
+*   **`prelude*.md`**: Large prelude documents (background, theory). *Refer here for extensive background information, theoretical foundations, and foundational concepts of the project.*
+
+
+## Ontologies
+
+Ontologies are central to the Code-Math Manifold, providing a structured, semantic understanding of code and its relationships. They define the concepts, properties, and relationships within our domain, enabling advanced analysis, reasoning, and visualization.
+
+*   **`ontologies/project_ontology.ttl`**: The main project ontology in Turtle format, generated from analyzed code. *Refer here to understand the semantic structure derived from the codebase.*
+*   **`ontologies/solfunmem.jsonld`**: A JSON-LD representation of core semantic concepts. *Refer here for a JSON-LD view of foundational semantic elements.*
+*   **`ontologies/zos/`**: Contains ZOS-specific ontology definitions. *Refer here for ontologies related to the ZOS (Zero-One-Space) framework.*
 
 ## Vendor/Input Crates Matrix
 
-Below are some of the key input and vendor crates used in this project. These provide foundational functionality, NLP, search, and integration capabilities.
+Below are some of the key input and vendor crates used in this project. Each vendor crate represents a **recursive world** or **sphere of functionality**, a self-contained ecosystem that contributes to the broader Code-Math Manifold. These provide foundational functionality, NLP, search, and integration capabilities.
 
 | Vendor Crate                | Emoji  | Function / OODA Phase         | Description                                                      |
 |-----------------------------|--------|-------------------------------|------------------------------------------------------------------|
@@ -406,5 +278,33 @@ Top 10 emojis in codebase:
 ```
 
 This tool leverages your existing `codebase_index/` Tantivy index, providing fast analysis without reprocessing files.
+
+---
+
+## Glossary of Key Concepts
+
+This glossary defines core terms and concepts central to the Solfunmeme-Dioxus project and the Code-Math Manifold.
+
+*   **Code-Math Manifold**: The foundational concept of the project, treating code as a mathematical object that can be analyzed, transformed, and visualized, unifying code, mathematics, and meaning. (See [doc/code_math_manifold.md](doc/code_math_manifold.md))
+*   **Abstract Syntax Tree (AST)**: A tree representation of the abstract syntactic structure of source code, used as a mathematical object for analysis and transformation. (See [doc/code_math_manifold.md](doc/code_math_manifold.md))
+*   **Multivector**: A mathematical object from Clifford algebra that combines scalars, vectors, and higher-grade elements, used to represent code and embeddings in a unified, multi-dimensional space. (See [doc/code_math_manifold.md](doc/code_math_manifold.md))
+*   **Bott Periodicity**: A mathematical concept from topology and Clifford algebras, echoing the 8-layered structure used to describe and map between different programming languages and meta-systems. (See [doc/code_math_manifold.md](doc/code_math_manifold.md))
+*   **OODA Loop (Observe, Orient, Decide, Act)**: A decision-making framework applied to the project's development process, emphasizing continuous observation, orientation, decision, and action. (See `README.md` - OODA Dashboard)
+*   **"File=Function=Block=Vibe" Principle**: A core architectural principle advocating for small, focused, and composable files, modules, and functions, each with a single, well-defined responsibility. (See [doc/guidelines.md](doc/guidelines.md))
+*   **Monadic Structures (Result, Option)**: Rust's idiomatic types (`Result<T, E>` and `Option<T>`) used for explicit and functional error handling and managing optional values. (See [doc/guidelines.md](doc/guidelines.md))
+*   **Composable Workflows**: The design principle where major functionalities are self-contained, reusable units that can be chained to build complex data processing pipelines. (See [doc/guidelines.md](doc/guidelines.md))
+*   **AI Tangle Processor**: An AI-powered system for automated literate programming, generating introspective and reflective code from documentation. (See [doc/main_ideas.md](doc/main_ideas.md), [doc/next_steps.md](doc/next_steps.md))
+*   **Multi-Agent Protocol**: A design for multiple AI agents to communicate and coordinate via file-based chat, enabling scalable and persistent interactions. (See [doc/cursor.md](doc/cursor.md), [doc/main_ideas.md](doc/main_ideas.md), [doc/next_steps.md](doc/next_steps.md))
+*   **Executable Documentation**: The concept of converting documentation into executable specifications that can be validated and introspected by the system. (See [doc/main_ideas.md](doc/main_ideas.md), [doc/next_steps.md](doc/next_steps.md))
+*   **Semantic Web Ontology**: A structured representation of knowledge using RDF/Turtle, defining concepts and relationships within the codebase to enable semantic search and reasoning. (See `README.md` - Ontologies, [doc/main_ideas.md](doc/main_ideas.md))
+*   **Cursor Protocol**: A file-based communication protocol used for stable and persistent interactions between users and AI agents, avoiding real-time chat issues. (See [doc/cursor.md](doc/cursor.md), [doc/lessons_learned.md](doc/lessons_learned.md))
+*   **Ontology**: A formal naming and definition of the types, properties, and interrelationships of the entities that exist in a particular domain, central to the project's semantic understanding of code. (See `README.md` - Ontologies)
+*   **Code Vectorization**: The process of transforming source code into numerical vector representations (embeddings) for analysis, comparison, and visualization. (See `README.md` - Project Goals, [doc/overview.md](doc/overview.md))
+*   **Meme (Biosemiotic Entity)**: In this context, a declaration or piece of code that appears in multiple forms, like a higher-dimensional being projected into a lower dimension, a content-addressable entity. (See [doc/overview.md](doc/overview.md))
+*   **Lean4**: A formal proof assistant used for mathematical verification of properties and integration with LLMs for witness generation. (See [doc/main_ideas.md](doc/main_ideas.md), [doc/next_steps.md](doc/next_steps.md))
+*   **Zero-Knowledge Proof (ZKP)**: A cryptographic method used for proving properties without revealing the underlying data, integrated for validation and provenance tracking. (See [doc/main_ideas.md](doc/main_ideas.md), [doc/next_steps.md](doc/next_steps.md))
+*   **Tantivy**: A Rust-based full-text search engine used for efficient indexing and searching of code chunks within the codebase. (See `README.md` - Crate Matrix, [doc/architecture.md](doc/architecture.md), [doc/lessons_learned.md](doc/lessons_learned.md))
+*   **Vendored Dependencies**: External libraries included directly within the project's repository to ensure stability and control over specific versions. (See `README.md` - Vendored Dependencies, [doc/lessons_learned.md](doc/lessons_learned.md))
+*   **ZOS (Zero-One-Space)**: A framework or tool integrated for specific functionalities, particularly in relation to the AI Tangle Processor. (See [doc/cursor.md](doc/cursor.md), `README.md` - Ontologies)
 
 

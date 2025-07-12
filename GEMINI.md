@@ -12,6 +12,8 @@ Our core philosophy is that:
 *   **Mathematics is a language:** We use concepts from abstract algebra (Clifford algebra, group theory) and topology (Bott periodicity) to create a universal language for describing and manipulating code structures.
 *   **AI is a bridge:** We use AI and machine learning, not as a replacement for human ingenuity, but as a bridge to connect the symbolic world of code with the semantic world of meaning. This includes using embeddings and other AI techniques to analyze and generate code.
 *   **Visualization is key:** The Dioxus-based UI is not just a front-end, but an interactive laboratory for exploring the Code-Math Manifold.
+*   **Continuous Emergence:** The system is never finished; its computation is an ongoing emergence, where each step, each interaction, and each analysis contributes to its evolving understanding.
+*   **Process over Product:** The journey of computation and discovery is as important as any specific outcome. The value lies in the continuous process of exploration and refinement within the Code-Math Manifold.
 
 ## Project Goals
 
@@ -34,6 +36,10 @@ When contributing to this project, AI agents should:
 *   **Document Everything:** Given the abstract nature of this project, clear and concise documentation is essential. Document your code, your data, and your ideas.
 
 This `GEMINI.md` file serves as a starting point. As the project evolves, so too will this protocol. Welcome to the manifold.
+
+# General Development Guidelines
+
+For comprehensive development guidelines applicable to all contributors, please refer to [doc/guidelines.md](doc/guidelines.md). These guidelines cover architectural principles, implementation workflows, documentation standards, and development processes.
 
 ## Lessons Learned (from recent debugging sessions)
 

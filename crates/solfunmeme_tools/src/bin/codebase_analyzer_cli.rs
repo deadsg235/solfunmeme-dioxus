@@ -29,7 +29,7 @@ fn main() -> Result<()> {
     }
     
     // Open the existing index
-    let index = Index::open_in_dir(index_path)?;
+    let index = Index::open(index_path)?;
     let reader = index.reader()?;
     let searcher = reader.searcher();
     let schema = index.schema();
@@ -141,35 +141,35 @@ fn main() -> Result<()> {
 
 fn analyze_emoji_frequency(limit: usize) -> Result<()> {
     let index_path = Path::new("codebase_index");
-    
+
     if !index_path.exists() {
         println!("No index found at: {}", index_path.display());
         return Ok(());
     }
-    
-    let index = Index::open_in_dir(index_path)?;
+
+    let index = Index::open(index_path)?;
     let reader = index.reader()?;
     let searcher = reader.searcher();
     let schema = index.schema();
-    
+
     // Try to get emoji field, fall back to content field
     let emoji_field = schema.get_field("emoji").or_else(|_| schema.get_field("content"))?;
     let query_parser = tantivy::query::QueryParser::for_index(&index, vec![emoji_field]);
     let query = query_parser.parse_query("*")?;
     let top_docs = searcher.search(&query, &tantivy::collector::TopDocs::with_limit(1000))?;
-    
+
     println!("Top {} emojis in codebase:", limit);
     println!("==========================");
-    
+
     let mut emoji_counts: HashMap<String, usize> = HashMap::new();
-    
+
     for (_score, doc_address) in top_docs {
         let doc: tantivy::TantivyDocument = searcher.doc(doc_address)?;
         if let Some(content) = doc.get_first(emoji_field) {
             if let Some(content_str) = content.as_value().as_str() {
                 // Extract emojis from content using regex
                 let emoji_regex = Regex::new(r"[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]")?;
-                
+
                 for emoji_match in emoji_regex.find_iter(content_str) {
                     let emoji = emoji_match.as_str();
                     *emoji_counts.entry(emoji.to_string()).or_insert(0) += 1;
@@ -177,14 +177,15 @@ fn analyze_emoji_frequency(limit: usize) -> Result<()> {
             }
         }
     }
-    
+
     let mut sorted_emojis: Vec<(String, usize)> = emoji_counts.into_iter().collect();
     sorted_emojis.sort_by(|a, b| b.1.cmp(&a.1));
-    
+
     for (i, (emoji, count)) in sorted_emojis.iter().take(limit).enumerate() {
-        println!("{:3}. {:4} - {} occurrences", i + 1, emoji, count);
+        let emoji_name = emojis::get(emoji).map_or("", |e| e.name());
+        println!("{:3}. {:4} - {:<30} - {} occurrences", i + 1, emoji, emoji_name, count);
     }
-    
+
     Ok(())
 }
 
@@ -196,7 +197,7 @@ fn show_stats() -> Result<()> {
         return Ok(());
     }
     
-    let index = Index::open_in_dir(index_path)?;
+    let index = Index::open(index_path)?;
     let reader = index.reader()?;
     let searcher = reader.searcher();
     let schema = index.schema();

@@ -37,7 +37,8 @@ path = "src/bin/tantivy_analyzer_cli.rs"
 
 [dependencies]
 anyhow = "1.0"
-tantivy = "0.24"
+tantivy = { path = "../../vendor/tantivy", default-features = false }
+emojis = "0.7.0"
 # Lightweight dependencies for chat processing
 regex = "1.10"
 walkdir = "2.5"
