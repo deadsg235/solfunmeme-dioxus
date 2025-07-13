@@ -169,6 +169,10 @@ bincodev1 = []
 [workspace]
 exclude = ["vendor"]
 members = [
+    "bootstrap",
+    "bootstrap/stage1",
+    "crates/bootstrap/stage0",
+    "crates/bootstrap/stage1",
     "crates/solfunmeme_app",
     "crates/solfunmeme_wallet_integration",
     "crates/solfunmeme_core_logic",

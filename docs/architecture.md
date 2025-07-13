@@ -17,9 +17,11 @@ Solfunmeme-Dioxus is a self-aware codebase that integrates mathematical framewor
   - Version tracking and provenance
 
 #### Code Indexing & Search
-- **Tantivy Integration**: Full-text search across all code
+- **Hybrid Indexing Strategy**: Combines Tantivy text search, vector databases (Qdrant/LanceDB), and emoji indexing
+- **Tantivy Integration**: Full-text search across all code with structured schema
+- **Vector Search**: Semantic similarity using embeddings with scalable vector databases
+- **Emoji Indexing**: Vibe-based retrieval using emoji patterns and cultural context
 - **AST Parsing**: Structural analysis using `syn` and `rust-code-analysis`
-- **Vector Embeddings**: Semantic similarity using embeddings
 - **SHA-based Deduplication**: Exact duplicate detection via content hashing
 
 #### Cross-Reference Analysis
@@ -88,10 +90,11 @@ Code Analysis → Task Extraction → Priority Assignment → Execution
 
 ### 3. Self-Awareness Pipeline
 ```
-Query → Semantic Search → Cross-Reference → Mathematical Analysis → Response
+Query → Hybrid Search → Cross-Reference → Mathematical Analysis → Response
   ↓         ↓              ↓                ↓                    ↓
-User    Tantivy Index   Code-Doc Links   Clifford Algebra    Insights &
+User    Text Search     Code-Doc Links   Clifford Algebra    Insights &
 Input   Vector Search   Provenance       Geometric Attention  Actions
+        Vibe Search
 ```
 
 ## Integration Points
@@ -101,6 +104,8 @@ Input   Vector Search   Provenance       Geometric Attention  Actions
 - `doc-cross-references` - Documentation and code analysis
 - `vibe-finder` - Semantic code search using Tantivy
 - `duplicate-finder` - Code duplication detection
+- `index-exporter` - Export search index data in multiple formats
+- `chat-indexer` - Index chat logs for easter egg discovery
 
 ### APIs & Interfaces
 - **REST API**: Web interface for codebase queries
@@ -198,17 +203,17 @@ rust_analyzer_enabled = true
 - **Refactoring Suggestions**: Automated code improvement recommendations
 - **Documentation Generation**: Auto-generate docs from code analysis
 
-### Advanced Analytics
-- **Code Evolution Tracking**: Historical analysis of code changes
-- **Team Productivity Metrics**: Developer activity and contribution analysis
-- **Dependency Impact Analysis**: Understand the cost of dependencies
-- **Performance Regression Detection**: Automated performance monitoring
+### Hybrid Search Enhancements
+- **Multi-modal Search**: Combine code, images, and audio
+- **Temporal Search**: Track changes over time
+- **Federated Search**: Search across multiple repositories
+- **Advanced Fusion**: Improved result ranking and relevance scoring
 
-### Ecosystem Integration
-- **Package Manager Integration**: Direct integration with cargo, npm, pip, etc.
-- **IDE Plugins**: VSCode, IntelliJ, and other IDE integrations
-- **ChatOps**: Slack, Discord, and other chat platform integrations
-- **Web Dashboard**: Rich web interface for codebase exploration
+## Related Documentation
+
+- [Hybrid Indexing Strategy](hybrid_indexing_strategy.md) - Detailed documentation of the multi-approach search system
+- [Task Management Guide](task_management.md) - Automated task discovery and execution
+- [CLI Tools Guide](cli_tools_guide.md) - Usage instructions for all command-line tools
 
 ## Security Considerations
 

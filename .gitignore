@@ -77,3 +77,6 @@ founding_documents/internal/
 /zos/plugins/*.dll
 /zos/plugins/*.dylib
 codebase_index/
+.env
+hf_dataset
+.vs

@@ -40,7 +40,7 @@ This `GEMINI.md` file serves as a starting point. As the project evolves, so too
 
 # General Development Guidelines
 
-For comprehensive development guidelines applicable to all contributors, please refer to [doc/guidelines.md](doc/guidelines.md). These guidelines cover architectural principles, implementation workflows, documentation standards, and development processes.
+For comprehensive development guidelines applicable to all contributors, please refer to [docs/guidelines.md](docs/guidelines.md). These guidelines cover architectural principles, implementation workflows, documentation standards, and development processes.
 
 ## Lessons Learned (from recent debugging sessions)
 
