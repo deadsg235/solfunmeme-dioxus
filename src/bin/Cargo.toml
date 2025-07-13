@@ -1,9 +1,12 @@
 [package]
-name = "prepare_sources"
+name = "duplicate-check"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-sophia_turtle = "0.7"
-sophia_api = "0.7"
-sophia_inmem = "0.7" 
+walkdir = "2.5.0"
+sha2 = "0.10.9"
+
+[[bin]]
+name = "duplicate_check"
+path = "duplicate_check.rs" 
