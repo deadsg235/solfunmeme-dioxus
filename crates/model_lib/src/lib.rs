@@ -1,4 +1,4 @@
-pub use solfunmeme_core_logic::core::WalletManager;
+pub use solfunmeme_models::WalletManager;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

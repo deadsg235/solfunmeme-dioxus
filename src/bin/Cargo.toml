@@ -20,4 +20,8 @@ path = "duplicate_check.rs"
 
 [[bin]]
 name = "index_exporter"
-path = "index_exporter.rs" 
+path = "index_exporter.rs"
+
+[[bin]]
+name = "godel_distance_demo"
+path = "godel_distance_demo.rs" 
