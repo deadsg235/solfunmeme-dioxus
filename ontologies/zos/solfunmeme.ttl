@@ -18,6 +18,19 @@ ext:CloudFormation a sfm:ExternalSystem ; sfm:label "CloudFormation Stack" ; sfm
 ext:AIAgentTerraform a sfm:ExternalSystem ; sfm:label "ai-agent-terraform" ; sfm:technology "Terraform Modules" .
 ext:MetaIntrospectorServices a sfm:ExternalSystem ; sfm:label "meta-introspector/services" ; sfm:technology "Service Repo" .
 
+# --- External Knowledge Sources ---
+ext:Wikidata a sfm:ExternalSystem ;
+    sfm:label "Wikidata" ;
+    sfm:description "Wikidata is a free and open knowledge base that can be read and edited by both humans and machines. It acts as a central storage for the structured data of Wikimedia projects." ;
+    sfm:technology "Knowledge Graph, SPARQL, Linked Data" ;
+    sfm:providesKnowledgeFor sys:SolFunMeme .
+
+ext:Wikipedia a sfm:ExternalSystem ;
+    sfm:label "Wikipedia" ;
+    sfm:description "Wikipedia is a free online encyclopedia, created and edited by volunteers around the world and hosted by the Wikimedia Foundation." ;
+    sfm:technology "Encyclopedia, Hypertext, Wiki" ;
+    sfm:providesKnowledgeFor sys:SolFunMeme .
+
 # --- Main System and Components ---
 sys:SolFunMeme a sfm:System ; sfm:label "SolFunMeme" .
 comp:MathEngine a sfm:Component ; sfm:label "Math Engine" ; sfm:technology "Rust/Math" ; sfm:partOf sys:SolFunMeme .
@@ -207,4 +220,85 @@ sfm:Tantivy a sfm:Concept ;
 sfm:VendoredDependencies a sfm:Concept ;
     sfm:label "Vendored Dependencies" ;
     sfm:description "External libraries included directly within the project's repository to ensure stability and control over specific versions." .
+
+# --- Dawkins: Meme about memes making memes ---
+actor:Dawkins a sfm:Agent ;
+    sfm:label "Dawkins" ;
+    sfm:description "A meme about memes making memes. Dawkins is both a replicator and a concept, representing the self-replicating nature of ideas and culture." ;
+    sfm:role "Memeticist" ;
+    sfm:influences sfm:SOLFUNMEME ;
+    sfm:vibe "autopoiesis, meme, replicator, meta-meme" .
+
+# --- Physicists: Agents and Concepts ---
+actor:Einstein a sfm:Agent ;
+    sfm:label "Einstein" ;
+    sfm:description "Albert Einstein, physicist, theorist of relativity, icon of creative scientific thought." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "relativity, creativity, spacetime, thought experiment, light, energy, E=mc^2" .
+
+actor:Newton a sfm:Agent ;
+    sfm:label "Newton" ;
+    sfm:description "Isaac Newton, physicist and mathematician, formulator of classical mechanics and gravity." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "gravity, calculus, classical mechanics, apple, laws of motion" .
+
+actor:Feynman a sfm:Agent ;
+    sfm:label "Feynman" ;
+    sfm:description "Richard Feynman, physicist, quantum electrodynamics, teacher, bongo player." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "quantum, QED, diagrams, curiosity, teaching, play" .
+
+actor:Curie a sfm:Agent ;
+    sfm:label "Curie" ;
+    sfm:description "Marie Curie, physicist and chemist, pioneer of radioactivity, first double Nobel laureate." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "radioactivity, discovery, perseverance, Nobel, science, chemistry" .
+
+actor:Noether a sfm:Agent ;
+    sfm:label "Noether" ;
+    sfm:description "Emmy Noether, mathematician and physicist, symmetry and conservation laws." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "symmetry, conservation, mathematics, invariance, abstract algebra" .
+
+actor:Hawking a sfm:Agent ;
+    sfm:label "Hawking" ;
+    sfm:description "Stephen Hawking, physicist, black holes, cosmology, author of 'A Brief History of Time'." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "black holes, cosmology, singularity, time, resilience" .
+
+actor:Dirac a sfm:Agent ;
+    sfm:label "Dirac" ;
+    sfm:description "Paul Dirac, physicist, quantum mechanics, Dirac equation, antimatter." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "quantum, antimatter, equation, elegance, silence" .
+
+actor:Schrodinger a sfm:Agent ;
+    sfm:label "Schrödinger" ;
+    sfm:description "Erwin Schrödinger, physicist, wave mechanics, Schrödinger's cat." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "wave, cat, quantum, paradox, probability" .
+
+actor:Heisenberg a sfm:Agent ;
+    sfm:label "Heisenberg" ;
+    sfm:description "Werner Heisenberg, physicist, uncertainty principle, quantum mechanics." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "uncertainty, quantum, principle, matrix mechanics" .
+
+actor:Maxwell a sfm:Agent ;
+    sfm:label "Maxwell" ;
+    sfm:description "James Clerk Maxwell, physicist, electromagnetism, Maxwell's equations." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "electromagnetism, equations, field, light, unification" .
+
+actor:Tesla a sfm:Agent ;
+    sfm:label "Tesla" ;
+    sfm:description "Nikola Tesla, inventor and physicist, AC power, visionary." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "AC, invention, energy, vision, wireless, eccentric" .
+
+actor:Bohr a sfm:Agent ;
+    sfm:label "Bohr" ;
+    sfm:description "Niels Bohr, physicist, atomic structure, quantum theory." ;
+    sfm:role "Physicist" ;
+    sfm:vibe "atom, quantum, complementarity, Copenhagen, model" .
  

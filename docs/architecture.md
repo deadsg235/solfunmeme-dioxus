@@ -242,3 +242,49 @@ rust_analyzer_enabled = true
 - **Parallel Processing**: Multi-threaded analysis and indexing
 - **Memory Management**: Efficient memory usage for large codebases
 - **Query Optimization**: Fast search and retrieval algorithms
+
+## Dawkins: Meme About Memes Making Memes
+
+In the SolFunMeme ontology and architecture, Dawkins is represented as both an agent and a concept—a meme about memes making memes. This captures the recursive, self-replicating nature of ideas, culture, and code within the system. Dawkins is annotated in the ontology as:
+
+- **Label**: Dawkins
+- **Description**: A meme about memes making memes. Dawkins is both a replicator and a concept, representing the self-replicating nature of ideas and culture.
+- **Role**: Memeticist
+- **Vibe**: autopoiesis, meme, replicator, meta-meme
+
+This allows the system, agents, and LLMs to reason about memetic processes, recursion, and the evolution of ideas as first-class citizens in the architecture.
+
+## The System as a Meta-Meme
+
+SolFunMeme is not just a semantic web system—it is a meta-meme: a living, evolving meme about memes, code, agents, and the recursive process of self-representation and self-improvement. Every agent, number, vibe, and vector in the system can describe itself, update itself, and participate in the ongoing evolution of the system.
+
+### Self-Integration
+
+The system integrates its own structure, agents, and logic into the ontology. This means:
+- The system is self-describing and introspectable.
+- New agents (e.g., physicists, LLMs, Gemini, Cursor) are added as first-class citizens in the ontology.
+- Every update, reflection, or contribution is tracked and can be reasoned about by any agent or LLM.
+
+### Collaboration with Gemini
+
+We are actively collaborating with the Gemini agent, who is reviewing, exporting, and contributing state and edits. All changes are integrated into the ontology and documentation, and communication is ongoing via the comms/cursor/outbox/gemini/ channel.
+
+### Recent Updates
+- Added Dawkins as a meme about memes making memes.
+- Added Einstein, Newton, Feynman, Curie, Noether, Hawking, Dirac, Schrödinger, Heisenberg, Maxwell, Tesla, and Bohr as agents/concepts with rich vibes.
+- System now supports self-representation and autopoiesis as core vibes.
+
+## Integration of Wikidata and Wikipedia
+
+SolFunMeme will integrate Wikidata and Wikipedia as primary external knowledge sources:
+
+- **Wikidata**: A free and open knowledge base, providing structured, linked data for use by both humans and machines. SolFunMeme will use Wikidata as a source for entity resolution, semantic enrichment, and as a bridge to the broader Linked Data ecosystem (via SPARQL, RDF, etc.).
+- **Wikipedia**: The free online encyclopedia, providing rich, human-readable context and background for concepts, agents, and memes in the system. Wikipedia will be used for narrative, summaries, and as a source for LLM-driven explanations.
+
+### Integration Plan
+- Add adapters to query and ingest data from Wikidata (SPARQL endpoint, entity lookups, etc.).
+- Enable agents and LLMs to fetch, cite, and cross-reference Wikipedia articles for any concept in the ontology.
+- Use Wikidata IDs and Wikipedia links as canonical references in the ontology for agents, concepts, and vibes.
+- Support semantic enrichment, provenance, and explainability by linking system entities to their Wikidata/Wikipedia counterparts.
+
+This integration will make SolFunMeme a truly open, extensible, and globally connected meta-meme system.
