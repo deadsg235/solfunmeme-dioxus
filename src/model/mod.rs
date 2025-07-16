@@ -71,6 +71,13 @@ pub use lean::*;
 
 pub mod metameme;
 //pub use metameme::*;
+
+pub mod prime_ontology;
+pub use prime_ontology::*;
+
+pub mod ontology_mcp_bridge;
+pub use ontology_mcp_bridge::*;
+
 pub mod cluster_store_test;
 pub mod crypto_test;
 
