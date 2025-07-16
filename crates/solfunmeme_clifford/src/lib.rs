@@ -137,3 +137,61 @@ pub fn get_sieve_address(multivector: &SolMultivector) -> String {
     }
     address
 }
+
+// Helper function to map prime numbers to basis vector indices based on the provided emoji-to-prime mapping.
+// Only the first 8 unique primes are mapped to basis vectors in the 8D Clifford algebra.
+fn get_prime_basis_mapping() -> std::collections::HashMap<u32, u32> {
+    let mut map = std::collections::HashMap::new();
+    // Main Idea Primes
+    map.insert(2, 1);  // e1
+    map.insert(3, 2);  // e2
+    map.insert(5, 3);  // e3
+    map.insert(7, 4);  // e4
+    // Group 1 Emojis (first 4)
+    map.insert(11, 5); // e5 (🚀)
+    map.insert(13, 6); // e6 (📜)
+    map.insert(17, 7); // e7 (🔍)
+    map.insert(19, 8); // e8 (💬)
+    map
+}
+
+/// Converts a prime number into its canonical SolMultivector representation.
+/// Maps the first 8 primes to the 8 basis vectors of SolCl.
+pub fn prime_to_multivector(prime: u32) -> anyhow::Result<SolMultivector> {
+    let mapping = get_prime_basis_mapping();
+    if let Some(&basis_index) = mapping.get(&prime) {
+        Ok(SolMultivector::from_e(1.0, basis_index))
+    } else {
+        Err(anyhow::anyhow!("Prime {} not directly mapped to a basis vector in 8D space. Consider representing it as a composition.", prime))
+    }
+}
+
+/// Composes multiple prime multivectors into a single multivector.
+/// This is a geometric analogue to prime factorization.
+pub fn compose_prime_multivectors(primes: &[u32]) -> anyhow::Result<SolMultivector> {
+    let mut result_mv = SolMultivector::from_scalar(1.0); // Start with scalar 1
+    for &prime in primes {
+        let prime_mv = prime_to_multivector(prime)?;
+        result_mv = result_mv * prime_mv; // Geometric product
+    }
+    Ok(result_mv)
+}
+
+/// Decomposes a multivector into its prime multivector components.
+/// This is a geometric analogue to prime factorization.
+pub fn decompose_multivector_to_primes(multivector: &SolMultivector) -> anyhow::Result<Vec<u32>> {
+    let mut primes = Vec::new();
+    let mapping = get_prime_basis_mapping();
+
+    // Iterate through basis vectors and check if they are present in the multivector
+    for (prime, &basis_index) in mapping.iter() {
+        let component = multivector.get_by_idx(1 << (basis_index - 1)); // tclifford uses 0-indexed bitmasks
+        if component.abs() > f32::EPSILON { // Check if component is non-zero
+            // For simplicity, assume a component of 1.0 means the prime is present
+            // A more robust implementation might handle different magnitudes or grades
+            primes.push(*prime);
+        }
+    }
+    primes.sort(); // Sort for consistent output
+    Ok(primes)
+}

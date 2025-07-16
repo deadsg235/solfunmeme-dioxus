@@ -18,9 +18,17 @@ Solfunmeme-Dioxus represents a paradigm shift in how we understand, manage, and 
 
 ### Mathematical Framework
 - **8D Riemann Manifold**: Geometric representation of code semantics
-- **Clifford Algebra Engine**: Advanced mathematical structures for code analysis
+- **Clifford Algebra Engine**: Advanced mathematical structures for code analysis, now integrated with `solfunmeme_clifford` for robust multivector operations.
+- **Flow Model**: Representation of system state and execution flow as evolving `SolMultivector`s within the Clifford algebra.
 - **Geometric Attention**: Multi-dimensional attention mechanisms
 - **Vector Processing**: Convert code to mathematical vectors for similarity analysis
+
+### LLM Reflection System
+- **Distributed Architecture**: A bid/ask system with buyers (`llm_planner`), market makers (`solfunmeme_market_maker`), and external LLM providers.
+- **Semantic Task Generation**: `llm_planner` groups code chunks by embedding similarity and generates structured tasks for LLMs.
+- **Dynamic Provider Selection**: `solfunmeme_market_maker` selects optimal LLM providers based on cost, rate limits, and available credits.
+- **Extensible Provider Interface**: LLM providers are external binaries communicating via JSON over standard I/O, allowing for easy integration of various LLMs (e.g., Gemini, Groq, custom models).
+- **Self-Reflection Capability**: The system can analyze its own codebase, generating insights and driving its own evolution.
 
 ### Task Management System
 - **Automated Task Discovery**: Extract TODO, FIXME, and other task markers from code

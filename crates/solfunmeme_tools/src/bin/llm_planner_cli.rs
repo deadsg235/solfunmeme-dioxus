@@ -187,6 +187,16 @@ fn main() -> Result<()> {
                     operation: "create_scalar_multivector".to_string(),
                     scalar_value: 42.0,
                     vector_values: Vec::new(),
+                    input_multivector: None,
+                }),
+            }]
+        } else if cli.task_type == "code_evolution" {
+            let code_snippet = cli.code_snippet.ok_or_else(|| anyhow!("Code snippet is required for code_evolution task."))?;
+            vec![LlmTaskGroup {
+                task_type: "code_evolution".to_string(),
+                payload: LlmTaskPayload::CodeEvolution(CodeEvolutionTask {
+                    code_snippet,
+                    meme_token: None, // MemeToken can be populated later or passed as input
                 }),
             }]
         } else {

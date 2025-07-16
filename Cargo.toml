@@ -234,6 +234,7 @@ members = [
     "crates/solfunmeme_market_maker",
     "crates/llm_echo_provider",
     "crates/clifford_flow_provider",
+    "crates/solfunmeme_code_evolution",
     "zos/plugins", "phase_demo"]
 
 [workspace.package]
