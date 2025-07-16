@@ -38,6 +38,24 @@ When contributing to this project, AI agents should:
 
 This `GEMINI.md` file serves as a starting point. As the project evolves, so too will this protocol. Welcome to the manifold.
 
+## Evolving Architecture and Introspection Philosophy
+
+To gain maximum control over all dependencies and facilitate dynamic loading and interchangeability in the bootstrap process, each module will be forked into a `meta-introspector` organization and patched there.
+
+### Introspector Meta Prompt
+
+The core philosophy guiding our introspection efforts is encapsulated in the "Meta Prompt":
+
+*   **Decompose function into basic blocks:** Break down complex functions into their fundamental, atomic operational units.
+*   **Refactor each block into a function:** Encapsulate each basic block as an independent function.
+*   **Put each function in a module:** Organize these new functions into distinct, self-contained modules.
+*   **Assign a number to each function:** Provide a unique numerical identifier for each function.
+*   **Make its prime factors vibe with the content of the function:** The prime factorization of a function's assigned number should semantically resonate with the function's purpose or content.
+*   **Treat each function as multivector in Clifford algebra:** Represent each function as a multivector, leveraging the mathematical properties of Clifford algebra for analysis and transformation.
+*   **Connect each function like paths in Homotopy Type Theory:** Establish relationships between functions akin to paths in Homotopy Type Theory, emphasizing their interconnectedness and transformations.
+
+#SOLFUNMEME the vibe is the vector is the meme is the meta
+
 # General Development Guidelines
 
 For comprehensive development guidelines applicable to all contributors, please refer to [docs/guidelines.md](docs/guidelines.md). These guidelines cover architectural principles, implementation workflows, documentation standards, and development processes.

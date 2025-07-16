@@ -1,0 +1,551 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix em: <http://example.org/emoji#> .
+@prefix crates_root: <http://example.org/crates_root#> .
+
+# Central Ontology Index for Solfunmeme-Dioxus Codebase
+
+crates_root:CratesRoot a rdfs:Class ;
+    rdfs:label "All Crates Root Directory" ;
+    em:hasEmojiRepresentation "📦🌳" ;
+    rdfs:comment "The root directory containing all individual Rust crates." .
+
+# Import individual crate ontologies
+owl:imports <http://example.org/bootstrap#> .
+owl:imports <http://example.org/agave_solana_validator_plugin#> .
+owl:imports <http://example.org/bm25_plugin#> .
+owl:imports <http://example.org/crates_bootstrap#> .
+owl:imports <http://example.org/clifford_flow_provider#> .
+owl:imports <http://example.org/component_builder_lib#> .
+owl:imports <http://example.org/component_emoji_lib#> .
+owl:imports <http://example.org/component_registry_lib#> .
+owl:imports <http://example.org/core_data_lib#> .
+owl:imports <http://example.org/doc_cross_references#> .
+owl:imports <http://example.org/eliza_rs_plugin#> .
+owl:imports <http://example.org/emoji_lang_plugin#> .
+owl:imports <http://example.org/emoji_matrix_lib#> .
+owl:imports <http://example.org/emoji_workflow_macro#> .
+owl:imports <http://example.org/extractous_plugin#> .
+owl:imports <http://example.org/gemini_cli_lib#> .
+owl:imports <http://example.org/git_plugin#> .
+owl:imports <http://example.org/gitaccount#> .
+owl:imports <http://example.org/gline_rs_plugin#> .
+owl:imports <http://example.org/json_ld_plugin#> .
+owl:imports <http://example.org/jsonld_plugin#> .
+owl:imports <http://example.org/keyword_extraction_rs_plugin#> .
+owl:imports <http://example.org/layered_nlp_plugin#> .
+owl:imports <http://example.org/llm_echo_provider#> .
+owl:imports <http://example.org/llms_from_scratch_rs_plugin#> .
+owl:imports <http://example.org/model_lib#> .
+owl:imports <http://example.org/model2vec_rs_plugin#> .
+owl:imports <http://example.org/nlprule_plugin#> .
+owl:imports <http://example.org/orbital_sim_lib#> .
+owl:imports <http://example.org/playground_lib#> .
+owl:imports <http://example.org/prepare_sources#> .
+owl:imports <http://example.org/quickwit_plugin#> .
+owl:imports <http://example.org/rdf_output#> .
+owl:imports <http://example.org/rdf_processing_lib#> .
+owl:imports <http://example.org/rhai_plugin#> .
+owl:imports <http://example.org/rrust_kontekst#> .
+owl:imports <http://example.org/rrust_kontekst_base#> .
+owl:imports <http://example.org/rust_sbert_plugin#> .
+owl:imports <http://example.org/rust_sentence_transformers_plugin#> .
+owl:imports <http://example.org/s3_plugin#> .
+owl:imports <http://example.org/semweb_lib#> .
+owl:imports <http://example.org/shared_analysis_types#> .
+owl:imports <http://example.org/shared_types_lib#> .
+owl:imports <http://example.org/signals_lib#> .
+owl:imports <http://example.org/solana_airdrop_service_plugin#> .
+owl:imports <http://example.org/solana_integration_lib#> .
+owl:imports <http://example.org/solfunmeme_app#> .
+owl:imports <http://example.org/solfunmeme_clifford#> .
+owl:imports <http://example.org/solfunmeme_code_evolution#> .
+owl:imports <http://example.org/solfunmeme_core_logic#> .
+owl:imports <http://example.org/solfunmeme_embedding#> .
+owl:imports <http://example.org/solfunmeme_extractor#> .
+owl:imports <http://example.org/solfunmeme_extractor_system#> .
+owl:imports <http://example.org/solfunmeme_function_analysis#> .
+owl:imports <http://example.org/solfunmeme_generated#> .
+owl:imports <http://example.org/solfunmeme_indexer#> .
+owl:imports <http://example.org/solfunmeme_input_fs#> .
+owl:imports <http://example.org/solfunmeme_market_maker#> .
+owl:imports <http://example.org/solfunmeme_models#> .
+owl:imports <http://example.org/solfunmeme_playground#> .
+owl:imports <http://example.org/solfunmeme_search_tantivy#> .
+owl:imports <http://example.org/solfunmeme_solana_data#> .
+owl:imports <http://example.org/solfunmeme_state#> .
+owl:imports <http://example.org/solfunmeme_tantivy_report#> .
+owl:imports <http://example.org/solfunmeme_tools#> .
+owl:imports <http://example.org/solfunmeme_views#> .
+owl:imports <http://example.org/solfunmeme_wallet_integration#> .
+owl:imports <http://example.org/steel_plugin#> .
+owl:imports <http://example.org/task_manager#> .
+owl:imports <http://example.org/tongrams_rs_plugin#> .
+owl:imports <http://example.org/vaporetto_plugin#> .
+owl:imports <http://example.org/vibrato_plugin#> .
+owl:imports <http://example.org/views_lib#> .
+owl:imports <http://example.org/vtext_plugin#> .
+owl:imports <http://example.org/workflow_manager#> .
+owl:imports <http://example.org/zip_plugin#> .
+
+# Individual Crate References with Emoji Representations
+
+# Example for bootstrap (root level)
+crates_root:bootstrapCrate a rdfs:Class ;
+    rdfs:label "Bootstrap Crate" ;
+    em:hasEmojiRepresentation "🚀🌳" ;
+    em:hasNumericalAddress "1" ;
+    rdfs:comment "The root-level bootstrap module." .
+
+# Example for crates/agave_solana_validator_plugin
+crates_root:agaveSolanaValidatorPluginCrate a rdfs:Class ;
+    rdfs:label "Agave Solana Validator Plugin Crate" ;
+    em:hasEmojiRepresentation "🌿🔗" ;
+    em:hasNumericalAddress "2" ;
+    rdfs:comment "The agave_solana_validator_plugin crate." .
+
+# Add similar entries for all other crates...
+
+crates_root:bm25PluginCrate a rdfs:Class ;
+    rdfs:label "BM25 Plugin Crate" ;
+    em:hasEmojiRepresentation "🔍📄" ;
+    em:hasNumericalAddress "3" ;
+    rdfs:comment "The bm25_plugin crate." .
+
+crates_root:cratesBootstrapCrate a rdfs:Class ;
+    rdfs:label "Crates Bootstrap Crate" ;
+    em:hasEmojiRepresentation "📦🚀" ;
+    em:hasNumericalAddress "4" ;
+    rdfs:comment "The bootstrap crate within the crates folder." .
+
+crates_root:cliffordFlowProviderCrate a rdfs:Class ;
+    rdfs:label "Clifford Flow Provider Crate" ;
+    em:hasEmojiRepresentation "🌊➕" ;
+    em:hasNumericalAddress "5" ;
+    rdfs:comment "The clifford_flow_provider crate." .
+
+crates_root:componentBuilderLibCrate a rdfs:Class ;
+    rdfs:label "Component Builder Lib Crate" ;
+    em:hasEmojiRepresentation "🏗️🧩" ;
+    em:hasNumericalAddress "6" ;
+    rdfs:comment "The component_builder_lib crate." .
+
+crates_root:componentEmojiLibCrate a rdfs:Class ;
+    rdfs:label "Component Emoji Lib Crate" ;
+    em:hasEmojiRepresentation "🎨🧩" ;
+    em:hasNumericalAddress "7" ;
+    rdfs:comment "The component_emoji_lib crate." .
+
+crates_root:componentRegistryLibCrate a rdfs:Class ;
+    rdfs:label "Component Registry Lib Crate" ;
+    em:hasEmojiRepresentation "📝🧩" ;
+    em:hasNumericalAddress "8" ;
+    rdfs:comment "The component_registry_lib crate." .
+
+crates_root:coreDataLibCrate a rdfs:Class ;
+    rdfs:label "Core Data Lib Crate" ;
+    em:hasEmojiRepresentation " 핵심💾" ;
+    em:hasNumericalAddress "9" ;
+    rdfs:comment "The core_data_lib crate." .
+
+crates_root:docCrossReferencesCrate a rdfs:Class ;
+    rdfs:label "Doc Cross References Crate" ;
+    em:hasEmojiRepresentation "🔗📄" ;
+    em:hasNumericalAddress "10" ;
+    rdfs:comment "The doc_cross_references crate." .
+
+crates_root:elizaRsPluginCrate a rdfs:Class ;
+    rdfs:label "Eliza RS Plugin Crate" ;
+    em:hasEmojiRepresentation "💬🤖" ;
+    em:hasNumericalAddress "11" ;
+    rdfs:comment "The eliza_rs_plugin crate." .
+
+crates_root:emojiLangPluginCrate a rdfs:Class ;
+    rdfs:label "Emoji Lang Plugin Crate" ;
+    em:hasEmojiRepresentation "🗣️✨" ;
+    em:hasNumericalAddress "12" ;
+    rdfs:comment "The emoji_lang_plugin crate." .
+
+crates_root:emojiMatrixLibCrate a rdfs:Class ;
+    rdfs:label "Emoji Matrix Lib Crate" ;
+    em:hasEmojiRepresentation "📊🌈" ;
+    em:hasNumericalAddress "13" ;
+    rdfs:comment "The emoji_matrix_lib crate." .
+
+crates_root:emojiWorkflowMacroCrate a rdfs:Class ;
+    rdfs:label "Emoji Workflow Macro Crate" ;
+    em:hasEmojiRepresentation "✨➡️" ;
+    em:hasNumericalAddress "14" ;
+    rdfs:comment "The emoji_workflow_macro crate." .
+
+crates_root:extractousPluginCrate a rdfs:Class ;
+    rdfs:label "Extractous Plugin Crate" ;
+    em:hasEmojiRepresentation "🔎📜" ;
+    em:hasNumericalAddress "15" ;
+    rdfs:comment "The extractous_plugin crate." .
+
+crates_root:geminiCliLibCrate a rdfs:Class ;
+    rdfs:label "Gemini Cli Lib Crate" ;
+    em:hasEmojiRepresentation "♊💻" ;
+    em:hasNumericalAddress "16" ;
+    rdfs:comment "The gemini_cli_lib crate." .
+
+crates_root:gitPluginCrate a rdfs:Class ;
+    rdfs:label "Git Plugin Crate" ;
+    em:hasEmojiRepresentation "🌳🐙" ;
+    em:hasNumericalAddress "17" ;
+    rdfs:comment "The git_plugin crate." .
+
+crates_root:gitaccountCrate a rdfs:Class ;
+    rdfs:label "Gitaccount Crate" ;
+    em:hasEmojiRepresentation "👤🔑" ;
+    em:hasNumericalAddress "18" ;
+    rdfs:comment "The gitaccount crate." .
+
+crates_root:glineRsPluginCrate a rdfs:Class ;
+    rdfs:label "Gline RS Plugin Crate" ;
+    em:hasEmojiRepresentation "📈🌐" ;
+    em:hasNumericalAddress "19" ;
+    rdfs:comment "The gline_rs_plugin crate." .
+
+crates_root:jsonLdPluginCrate a rdfs:Class ;
+    rdfs:label "Json Ld Plugin Crate" ;
+    em:hasEmojiRepresentation "📄🌐" ;
+    em:hasNumericalAddress "20" ;
+    rdfs:comment "The json_ld_plugin crate." .
+
+crates_root:jsonldPluginCrate a rdfs:Class ;
+    rdfs:label "Jsonld Plugin Crate" ;
+    em:hasEmojiRepresentation "📄🔗" ;
+    em:hasNumericalAddress "21" ;
+    rdfs:comment "The jsonld_plugin crate." .
+
+crates_root:keywordExtractionRsPluginCrate a rdfs:Class ;
+    rdfs:label "Keyword Extraction RS Plugin Crate" ;
+    em:hasEmojiRepresentation "🔑🔎" ;
+    em:hasNumericalAddress "22" ;
+    rdfs:comment "The keyword_extraction_rs_plugin crate." .
+
+crates_root:layeredNlpPluginCrate a rdfs:Class ;
+    rdfs:label "Layered Nlp Plugin Crate" ;
+    em:hasEmojiRepresentation "🧅🗣️" ;
+    em:hasNumericalAddress "23" ;
+    rdfs:comment "The layered_nlp_plugin crate." .
+
+crates_root:llmEchoProviderCrate a rdfs:Class ;
+    rdfs:label "Llm Echo Provider Crate" ;
+    em:hasEmojiRepresentation "🗣️👂" ;
+    em:hasNumericalAddress "24" ;
+    rdfs:comment "The llm_echo_provider crate." .
+
+crates_root:llmsFromScratchRsPluginCrate a rdfs:Class ;
+    rdfs:label "Llms From Scratch RS Plugin Crate" ;
+    em:hasEmojiRepresentation "🧠✍️" ;
+    em:hasNumericalAddress "25" ;
+    rdfs:comment "The llms_from_scratch_rs_plugin crate." .
+
+crates_root:modelLibCrate a rdfs:Class ;
+    rdfs:label "Model Lib Crate" ;
+    em:hasEmojiRepresentation " 模型📚" ;
+    em:hasNumericalAddress "26" ;
+    rdfs:comment "The model_lib crate." .
+
+crates_root:model2vecRsPluginCrate a rdfs:Class ;
+    rdfs:label "Model2Vec RS Plugin Crate" ;
+    em:hasEmojiRepresentation " 模型➡️📏" ;
+    em:hasNumericalAddress "27" ;
+    rdfs:comment "The model2vec_rs_plugin crate." .
+
+crates_root:nlprulePluginCrate a rdfs:Class ;
+    rdfs:label "Nlprule Plugin Crate" ;
+    em:hasEmojiRepresentation "🗣️📏" ;
+    em:hasNumericalAddress "28" ;
+    rdfs:comment "The nlprule_plugin crate." .
+
+crates_root:orbitalSimLibCrate a rdfs:Class ;
+    rdfs:label "Orbital Sim Lib Crate" ;
+    em:hasEmojiRepresentation "🪐💫" ;
+    em:hasNumericalAddress "29" ;
+    rdfs:comment "The orbital_sim_lib crate." .
+
+crates_root:playgroundLibCrate a rdfs:Class ;
+    rdfs:label "Playground Lib Crate" ;
+    em:hasEmojiRepresentation " sandbox" ;
+    em:hasNumericalAddress "30" ;
+    rdfs:comment "The playground_lib crate." .
+
+crates_root:prepareSourcesCrate a rdfs:Class ;
+    rdfs:label "Prepare Sources Crate" ;
+    em:hasEmojiRepresentation "⚙️📄" ;
+    em:hasNumericalAddress "31" ;
+    rdfs:comment "The prepare_sources crate." .
+
+crates_root:quickwitPluginCrate a rdfs:Class ;
+    rdfs:label "Quickwit Plugin Crate" ;
+    em:hasEmojiRepresentation "⚡🔎" ;
+    em:hasNumericalAddress "32" ;
+    rdfs:comment "The quickwit_plugin crate." .
+
+crates_root:rdfOutputCrate a rdfs:Class ;
+    rdfs:label "Rdf Output Crate" ;
+    em:hasEmojiRepresentation "📄🌐" ;
+    em:hasNumericalAddress "33" ;
+    rdfs:comment "The rdf_output crate." .
+
+crates_root:rdfProcessingLibCrate a rdfs:Class ;
+    rdfs:label "Rdf Processing Lib Crate" ;
+    em:hasEmojiRepresentation "⚙️🌐" ;
+    em:hasNumericalAddress "34" ;
+    rdfs:comment "The rdf_processing_lib crate." .
+
+crates_root:rhaiPluginCrate a rdfs:Class ;
+    rdfs:label "Rhai Plugin Crate" ;
+    em:hasEmojiRepresentation "📜⚙️" ;
+    em:hasNumericalAddress "35" ;
+    rdfs:comment "The rhai_plugin crate." .
+
+crates_root:rrustKontekstCrate a rdfs:Class ;
+    rdfs:label "Rrust Kontekst Crate" ;
+    em:hasEmojiRepresentation "📖🧠" ;
+    em:hasNumericalAddress "36" ;
+    rdfs:comment "The rrust_kontekst crate." .
+
+crates_root:rrustKontekstBaseCrate a rdfs:Class ;
+    rdfs:label "Rrust Kontekst Base Crate" ;
+    em:hasEmojiRepresentation "📖🧠" ;
+    em:hasNumericalAddress "37" ;
+    rdfs:comment "The rrust_kontekst_base crate." .
+
+crates_root:rustSbertPluginCrate a rdfs:Class ;
+    rdfs:label "Rust Sbert Plugin Crate" ;
+    em:hasEmojiRepresentation "🦀🧠" ;
+    em:hasNumericalAddress "38" ;
+    rdfs:comment "The rust_sbert_plugin crate." .
+
+crates_root:rustSentenceTransformersPluginCrate a rdfs:Class ;
+    rdfs:label "Rust Sentence Transformers Plugin Crate" ;
+    em:hasEmojiRepresentation "🦀💬🤖" ;
+    em:hasNumericalAddress "39" ;
+    rdfs:comment "The rust_sentence_transformers_plugin crate." .
+
+crates_root:s3PluginCrate a rdfs:Class ;
+    rdfs:label "S3 Plugin Crate" ;
+    em:hasEmojiRepresentation "☁️💾" ;
+    em:hasNumericalAddress "40" ;
+    rdfs:comment "The s3_plugin crate." .
+
+crates_root:semwebLibCrate a rdfs:Class ;
+    rdfs:label "Semweb Lib Crate" ;
+    em:hasEmojiRepresentation "🌐📚" ;
+    em:hasNumericalAddress "41" ;
+    rdfs:comment "The semweb_lib crate." .
+
+crates_root:sharedAnalysisTypesCrate a rdfs:Class ;
+    rdfs:label "Shared Analysis Types Crate" ;
+    em:hasEmojiRepresentation "🤝📊" ;
+    em:hasNumericalAddress "42" ;
+    rdfs:comment "The shared_analysis_types crate." .
+
+crates_root:sharedTypesLibCrate a rdfs:Class ;
+    rdfs:label "Shared Types Lib Crate" ;
+    em:hasEmojiRepresentation "🤝🏷️" ;
+    em:hasNumericalAddress "43" ;
+    rdfs:comment "The shared_types_lib crate." .
+
+crates_root:signalsLibCrate a rdfs:Class ;
+    rdfs:label "Signals Lib Crate" ;
+    em:hasEmojiRepresentation "📶📚" ;
+    em:hasNumericalAddress "44" ;
+    rdfs:comment "The signals_lib crate." .
+
+crates_root:solanaAirdropServicePluginCrate a rdfs:Class ;
+    rdfs:label "Solana Airdrop Service Plugin Crate" ;
+    em:hasEmojiRepresentation "💧⛓️" ;
+    em:hasNumericalAddress "45" ;
+    rdfs:comment "The solana_airdrop_service_plugin crate." .
+
+crates_root:solanaIntegrationLibCrate a rdfs:Class ;
+    rdfs:label "Solana Integration Lib Crate" ;
+    em:hasEmojiRepresentation "⛓️🤝" ;
+    em:hasNumericalAddress "46" ;
+    rdfs:comment "The solana_integration_lib crate." .
+
+crates_root:solfunmemeAppCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme App Crate" ;
+    em:hasEmojiRepresentation "🚀📱" ;
+    em:hasNumericalAddress "47" ;
+    rdfs:comment "The solfunmeme_app crate." .
+
+crates_root:solfunmemeCliffordCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Clifford Crate" ;
+    em:hasEmojiRepresentation "➕✖️" ;
+    em:hasNumericalAddress "48" ;
+    rdfs:comment "The solfunmeme_clifford crate." .
+
+crates_root:solfunmemeCodeEvolutionCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Code Evolution Crate" ;
+    em:hasEmojiRepresentation "🧬📈" ;
+    em:hasNumericalAddress "49" ;
+    rdfs:comment "The solfunmeme_code_evolution crate." .
+
+crates_root:solfunmemeCoreLogicCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Core Logic Crate" ;
+    em:hasEmojiRepresentation "🧠💡" ;
+    em:hasNumericalAddress "50" ;
+    rdfs:comment "The solfunmeme_core_logic crate." .
+
+crates_root:solfunmemeEmbeddingCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Embedding Crate" ;
+    em:hasEmojiRepresentation "🧠📏" ;
+    em:hasNumericalAddress "51" ;
+    rdfs:comment "The solfunmeme_embedding crate." .
+
+crates_root:solfunmemeExtractorCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Extractor Crate" ;
+    em:hasEmojiRepresentation "🔎📦" ;
+    em:hasNumericalAddress "52" ;
+    rdfs:comment "The solfunmeme_extractor crate." .
+
+crates_root:solfunmemeExtractorSystemCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Extractor System Crate" ;
+    em:hasEmojiRepresentation "🔎⚙️" ;
+    em:hasNumericalAddress "53" ;
+    rdfs:comment "The solfunmeme_extractor_system crate." .
+
+crates_root:solfunmemeFunctionAnalysisCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Function Analysis Crate" ;
+    em:hasEmojiRepresentation "📊🧠" ;
+    em:hasNumericalAddress "54" ;
+    rdfs:comment "The solfunmeme_function_analysis crate." .
+
+crates_root:solfunmemeGeneratedCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Generated Crate" ;
+    em:hasEmojiRepresentation "✨⚙️" ;
+    em:hasNumericalAddress "55" ;
+    rdfs:comment "The solfunmeme_generated crate." .
+
+crates_root:solfunmemeIndexerCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Indexer Crate" ;
+    em:hasEmojiRepresentation "🗂️🔎" ;
+    em:hasNumericalAddress "56" ;
+    rdfs:comment "The solfunmeme_indexer crate." .
+
+crates_root:solfunmemeInputFsCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Input Fs Crate" ;
+    em:hasEmojiRepresentation "📥📂" ;
+    em:hasNumericalAddress "57" ;
+    rdfs:comment "The solfunmeme_input_fs crate." .
+
+crates_root:solfunmemeMarketMakerCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Market Maker Crate" ;
+    em:hasEmojiRepresentation "📈💰" ;
+    em:hasNumericalAddress "58" ;
+    rdfs:comment "The solfunmeme_market_maker crate." .
+
+crates_root:solfunmemeModelsCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Models Crate" ;
+    em:hasEmojiRepresentation " 模型📚" ;
+    em:hasNumericalAddress "59" ;
+    rdfs:comment "The solfunmeme_models crate." .
+
+crates_root:solfunmemePlaygroundCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Playground Crate" ;
+    em:hasEmojiRepresentation " sandbox" ;
+    em:hasNumericalAddress "60" ;
+    rdfs:comment "The solfunmeme_playground crate." .
+
+crates_root:solfunmemeSearchTantivyCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Search Tantivy Crate" ;
+    em:hasEmojiRepresentation "🔎📚" ;
+    em:hasNumericalAddress "61" ;
+    rdfs:comment "The solfunmeme_search_tantivy crate." .
+
+crates_root:solfunmemeSolanaDataCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Solana Data Crate" ;
+    em:hasEmojiRepresentation "⛓️📊" ;
+    em:hasNumericalAddress "62" ;
+    rdfs:comment "The solfunmeme_solana_data crate." .
+
+crates_root:solfunmemeStateCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme State Crate" ;
+    em:hasEmojiRepresentation "💾✨" ;
+    em:hasNumericalAddress "63" ;
+    rdfs:comment "The solfunmeme_state crate." .
+
+crates_root:solfunmemeTantivyReportCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Tantivy Report Crate" ;
+    em:hasEmojiRepresentation "📊🔎" ;
+    em:hasNumericalAddress "64" ;
+    rdfs:comment "The solfunmeme_tantivy_report crate." .
+
+crates_root:solfunmemeToolsCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Tools Crate" ;
+    em:hasEmojiRepresentation "🛠️📦" ;
+    em:hasNumericalAddress "65" ;
+    rdfs:comment "The solfunmeme_tools crate." .
+
+crates_root:solfunmemeViewsCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Views Crate" ;
+    em:hasEmojiRepresentation "🖼️👀" ;
+    em:hasNumericalAddress "66" ;
+    rdfs:comment "The solfunmeme_views crate." .
+
+crates_root:solfunmemeWalletIntegrationCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Wallet Integration Crate" ;
+    em:hasEmojiRepresentation "👛🔗" ;
+    em:hasNumericalAddress "67" ;
+    rdfs:comment "The solfunmeme_wallet_integration crate." .
+
+crates_root:steelPluginCrate a rdfs:Class ;
+    rdfs:label "Steel Plugin Crate" ;
+    em:hasEmojiRepresentation "⚙️🔩" ;
+    em:hasNumericalAddress "68" ;
+    rdfs:comment "The steel_plugin crate." .
+
+crates_root:taskManagerCrate a rdfs:Class ;
+    rdfs:label "Task Manager Crate" ;
+    em:hasEmojiRepresentation "✅📋" ;
+    em:hasNumericalAddress "69" ;
+    rdfs:comment "The task_manager crate." .
+
+crates_root:tongramsRsPluginCrate a rdfs:Class ;
+    rdfs:label "Tongrams RS Plugin Crate" ;
+    em:hasEmojiRepresentation "🗣️📊" ;
+    em:hasNumericalAddress "70" ;
+    rdfs:comment "The tongrams_rs_plugin crate." .
+
+crates_root:vaporettoPluginCrate a rdfs:Class ;
+    rdfs:label "Vaporetto Plugin Crate" ;
+    em:hasEmojiRepresentation "🚂💨" ;
+    em:hasNumericalAddress "71" ;
+    rdfs:comment "The vaporetto_plugin crate." .
+
+crates_root:vibratoPluginCrate a rdfs:Class ;
+    rdfs:label "Vibrato Plugin Crate" ;
+    em:hasEmojiRepresentation "🎶🔊" ;
+    em:hasNumericalAddress "72" ;
+    rdfs:comment "The vibrato_plugin crate." .
+
+crates_root:viewsLibCrate a rdfs:Class ;
+    rdfs:label "Views Lib Crate" ;
+    em:hasEmojiRepresentation "🖼️📚" ;
+    em:hasNumericalAddress "73" ;
+    rdfs:comment "The views_lib crate." .
+
+crates_root:vtextPluginCrate a rdfs:Class ;
+    rdfs:label "Vtext Plugin Crate" ;
+    em:hasEmojiRepresentation "🗣️📏" ;
+    em:hasNumericalAddress "74" ;
+    rdfs:comment "The vtext_plugin crate." .
+
+crates_root:workflowManagerCrate a rdfs:Class ;
+    rdfs:label "Workflow Manager Crate" ;
+    em:hasEmojiRepresentation "⚙️📋" ;
+    em:hasNumericalAddress "75" ;
+    rdfs:comment "The workflow_manager crate." .
+
+crates_root:zipPluginCrate a rdfs:Class ;
+    rdfs:label "Zip Plugin Crate" ;
+    em:hasEmojiRepresentation "🗜️📦" ;
+    em:hasNumericalAddress "76" ;
+    rdfs:comment "The zip_plugin crate." .

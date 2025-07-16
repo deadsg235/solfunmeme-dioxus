@@ -469,3 +469,6 @@
 [submodule "vendor/rust_libloading"]
 	path = vendor/rust_libloading
 	url = https://github.com/nagisa/rust_libloading/
+[submodule "vendor/float-cmp"]
+	path = vendor/float-cmp
+	url = https://github.com/mikedilger/float-cmp
