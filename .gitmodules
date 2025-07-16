@@ -1,3 +1,7 @@
+[submodule "crates/task_manager"]
+	path = crates/task_manager
+ 	url = https://github.com/meta-introspector/task_manager
+	
 # see internal/2025/07/13/dir-structure-grok-chat (1).md
 # [submodule "vendor/rust-embed"]
 # 	path = vendor/rust-embed
@@ -299,9 +303,9 @@
 # [submodule "vendor/simba"]
 # 	path = vendor/simba
 # 	url = https://github.com/dimforge/simba
-# [submodule "vendor/dioxus-charts"]
-# 	path = vendor/dioxus-charts
-# 	url = https://github.com/dioxus-community/dioxus-charts
+[submodule "vendor/dioxus-charts"]
+ 	path = vendor/dioxus-charts
+ 	url = https://github.com/dioxus-community/dioxus-charts
 # [submodule "vendor/dioxus-clipboard"]
 # 	path = vendor/dioxus-clipboard
 # 	url = https://github.com/dioxus-community/dioxus-clipboard
@@ -1010,12 +1014,12 @@
 # [submodule "vendor/rust"]
 # 	path = vendor/rust
 # 	url = https://github.com/rust-lang/rust.git
-# [submodule "hf_dataset"]
-# 	path = hf_dataset
-# 	url = https://huggingface.co/datasets/h4/solfunmeme-dioxus-reports
-# [submodule "hg_datasets/microlean4"]
-# 	path = hg_datasets/microlean4
-# 	url = https://huggingface.co/datasets/introspector/MicroLean4
+ [submodule "hf_dataset"]
+ 	path = hf_dataset
+ 	url = https://huggingface.co/datasets/h4/solfunmeme-dioxus-reports
+ [submodule "hg_datasets/microlean4"]
+ 	path = hg_datasets/microlean4
+ 	url = https://huggingface.co/datasets/introspector/MicroLean4
 # [submodule "vendor/lean4"]
 # 	path = vendor/lean4
 # 	url = https://github.com/meta-introspector/lean4
@@ -1115,9 +1119,9 @@
 # [submodule "vendor/steel"]
 # 	path = vendor/steel
 # 	url = https://github.com/mattwparas/steel
-# [submodule "vendor/task_manager"]
-# 	path = vendor/task_mangager
-# 	url = https://github.com/jmikedupont2/task_manager
+
+
+
 # [submodule "vendor/path-clean"]
 # 	path = vendor/path-clean
 # 	url = https://github.com/danreeves/path-clean
