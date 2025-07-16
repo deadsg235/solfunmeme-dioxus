@@ -3,9 +3,9 @@
  	url = https://github.com/meta-introspector/task_manager
 	
 # see internal/2025/07/13/dir-structure-grok-chat (1).md
-# [submodule "vendor/rust-embed"]
-# 	path = vendor/rust-embed
-# 	url = https://git.sr.ht/~pyrossh/rust-embed
+[submodule "vendor/rust-embed"]
+	path = vendor/rust-embed
+	url = https://git.sr.ht/~pyrossh/rust-embed
 # [submodule "vendor/sync_wrapper"]
 # 	path = vendor/sync_wrapper
 # 	url = https://github.com/Actyx/sync_wrapper
@@ -354,18 +354,18 @@
 # [submodule "vendor/rust-sbert"]
 # 	path = vendor/rust-sbert
 # 	url = https://github.com/cpcdoy/rust-sbert
-# [submodule "vendor/llms-from-scratch-rs"]
-# 	path = vendor/llms-from-scratch-rs
-# 	url = https://github.com/nerdai/llms-from-scratch-rs
-# [submodule "vendor/gline-rs"]
-# 	path = vendor/gline-rs
-# 	url = https://github.com/fbilhaut/gline-rs
+[submodule "vendor/llms-from-scratch-rs"]
+	path = vendor/llms-from-scratch-rs
+	url = https://github.com/nerdai/llms-from-scratch-rs
+[submodule "vendor/gline-rs"]
+	path = vendor/gline-rs
+	url = https://github.com/fbilhaut/gline-rs
 # [submodule "vendor/extractous"]
 # 	path = vendor/extractous
 # 	url = https://github.com/yobix-ai/extractous
-# [submodule "vendor/model2vec-rs"]
-# 	path = vendor/model2vec-rs
-# 	url = https://github.com/MinishLab/model2vec-rs
+ [submodule "vendor/model2vec-rs"]
+	path = vendor/model2vec-rs
+	url = https://github.com/MinishLab/model2vec-rs
 # [submodule "vendor/layered-nlp"]
 # 	path = vendor/layered-nlp
 # 	url = https://github.com/old-storyai/layered-nlp
@@ -384,12 +384,12 @@
 # [submodule "vendor/bm25"]
 # 	path = vendor/bm25
 # 	url = https://github.com/Michael-JB/bm25
-# [submodule "vendor/vaporetto"]
-# 	path = vendor/vaporetto
-# 	url = https://github.com/daac-tools/vaporetto
-# [submodule "vendor/tongrams-rs"]
-# 	path = vendor/tongrams-rs
-# 	url = https://github.com/kampersanda/tongrams-rs
+ [submodule "vendor/vaporetto"]
+	path = vendor/vaporetto
+	url = https://github.com/daac-tools/vaporetto
+ [submodule "vendor/tongrams-rs"]
+	path = vendor/tongrams-rs
+	url = https://github.com/kampersanda/tongrams-rs
 # [submodule "vendor/agave-solana-validator"]
 # 	path = vendor/agave-solana-validator
 # 	url = https://github.com/meta-introspector/agave-solana-validator.git
@@ -423,3 +423,49 @@
 [submodule "bootstrap"]
 	path = bootstrap
 	url = https://github.com/meta-introspector/bootstrap
+[submodule "vendor/dioxus-charts"]
+	path = vendor/dioxus-charts
+	url = https://github.com/meta-introspector/dioxus-charts
+[submodule "vendor/tantivy"]
+	path = vendor/tantivy
+	url = https://github.com/meta-introspector/tantivy
+[submodule "vendor/candle"]
+	path = vendor/candle
+	url = https://github.com/huggingface/candle
+[submodule "vendor/fastembed-rs"]
+	path = vendor/fastembed-rs
+	url = https://github.com/Anush008/fastembed-rs.git
+
+[submodule "vendor/tclifford"]
+	path = vendor/tclifford
+	url = https://github.com/grumyantsev/tclifford
+[submodule "vendor/layered-nlp"]
+	path = vendor/layered-nlp
+	url = https://github.com/old-storyai/layered-nlp
+[submodule "vendor/vibrato"]
+	path = vendor/vibrato
+	url = https://github.com/daac-tools/vibrato
+[submodule "vendor/keyword-extraction-rs"]
+	path = vendor/keyword-extraction-rs
+	url = https://github.com/tugascript/keyword-extraction-rs
+[submodule "vendor/eliza-rs"]
+	path = vendor/eliza-rs
+	url = https://github.com/meta-introspector/eliza-rs
+[submodule "vendor/bm25"]
+	path = vendor/bm25
+	url = https://github.com/Michael-JB/bm25
+[submodule "vendor/solana-airdrop-service"]
+	path = vendor/solana-airdrop-service
+	url = https://github.com/oguzhaniptes/solana-airdrop-service.git
+[submodule "vendor/json-ld"]
+	path = vendor/json-ld
+	url = https://github.com/meta-introspector/json-ld
+[submodule "vendor/rhai"]
+	path = vendor/rhai
+	url = https://github.com/rhaiscript/rhai
+[submodule "vendor/steel"]
+	path = vendor/steel
+	url = https://github.com/mattwparas/steel
+[submodule "vendor/rust_libloading"]
+	path = vendor/rust_libloading
+	url = https://github.com/nagisa/rust_libloading/
