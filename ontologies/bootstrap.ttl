@@ -4,26 +4,132 @@
 @prefix dct: <http://purl.org/dc/terms/> .
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix bs: <http://example.org/bootstrap#> .
+@prefix sfm: <http://example.org/solfunmeme#> .
+@prefix tm: <https://example.org/taskmanager#> .
+@prefix agent: <http://example.org/agent/> .
+@prefix em: <http://example.org/emoji#> .
 
 <urn:bootstrap/ontology>
   a owl:Ontology ;
   rdfs:label "Bootstrap Submodule Ontology" ;
-  dct:description "Template ontology for submodules. Describes required metadata, entry points, and integration patterns for semantic interoperability." ;
+  dct:description "Template and summary ontology for submodules. Describes required metadata, entry points, integration patterns, and system expectations for semantic interoperability in the project. This ontology should be extended by all submodules to ensure discoverability and semantic alignment." ;
   dct:creator "Project contributors" ;
   dct:created "2024-06-07" ;
   dct:license <https://opensource.org/licenses/MIT> ;
   owl:imports <project_ontology.ttl> ;
   rdfs:seeAlso <index.ttl> ;
-  rdfs:comment "This ontology should be extended by all submodules to ensure discoverability and semantic alignment." .
+  rdfs:comment """
+System Overview:
+- Semantic, code-driven platform for code analysis, task management, visualization, and agent-based workflows.
+- Ontologies encode concepts, workflows, code structure, and agent interactions.
 
-bs:MainConcept
-  a owl:Class ;
-  rdfs:label "Main Concept" ;
-  rdfs:comment "Primary class to extend or link to in this submodule." .
+Key Concepts:
+- Task: Units of work, with dependencies, statuses, and semantic links (sfm:Task, tm:Task).
+- Data: Aggregated, structured, and visualized information (sfm:Data).
+- Code: Source code (primarily Rust), analyzed and semantically annotated (sfm:Code, ex:Function).
+- Agent: Autonomous actors (human or AI) that interact with the system (agent:Agent).
+- Graph/Dependencies: Relationships between tasks, code, and data (sfm:Graph, sfm:Dependencies).
+- Visualization: Rendering of data and relationships (sfm:Visualization, Dioxus UI).
+- Embedding/AI: Vector representations and semantic analysis (sfm:Embedding, sfm:AI).
+- Blockchain: Integration with Solana for decentralized features (sfm:Solana).
 
-bs:hasIntegrationPoint
-  a owl:ObjectProperty ;
-  rdfs:label "has Integration Point" ;
-  rdfs:domain bs:MainConcept ;
+Core Functions & Workflows:
+- Code Analysis: Functions like analyze_project, analyze_rust_file, and embed_text extract, embed, and annotate code.
+- Task Management: Tasks are tracked, visualized, and linked to code/data/agents.
+- Semantic Export: Data and tasks are exported in RDF/Turtle/JSON-LD for interoperability.
+- Visualization: Emoji matrix dashboards, dependency graphs, and Dioxus-based UIs.
+- Agent Interactions: Agents perform, track, and document actions in the system.
+
+Integration Points:
+- owl:imports: Submodules should import the main ontology (project_ontology.ttl) and reference the index.
+- Class Extension: Extend or link to core classes like Task, Agent, Data, Code, Graph.
+- Property Alignment: Use or extend properties like hasTask, hasTimestamp, relatesTo, dependsOn.
+- Workflow Participation: Submodules should define their role in code analysis, task management, or visualization.
+
+Metadata & Documentation:
+- Provide rdfs:label, rdfs:comment, and dct:description for all new concepts.
+- Document dependencies, extension points, and usage in both human-readable (README) and semantic (TTL) form.
+
+Best Practices:
+- Use emoji annotations for concepts and tasks for visual clarity.
+- Link to existing concepts using rdfs:seeAlso and relatesTo.
+- Ensure all new ontologies are discoverable via the index and README.
+
+See also: ontologies/README.md, ontologies/index.ttl, zos/terms.ttl, zos/all_tasks.ttl, agent_ontology.ttl, solfunmem.jsonld.
+""" .
+
+# Key Classes and Properties for Submodules
+bs:Task a owl:Class ;
+  rdfs:label "Task" ;
+  rdfs:comment "A unit of work or action within the system, with dependencies, statuses, and semantic links." ;
+  rdfs:seeAlso sfm:Task, tm:Task .
+
+bs:Data a owl:Class ;
+  rdfs:label "Data" ;
+  rdfs:comment "Aggregated, structured, and visualized information." ;
+  rdfs:seeAlso sfm:Data .
+
+bs:Code a owl:Class ;
+  rdfs:label "Code" ;
+  rdfs:comment "Source code, analyzed and semantically annotated." ;
+  rdfs:seeAlso sfm:Code, ex:Function .
+
+bs:Agent a owl:Class ;
+  rdfs:label "Agent" ;
+  rdfs:comment "An autonomous actor (human or AI) that interacts with the system." ;
+  rdfs:seeAlso agent:Agent .
+
+bs:Graph a owl:Class ;
+  rdfs:label "Graph" ;
+  rdfs:comment "A data structure representing relationships, such as task dependencies or semantic connections." ;
+  rdfs:seeAlso sfm:Graph .
+
+bs:Visualization a owl:Class ;
+  rdfs:label "Visualization" ;
+  rdfs:comment "Rendering of data and relationships, often using Dioxus UI." ;
+  rdfs:seeAlso sfm:Visualization .
+
+bs:Embedding a owl:Class ;
+  rdfs:label "Embedding" ;
+  rdfs:comment "Vector representations of data or concepts, used in AI or semantic analysis." ;
+  rdfs:seeAlso sfm:Embedding .
+
+bs:Solana a owl:Class ;
+  rdfs:label "Solana" ;
+  rdfs:comment "A blockchain platform integrated for decentralized features like token management." ;
+  rdfs:seeAlso sfm:Solana .
+
+bs:hasTask a owl:ObjectProperty ;
+  rdfs:label "has task" ;
+  rdfs:domain bs:Agent ;
+  rdfs:range bs:Task ;
+  rdfs:comment "Links an agent interaction to a task." ;
+  rdfs:seeAlso agent:hasTask .
+
+bs:hasTimestamp a owl:DatatypeProperty ;
+  rdfs:label "has timestamp" ;
+  rdfs:domain bs:Agent ;
+  rdfs:range rdfs:Literal ;
+  rdfs:comment "Timestamp for an agent interaction." ;
+  rdfs:seeAlso agent:hasTimestamp .
+
+bs:dependsOn a owl:ObjectProperty ;
+  rdfs:label "depends on" ;
+  rdfs:domain bs:Task ;
+  rdfs:range bs:Task ;
+  rdfs:comment "Specifies task dependencies." ;
+  rdfs:seeAlso tm:dependsOn .
+
+bs:relatesTo a owl:ObjectProperty ;
+  rdfs:label "relates to" ;
+  rdfs:domain owl:Thing ;
   rdfs:range owl:Thing ;
-  rdfs:comment "Links to integration points in the main ontology or other submodules." .
+  rdfs:comment "General-purpose semantic relationship for linking concepts." ;
+  rdfs:seeAlso sfm:relatesTo .
+
+bs:emoji a owl:DatatypeProperty ;
+  rdfs:label "emoji" ;
+  rdfs:domain owl:Thing ;
+  rdfs:range rdfs:Literal ;
+  rdfs:comment "Emoji annotation for visual clarity." ;
+  rdfs:seeAlso em:emoji .
