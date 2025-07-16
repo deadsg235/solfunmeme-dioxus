@@ -16,7 +16,8 @@ jobs:
     - uses: meta-introspector/checkout@v2
 
     - name: Install Rust
-      uses: meta-introspector/toolchain@feature/v1
+      uses: meta-introspector/setup-rust-toolchain@feature/v1
+
       with:
         toolchain: stable
         profile: minimal
