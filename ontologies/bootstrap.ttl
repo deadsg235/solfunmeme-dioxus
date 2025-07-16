@@ -1,0 +1,29 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix bs: <http://example.org/bootstrap#> .
+
+<urn:bootstrap/ontology>
+  a owl:Ontology ;
+  rdfs:label "Bootstrap Submodule Ontology" ;
+  dct:description "Template ontology for submodules. Describes required metadata, entry points, and integration patterns for semantic interoperability." ;
+  dct:creator "Project contributors" ;
+  dct:created "2024-06-07" ;
+  dct:license <https://opensource.org/licenses/MIT> ;
+  owl:imports <project_ontology.ttl> ;
+  rdfs:seeAlso <index.ttl> ;
+  rdfs:comment "This ontology should be extended by all submodules to ensure discoverability and semantic alignment." .
+
+bs:MainConcept
+  a owl:Class ;
+  rdfs:label "Main Concept" ;
+  rdfs:comment "Primary class to extend or link to in this submodule." .
+
+bs:hasIntegrationPoint
+  a owl:ObjectProperty ;
+  rdfs:label "has Integration Point" ;
+  rdfs:domain bs:MainConcept ;
+  rdfs:range owl:Thing ;
+  rdfs:comment "Links to integration points in the main ontology or other submodules." .
