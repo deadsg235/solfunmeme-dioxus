@@ -143,6 +143,7 @@ pub enum SemanticFeature {
     Reflection,
     Macros,
     Proofs,
+    DependentTypes,
 }
 
 /// Relationships between AST structures
