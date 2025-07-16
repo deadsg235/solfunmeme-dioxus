@@ -1,8 +1,8 @@
 use anyhow::{Result, anyhow};
 use std::io::{self, Read, Write};
 
-// Import necessary types from the bootstrap crate
-use bootstrap::clifford::{CliffordMultivector, Clifford};
+// Import necessary types from the solfunmeme_clifford crate
+use solfunmeme_clifford::{SolMultivector, SolCl};
 use solfunmeme_models::{CliffordOperationRequest, CliffordOperationResponse, LlmTaskPayload};
 
 fn main() -> Result<()> {
@@ -15,12 +15,12 @@ fn main() -> Result<()> {
         LlmTaskPayload::CliffordOperation(request) => {
             match request.operation.as_str() {
                 "create_scalar_multivector" => {
-                    let mv = CliffordMultivector::from_scalar(request.scalar_value);
+                    let mv = SolMultivector::from_scalar(request.scalar_value);
                     CliffordOperationResponse { result: format!("{:?}", mv), error: None }
                 },
                 "create_vector_multivector" => {
                     if request.vector_values.len() > 0 {
-                        let mv = CliffordMultivector::from_vector(&request.vector_values);
+                        let mv = SolMultivector::from_vector(request.vector_values.iter().cloned());
                         CliffordOperationResponse { result: format!("{:?}", mv), error: None }
                     } else {
                         CliffordOperationResponse { result: String::new(), error: Some("Vector values not provided for vector multivector creation.".to_string()) }
@@ -29,6 +29,19 @@ fn main() -> Result<()> {
                 "reverse_multivector" => {
                     // This operation would require a multivector as input, which is not yet handled
                     CliffordOperationResponse { result: String::new(), error: Some("Reverse operation not fully implemented for direct input.".to_string()) }
+                },
+                "update_flow_multivector" => {
+                    if let Some(input_mv) = request.input_multivector {
+                        let new_mv = if request.vector_values.len() > 0 {
+                            SolMultivector::from_vector(request.vector_values.iter().cloned())
+                        } else {
+                            SolMultivector::from_scalar(request.scalar_value)
+                        };
+                        let updated_mv = input_mv + new_mv;
+                        CliffordOperationResponse { result: format!("{:?}", updated_mv), error: None }
+                    } else {
+                        CliffordOperationResponse { result: String::new(), error: Some("Input multivector not provided for update_flow_multivector.".to_string()) }
+                    }
                 }
                 _ => CliffordOperationResponse { result: String::new(), error: Some(format!("Unknown operation: {}", request.operation)) },
             }

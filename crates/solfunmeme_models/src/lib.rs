@@ -32,6 +32,8 @@ pub struct CliffordOperationRequest {
     pub scalar_value: f32,
     #[serde(default)]
     pub vector_values: Vec<f32>,
+    #[serde(default)]
+    pub input_multivector: Option<SolMultivector>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
