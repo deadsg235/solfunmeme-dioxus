@@ -1,11 +1,24 @@
+//! Duplicate Checker CLI Tool
+//!
+//! This program is one of the 42 canonical tools in the Solfunmeme suite.
+//! It scans a directory for duplicate or highly similar code snippets (Rust, TOML, Markdown),
+//! reports exact and near-duplicate code, and can output results in text or JSON format.
+//!
+//! Usage:
+//!   cargo run --bin duplicate_check -- <directory> [--threshold <float>] [--format <json|text>]
+//!
+//! Example:
+//!   cargo run --bin duplicate_check -- src --threshold 0.8 --format json
+
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::error::Error;
 use walkdir::WalkDir;
 use sha2::{Sha256, Digest};
+use serde::Serialize;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 struct CodeSnippet {
     file_path: String,
     line_start: usize,
@@ -13,6 +26,12 @@ struct CodeSnippet {
     content: String,
     normalized_content: String,
     hash: String,
+}
+
+#[derive(Debug, Serialize)]
+struct DuplicateGroup {
+    similarity_score: f64,
+    snippets: Vec<CodeSnippet>,
 }
 
 struct DuplicateChecker {
@@ -30,7 +49,6 @@ impl DuplicateChecker {
 
     fn analyze_directory(&mut self, dir_path: &Path) -> Result<(), Box<dyn Error>> {
         println!("🔍 Analyzing directory: {:?}", dir_path);
-        
         for entry in WalkDir::new(dir_path)
             .into_iter()
             .filter_map(|e| e.ok())
@@ -43,24 +61,19 @@ impl DuplicateChecker {
                 }
             }
         }
-        
         Ok(())
     }
 
     fn analyze_file(&mut self, file_path: &Path) -> Result<(), Box<dyn Error>> {
         let content = fs::read_to_string(file_path)?;
         let lines: Vec<&str> = content.lines().collect();
-        
         let snippets = self.extract_snippets(&lines, file_path);
-        
         for mut snippet in snippets {
             let hash = self.compute_hash(&snippet.normalized_content);
             snippet.hash = hash.clone();
-            
             self.hash_map.entry(hash).or_insert_with(Vec::new).push(self.snippets.len());
             self.snippets.push(snippet);
         }
-        
         Ok(())
     }
 
@@ -69,14 +82,10 @@ impl DuplicateChecker {
         let mut current_snippet = String::new();
         let mut start_line = 0;
         let mut in_code_block = false;
-        
         for (i, line) in lines.iter().enumerate() {
             let trimmed = line.trim();
-            
-            // Detect code blocks in markdown
             if trimmed.starts_with("```") {
                 if in_code_block {
-                    // End of code block
                     if !current_snippet.trim().is_empty() {
                         snippets.push(CodeSnippet {
                             file_path: file_path.to_string_lossy().to_string(),
@@ -90,7 +99,6 @@ impl DuplicateChecker {
                     current_snippet.clear();
                     in_code_block = false;
                 } else {
-                    // Start of code block
                     in_code_block = true;
                     start_line = i;
                 }
@@ -98,7 +106,6 @@ impl DuplicateChecker {
                 current_snippet.push_str(line);
                 current_snippet.push('\n');
             } else {
-                // For Rust files, extract functions, structs, etc.
                 if self.is_code_start(trimmed) {
                     if !current_snippet.trim().is_empty() {
                         snippets.push(CodeSnippet {
@@ -119,8 +126,6 @@ impl DuplicateChecker {
                 }
             }
         }
-        
-        // Add final snippet
         if !current_snippet.trim().is_empty() {
             snippets.push(CodeSnippet {
                 file_path: file_path.to_string_lossy().to_string(),
@@ -131,7 +136,6 @@ impl DuplicateChecker {
                 hash: String::new(),
             });
         }
-        
         snippets
     }
 
@@ -164,17 +168,40 @@ impl DuplicateChecker {
         format!("{:x}", hasher.finalize())
     }
 
-    fn prove_no_duplicates(&self, module_path: &Path) -> bool {
+    fn find_duplicates(&self, threshold: f64) -> Vec<DuplicateGroup> {
+        let mut groups = Vec::new();
+        let mut processed = std::collections::HashSet::new();
+        // Exact duplicates
+        for (hash, indices) in &self.hash_map {
+            if indices.len() > 1 && !processed.contains(hash) {
+                let snippets = indices.iter().map(|&i| self.snippets[i].clone()).collect();
+                groups.push(DuplicateGroup { similarity_score: 1.0, snippets });
+                processed.insert(hash.clone());
+            }
+        }
+        // Near-duplicates
+        for i in 0..self.snippets.len() {
+            for j in (i + 1)..self.snippets.len() {
+                let sim = self.calculate_similarity(&self.snippets[i], &self.snippets[j]);
+                if sim >= threshold && sim < 1.0 {
+                    groups.push(DuplicateGroup {
+                        similarity_score: sim,
+                        snippets: vec![self.snippets[i].clone(), self.snippets[j].clone()],
+                    });
+                }
+            }
+        }
+        groups
+    }
+
+    fn prove_no_duplicates(&self, module_path: &Path, threshold: f64) -> bool {
         let module_snippets: Vec<&CodeSnippet> = self.snippets.iter()
             .filter(|s| s.file_path.contains(module_path.to_string_lossy().as_ref()))
             .collect();
-        
         if module_snippets.is_empty() {
             println!("✅ No code found in module: {:?}", module_path);
             return true;
         }
-        
-        // Check for exact duplicates within the module
         let mut hashes = std::collections::HashSet::new();
         for snippet in &module_snippets {
             if !hashes.insert(&snippet.hash) {
@@ -183,12 +210,10 @@ impl DuplicateChecker {
                 return false;
             }
         }
-        
-        // Check for similar code within the module
         for i in 0..module_snippets.len() {
             for j in (i + 1)..module_snippets.len() {
                 let similarity = self.calculate_similarity(module_snippets[i], module_snippets[j]);
-                if similarity > 0.8 {
+                if similarity > threshold {
                     println!("⚠️  Found similar code in module: {:?} (similarity: {:.2})", module_path, similarity);
                     println!("   File 1: {}:{}", module_snippets[i].file_path, module_snippets[i].line_start);
                     println!("   File 2: {}:{}", module_snippets[j].file_path, module_snippets[j].line_start);
@@ -196,7 +221,6 @@ impl DuplicateChecker {
                 }
             }
         }
-        
         println!("✅ No duplicates found in module: {:?}", module_path);
         true
     }
@@ -204,18 +228,13 @@ impl DuplicateChecker {
     fn calculate_similarity(&self, snippet1: &CodeSnippet, snippet2: &CodeSnippet) -> f64 {
         let words1: Vec<&str> = snippet1.normalized_content.split_whitespace().collect();
         let words2: Vec<&str> = snippet2.normalized_content.split_whitespace().collect();
-        
         if words1.is_empty() && words2.is_empty() {
             return 1.0;
         }
         if words1.is_empty() || words2.is_empty() {
             return 0.0;
         }
-        
-        let common_words: Vec<&&str> = words1.iter()
-            .filter(|word| words2.contains(word))
-            .collect();
-        
+        let common_words: Vec<&&str> = words1.iter().filter(|word| words2.contains(word)).collect();
         let union_size = words1.len() + words2.len() - common_words.len();
         if union_size == 0 {
             1.0
@@ -226,60 +245,46 @@ impl DuplicateChecker {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    println!("🔍 Solfunmeme Duplicate Code Prover");
-    println!("=====================================");
-    
-    let args: Vec<String> = std::env::args().collect();
-    
-    if args.len() < 2 {
-        println!("Usage: {} <directory>", args[0]);
-        println!("Example: {} src/bin", args[0]);
-        return Ok(());
-    }
-    
-    let dir_path = PathBuf::from(&args[1]);
-    
+    use clap::{Arg, Command};
+    let matches = Command::new("duplicate_check")
+        .about("Duplicate Checker CLI Tool (one of the 42 programs): Scans for duplicate or similar code snippets in a directory.")
+        .arg(Arg::new("directory")
+            .help("Directory to scan for duplicates")
+            .required(true))
+        .arg(Arg::new("threshold")
+            .long("threshold")
+            .short('t')
+            .help("Similarity threshold for near-duplicates (0.0-1.0)")
+            .default_value("0.8"))
+        .arg(Arg::new("format")
+            .long("format")
+            .short('f')
+            .help("Output format: json or text")
+            .default_value("text"))
+        .get_matches();
+    let dir_path = PathBuf::from(matches.get_one::<String>("directory").unwrap());
+    let threshold: f64 = matches.get_one::<String>("threshold").unwrap().parse().unwrap_or(0.8);
+    let format = matches.get_one::<String>("format").unwrap().to_lowercase();
     if !dir_path.exists() {
-        println!("❌ Directory does not exist: {:?}", dir_path);
+        eprintln!("❌ Directory does not exist: {:?}", dir_path);
         return Ok(());
     }
-    
     let mut checker = DuplicateChecker::new();
     checker.analyze_directory(&dir_path)?;
-    
-    println!("\n📊 Analysis Results:");
-    println!("Total snippets found: {}", checker.snippets.len());
-    
-    // Check specific modules for duplicates
-    let modules_to_check = vec![
-        "src/bin",
-        "crates/task_manager", 
-        "crates/solfunmeme_core_logic",
-        "crates/solfunmeme_views",
-        "crates/solfunmeme_state"
-    ];
-    
-    println!("\n🔍 Module Duplicate Proof:");
-    println!("==========================");
-    
-    let mut all_clean = true;
-    for module in modules_to_check {
-        let module_path = PathBuf::from(module);
-        if module_path.exists() {
-            if !checker.prove_no_duplicates(&module_path) {
-                all_clean = false;
+    let groups = checker.find_duplicates(threshold);
+    if format == "json" {
+        println!("{}", serde_json::to_string_pretty(&groups).unwrap());
+    } else {
+        println!("\n📊 Analysis Results:");
+        println!("Total snippets found: {}", checker.snippets.len());
+        println!("Duplicate groups found: {}", groups.len());
+        for (i, group) in groups.iter().enumerate() {
+            println!("\nGroup {}: Similarity {:.2}", i + 1, group.similarity_score);
+            for snippet in &group.snippets {
+                println!("  File: {} (lines {}-{})", snippet.file_path, snippet.line_start, snippet.line_end);
+                println!("  ---\n{}\n---", snippet.content.trim());
             }
-        } else {
-            println!("⚠️  Module not found: {:?}", module_path);
         }
     }
-    
-    println!("\n🎯 Final Result:");
-    if all_clean {
-        println!("✅ All modules are duplicate-free! The vibe is proven true.");
-    } else {
-        println!("❌ Duplicates found. The vibe needs work.");
-    }
-    
     Ok(())
 } 
