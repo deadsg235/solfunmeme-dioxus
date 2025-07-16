@@ -231,6 +231,9 @@ members = [
     "crates/solfunmeme_tantivy_report",
     "crates/doc_cross_references",
     "crates/gemini_cli_lib",
+    "crates/solfunmeme_market_maker",
+    "crates/llm_echo_provider",
+    "crates/clifford_flow_provider",
     "zos/plugins", "phase_demo"]
 
 [workspace.package]

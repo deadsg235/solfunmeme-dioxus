@@ -1,7 +1,7 @@
-use anyhow::Result;
+use anyhow::{Result, anyhow};
 use clap::Parser;
 use std::path::PathBuf;
-use solfunmeme_indexer::index_directory;
+use std::process::{Command, Stdio};
 use tempfile::TempDir;
 
 #[derive(Parser)]
@@ -43,10 +43,67 @@ fn main() -> Result<()> {
         std::fs::remove_dir_all(&index_path)?;
     }
 
+    // Run solfunmeme_indexer_cli with --overwrite if cli.overwrite is true
+    let mut indexer_command = Command::new("cargo");
+    indexer_command.args([
+            "run",
+            "-p",
+            "solfunmeme_indexer",
+            "--bin",
+            "solfunmeme_indexer_cli",
+            "--",
+            "--index-path",
+            index_path.to_str().ok_or_else(|| anyhow!("Invalid index path"))?,
+        ])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit());
+
+    if cli.overwrite {
+        indexer_command.arg("--overwrite");
+    }
+
+    let mut indexer_child = indexer_command.spawn()?;
+    let mut indexer_stdin = indexer_child.stdin.take().ok_or_else(|| anyhow!("Failed to open stdin for indexer"))?;
+
     for dir_path in cli.directories {
-        println!("Indexing directory: {}", dir_path.display());
-        index_directory(&dir_path, &index_path, cli.debug_backtrace)?;
-        println!("Finished indexing: {}", dir_path.display());
+        println!("Processing directory with prepare_sources: {}", dir_path.display());
+
+        let mut prepare_sources_command = Command::new("cargo");
+        prepare_sources_command.args([
+                "run",
+                "-p",
+                "prepare_sources",
+                "--bin",
+                "prepare_sources",
+                "--",
+                dir_path.to_str().ok_or_else(|| anyhow!("Invalid directory path"))?,
+            ])
+            .stdout(Stdio::piped())
+            .stderr(Stdio::inherit());
+
+        if cli.debug_backtrace {
+            prepare_sources_command.env("RUST_BACKTRACE", "full");
+        }
+
+        let mut prepare_sources_child = prepare_sources_command.spawn()?;
+        let prepare_sources_stdout = prepare_sources_child.stdout.take().ok_or_else(|| anyhow!("Failed to open stdout for prepare_sources"))?;
+
+        // Pipe stdout of prepare_sources to stdin of solfunmeme_indexer_cli
+        std::io::copy(&mut prepare_sources_stdout.lock(), &mut indexer_stdin)?;
+
+        let status = prepare_sources_child.wait()?;
+        if !status.success() {
+            return Err(anyhow!("prepare_sources failed for directory {}: {:?}", dir_path.display(), status.code()));
+        }
+    }
+
+    // Close stdin for the indexer to signal end of input
+    drop(indexer_stdin);
+
+    let indexer_status = indexer_child.wait()?;
+    if !indexer_status.success() {
+        return Err(anyhow!("solfunmeme_indexer_cli failed: {:?}", indexer_status.code()));
     }
 
     println!("Indexing complete.");

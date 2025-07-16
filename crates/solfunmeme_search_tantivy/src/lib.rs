@@ -47,6 +47,7 @@ impl SearchIndex {
         let line_count_field = schema_builder.add_u64_field("line_count", STORED);
         let char_count_field = schema_builder.add_u64_field("char_count", STORED);
         let test_result_field = schema_builder.add_text_field("test_result", TEXT | STORED);
+        let embedding_field = schema_builder.add_bytes_field("embedding", STORED);
         
         let schema = schema_builder.build();
         
@@ -102,6 +103,9 @@ impl SearchIndex {
         let line_count_field = self.schema.get_field("line_count")?;
         let char_count_field = self.schema.get_field("char_count")?;
         let test_result_field = self.schema.get_field("test_result")?;
+        let embedding_field = self.schema.get_field("embedding")?;
+
+        let embedding_bytes: Vec<u8> = chunk.embedding.iter().flat_map(|f| f.to_le_bytes()).collect();
 
         let doc = doc!(
             language_field => chunk.language.clone(),
@@ -113,6 +117,7 @@ impl SearchIndex {
             line_count_field => chunk.line_count as u64,
             char_count_field => chunk.char_count as u64,
             test_result_field => chunk.test_result.clone(),
+            embedding_field => embedding_bytes,
         );
         
         self.writer.add_document(doc)?;

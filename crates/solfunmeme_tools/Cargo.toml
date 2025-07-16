@@ -51,6 +51,10 @@ path = "src/bin/recursive_index_cli.rs"
 name = "git_object_indexer"
 path = "src/bin/git_object_indexer_cli.rs"
 
+[[bin]]
+name = "llm_planner"
+path = "src/bin/llm_planner_cli.rs"
+
 [dependencies]
 anyhow = "1.0"
 tantivy = { path = "../../vendor/tantivy", default-features = false, features = ["mmap", "lz4-compression"] }
@@ -62,8 +66,9 @@ glob = "0.3.1"
 thiserror = "1.0"
 markdown = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
-serde = { version = "1.0", features = ["derive"] }
+serde = { version = "1.0", features = ["derive", "rc"] }
 serde_json = "1.0"
+toml = "0.8"
 clap = { version = "4.4", features = ["derive"] }
 rayon = "1.8"
 notify = "6.1"
@@ -80,6 +85,7 @@ solfunmeme_tantivy_report = { path = "../solfunmeme_tantivy_report" }
 solfunmeme_indexer = { path = "../solfunmeme_indexer" }
 
 tempfile = "3.10"
+candle-core = { version = "0.9.1", default-features = false }
 
 [dev-dependencies]
 glob = "0.3.1"

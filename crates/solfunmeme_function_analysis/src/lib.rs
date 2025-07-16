@@ -258,6 +258,7 @@ pub fn create_code_snippet(
         line_count,
         char_count,
         test_result,
+        embedding: Vec::new(),
     }
 }
 
