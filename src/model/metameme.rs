@@ -645,9 +645,17 @@ impl MetaMemeOntology {
         Some(Meme {
             typ: target_language,
             value: translated_value,
-            prime_encoding: self.prime_ontology.encode_concept(&translated_value)
-                .into_iter().map(|x| x as u64).collect(),
-            semantic_vector: self.prime_ontology.encode_concept(&translated_value),
+        let encoded_concept = self.prime_ontology.encode_concept(&translated_value);
+        Some(Meme {
+            typ: target_language,
+            value: translated_value,
+            prime_encoding: encoded_concept.iter()
+                .map(|&x| x.round() as u64)
+                .collect(),
+            semantic_vector: encoded_concept,
+            ast_structure: None, // Would need actual AST parsing
+            metadata: meme.metadata.clone(),
+        })
             ast_structure: None, // Would need actual AST parsing
             metadata: meme.metadata.clone(),
         })
