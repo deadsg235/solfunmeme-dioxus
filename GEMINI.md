@@ -46,6 +46,27 @@ To further align with the `solfunmeme-dioxus` project's unique vision, AI agents
 
 This `GEMINI.md` file serves as a starting point. As the project evolves, so too will this protocol. Welcome to the manifold.
 
+## Dependency Abstraction Strategy
+
+To maintain a clean, modular, and future-proof dependency tree, all external third-party crates are to be abstracted behind internal `solfunmeme` wrapper crates. This strategy facilitates:
+
+*   **Modularity:** Isolates external dependency changes to specific wrapper crates.
+*   **Maintainability:** Simplifies dependency upgrades and management.
+*   **Future-proofing:** Enables easier migration to alternative libraries or dynamic loading mechanisms.
+
+Currently, the following wrapper crates have been established:
+
+*   `solfunmeme_serde_utils`: Wraps `serde`, `serde_json`, `toml`, and `syn-serde`.
+*   `solfunmeme_web_utils`: Wraps `web-sys`, `js-sys`, `wasm-bindgen`, `wasm-bindgen-futures`, `gloo` and its sub-crates, and `reqwasm`.
+*   `solfunmeme_logging`: Wraps `log`, `console_log`, `tracing`, and `wasm-logger`.
+*   `solfunmeme_crypto_utils`: Wraps `aes-gcm`, `base64`, `bip39`, `bs58`, `chacha20poly1305`, `ring`, `ring-compat`, `sha2`, `curve25519-dalek`, `x25519-dalek`, and `uuid`.
+*   `solfunmeme_utility_deps`: Wraps `inventory`, `lazy_static`, `ctor`, and `thiserror`.
+*   `solfunmeme_rdf_utils`: Wraps `sophia_turtle`, `sophia_api`, `sophia_inmem`.
+*   `solfunmeme_markdown_utils`: Wraps `markdown-meta-parser`, `markdown`, `pulldown-cmark`.
+*   `solfunmeme_http_client`: Wraps `reqwest`.
+
+All new external dependencies should be introduced via a new or existing `solfunmeme` wrapper crate.
+
 ## Evolving Architecture and Introspection Philosophy
 
 To gain maximum control over all dependencies and facilitate dynamic loading and interchangeability in the bootstrap process, each module will be forked into a `meta-introspector` organization and patched there.
@@ -70,27 +91,25 @@ For comprehensive development guidelines applicable to all contributors, please 
 
 ## Lessons Learned (from recent debugging sessions)
 
-*   **Module Re-exports and Structure:** Rust's module system, especially with `pub use` and nested modules, can be tricky. Ensure clear, non-circular re-exports and a flat module structure where possible to avoid accessibility issues.
-*   **Tantivy API Evolution:** Libraries like Tantivy evolve. Always consult the latest documentation or source code when encountering unexpected API changes (e.g., `IndexReader::iter_segments` vs. `Searcher::segment_readers`, `TermStreamer::next()` vs. `TermDictionary::stream()`).
 *   **Centralized Data Models:** Defining core data structures in a single, dedicated crate (like `solfunmeme_function_analysis` now serves for `CodeChunk` and related types) is paramount. This prevents duplication, ensures type consistency, and simplifies dependency management across the project.
 *   **"File=Function=Block=Vibe" Principle:** Adhering to this principle (small, focused files/functions/modules) significantly aids in debugging and refactoring. When issues arise, it's easier to isolate and address them in smaller, self-contained units.
-*   **Sophia `Term` Trait and `Sized` Types**: When converting string literals (`&str`) to `sophia_api::term::Term` types using `into_term()`, ensure the string is first converted to an owned `String` using `.to_string()`. This is because `&str` is not `Sized`, while `String` is. For example, use `func.function_name.to_string().into_term()` instead of `func.function_name.into_term()`.
-*   **`IriRef` and `with_suffix`**: The `with_suffix` method is not available on `IriRef<MownStr>`. Instead, construct the full IRI manually using `format!` and `IriRef::new_unchecked()`.
-*   **Sophia Serializer Traits**: For `TurtleSerializer` methods like `set_prefix` and `flush`, ensure that the `sophia_api::prefix::PrefixSink` and `sophia_api::serializer::StreamSerializer` traits are explicitly imported into the relevant file (e.g., `serialize.rs`).
-*   **Dependency Management**: When encountering unexpected compilation errors, especially related to type mismatches or missing methods, perform `cargo clean` followed by `cargo update` to ensure a clean build environment and updated dependencies.
-*   **Redundant Emoji Output**: The final list of emojis in the output is redundant and should be streamlined or removed to improve clarity and conciseness. This indicates a potential area for refinement in the output formatting or the emoji mapping logic itself.
-*   **Sophia `Term` Trait and `Sized` Types (Revisited)**: `String` implements `Term` directly, so `as_str()` should be used when passing `String` references to functions expecting `Term` (which `&str` implements). `f32` does not implement `Term` directly, so it needs to be cast to `f64` before calling `into_term::<SimpleTerm>()`. Example: `&(func.emoji_distance as f64).into_term::<SimpleTerm>()`.
-*   **`tclifford::Multivector` Dimension**: The `MultivectorBase` struct (aliased as `SolMultivector`) does not have a `.len()` or `.dimension()` method directly. The dimension of the Clifford algebra should be accessed via `SolCl::dim()`. Ensure `SolCl` is imported from `crate::clifford`.
-*   **Unresolved Imports**: Always ensure all necessary types and traits are correctly imported from their respective modules. Pay close attention to the full path of the import (e.g., `sophia_iri::Iri` vs. `sophia_api::Iri`).
-*   **Unused Manifest Keys**: Remove unused profile configurations from `Cargo.toml` to clean up warnings (e.g., `profile.android-dev.sophia_*`).
-*   **Vendored Dependencies**: This project may use vendored dependencies located in the `/vendor` directory. When a user specifies using a vendored dependency, update the `Cargo.toml` to use a path dependency (e.g., `libloading = { path = "../vendor/rust_libloading" }`) instead of a version from a registry.
-*   **`zos` Crate Configuration**: Ensure `src/main.rs` is correctly configured as a binary target only, avoiding conflicts with library compilation. Remove redundant `[lib]` sections if the crate is solely an executable.
-*   **Main `Cargo.toml` Cleanup**: Remove unused `workspace.package.default-run` keys from the main `Cargo.toml` to eliminate warnings and streamline project configuration.
-*   **Tantivy Feature Flags**: When using Tantivy, explicitly enable necessary features like `mmap` and `lz4-compression` in `Cargo.toml` to ensure proper directory handling and data decompression. Also, ensure `Index::create` calls include `IndexSettings::default()` as the third argument.
-*   **`prepare_sources` CLI Enhancements**: Implement `clap` for robust command-line argument parsing, redirect JSON output to a specified file (or stdout by default), and add progress reporting to `stderr` for long-running operations.
-*   **Robust File Reading (`solfunmeme_input_fs`)**: When reading file contents, use `String::from_utf8_lossy` to gracefully handle non-UTF-8 or binary files, preventing crashes and allowing partial processing.
-*   **Tantivy Indexing Panic (`index out of bounds`)**: An ongoing issue where Tantivy's `fastfield::writer.rs` panics with an "index out of bounds" error. This suggests an inconsistency between the Tantivy schema definition (especially for fields like `test_result`) and the data being added. Further investigation is needed to ensure all fields are correctly handled and initialized, particularly `Option<String>` fields which might require a default value or specific handling when `None`.
-*   **Integrating Complex Conceptual Frameworks**: When introducing new, deeply philosophical or abstract concepts (like the "Digital Secretome" as a Tarot deck), it is crucial to meticulously align them with the existing Code-Math Manifold philosophy and the project's technical architecture. This ensures conceptual coherence and guides practical implementation, preventing fragmentation and maintaining a unified vision.
+*   **Tantivy API Usage:** When working with Tantivy, ensure correct usage of `CompactDocValue` and `Value` types for extracting data. Direct access to `as_text()` and `as_u64()` methods on `CompactDocValue` is not available; conversion to `Value` using `as_value()` is required first.
+*   **Module Structure and Imports:** Proper module declaration in `lib.rs` and correct import paths (e.g., `crate::module` vs. `super::module`) are crucial for successful compilation in multi-crate Rust projects.
+*   **Error Handling:** Always consider potential errors and implement robust error handling, especially for file operations and data conversions.
+*   **Cloning vs. Borrowing:** Be mindful of Rust's ownership rules. Use `clone()` when a moved value is needed in multiple places, or adjust lifetimes and references appropriately.
+*   **Vendored Dependencies:** When using vendored dependencies, ensure `Cargo.toml` paths are correctly configured.
+*   **CLI Argument Parsing:** Utilize libraries like `clap` for robust command-line parsing.
+*   **File I/O Robustness:** When reading file contents, use `String::from_utf8_lossy` to gracefully handle non-UTF-8 or binary files.
+*   **Conceptual Alignment:** When introducing new conceptual frameworks, ensure they are meticulously aligned with the project's core philosophy and technical architecture to maintain coherence.
+*   **Configuration-driven development:** Transitioned from hardcoded strings and default values in CLI applications (`zos.rs`) to external `zos_config.toml` files. This improves maintainability and dynamism. `serde` and `toml` crates are used for deserializing the configuration. `format!` macro is used with string constants from the configuration to satisfy `println!` and `eprintln!` macro requirements.
+
+*   **Module Restructuring:** When refactoring modules, especially when moving declarations into separate files, ensure that `pub use` statements and import paths are meticulously updated to reflect the new structure. Incorrect paths can lead to `unresolved import` and `private module` errors.
+*   **`#[cfg(feature = "...")]` Attributes:** Be mindful of `cfg` attributes for features. If a feature is not defined in `Cargo.toml`, any code blocks guarded by `#[cfg(feature = "undefined-feature")]` will cause warnings. Extracting such code into separate modules and conditionally compiling the module itself can help manage this.
+*   **`Cow` for Trait Returns:** When a trait method needs to return a slice (`&[u8]`) but the underlying implementation might generate owned data (`Vec<u8>`), consider using `std::borrow::Cow` to avoid `cannot return value referencing temporary value` errors. This allows the implementation to return either a borrowed slice or an owned value that can be converted to a slice.
+*   **Dependency Configuration:** Pay close attention to how dependencies are configured in `Cargo.toml`, especially when dealing with binary crates being used as libraries. Misconfigurations can lead to warnings about missing `lib` targets.
+*   **Unused Code Cleanup:** Regularly remove unused imports, variables, and functions to keep the codebase clean and reduce warning noise. This also helps in maintaining a clear understanding of the active components of the project.
+*   **`ort-sys` Compilation Issues:** Encountered persistent compilation failures on AArch64 Android due to `ort-sys`, a transitive dependency. Resolved by aggressively disabling all embedding-related features and plugins (`solfunmeme_embedding`, `llms_from_scratch_rs_plugin`, `rust_sbert_plugin`, `rust_sentence_transformers_plugin`) and ensuring `ort` is commented out in `vendor/orp/Cargo.toml`. This highlights the need for careful dependency management, especially for platform-specific builds.
+
 
 # Inspiration: The Hero's Wedge and the Code-Math Manifold
 

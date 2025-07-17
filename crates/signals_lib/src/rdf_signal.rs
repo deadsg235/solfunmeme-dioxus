@@ -1,7 +1,7 @@
 use sophia_term::BoxTerm;
 use sophia::parser::turtle;
 use sophia::triple::stream::TripleSource;
-use crate::common::{SignalManager, SignalState};
+use crate::common::SignalManager;
 
 pub type RdfGraph = Vec<[BoxTerm; 3]>;
 pub type RdfSignal = SignalManager<RdfGraph>;

@@ -7,7 +7,7 @@ use crate::{
     model::files::process_files,
     styles::STYLE,
 };
-use shared_analysis_types::{ExtractedFile, ProcessingFile, AnnotatedWord};
+use shared_analysis_types::{ExtractedFile, ProcessingFile};
 use dioxus::prelude::*;
 use dioxus::html::FileEngine;
 use dioxus_html::HasFileData;

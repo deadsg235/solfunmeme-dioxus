@@ -4,11 +4,11 @@ use std::path::Path;
 use std::collections::HashMap;
 
 mod namespaces;
-mod process_function;
+pub mod process_function;
 mod serialize;
 
 pub fn generate_ontology(
-    analyzed_functions: Vec<shared_analysis_types::AnalyzedFunction>,
+    analyzed_functions: Vec<process_function::AnalyzedFunction>,
     output_path: &Path,
 ) -> Result<()> {
     let mut graph = LightGraph::new();
@@ -24,7 +24,7 @@ pub fn generate_ontology(
 }
 
 pub fn generate_token_ontology(
-    analyzed_tokens: HashMap<String, shared_analysis_types::AnalyzedToken>,
+    analyzed_tokens: HashMap<String, process_function::AnalyzedToken>,
     output_path: &Path,
 ) -> Result<()> {
     let mut graph = LightGraph::new();

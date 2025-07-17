@@ -10,7 +10,7 @@ path = "src/bin/prepare_sources.rs"
 
 [dependencies]
 solfunmeme_search_tantivy = { path = "../solfunmeme_search_tantivy" }
-solfunmeme_embedding = { path = "../solfunmeme_embedding", optional = true }
+
 solfunmeme_function_analysis = { path = "../solfunmeme_function_analysis" }
 solfunmeme_clifford = { path = "../solfunmeme_clifford" }
 solfunmeme_solana_data = { path = "../solfunmeme_solana_data" }
@@ -31,6 +31,10 @@ tclifford = "0.1"
 orbital_sim_lib = { path = "../orbital_sim_lib" }
 nalgebra = "0.32"
 
+# solfunmeme_embedding = { path = "../solfunmeme_embedding" }
+# candle-core = { version = "0.2.0" }
+# tokenizers = { version = "0.15.0" }
+
 [features]
 default = []
-with-embedding = ["solfunmeme_embedding?/with-candle"]
+# with-embedding = ["solfunmeme_embedding", "candle-core", "tokenizers"]

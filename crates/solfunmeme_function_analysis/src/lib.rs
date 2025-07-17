@@ -4,12 +4,7 @@ use walkdir::WalkDir;
 use md5;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ClosestEmojiInfo {
-    pub emoji: String,
-    pub category: String,
-    pub distance: f32,
-}
+
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnalyzedFunction {
@@ -17,9 +12,6 @@ pub struct AnalyzedFunction {
     pub code_snippet: String,
     pub semantic_summary: String,
     pub file_path: String,
-    pub multivector_str: String,
-    pub sieve_address: String,
-    pub closest_emojis: Vec<ClosestEmojiInfo>,
     pub orbital_path: Option<Vec<(f64, f64)>>,
 }
 
@@ -28,14 +20,14 @@ pub struct AnalyzedDocument {
     pub file_path: String,
     pub code_snippets: Vec<CodeChunk>,
     pub text_chunks: Vec<String>,
-    pub analyzed_snippets: Vec<AnalyzedFunction>, // Changed from FunctionInfo to AnalyzedFunction
+    pub analyzed_snippets: Vec<CodeChunk>, // Changed from FunctionInfo to AnalyzedFunction
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnalyzedToken {
     pub token: String,
     pub count: usize,
-    pub multivector_str: String,
+    
     pub orbital_path: Option<Vec<(f64, f64)>>,
 }
 
@@ -50,10 +42,7 @@ pub struct CodeChunk {
     pub line_count: usize,
     pub char_count: usize,
     pub test_result: String,
-    pub embedding: Vec<f32>,
-    pub multivector_str: String,
-    pub sieve_address: String,
-    pub closest_emojis: Vec<ClosestEmojiInfo>,
+    
 }
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
@@ -249,10 +238,7 @@ pub fn create_code_snippet(
         line_count,
         char_count,
         test_result,
-        embedding: Vec::new(),
-        multivector_str: String::new(),
-        sieve_address: String::new(),
-        closest_emojis: Vec::new(),
+        
     }
 }
 
@@ -284,9 +270,7 @@ pub fn analyze_rust_file(file_path: &Path) -> Vec<AnalyzedFunction> {
                 code_snippet,
                 semantic_summary,
                 file_path: file_path.to_string_lossy().replace("\\", "/").to_owned(),
-                multivector_str: String::new(), // Placeholder
-                sieve_address: String::new(),   // Placeholder
-                closest_emojis: Vec::new(),   // Placeholder
+                
                 orbital_path: None,            // Placeholder
             });
         }

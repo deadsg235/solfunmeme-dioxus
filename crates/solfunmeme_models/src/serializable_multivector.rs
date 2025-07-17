@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize, Serializer, Deserializer};
 use solfunmeme_clifford::{SolCliffordAlgebra, SolMultivector};
-use tclifford::MultivectorBase;
+
 use tclifford::algebra::ClAlgebraBase;
 use tclifford::types::IndexType;
 

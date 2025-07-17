@@ -36,7 +36,7 @@ where
                 }
             }
             let snippets = extract_code_snippets_fn(&content).unwrap();
-            let mut all_snippets: Vec<shared_analysis_types::CodeSnippet> = snippets.into_iter().map(|s| s.into()).collect();
+            let all_snippets: Vec<shared_analysis_types::CodeSnippet> = snippets.into_iter().map(|s| s.into()).collect();
             //            let html_code_snippets = extract_code_snippets_from_html(&content);
 //            all_snippets.extend(html_code_snippets);
             // Finally push one combined ExtractedFile

@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use lazy_static::lazy_static;
+
 use std::collections::HashMap;
 
 /// Adds two u64 numbers. This is a placeholder function.

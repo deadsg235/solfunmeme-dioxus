@@ -1,0 +1,9 @@
+[package]
+name = "solfunmeme_rdf_utils"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sophia_turtle = "0.8"
+sophia_api = "0.8"
+sophia_inmem = "0.8"

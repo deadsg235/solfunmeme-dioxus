@@ -38,7 +38,7 @@ pub fn copy_to_clipboard(
         let window = web_sys::window().expect("window");
         let nav = window.navigator().clipboard();
         let p = nav.write_text(&text2);
-        let result = wasm_bindgen_futures::JsFuture::from(p)
+        let _result = wasm_bindgen_futures::JsFuture::from(p)
             .await
             .expect("clipboard populated");
         info!("clippyboy worked");

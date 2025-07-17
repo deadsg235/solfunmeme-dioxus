@@ -6,7 +6,7 @@ use std::collections::HashSet;
 use crate::{
     components::{codesnippet::CodeSnippetComponent, filesummary::FileSummary},
 };
-use shared_analysis_types::{ExtractedFile, CodeSnippet};
+use shared_analysis_types::ExtractedFile;
 
 #[component]
 pub fn FileDisplay(

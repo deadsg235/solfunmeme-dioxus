@@ -38,16 +38,16 @@ impl SearchIndex {
         let mut schema_builder = Schema::builder();
         
         // Fields for indexing
-        let language_field = schema_builder.add_text_field("language", TEXT | STORED);
-        let content_field = schema_builder.add_text_field("content", TEXT | STORED);
-        let line_start_field = schema_builder.add_u64_field("line_start", STORED);
-        let line_end_field = schema_builder.add_u64_field("line_end", STORED);
-        let content_hash_field = schema_builder.add_text_field("content_hash", TEXT | STORED);
-        let token_count_field = schema_builder.add_u64_field("token_count", STORED);
-        let line_count_field = schema_builder.add_u64_field("line_count", STORED);
-        let char_count_field = schema_builder.add_u64_field("char_count", STORED);
-        let test_result_field = schema_builder.add_text_field("test_result", TEXT | STORED);
-        let embedding_field = schema_builder.add_bytes_field("embedding", STORED);
+        let _language_field = schema_builder.add_text_field("language", TEXT | STORED);
+        let _content_field = schema_builder.add_text_field("content", TEXT | STORED);
+        let _line_start_field = schema_builder.add_u64_field("line_start", STORED);
+        let _line_end_field = schema_builder.add_u64_field("line_end", STORED);
+        let _content_hash_field = schema_builder.add_text_field("content_hash", TEXT | STORED);
+        let _token_count_field = schema_builder.add_u64_field("token_count", STORED);
+        let _line_count_field = schema_builder.add_u64_field("line_count", STORED);
+        let _char_count_field = schema_builder.add_u64_field("char_count", STORED);
+        let _test_result_field = schema_builder.add_text_field("test_result", TEXT | STORED);
+        
         
         let schema = schema_builder.build();
         
@@ -103,9 +103,9 @@ impl SearchIndex {
         let line_count_field = self.schema.get_field("line_count")?;
         let char_count_field = self.schema.get_field("char_count")?;
         let test_result_field = self.schema.get_field("test_result")?;
-        let embedding_field = self.schema.get_field("embedding")?;
+        
 
-        let embedding_bytes: Vec<u8> = chunk.embedding.iter().flat_map(|f| f.to_le_bytes()).collect();
+        
 
         let doc = doc!(
             language_field => chunk.language.clone(),
@@ -117,7 +117,7 @@ impl SearchIndex {
             line_count_field => chunk.line_count as u64,
             char_count_field => chunk.char_count as u64,
             test_result_field => chunk.test_result.clone(),
-            embedding_field => embedding_bytes,
+//            embedding_field => embedding_bytes,
         );
         
         self.writer.add_document(doc)?;

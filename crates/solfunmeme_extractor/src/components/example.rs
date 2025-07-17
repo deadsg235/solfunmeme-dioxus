@@ -52,7 +52,7 @@ mod Comp4 {
     }
 }
 
-mod Comp5 {
+pub mod Comp5 {
     use rrust_kontekst::mcp_component;
     // Example 4: High-priority component
     #[mcp_component(

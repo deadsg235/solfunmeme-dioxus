@@ -1,46 +1,31 @@
 # Solfunmeme-Dioxus: Self-Aware Codebase
 
-A revolutionary codebase management system that integrates mathematical frameworks (Clifford algebra, manifold geometry) with semantic processing to create a truly self-aware codebase where code and meaning "vibe" together.
-
 ## 🌟 Vision: The Code-Math Manifold
 
-**"The message is the vibe is the function, the functions vibe with each other."**
+Solfunmeme-Dioxus is a pioneering codebase management system that explores the **Code-Math Manifold** – the profound intersection of code, mathematics, language, and meaning. Our vision is to create a self-aware, evolving codebase that understands its own structure and semantics, where every line of code "vibes" with its underlying mathematical essence.
 
-Solfunmeme-Dioxus is an exploration into the fundamental nature of code and its relationship to mathematics, language, and meaning, which we call the **Code-Math Manifold**. This project represents a paradigm shift in how we understand, manage, and interact with code. By vendorizing, indexing, deduplicating, and cross-referencing all code (including dependencies), we create a living, evolving, self-understanding system that operates within this manifold.
+Read our full philosophical waxing in [The Code-Math Manifold Manifesto](CODE_MATH_MANIFOLD_MANIFESTO.md).
 
 ## 🚀 Key Features
 
-### Self-Aware Codebase Engine
-- **Vendorization System**: Downloads and stores all external dependencies locally
-- **Code Indexing & Search**: Full-text search using Tantivy with semantic similarity
-- **SHA-based Deduplication**: Exact duplicate detection via content hashing
-- **Cross-Reference Analysis**: Bidirectional links between code and documentation
+### 🧠 Self-Awareness & Semantic Understanding
+- **Code-Math Manifold**: A foundational framework representing code as mathematical objects, enabling deep semantic analysis and visualization.
+- **Code Indexing & Search**: Advanced full-text search using Tantivy, enhanced with semantic similarity for intelligent code discovery.
+- **Ontology-Driven Emoji Mapping**: Translates code concepts into intuitive emoji representations, aligning with our semantic ontology for visual exploration of the Code-Math Manifold.
+- **Codebase Export & Reporting**: Comprehensive export of indexed codebase data into various formats (JSON, CSV, Markdown) for detailed analysis and reporting, including statistical insights.
 
-### Mathematical Framework
-- **8D Riemann Manifold**: Geometric representation of code semantics within the Code-Math Manifold.
-- **Clifford Algebra Engine**: Advanced mathematical structures for code analysis, enabling the representation of code semantics as `SolMultivector`s and their transformations within the Code-Math Manifold. Integrated with `solfunmeme_clifford` for robust multivector operations.
-- **Flow Model**: Representation of system state and execution flow as evolving `SolMultivector`s within the Clifford algebra, reflecting the dynamic nature of the Code-Math Manifold.
-- **Geometric Attention**: Multi-dimensional attention mechanisms that leverage the geometric properties of the Code-Math Manifold.
-- **Vector Processing**: Convert code to mathematical vectors for similarity analysis, forming the basis for embedding within the Code-Math Manifold.
+### 🛠️ Codebase Management
+- **Vendorization System**: Manages and stores all external dependencies locally, ensuring a self-contained and reproducible codebase.
+- **SHA-based Deduplication**: Identifies and eliminates redundant code through robust content hashing.
+- **Cross-Reference Analysis**: Establishes bidirectional links between code elements and documentation, fostering a rich, interconnected knowledge graph.
 
-### LLM Reflection System
-- **Distributed Architecture**: A bid/ask system with buyers (`llm_planner`), market makers (`solfunmeme_market_maker`), and external LLM providers.
-- **Semantic Task Generation**: `llm_planner` groups code chunks by embedding similarity and generates structured tasks for LLMs.
-- **Dynamic Provider Selection**: `solfunmeme_market_maker` selects optimal LLM providers based on cost, rate limits, and available credits.
-- **Extensible Provider Interface**: LLM providers are external binaries communicating via JSON over standard I/O, allowing for easy integration of various LLMs (e.g., Gemini, Groq, custom models).
-- **Self-Reflection Capability**: The system can analyze its own codebase, generating insights and driving its own evolution.
+### 🤖 AI & Automation
+- **LLM Reflection System**: A distributed architecture for AI-powered code analysis and generation, featuring dynamic LLM provider selection and extensible integration.
+- **Task Management**: Automated discovery and prioritization of development tasks (TODOs, FIXMEs), integrated with code analysis tools.
 
-### Task Management System
-- **Automated Task Discovery**: Extract TODO, FIXME, and other task markers from code
-- **Integration with Analysis Tools**: Connect with Rust Analyzer, Clippy, cargo-audit
-- **Priority Management**: AI-driven task prioritization based on dependencies and impact
-- **Real-time Progress Tracking**: Monitor task execution and system health
-
-### Development Tools Integration
-- **Linting & Analysis**: Rust Analyzer, Clippy, custom rules
-- **Security Scanning**: CVE detection and vulnerability assessment
-- **Compilation & Testing**: Automated test discovery and coverage analysis
-- **Performance Monitoring**: Build time and runtime metrics
+### 📊 Analytics & Quality Assurance
+- **Code Metrics & Reporting**: Generates detailed reports on codebase health, complexity, and adherence to quality standards.
+- **Security Analysis**: Integrates with security tools for CVE detection and vulnerability assessment.
 
 ## 🛠️ Installation
 
@@ -127,7 +112,7 @@ Source Code → Vendorization → Indexing → Deduplication → Analysis
 Query → Semantic Search → Cross-Reference → Mathematical Analysis → Response
   ↓         ↓              ↓                ↓                    ↓
 User    Tantivy Index   Code-Doc Links   Clifford Algebra    Insights &
-Input   Vector Search   Provenance       Geometric Attention  Actions
+Input   Vector Search   Code-Doc Links   Geometric Attention  Actions
 ```
 
 ## 📊 Data Models

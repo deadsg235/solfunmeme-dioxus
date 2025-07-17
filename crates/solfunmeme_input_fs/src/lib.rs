@@ -2,7 +2,7 @@ use walkdir::WalkDir;
 use std::fs;
 use std::path::Path;
 use anyhow::Result;
-use solfunmeme_function_analysis::{CodeChunk, ClosestEmojiInfo};
+use solfunmeme_function_analysis::CodeChunk;
 use md5;
 
 pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Result<Vec<CodeChunk>> {
@@ -51,7 +51,7 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
                 chunk.line_count = content.lines().count();
                 chunk.char_count = content.chars().count();
                 chunk.test_result = "Untested".to_string(); // Placeholder test result
-                chunk.embedding = Vec::new();
+                
                 code_chunks.push(chunk);
             },
             Err(e) => {

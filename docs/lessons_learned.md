@@ -324,3 +324,17 @@ This document captures key insights, best practices, and lessons learned during 
 ---
 
 *This document should be updated regularly as new lessons are learned and insights are gained.* 
+
+## 🐛 Compilation and Dependency Management
+
+### 24. Resolving `ort-sys` Dependency Issues
+**Lesson:** The `ort-sys` dependency can cause significant compilation issues, especially on Android, due to platform-specific features. Identifying and isolating its source (e.g., `solfunmeme_embedding`) is crucial for resolving these conflicts.
+
+### 25. Managing Duplicate `Cargo.toml` Sections
+**Lesson:** Duplicate sections (e.g., `[features]`) in `Cargo.toml` files can lead to unexpected compilation errors and should be resolved by merging them into a single, coherent section.
+
+### 26. Refactoring Large Binaries into Library Crates
+**Lesson:** Refactoring large binary files (e.g., `src/bin/index_exporter.rs`) into dedicated library crates (e.g., `index_exporter_lib`) improves code organization, reusability, and maintainability.
+
+### 27. Addressing Module Import and Type Mismatch Errors
+**Lesson:** Persistent attention to module import paths and type consistency is essential. These errors often indicate incorrect `use` statements, API changes in dependencies, or fundamental mismatches in data structures. Cloning values to resolve borrow errors and explicitly casting numeric types can often resolve these issues. 

@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+
 
 pub mod wallet_manager;
 pub use wallet_manager::{WalletCredentials, SecretStore, EncryptedSecret, WalletManager};
