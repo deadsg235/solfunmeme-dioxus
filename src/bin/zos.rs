@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, Args};
 use std::path::PathBuf;
 use std::process;
 
@@ -109,16 +109,7 @@ enum ChatCommands {
         output: PathBuf,
     },
     
-    /// Extract easter eggs from chats
-    Eggs {
-        /// Search for specific easter egg patterns
-        #[arg(short, long)]
-        pattern: Option<String>,
-        
-        /// Output format
-        #[arg(short, long, default_value = "json")]
-        format: String,
-    },
+    
     
     /// Generate vibe proof from chat data
     Vibe {
@@ -155,11 +146,9 @@ enum ChatCommands {
 
 mod chat_indexer;
 mod vibe_prover;
-mod easter_egg_finder;
 
 use chat_indexer::ChatIndexer;
 use vibe_prover::VibeProver;
-use easter_egg_finder::EasterEggFinder;
 
 fn main() {
     let cli = Cli::parse();
@@ -181,7 +170,7 @@ fn main() {
         }
         
         Commands::Search { query, limit } => {
-            println!("Searching for '{}' with limit {}", query, limit);
+            println!("Searching for \"{}\" with limit {}", query, limit);
             // TODO: Implement search functionality
         }
         
@@ -219,27 +208,7 @@ fn main() {
                     println!("Chat indexing completed successfully!");
                 }
                 
-                ChatCommands::Eggs { pattern, format } => {
-                    println!("Extracting easter eggs in {} format", format);
-                    let finder = EasterEggFinder::new();
-                    let eggs = if let Some(pat) = pattern {
-                        finder.find_pattern(&pat)
-                    } else {
-                        finder.find_all()
-                    };
-                    
-                    match format.as_str() {
-                        "json" => println!("{}", serde_json::to_string_pretty(&eggs).unwrap()),
-                        "text" => {
-                            for egg in eggs {
-                                println!("Easter Egg: {}", egg);
-                            }
-                        }
-                        _ => println!("Unsupported format: {}", format),
-                    }
-                }
-                
-                ChatCommands::Vibe { ontology, output } => {
+                """                ChatCommands::Vibe { ontology, output } => {
                     println!("Generating vibe proof with ontology {} to {:?}", ontology, output);
                     let prover = VibeProver::new(ontology.clone());
                     if let Err(e) = prover.generate_proof(&output) {
@@ -247,34 +216,34 @@ fn main() {
                         process::exit(1);
                     }
                     println!("Vibe proof generated successfully!");
-                }
+                }""
                 
                 ChatCommands::Search { query, limit } => {
-                    println!("Searching chats for '{}' with limit {}", query, limit);
+                    println!("Searching chats for \"{}\" with limit {}", query, limit);
                     let indexer = ChatIndexer::new(
                         PathBuf::from("processed_chats"),
-                        PathBuf::from("tmp/chat_index")
+                        PathBuf::from("tmp/chat_index ")
                     );
-                    if let Ok(results) = indexer.search(query, *limit) {
+                    if let Ok(results) = indexer.search(&query, limit) {
                         for result in results {
                             println!("Found: {}", result);
                         }
                     } else {
-                        eprintln!("Error searching chats");
+                        eprintln!("Error searching chats ");
                         process::exit(1);
                     }
                 }
                 
                 ChatCommands::Analyze { analysis_type, format } => {
-                    println!("Analyzing chats for {} in {} format", analysis_type, format);
+                    println!("Analyzing chats for {} in {} format ", analysis_type, format);
                     let indexer = ChatIndexer::new(
                         PathBuf::from("processed_chats"),
-                        PathBuf::from("tmp/chat_index")
+                        PathBuf::from("tmp/chat_index ")
                     );
-                    if let Ok(analysis) = indexer.analyze(analysis_type, format) {
+                    if let Ok(analysis) = indexer.analyze(&analysis_type, &format) {
                         println!("Analysis: {}", analysis);
                     } else {
-                        eprintln!("Error analyzing chats");
+                        eprintln!("Error analyzing chats ");
                         process::exit(1);
                     }
                 }

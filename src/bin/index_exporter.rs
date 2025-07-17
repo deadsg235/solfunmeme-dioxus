@@ -92,14 +92,14 @@ impl IndexExporter {
         let schema = self.index.schema();
         
         let total_docs = searcher.num_docs();
-        let export_limit = if limit == 0 { total_docs } else { limit.min(total_docs) };
+        let export_limit = if limit == 0 { total_docs as usize } else { limit.min(total_docs as usize) };
         
         println!("Exporting {} documents from index (total: {})", export_limit, total_docs);
         
         let mut documents = Vec::new();
         
         for doc_id in 0..export_limit {
-            if let Ok(doc) = searcher.doc(DocId::from(doc_id)) {
+            if let Ok(doc) = searcher.doc(DocId::from(doc_id as u32)) {
                 if let Ok(indexed_doc) = self.document_to_indexed_document(&doc, &schema) {
                     documents.push(indexed_doc);
                 }
@@ -125,69 +125,45 @@ impl IndexExporter {
             test_result: None,
         };
         
-        for (field, values) in doc.iter() {
+                for (field, value) in doc.field_values() {
             let field_name = schema.get_field_name(field);
             
             match field_name {
                 "path" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.path = Some(value.as_text().unwrap_or("").to_string());
-                    }
+                    indexed_doc.path = Some(value.as_text().unwrap_or("").to_string());
                 },
                 "content" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.content = Some(value.as_text().unwrap_or("").to_string());
-                    }
+                    indexed_doc.content = Some(value.as_text().unwrap_or("").to_string());
                 },
                 "emoji" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.emoji = Some(value.as_text().unwrap_or("").to_string());
-                    }
+                    indexed_doc.emoji = Some(value.as_text().unwrap_or("").to_string());
                 },
                 "line_start" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.line_start = Some(value.as_u64().unwrap_or(0));
-                    }
+                    indexed_doc.line_start = Some(value.as_u64().unwrap_or(0));
                 },
                 "line_end" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.line_end = Some(value.as_u64().unwrap_or(0));
-                    }
+                    indexed_doc.line_end = Some(value.as_u64().unwrap_or(0));
                 },
                 "chunk_type" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.chunk_type = Some(value.as_text().unwrap_or("").to_string());
-                    }
+                    indexed_doc.chunk_type = Some(value.as_text().unwrap_or("").to_string());
                 },
                 "language" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.language = Some(value.as_text().unwrap_or("").to_string());
-                    }
+                    indexed_doc.language = Some(value.as_text().unwrap_or("").to_string());
                 },
                 "content_hash" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.content_hash = Some(value.as_text().unwrap_or("").to_string());
-                    }
+                    indexed_doc.content_hash = Some(value.as_text().unwrap_or("").to_string());
                 },
                 "token_count" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.token_count = Some(value.as_u64().unwrap_or(0));
-                    }
+                    indexed_doc.token_count = Some(value.as_u64().unwrap_or(0));
                 },
                 "line_count" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.line_count = Some(value.as_u64().unwrap_or(0));
-                    }
+                    indexed_doc.line_count = Some(value.as_u64().unwrap_or(0));
                 },
                 "char_count" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.char_count = Some(value.as_u64().unwrap_or(0));
-                    }
+                    indexed_doc.char_count = Some(value.as_u64().unwrap_or(0));
                 },
                 "test_result" => {
-                    if let Some(value) = values.first() {
-                        indexed_doc.test_result = Some(value.as_text().unwrap_or("").to_string());
-                    }
+                    indexed_doc.test_result = Some(value.as_text().unwrap_or("").to_string());
                 },
                 _ => {}
             }
@@ -208,7 +184,7 @@ impl IndexExporter {
         
         // Collect statistics from all documents
         for doc_id in 0..total_docs {
-            if let Ok(doc) = searcher.doc(DocId::from(doc_id)) {
+            if let Ok(doc) = searcher.doc(DocId::from(doc_id as u32)) {
                 if let Ok(indexed_doc) = self.document_to_indexed_document(&doc, &schema) {
                     // Count emojis
                     if let Some(emoji) = indexed_doc.emoji {
@@ -258,7 +234,7 @@ impl IndexExporter {
         ];
         
         Ok(IndexStats {
-            total_documents: total_docs,
+            total_documents: total_docs as usize,
             fields,
             emoji_distribution,
             language_distribution,

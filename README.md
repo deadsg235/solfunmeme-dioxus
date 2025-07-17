@@ -2,11 +2,11 @@
 
 A revolutionary codebase management system that integrates mathematical frameworks (Clifford algebra, manifold geometry) with semantic processing to create a truly self-aware codebase where code and meaning "vibe" together.
 
-## 🌟 Vision
+## 🌟 Vision: The Code-Math Manifold
 
 **"The message is the vibe is the function, the functions vibe with each other."**
 
-Solfunmeme-Dioxus represents a paradigm shift in how we understand, manage, and interact with code. By vendorizing, indexing, deduplicating, and cross-referencing all code (including dependencies), we create a living, evolving, self-understanding system.
+Solfunmeme-Dioxus is an exploration into the fundamental nature of code and its relationship to mathematics, language, and meaning, which we call the **Code-Math Manifold**. This project represents a paradigm shift in how we understand, manage, and interact with code. By vendorizing, indexing, deduplicating, and cross-referencing all code (including dependencies), we create a living, evolving, self-understanding system that operates within this manifold.
 
 ## 🚀 Key Features
 
@@ -17,11 +17,11 @@ Solfunmeme-Dioxus represents a paradigm shift in how we understand, manage, and 
 - **Cross-Reference Analysis**: Bidirectional links between code and documentation
 
 ### Mathematical Framework
-- **8D Riemann Manifold**: Geometric representation of code semantics
-- **Clifford Algebra Engine**: Advanced mathematical structures for code analysis, now integrated with `solfunmeme_clifford` for robust multivector operations.
-- **Flow Model**: Representation of system state and execution flow as evolving `SolMultivector`s within the Clifford algebra.
-- **Geometric Attention**: Multi-dimensional attention mechanisms
-- **Vector Processing**: Convert code to mathematical vectors for similarity analysis
+- **8D Riemann Manifold**: Geometric representation of code semantics within the Code-Math Manifold.
+- **Clifford Algebra Engine**: Advanced mathematical structures for code analysis, enabling the representation of code semantics as `SolMultivector`s and their transformations within the Code-Math Manifold. Integrated with `solfunmeme_clifford` for robust multivector operations.
+- **Flow Model**: Representation of system state and execution flow as evolving `SolMultivector`s within the Clifford algebra, reflecting the dynamic nature of the Code-Math Manifold.
+- **Geometric Attention**: Multi-dimensional attention mechanisms that leverage the geometric properties of the Code-Math Manifold.
+- **Vector Processing**: Convert code to mathematical vectors for similarity analysis, forming the basis for embedding within the Code-Math Manifold.
 
 ### LLM Reflection System
 - **Distributed Architecture**: A bid/ask system with buyers (`llm_planner`), market makers (`solfunmeme_market_maker`), and external LLM providers.
@@ -161,6 +161,19 @@ struct Task {
     metadata: HashMap<String, Value>,
 }
 ```
+
+### Hugging Face Datasets
+
+Our codebase actively generates and leverages Hugging Face datasets as a core component of its self-awareness and semantic understanding. The `rust_ast_emoji` dataset, for instance, is a direct output of our Rust AST analysis and emoji mapping, embodying the "Code-Math Manifold" philosophy.
+
+- **rust_ast_emoji**: This dataset contains Rust codebase AST (Abstract Syntax Tree) analysis with emoji mapping for code understanding and visualization. It provides a unique perspective on code structure by mapping AST node types and extracted words to emojis, enabling creative code analysis and visualization. This dataset is designed to be self-generating and will eventually "write itself" to Hugging Face Hub.
+
+### Semantic Ontology and Emoji Mapping
+
+The project utilizes a semantic ontology, defined in `ontologies/zos/v1.ttl`, to establish a formal mapping between code concepts and their emoji representations. This ontology is crucial for:
+- **Semantic Alignment**: Ensuring that emoji representations accurately reflect the underlying meaning of code elements.
+- **Code-Math Manifold Visualization**: Providing a visual language for exploring the Code-Math Manifold, where emojis serve as intuitive glyphs for complex mathematical and code structures.
+- **Data-Driven Insights**: Enabling the system to generate and interpret emoji-based summaries and reports, fostering a deeper, more intuitive understanding of the codebase.
 
 ## 🔗 Integration Points
 

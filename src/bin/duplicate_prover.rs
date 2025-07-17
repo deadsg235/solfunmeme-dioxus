@@ -68,7 +68,7 @@ impl DuplicateProver {
         // Extract code snippets (functions, structs, etc.)
         let snippets = self.extract_snippets(&lines, file_path);
         
-        for snippet in snippets {
+        for mut snippet in snippets {
             let hash = self.compute_hash(&snippet.normalized_content);
             snippet.hash = hash.clone();
             
@@ -141,7 +141,7 @@ impl DuplicateProver {
                 file_path: file_path.to_string_lossy().to_string(),
                 line_start: start_line + 1,
                 line_end: lines.len(),
-                content: current_snippet,
+                content: current_snippet.clone(),
                 normalized_content: self.normalize_content(&current_snippet),
                 hash: String::new(),
             });

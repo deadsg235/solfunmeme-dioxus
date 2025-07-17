@@ -126,7 +126,7 @@ impl DuplicateChecker {
                 file_path: file_path.to_string_lossy().to_string(),
                 line_start: start_line + 1,
                 line_end: lines.len(),
-                content: current_snippet,
+                content: current_snippet.clone(),
                 normalized_content: self.normalize_content(&current_snippet),
                 hash: String::new(),
             });

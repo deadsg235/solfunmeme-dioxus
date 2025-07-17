@@ -1,5 +1,5 @@
-use solfunmeme_dioxus::godel::{Godel, GodelNumber};
-use solfunmeme_dioxus::emoji_stage::EmojiStage;
+use bootstrap::godel::{Godel, GodelNumber};
+use bootstrap::emojistage::EmojiStage;
 
 fn main() {
     println!("🌐 Gödel Number Euclidean Distance Analysis");

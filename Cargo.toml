@@ -86,7 +86,7 @@ dioxus-router = "0.6.3"
 dioxus-web = "0.6.3"
 #ndarray = "0.16.1"
 ndarray = "0.15.6"
-tclifford = "0.1.0"
+tclifford = { path = "vendor/tclifford", features = ["serde"] }
 #rust-bert = "0.23.0"
 linfa = "0.7.1"
 linfa-preprocessing = "0.7.1"
@@ -135,14 +135,27 @@ solfunmeme_models = { path = "crates/solfunmeme_models" }
 solfunmeme_views = { path = "crates/solfunmeme_views" }
 solfunmeme_playground = { path = "crates/solfunmeme_playground" }
 solfunmeme_state = { path = "crates/solfunmeme_state" }
+solfunmeme_indexer = { path = "crates/solfunmeme_indexer" }
+solfunmeme_embedding = { path = "crates/solfunmeme_embedding", optional = true } # Made optional
 ctor = "0.4.2"
 tracing = "0.1.41"
+lazy_static = "1.4.0"
+clap = { version = "4", features = ["derive"] }
+tantivy = { path = "vendor/tantivy" }
+bootstrap = { path = "bootstrap" }
+chat_indexer = { path = "crates/chat_indexer" }
+vibe_prover = { path = "crates/vibe_prover" }
 
 
 curve25519-dalek = "4.1.3"
 walkdir = "2.5.0"
-burn = { version = "0.17.1", features = ["wgpu"] }
+
+
 #rand_core = { version = "*", features = ["std"] }
+# burn-backend = ["dep:burn"]
+
+
+
 
 [dependencies.x25519-dalek  ]
 version = "2.0.1"
@@ -157,13 +170,6 @@ features = [
     "rng-getrandom",
     "rng-rand"
 ]
-
-[features]
-default = ["web"]
-web = ["dioxus/web"]
-gpu_backend = []
-bincodev2 = []
-bincodev1 = []
 
 # Exclude vendor from certain cargo operations
 [workspace]
@@ -192,7 +198,6 @@ members = [
     "crates/shared_analysis_types",
     "crates/gitaccount",
     "crates/solfunmeme_clifford",
-    "crates/solfunmeme_embedding",
     "crates/solfunmeme_solana_data",
     "crates/solfunmeme_function_analysis",
     "crates/solfunmeme_search_tantivy",
@@ -215,7 +220,10 @@ members = [
     "crates/solfunmeme_playground",
     "crates/solfunmeme_state",
     "crates/solfunmeme_indexer",
-    "crates/model2vec_rs_plugin",
+    "crates/chat_indexer",
+    "crates/vibe_prover",
+    
+    # "crates/model2vec_rs_plugin",
     "crates/layered_nlp_plugin",
     "crates/vibrato_plugin",
     "crates/keyword_extraction_rs_plugin",
@@ -247,6 +255,9 @@ members = [
 axum = "0.7" # Example server framework
 tokio = { version = "1.0", features = ["full"] } # For async runtime
 
+[patch.crates-io]
+tclifford = { path = "vendor/tclifford" }
+
 [profile]
 
 [profile.wasm-dev]
@@ -261,3 +272,5 @@ inherits = "dev"
 
 
 
+[features]
+with-embedding = ["solfunmeme_embedding"]

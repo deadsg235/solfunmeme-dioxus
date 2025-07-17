@@ -24,19 +24,6 @@ pub struct AnalyzedFunction {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct FunctionInfo {
-    pub function_name: String,
-    pub code_snippet: String,
-    pub semantic_summary: String,
-    pub file_path: String,
-    pub multivector_str: String,
-    pub sieve_address: String,
-    pub closest_emoji: String,
-    pub emoji_category: String,
-    pub emoji_distance: f32,
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnalyzedDocument {
     pub file_path: String,
     pub code_snippets: Vec<CodeChunk>,
@@ -52,7 +39,7 @@ pub struct AnalyzedToken {
     pub orbital_path: Option<Vec<(f64, f64)>>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub struct CodeChunk {
     pub language: String,
     pub content: String,
@@ -63,6 +50,10 @@ pub struct CodeChunk {
     pub line_count: usize,
     pub char_count: usize,
     pub test_result: String,
+    pub embedding: Vec<f32>,
+    pub multivector_str: String,
+    pub sieve_address: String,
+    pub closest_emojis: Vec<ClosestEmojiInfo>,
 }
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
@@ -259,10 +250,13 @@ pub fn create_code_snippet(
         char_count,
         test_result,
         embedding: Vec::new(),
+        multivector_str: String::new(),
+        sieve_address: String::new(),
+        closest_emojis: Vec::new(),
     }
 }
 
-pub fn analyze_rust_file(file_path: &Path) -> Vec<FunctionInfo> {
+pub fn analyze_rust_file(file_path: &Path) -> Vec<AnalyzedFunction> {
     let mut functions_info = Vec::new();
     let code = match std::fs::read_to_string(file_path) {
         Ok(code) => code,
@@ -285,16 +279,15 @@ pub fn analyze_rust_file(file_path: &Path) -> Vec<FunctionInfo> {
             let function_name = item_fn.sig.ident.to_string();
             let code_snippet = quote::quote! { #item_fn }.to_string();
             let semantic_summary = extract_semantic_summary(&item_fn);
-            functions_info.push(FunctionInfo {
+            functions_info.push(AnalyzedFunction {
                 function_name,
                 code_snippet,
                 semantic_summary,
                 file_path: file_path.to_string_lossy().replace("\\", "/").to_owned(),
                 multivector_str: String::new(), // Placeholder
                 sieve_address: String::new(),   // Placeholder
-                closest_emoji: String::new(),   // Placeholder
-                emoji_category: String::new(),  // Placeholder
-                emoji_distance: 0.0,            // Placeholder
+                closest_emojis: Vec::new(),   // Placeholder
+                orbital_path: None,            // Placeholder
             });
         }
     }
@@ -334,4 +327,3 @@ pub fn find_rust_files(project_root: &Path) -> Vec<String> {
 // The current content is a consolidation of data models and utility functions.
 // If the error reappears, carefully check for mismatched braces, parentheses, or brackets,
 // especially around macro expansions or complex type definitions.
-

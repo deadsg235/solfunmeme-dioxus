@@ -36,6 +36,14 @@ When contributing to this project, AI agents should:
 *   **Be Bold and Creative:** This is a research-oriented project. Don't be afraid to experiment with new ideas and push the boundaries of what's possible.
 *   **Document Everything:** Given the abstract nature of this project, clear and concise documentation is essential. Document your code, your data, and your ideas.
 
+### Project-Specific Directives: Code-Math Manifold and Ontology
+
+To further align with the `solfunmeme-dioxus` project's unique vision, AI agents must adhere to the following directives:
+
+*   **Code-Math Manifold Integration**: All code analysis, generation, and refactoring efforts should explicitly consider and leverage the principles of the Code-Math Manifold. This means understanding code as a mathematical object, utilizing geometric algebra for representation, and exploring its semantic relationships.
+*   **Ontology-Driven Semantic Mapping**: The project's semantic ontology, defined in `ontologies/zos/v1.ttl`, is central to mapping code concepts to emoji representations. When analyzing or generating code, refer to this ontology to ensure consistent and semantically accurate emoji assignments. This facilitates the visual exploration of the Code-Math Manifold.
+*   **Emoji-Based Communication**: Where appropriate and aligned with project conventions, use emoji representations to convey semantic meaning in code comments, documentation, or generated reports. This reinforces the project's unique approach to code understanding.
+
 This `GEMINI.md` file serves as a starting point. As the project evolves, so too will this protocol. Welcome to the manifold.
 
 ## Evolving Architecture and Introspection Philosophy

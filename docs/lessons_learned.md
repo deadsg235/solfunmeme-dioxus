@@ -207,6 +207,28 @@ This document captures key insights, best practices, and lessons learned during 
 - **Updates:** Regular update process
 - **Integration:** Ensure compatibility
 
+#### 15.1. Forking and Patching Dependencies
+**Lesson:** For critical dependencies, forking into a controlled organization and patching there provides maximum control over all aspects, including dynamic loading and interchangability.
+
+**Workflow Example (using `tongrams-rs` as an example):**
+1.  **Check Status:** `git status`
+2.  **Fork Repository:** `cd tongrams-rs/ && gh repo fork --remote --org meta-introspector`
+3.  **Check Status Again:** `git status`
+4.  **Commit Local Changes:** `git commit -m 'update' -a`
+5.  **Set New Remote Origin:** `git remote set-url origin https://USER:PAT@github.com/meta-introspector/tongrams-rs.git`
+6.  **Push Changes:** `git push origin main`
+
+#### 15.1. Forking and Patching Dependencies
+**Lesson:** For critical dependencies, forking into a controlled organization and patching there provides maximum control over all aspects, including dynamic loading and interchangability.
+
+**Workflow Example (using `tongrams-rs` as an example):**
+1.  **Check Status:** `git status`
+2.  **Fork Repository:** `cd tongrams-rs/ && gh repo fork --remote --org meta-introspector`
+3.  **Check Status Again:** `git status`
+4.  **Commit Local Changes:** `git commit -m 'update' -a`
+5.  **Set New Remote Origin:** `git remote set-url origin https://USER:PAT@github.com/meta-introspector/tongrams-rs.git`
+6.  **Push Changes:** `git push origin main`
+
 ## 🎯 Project Management
 
 ### 16. Task Prioritization

@@ -11,8 +11,10 @@ use anyhow::Result;
 use std::str::FromStr;
 use tracing::{info, instrument};
 
-use crate::{Ontology, CodeFile, Function, ClosestEmojiInfo, Term, BuyOrder, BuyOrderStatus};
+//use crate::{Ontology, CodeFile, Function, ClosestEmojiInfo, Term, BuyOrder, BuyOrderStatus};
+use crate::{Ontology, CodeFile,  Term, BuyOrder, BuyOrderStatus};
 
+#[cfg(feature = "with-bert")]
 #[instrument(skip(payer, rpc_url))]
 pub fn bootstrap_to_solana(
     ontology_data: Ontology,

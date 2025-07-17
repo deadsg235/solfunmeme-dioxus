@@ -2,7 +2,8 @@ use walkdir::WalkDir;
 use std::fs;
 use std::path::Path;
 use anyhow::Result;
-use solfunmeme_function_analysis::CodeChunk;
+use solfunmeme_function_analysis::{CodeChunk, ClosestEmojiInfo};
+use md5;
 
 pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Result<Vec<CodeChunk>> {
     let mut discovered_files = Vec::new();
@@ -40,17 +41,17 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
         match fs::read(&path) {
             Ok(bytes) => {
                 let content = String::from_utf8_lossy(&bytes).to_string();
-                let chunk = CodeChunk {
-                    language: ext.clone(), // Use file extension as language
-                    content: content.clone(),
-                    line_start: 1,
-                    line_end: content.lines().count(),
-                    content_hash: format!("{:x}", md5::compute(&content)), // Placeholder hash
-                    token_count: content.split_whitespace().count(), // Placeholder token count
-                    line_count: content.lines().count(),
-                    char_count: content.chars().count(),
-                    test_result: "Untested".to_string(), // Placeholder test result
-                };
+                let mut chunk = CodeChunk::default();
+                chunk.language = ext.clone(); // Use file extension as language
+                chunk.content = content.clone();
+                chunk.line_start = 1;
+                chunk.line_end = content.lines().count();
+                chunk.content_hash = format!("{:x}", md5::compute(&content)); // Placeholder hash
+                chunk.token_count = content.split_whitespace().count(); // Placeholder token count
+                chunk.line_count = content.lines().count();
+                chunk.char_count = content.chars().count();
+                chunk.test_result = "Untested".to_string(); // Placeholder test result
+                chunk.embedding = Vec::new();
                 code_chunks.push(chunk);
             },
             Err(e) => {
