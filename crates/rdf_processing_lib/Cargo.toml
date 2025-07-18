@@ -36,4 +36,4 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
 
 [features]
 default = []
-# gpu_backend = ["candle-core/cuda", "candle-nn", "candle-transformers"]
+# # gpu_backend = ["candle-core/cuda", "candle-nn", "candle-transformers"]

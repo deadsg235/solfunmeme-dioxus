@@ -8,6 +8,9 @@ Read our full philosophical waxing in [The Code-Math Manifold Manifesto](CODE_MA
 
 ## 🚀 Key Features
 
+### ⚠️ Known Issues
+- The `gline_rs_plugin` has been temporarily disabled due to persistent `ort-sys` compilation issues on Android. We are investigating a long-term solution.
+
 ### 🧠 Self-Awareness & Semantic Understanding
 - **Code-Math Manifold**: A foundational framework representing code as mathematical objects, enabling deep semantic analysis and visualization.
 - **Code Indexing & Search**: Advanced full-text search using Tantivy, enhanced with semantic similarity for intelligent code discovery.

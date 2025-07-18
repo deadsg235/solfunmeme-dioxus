@@ -117,7 +117,7 @@ members = [
     "crates/emoji_workflow_macro",
     # "crates/rust_sbert_plugin",
     "crates/llms_from_scratch_rs_plugin",
-    "crates/gline_rs_plugin",
+    # "crates/gline_rs_plugin", # Temporarily disabled due to ort-sys compilation issues on Android
     # "crates/extractous_plugin",
     # New refactored crates
     "crates/solfunmeme_extractor_system",

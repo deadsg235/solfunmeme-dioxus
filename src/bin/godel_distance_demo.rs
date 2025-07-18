@@ -33,7 +33,7 @@ fn main() {
     for i in 0..godel_numbers.len() {
         for j in (i + 1)..godel_numbers.len() {
             // Simplified distance calculation as original methods are not available
-            let distance = ((godel_numbers[i].value as f64 - godel_numbers[j].value as f64).abs());
+            let distance = (godel_numbers[i].value as f64 - godel_numbers[j].value as f64).abs();
             println!("  {} <-> {}: {:.4}", 
                 godel_numbers[i].to_string(), 
                 godel_numbers[j].to_string(), 

@@ -8,5 +8,5 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "1.0"
 solfunmeme_rdf_utils = { path = "../solfunmeme_rdf_utils" }
-sophia_turtle = { version = "0.9.0", path = "../../vendor/sophia_rs/turtle" }
-sophia_term = { version = "0.9.0", path = "../../vendor/sophia_rs/term" }
+
+

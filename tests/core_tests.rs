@@ -1,8 +1,9 @@
-use shared_analysis_types::{CodeSnippet, ExtractedFile, ProcessingFile, TestResult, DocumentSummary, ConversationTurn, UploadedFile, AnnotatedWord, Multivector, ProcessingStats, ProcessingError, LanguageConfig};
+use solfunmeme_function_analysis::{CodeChunk, ExtractedFile, ProcessingFile, TestResult, DocumentSummary, ConversationTurn, UploadedFile, AnnotatedWord, ProcessingStats, ProcessingError, LanguageConfig};
+use solfunmeme_clifford::SerializableMultivector;
 
 #[test]
 fn test_code_snippet_creation() {
-    let snippet = CodeSnippet {
+    let snippet = CodeChunk {
         language: "rust".to_string(),
         content: "fn test() { println!(\"hello\"); }".to_string(),
         line_start: 1,
@@ -26,7 +27,7 @@ fn test_code_snippet_creation() {
 
 #[test]
 fn test_extracted_file_creation() {
-    let snippet = CodeSnippet {
+    let snippet = CodeChunk {
         language: "rust".to_string(),
         content: "fn main() {}".to_string(),
         line_start: 1,
@@ -52,7 +53,7 @@ fn test_extracted_file_creation() {
 
 #[test]
 fn test_multivector_creation() {
-    let mv = Multivector {
+    let mv = SerializableMultivector {
         scalar: 1.0,
         vector: [0.1, 0.2, 0.3],
     };

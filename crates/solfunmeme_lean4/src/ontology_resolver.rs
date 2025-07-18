@@ -5,8 +5,11 @@ use std::io::BufReader;
 use std::path::Path;
 use solfunmeme_rdf_utils::sophia_api::graph::Graph;
 use solfunmeme_rdf_utils::sophia_inmem::graph::FastGraph;
-use sophia_turtle::parser::turtle;
-use sophia_term::{SimpleTerm, Term};
+use solfunmeme_rdf_utils::sophia_turtle::parser::turtle;
+use solfunmeme_rdf_utils::sophia_api::term::{SimpleTerm, Term};
+use solfunmeme_rdf_utils::sophia_api::iri::Iri;
+use solfunmeme_rdf_utils::sophia_api::source::TripleSource;
+use solfunmeme_rdf_utils::sophia_api::prelude::Triple;
 
 pub struct OntologyResolver {
     graph: FastGraph,
@@ -17,15 +20,15 @@ impl OntologyResolver {
     pub fn load(path: &Path) -> Result<Self, Box<dyn Error>> {
         let file = File::open(path)?;
         let reader = BufReader::new(file);
-        let graph: FastGraph = turtle::parse_bufread(reader).collect_quads()?.collect_graph()?;
+        let graph: FastGraph = turtle::parse_bufread(reader).collect_triples::<FastGraph>()?;
 
         let mut uri_to_emoji = HashMap::new();
-        let emoji_prop_uri = SimpleTerm::new_iri_unchecked("http://example.org/emoji#hasEmojiRepresentation");
+        let emoji_prop_uri = Iri::new_unchecked("http://example.org/emoji#hasEmojiRepresentation").into_term();
 
         for triple in graph.triples() {
             let triple = triple?;
             if triple.p() == &emoji_prop_uri {
-                uri_to_emoji.insert(triple.s().value().to_string(), triple.o().value().to_string());
+                uri_to_emoji.insert(triple.s().as_str().unwrap_or("").to_string(), triple.o().as_str().unwrap_or("").to_string());
             }
         }
 
