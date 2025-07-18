@@ -1,5 +1,5 @@
 use anyhow::Result;
-use sophia::inmem::graph::LightGraph;
+use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 use std::path::Path;
 use std::collections::HashMap;
 
@@ -11,14 +11,14 @@ pub fn generate_ontology(
     analyzed_functions: Vec<process_function::AnalyzedFunction>,
     output_path: &Path,
 ) -> Result<()> {
-    let mut graph = LightGraph::new();
-    let ns = namespaces::define_namespaces();
+    let mut graph = RdfGraph::new();
+    graph.namespaces = namespaces::define_namespaces();
 
     for func in analyzed_functions {
-        process_function::process_analyzed_function(&mut graph, func, &ns)?;
+        process_function::process_analyzed_function(&mut graph, func, &graph.namespaces)?;
     }
 
-    serialize::serialize_graph_to_file(&graph, output_path, &ns.ex_iri, &ns.rdf_iri, &ns.rdfs_iri, &ns.em_iri)?;
+    serialize::serialize_graph_to_file(&graph, output_path)?;
 
     Ok(())
 }
@@ -27,14 +27,14 @@ pub fn generate_token_ontology(
     analyzed_tokens: HashMap<String, process_function::AnalyzedToken>,
     output_path: &Path,
 ) -> Result<()> {
-    let mut graph = LightGraph::new();
-    let ns = namespaces::define_namespaces();
+    let mut graph = RdfGraph::new();
+    graph.namespaces = namespaces::define_namespaces();
 
     for (_token_str, token_data) in analyzed_tokens {
-        process_function::process_analyzed_token(&mut graph, token_data, &ns)?;
+        process_function::process_analyzed_token(&mut graph, token_data, &graph.namespaces)?;
     }
 
-    serialize::serialize_graph_to_file(&graph, output_path, &ns.ex_iri, &ns.rdf_iri, &ns.rdfs_iri, &ns.em_iri)?;
+    serialize::serialize_graph_to_file(&graph, output_path)?;
 
     Ok(())
 }

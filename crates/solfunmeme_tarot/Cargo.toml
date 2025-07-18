@@ -11,10 +11,5 @@ libloading = "0.10" # Updated to 0.10.x
 solfunmeme_rdf_utils = { path = "../solfunmeme_rdf_utils" }
 solfunmeme_function_analysis = { path = "../solfunmeme_function_analysis" }
 
-sophia_api = { path = "../../vendor/sophia_rs/api", version = "0.9.0" }
-sophia_inmem = { path = "../../vendor/sophia_rs/inmem", version = "0.9.0" }
-sophia_turtle = { path = "../../vendor/sophia_rs/turtle", version = "0.9.0" }
-sophia_iri = { path = "../../vendor/sophia_rs/iri", version = "0.9.0" }
-
 [dev-dependencies]
 tempfile = "3.10"

@@ -14,11 +14,6 @@ use hf_hub::{api::sync::Api, Repo, RepoType};
 #[cfg(feature = "with-candle")]
 use tokenizers::Tokenizer;
 
-use sophia_turtle::parser::turtle::parse_str;
-use sophia_api::term::SimpleTerm;
-use sophia_api::triple::Triple;
-use sophia_api::source::TripleSource;
-
 use solfunmeme_clifford::{SolMultivector};
 
 #[cfg(feature = "with-candle")]

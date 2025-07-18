@@ -1,14 +1,7 @@
 use anyhow::Result;
-use std::fs;
-use sophia_turtle::parser::turtle::TurtleParser;
-use sophia_api::term::Term;
-use sophia_api::source::TripleSource;
-use sophia_inmem::graph::FastGraph;
-use sophia_api::graph::Graph;
+use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
+use std::path::Path;
 
-pub fn read_and_parse_triples(ontology_path: &str) -> anyhow::Result<FastGraph> {
-    let turtle_data = fs::read_to_string(ontology_path)?;
-    let mut graph = FastGraph::new();
-    TurtleParser::new().parse_str(&turtle_data).add_to_graph(&mut graph)?;
-    Ok(graph)
+pub fn read_and_parse_triples(ontology_path: &str) -> anyhow::Result<RdfGraph> {
+    RdfGraph::from_file(Path::new(ontology_path))
 }

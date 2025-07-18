@@ -1,42 +1,27 @@
 use anyhow::Result;
-use sophia_api::prelude::*;
-use sophia_api::term::SimpleTerm;
-use sophia_api::MownStr;
-use sophia_inmem::graph::FastGraph;
-use sophia_iri::Iri;
-
+use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 use solfunmeme_clifford::generate_multivector_from_string;
-use crate::util::create_literal_simple_term;
 
-pub fn add_crate_data_internal(graph: &mut FastGraph, crates_root_prefix: &Iri<&'static str>, has_clifford_vector_iri: &Iri<&'static str>) -> Result<()> {
-    let all_triples: Vec<_> = graph.triples().filter_map(Result::ok).map(|t| {
-        (t.s().to_owned(), t.p().to_owned(), t.o().to_owned())
-    }).collect();
+pub fn add_crate_data_internal(graph: &mut RdfGraph) -> Result<()> {
+    let rdfs_label = graph.namespaces.get_term("rdfs", "label")?;
+    let has_clifford_vector_iri = graph.namespaces.get_term("onto", "hasCliffordVector")?;
+    let crates_root_prefix = graph.namespaces.get_base_iri("crates_root").unwrap().as_str();
 
-    let triples_to_add: Vec<_> = all_triples.into_iter().filter_map(|(s, p, o)| {
-        if p.iri() == Some(IriRef::new_unchecked(MownStr::from_ref("http://www.w3.org/2000/01/rdf-schema#label"))) {
-            if let Some(subject_iri) = s.iri().map(|iri_ref| IriRef::<MownStr<'static>>::new_unchecked(iri_ref.as_str().to_string().into())) {
-                if subject_iri.as_str().starts_with(crates_root_prefix.as_str()) {
-                    let crate_name = match o {
-                        SimpleTerm::LiteralDatatype(val, _) => val.to_string(),
-                        SimpleTerm::LiteralLanguage(val, _) => val.to_string(),
-                        _ => return None,
-                    };
-                    let multivector = generate_multivector_from_string(&crate_name);
-                    let multivector_str = format!("{}", multivector);
-                    return Some((
-                        subject_iri.to_owned(),
-                        has_clifford_vector_iri.to_owned(),
-                        create_literal_simple_term(&multivector_str),
-                    ));
-                }
+    let subjects = graph.get_subjects_with_property(&rdfs_label, &graph.namespaces.get_term("rdf", "type")?)?;
+
+    for subject in subjects {
+        if subject.iri().unwrap().as_str().starts_with(crates_root_prefix) {
+            if let Some(crate_name) = graph.get_property_value(&subject, &rdfs_label)? {
+                let multivector = generate_multivector_from_string(&crate_name);
+                let multivector_str = format!("{}", multivector);
+                graph.add_literal_triple(
+                    &subject,
+                    &has_clifford_vector_iri,
+                    &multivector_str,
+                    graph.namespaces.get_base_iri("xsd").unwrap(),
+                )?;
             }
         }
-        None
-    }).collect();
-
-    for (s, p, o) in triples_to_add {
-        graph.insert(&s, &p, &o)?;
     }
     Ok(())
 }

@@ -1,18 +1,9 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::error::Error;
-use std::fs::File;
-use std::io::BufReader;
 use std::path::Path;
 use libloading::{Library, Symbol};
-
-use sophia_api::graph::Graph;
-use sophia_inmem::graph::FastGraph;
-use sophia_turtle::parser::turtle;
-use sophia_api::term::{SimpleTerm, TTerm, Term};
-use sophia_iri::Iri;
-use sophia_api::source::TripleSource;
-use sophia_api::prelude::Triple;
+use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 
 /// Represents a generic semiotic entity loaded from the ontology.
 /// This can be a task, a concept, or eventually, a Tarot card,
@@ -41,56 +32,49 @@ pub struct FunctionBinding {
 
 /// Manages the ontology and the bindings between entities and functions.
 #[derive(Debug)]
-pub struct TarotEngine {
+pub struct TarotEngine<'a> {
     entities: HashMap<String, SemioticEntity>, // Maps URI to Entity
     bindings: HashMap<String, FunctionBinding>,
+    graph: RdfGraph<'a>,
 }
 
-impl TarotEngine {
+impl<'a> TarotEngine<'a> {
     /// Loads entities from a Turtle ontology file.
     pub fn from_ontology(path: &Path) -> Result<Self, Box<dyn Error>> {
-        let file = File::open(path)?;
-        let reader = BufReader::new(file);
-        let graph: FastGraph = turtle::parse_bufread(reader).collect_triples::<FastGraph>()?;
+        let mut graph = RdfGraph::from_file(path)?;
+        graph.namespaces.add_namespace("concept", "https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#vibe:")?;
+        graph.namespaces.add_namespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")?;
+        graph.namespaces.add_namespace("emoji", "https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#")?;
 
         let mut entities = HashMap::new();
-        let concept_type_uri = "https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#vibe:Concept"; // Updated URI
-        let rdf_type_uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-        let emoji_prop_uri = "https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#emoji"; // Updated URI
-        let category_prop_uri = "https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#vibe:category"; // Updated URI
+        let concept_term = graph.namespaces.get_term("concept", "Concept")?;
+        let type_term = graph.namespaces.get_term("rdf", "type")?;
 
-        let concept_term = Iri::new_unchecked(concept_type_uri).into_term();
-        let type_term = Iri::new_unchecked(rdf_type_uri).into_term();
-
-        let subjects = graph.subjects().filter_map(Result::ok).cloned().collect::<Vec<_>>();
+        let subjects = graph.get_subjects_with_property(&type_term, &concept_term)?;
 
         for subject in subjects {
-            let uri = if let Some(iri) = subject.as_iri() {
-                iri.as_str().to_string()
-            } else if let Some(lit) = subject.as_literal() {
-                lit.value().to_string()
-            } else {
-                continue; // Skip other term types
+            let uri = subject.iri().unwrap().as_str().to_string();
+            let label = uri.split('#').last().unwrap_or("").to_string();
+
+            let emoji_prop = graph.namespaces.get_term("emoji", "emoji")?;
+            let category_prop = graph.namespaces.get_term("emoji", "vibe:category")?;
+
+            let emoji = graph.get_property_value(&subject, &emoji_prop)?.unwrap_or_default();
+            let category = graph.get_property_value(&subject, &category_prop)?.unwrap_or_default();
+
+            let entity = SemioticEntity {
+                uri: uri.clone(),
+                label,
+                emoji,
+                category,
             };
-            if (graph as &dyn Graph).triples_with_sp(&subject, &type_term).any(|t| t.map_or(false, |t| t.o() == &concept_term)) {
-                let label = uri.split('#').last().unwrap_or("").to_string();
-
-                let emoji = get_property(&graph, &subject, emoji_prop_uri)?.unwrap_or_default();
-                let category = get_property(&graph, &subject, category_prop_uri)?.unwrap_or_default();
-
-                let entity = SemioticEntity {
-                    uri: uri.clone(),
-                    label,
-                    emoji,
-                    category,
-                };
-                entities.insert(uri, entity);
-            }
+            entities.insert(uri, entity);
         }
 
         Ok(TarotEngine {
             entities,
             bindings: HashMap::new(),
+            graph,
         })
     }
 
@@ -134,20 +118,4 @@ impl TarotEngine {
             Err(format!("No binding found for URI '{}'", uri).into())
         }
     }
-}
-
-fn get_property(graph: &FastGraph, subject: &SimpleTerm, property_uri: &str) -> Result<Option<String>, Box<dyn Error>> {
-    let prop_term = Iri::new_unchecked(property_uri).into_term();
-    if let Some(triple_res) = (graph as &dyn Graph).triples_with_sp(subject, &prop_term).next() {
-        let triple = triple_res?;
-        let object_str = if let Some(iri) = triple.o().as_iri() {
-            iri.as_str().to_string()
-        } else if let Some(lit) = triple.o().as_literal() {
-            lit.value().to_string()
-        } else {
-            return Ok(None); // Skip other term types
-        };
-        return Ok(Some(object_str));
-    }
-    Ok(None)
 }

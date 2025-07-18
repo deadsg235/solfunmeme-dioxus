@@ -5,8 +5,5 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0"
-sophia_api = { path = "../../vendor/sophia_rs/api" }
-sophia_inmem = { path = "../../vendor/sophia_rs/inmem" }
-sophia_turtle = { path = "../../vendor/sophia_rs/turtle" }
-sophia_iri = { path = "../../vendor/sophia_rs/iri" }
+solfunmeme_rdf_utils = { path = "../solfunmeme_rdf_utils" }
 solfunmeme_clifford = { path = "../solfunmeme_clifford" }

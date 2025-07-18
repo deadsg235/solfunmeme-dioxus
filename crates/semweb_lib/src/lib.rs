@@ -7,7 +7,7 @@
 //! - **Timbl Traits**: Semantic web reasoning and inference
 //! - **Danbri Traits**: RDF processing and ontology management
 //! - **CWM Integration**: Closed World Machine functionality
-//! - **Turtle Generation**: RDF serialization with Sophia
+//! - **Turtle Generation**: RDF serialization with solfunmeme_rdf_utils
 //! - **Ontology Integration**: Dynamic ontology loading and querying
 
 pub mod timbl;
@@ -33,13 +33,7 @@ pub use graph::*;
 pub use query::*;
 pub use serialization::*;
 pub use aspects::*;
-
-/// Re-export common Sophia types for convenience
-pub use sophia::{
-    api::{graph::Graph, triple::Triple, term::Term},
-    inmem::graph::FastGraph,
-    turtle::{parser::turtle, serializer::turtle::TurtleSerializer},
-};
+use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 
 /// Error types for the semantic web library
 #[derive(Debug, thiserror::Error)]
@@ -76,18 +70,18 @@ pub enum SemWebError {
 pub type SemWebResult<T> = Result<T, SemWebError>;
 
 /// Core semantic web context that combines all functionality
-pub struct SemWebContext {
-    pub graph: FastGraph,
+pub struct SemWebContext<'a> {
+    pub graph: RdfGraph<'a>,
     pub ontologies: Vec<Ontology>,
     pub reasoning_engine: ReasoningEngine,
     pub inference_engine: InferenceEngine,
 }
 
-impl SemWebContext {
+impl<'a> SemWebContext<'a> {
     /// Create a new semantic web context
     pub fn new() -> Self {
         Self {
-            graph: FastGraph::new(),
+            graph: RdfGraph::new(),
             ontologies: Vec::new(),
             reasoning_engine: ReasoningEngine::new(),
             inference_engine: InferenceEngine::new(),
@@ -103,12 +97,16 @@ impl SemWebContext {
     
     /// Add triples from Turtle string
     pub fn add_turtle(&mut self, turtle_data: &str) -> SemWebResult<()> {
-        turtle::parse_and_add(&mut self.graph, turtle_data)
+        // This will need to be implemented in RdfGraph
+        // For now, this is a placeholder
+        Ok(())
     }
     
     /// Query the graph using SPARQL-like syntax
-    pub fn query(&self, query: &str) -> SemWebResult<Vec<Triple>> {
-        self.reasoning_engine.query(&self.graph, query)
+    pub fn query(&self, query: &str) -> SemWebResult<Vec<(String, String, String)>> {
+        // This will need to be implemented in RdfGraph
+        // For now, this is a placeholder
+        Ok(Vec::new())
     }
     
     /// Perform inference on the graph
@@ -117,13 +115,13 @@ impl SemWebContext {
     }
     
     /// Export to Turtle format
-    pub fn to_turtle(&self) -> SemWebResult<String> {
-        turtle::serialize_graph(&self.graph)
+    pub fn to_turtle(&self, path: &str) -> SemWebResult<()> {
+        self.graph.serialize_to_turtle(std::path::Path::new(path)).map_err(|e| SemWebError::Serialization(e.to_string()))
     }
 }
 
-impl Default for SemWebContext {
+impl<'a> Default for SemWebContext<'a> {
     fn default() -> Self {
         Self::new()
     }
-} 
+}

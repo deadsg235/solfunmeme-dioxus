@@ -1,17 +1,11 @@
 use solfunmeme_function_analysis::CodeChunk;
-use solfunmeme_rdf_utils::ontology::Ontology;
+use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 use solfunmeme_clifford::encoder::BertCliffordEncoder;
 use solfunmeme_indexer::indexer::SearchIndex;
 use clap::Parser;
 use std::path::PathBuf;
 use std::collections::HashMap;
 use log::{info, error};
-use sophia_api::term::TTerm;
-use sophia_api::graph::Graph;
-use sophia_inmem::graph::FastGraph;
-use sophia_turtle::parser::TurtleParser;
-use sophia_iri::Iri;
-use sophia_term::SimpleTerm;
 use tclifford::Multivector;
 
 #[derive(Parser, Debug)]
@@ -55,12 +49,10 @@ pub fn vibe_check(args: VibeCheckArgs) -> Result<VibeCheckReport, Box<dyn std::e
 
     // Load ontology
     let ontology_path = args.ontology;
-    let ontology_content = std::fs::read_to_string(&ontology_path)
-        .map_err(|e| format!("Failed to read ontology file {:?}: {}", ontology_path, e))?;
-    let ontology_graph: FastGraph = TurtleParser::new()
-        .parse_str(&ontology_content)
-        .collect_graph()
-        .map_err(|e| format!("Failed to parse ontology: {}", e))?;
+    let mut ontology_graph = RdfGraph::from_file(&ontology_path)?;
+    ontology_graph.namespaces.add_namespace("term", "http://solfunmeme.com/terms#")?;
+    ontology_graph.namespaces.add_namespace("emoji", "https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#emoji")?;
+
 
     // Initialize Clifford encoder (mock for now)
     let encoder = BertCliffordEncoder::new();
@@ -72,19 +64,10 @@ pub fn vibe_check(args: VibeCheckArgs) -> Result<VibeCheckReport, Box<dyn std::e
         };
 
         // 2. Emoji Mapping
-        // This is a simplified example. A real implementation would query the ontology more robustly.
-        let term_iri = Iri::new(format!("http://solfunmeme.com/terms#{}", term_str))?;
-        let emoji_prop = Iri::new("https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#emoji")?;
+        let term_iri = ontology_graph.namespaces.get_term("term", term_str)?;
+        let emoji_prop = ontology_graph.namespaces.get_term("emoji", "emoji")?;
+        term_info.emoji = ontology_graph.get_object_literal(&term_iri, &emoji_prop)?;
 
-        for t in ontology_graph.triples_with_s(&term_iri) {
-            let t = t?;
-            if t.p().eq(&emoji_prop) {
-                if let Some(emoji_literal) = t.o().as_literal() {
-                    term_info.emoji = Some(emoji_literal.value().to_string());
-                    break;
-                }
-            }
-        }
 
         // 3. Hyperspace Location (Mock embedding for now)
         let mock_embedding = vec![0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]; // Dummy 8D vector
@@ -132,14 +115,11 @@ fn main() {
 @prefix vibe: <https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#vibe> .
 @prefix em: <https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#emoji> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix term: <http://solfunmeme.com/terms#> .
 
-em:code a em:Emoji ; em:name "code" ; em:utf "U+1F4BB" .
-em:math a em:Emoji ; em:name "math" ; em:utf "U+1F4C8" .
-em:vibe a em:Emoji ; em:name "vibe" ; em:utf "U+1F4A3" .
-
-vibe:code a rdfs:Class ; em:emoji "U+1F4BB" .
-vibe:math a rdfs:Class ; em:emoji "U+1F4C8" .
-vibe:vibe a rdfs:Class ; em:emoji "U+1F4A3" .
+term:code em:emoji "U+1F4BB" .
+term:math em:emoji "U+1F4C8" .
+term:vibe em:emoji "U+1F4A3" .
             "#,
         )
         .unwrap();

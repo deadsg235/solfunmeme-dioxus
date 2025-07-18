@@ -9,9 +9,7 @@ solfunmeme_clifford = { path = "../solfunmeme_clifford" }
 solfunmeme_function_analysis = { path = "../solfunmeme_function_analysis" }
 # shared_analysis_types = { path = "../shared_analysis_types" }
 
-sophia = "0.8"
-sophia_api = "0.8"
-sophia_turtle = "0.8"
+solfunmeme_rdf_utils = { path = "../solfunmeme_rdf_utils" }
 syn = { version = "2.0", features = ["full", "extra-traits"] }
 quote = "1.0"
 tclifford = { path = "../../vendor/tclifford" }

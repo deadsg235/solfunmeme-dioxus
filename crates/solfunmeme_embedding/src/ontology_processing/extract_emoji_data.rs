@@ -1,49 +1,28 @@
 use std::collections::HashMap;
-use sophia_api::term::Term;
-use sophia_api::triple::Triple;
-use sophia_inmem::graph::FastGraph;
-use sophia_api::graph::Graph;
+use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 
-// Helper function to convert a Term to a String
-fn term_to_string(term: &Term) -> String {
-    match term {
-        Term::Iri(iri) => iri.to_string(),
-        Term::Literal(lit) => lit.value().to_string(),
-        _ => "".to_string(), // Handle other term types as needed
-    }
-}
-
-pub fn extract_emoji_data(graph: &FastGraph) -> (HashMap<String, (String, String)>, HashMap<String, String>) {
+pub fn extract_emoji_data(graph: &mut RdfGraph) -> (HashMap<String, (String, String)>, HashMap<String, String>) {
     let mut emoji_data: HashMap<String, (String, String)> = HashMap::new(); // emoji_char -> (concept_id, category)
     let mut concept_descriptions: HashMap<String, String> = HashMap::new(); // concept_id -> description
 
-    let em_ns = "http://example.org/emoji#";
+    graph.namespaces.add_namespace("em", "http://example.org/emoji#").unwrap();
 
-    for t in graph.triples() {
-        let t = t.unwrap(); // Handle potential errors
-        let subject = term_to_string(t.s());
-        let predicate = term_to_string(t.p());
-        let object = term_to_string(t.o());
+    let emoji_prop = graph.namespaces.get_term("em", "emoji").unwrap();
+    let category_prop = graph.namespaces.get_term("em", "category").unwrap();
+    let description_prop = graph.namespaces.get_term("em", "description").unwrap();
+    let type_prop = graph.namespaces.get_term("rdf", "type").unwrap();
+    let emoji_class = graph.namespaces.get_term("em", "Emoji").unwrap();
 
-        if subject.starts_with(em_ns) {
-            let concept_id = subject.replace(em_ns, "");
-            if predicate == format!("{}emoji", em_ns) {
-                let emoji_char = object.trim_matches('"').to_string();
-                let category = graph.triples()
-                    .filter_map(|t2| {
-                        let t2 = t2.unwrap();
-                        if term_to_string(t2.s()) == subject && term_to_string(t2.p()) == format!("{}category", em_ns) {
-                            Some(term_to_string(t2.o()).trim_matches('"').to_string())
-                        } else {
-                            None
-                        }
-                    })
-                    .next()
-                    .unwrap_or_else(|| "Unknown".to_string());
-                emoji_data.insert(emoji_char, (concept_id.clone(), category));
-            } else if predicate == format!("{}description", em_ns) {
-                concept_descriptions.insert(concept_id, object.trim_matches('"').to_string());
-            }
+    let subjects = graph.get_subjects_with_property(&type_prop, &emoji_class).unwrap();
+
+    for subject in subjects {
+        let concept_id = subject.iri().unwrap().as_str().to_string();
+        if let Some(emoji_char) = graph.get_property_value(&subject, &emoji_prop).unwrap() {
+            let category = graph.get_property_value(&subject, &category_prop).unwrap().unwrap_or_else(|| "Unknown".to_string());
+            emoji_data.insert(emoji_char, (concept_id.clone(), category));
+        }
+        if let Some(description) = graph.get_property_value(&subject, &description_prop).unwrap() {
+            concept_descriptions.insert(concept_id, description);
         }
     }
     (emoji_data, concept_descriptions)
