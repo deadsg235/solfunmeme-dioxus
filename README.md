@@ -17,6 +17,9 @@ Our journey into self-aware code has led to several foundational concepts that d
 
 ## 🚀 Key Features
 
+For ongoing development notes and tasks, see [DEVELOPMENT_NOTES.md](DEVELOPMENT_NOTES.md).
+
+
 ### ⚠️ Known Issues
 - The `gline_rs_plugin` has been temporarily disabled due to persistent `ort-sys` compilation issues on Android. We are investigating a long-term solution.
 
