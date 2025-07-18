@@ -93,6 +93,7 @@ For comprehensive development guidelines applicable to all contributors, please 
 
 *   **Centralized Data Models:** Defining core data structures in a single, dedicated crate (like `solfunmeme_function_analysis` now serves for `CodeChunk` and related types) is paramount. This prevents duplication, ensures type consistency, and simplifies dependency management across the project.
 *   **"File=Function=Block=Vibe" Principle:** Adhering to this principle (small, focused files/functions/modules) significantly aids in debugging and refactoring. When issues arise, it's easier to isolate and address them in smaller, self-contained units.
+*   **Modularity and Functional Composition:** Breaking down code into smaller, more focused files and functions, and composing them functionally, significantly improves readability, maintainability, and reusability. This aligns with the "File=Function=Block=Vibe" principle, treating each function as a canonical basic block.
 *   **Tantivy API Usage:** When working with Tantivy, ensure correct usage of `CompactDocValue` and `Value` types for extracting data. Direct access to `as_text()` and `as_u64()` methods on `CompactDocValue` is not available; conversion to `Value` using `as_value()` is required first.
 *   **Module Structure and Imports:** Proper module declaration in `lib.rs` and correct import paths (e.g., `crate::module` vs. `super::module`) are crucial for successful compilation in multi-crate Rust projects.
 *   **Error Handling:** Always consider potential errors and implement robust error handling, especially for file operations and data conversions.
@@ -102,13 +103,14 @@ For comprehensive development guidelines applicable to all contributors, please 
 *   **File I/O Robustness:** When reading file contents, use `String::from_utf8_lossy` to gracefully handle non-UTF-8 or binary files.
 *   **Conceptual Alignment:** When introducing new conceptual frameworks, ensure they are meticulously aligned with the project's core philosophy and technical architecture to maintain coherence.
 *   **Configuration-driven development:** Transitioned from hardcoded strings and default values in CLI applications (`zos.rs`) to external `zos_config.toml` files. This improves maintainability and dynamism. `serde` and `toml` crates are used for deserializing the configuration. `format!` macro is used with string constants from the configuration to satisfy `println!` and `eprintln!` macro requirements.
-
-*   **Module Restructuring:** When refactoring modules, especially when moving declarations into separate files, ensure that `pub use` statements and import paths are meticulously updated to reflect the new structure. Incorrect paths can lead to `unresolved import` and `private module` errors.
 *   **`#[cfg(feature = "...")]` Attributes:** Be mindful of `cfg` attributes for features. If a feature is not defined in `Cargo.toml`, any code blocks guarded by `#[cfg(feature = "undefined-feature")]` will cause warnings. Extracting such code into separate modules and conditionally compiling the module itself can help manage this.
 *   **`Cow` for Trait Returns:** When a trait method needs to return a slice (`&[u8]`) but the underlying implementation might generate owned data (`Vec<u8>`), consider using `std::borrow::Cow` to avoid `cannot return value referencing temporary value` errors. This allows the implementation to return either a borrowed slice or an owned value that can be converted to a slice.
 *   **Dependency Configuration:** Pay close attention to how dependencies are configured in `Cargo.toml`, especially when dealing with binary crates being used as libraries. Misconfigurations can lead to warnings about missing `lib` targets.
 *   **Unused Code Cleanup:** Regularly remove unused imports, variables, and functions to keep the codebase clean and reduce warning noise. This also helps in maintaining a clear understanding of the active components of the project.
 *   **`ort-sys` Compilation Issues:** Encountered persistent compilation failures on AArch64 Android due to `ort-sys`, a transitive dependency. Resolved by aggressively disabling all embedding-related features and plugins (`solfunmeme_embedding`, `llms_from_scratch_rs_plugin`, `rust_sbert_plugin`, `rust_sentence_transformers_plugin`) and ensuring `ort` is commented out in `vendor/orp/Cargo.toml`. This highlights the need for careful dependency management, especially for platform-specific builds.
+*   **Refactor, Don't Just Edit:** When making changes, prioritize refactoring by splitting declarations into new, smaller files. Every edit should be seen as an opportunity to improve modularity and functional composition. There is always a way to split a file, aligning with the "File=Function=Block=Vibe" principle, where the vibe is the vector is the function is the canonical basic block.
+*   **Every Edit is a Split Opportunity:** Do not directly edit existing functions or large blocks of code. Instead, identify logical sub-components within the code you intend to modify and extract them into new, smaller functions or modules. This ensures that every change contributes to a more granular and composable codebase.
+*   **Hugging Face Datasets as Queues/Artifacts:** We can leverage Hugging Face datasets not only for publishing open-source results as artifacts but also as queues for multi-part compute workflows. This enables dual usage of datasets for both data sharing and inter-process communication.
 
 
 # Inspiration: The Hero's Wedge and the Code-Math Manifold
@@ -166,6 +168,28 @@ The block is sealed: the Hero’s Wedge sprung.
 View post engagements
 Post your reply
 ```
+
+## Workflow Overview: Semantic Code Indexing and LLM Feedback Loop
+
+Our comprehensive workflow for semantic code indexing and continuous improvement involves a multi-stage, distributed computing pipeline, leveraging JSON-based queues for inter-process communication and a Solana sidechain for persistent data storage.
+
+1.  **Code Indexing and Initial Semantic Assignment:**
+    *   Source code is indexed, and initial semantic assignments (e.g., emoji representations) are generated and integrated into the project's ontology.
+    *   This process produces structured data for subsequent stages.
+
+2.  **LLM-Driven Semantic Refinement:**
+    *   The system identifies common untagged elements or ambiguous semantic assignments within the indexed code.
+    *   These elements are then presented to Large Language Models (LLMs) for automated tagging and refinement.
+    *   LLM outputs are integrated back into the ontology, enriching its semantic depth.
+
+3.  **Automated Verification and Feedback:**
+    *   The refined semantic data is subjected to rigorous verification, including Rust compilation and Lean 4 proof checking on generated outputs.
+    *   Feedback from these verification steps (e.g., compilation errors, proof failures, or ambiguous data) is provided back to the LLMs, enabling a continuous learning and improvement cycle.
+
+4.  **Distributed Compute and Data Persistence:**
+    *   Each stage of this workflow operates as a distinct computational unit, communicating via JSON files exchanged through a queueing mechanism (e.g., Hugging Face Datasets).
+    *   All critical workflow data and semantic artifacts are persistently stored on a Solana sidechain, which utilizes RocksDB internally, ensuring data integrity, provenance, and decentralized access.
+
 
 ## Geometric Algebra Representation (Python)
 

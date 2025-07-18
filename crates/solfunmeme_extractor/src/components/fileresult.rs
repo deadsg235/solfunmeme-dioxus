@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 use crate::{
     components::codesnippet::CodeSnippetView,
 };
-use shared_analysis_types::{CodeSnippet, ExtractedFile};
+use solfunmeme_function_analysis::{CodeChunk, ExtractedFile};
 
 #[component]
 pub fn FileResults(

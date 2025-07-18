@@ -8,13 +8,10 @@ use crate::styles::STYLE;
 use dioxus::html::FileEngine;
 //use crate::extractor::error;
 //use crate::extractor::ProcessingFile;
-use shared_analysis_types::UploadedFile;
-use shared_analysis_types::DocumentSummary;
-//use crate::types::UploadedFile;
-
-use shared_analysis_types::CodeSnippet;
-use shared_analysis_types::{ProcessingFile};
-use shared_analysis_types::AnnotatedWord;
+use solfunmeme_function_analysis::{ProcessingFile, UploadedFile, DocumentSummary, AnnotatedWord, CodeChunk};
+// use solfunmeme_embedding::embed_text;
+use solfunmeme_clifford::{SolMultivector, SerializableMultivector};
+// use candle_core::Device;
 
 async fn read_files(
     file_engine: Arc<dyn FileEngine>,
@@ -150,36 +147,32 @@ pub fn embedding_app() -> Element {
 
     //    let mut annotator = WikidataAnnotator::new();
 
-    // let annotate_word = move |word: &str| -> AnnotatedWord {
-    //     let embedding = if *enable_embedding.read() {
-    //         rust_bert_embed_with_context(word, None)
-    //     } else {
-    //         vec![0.0; 384]
-    //     };
-    //     let reduced = pca_reduce(&embedding, 3);
-    //     let sentiment = if *enable_sentiment.read() {
-    //         WasmSentimentAnalyzer::new().analyze(word)
-    //     } else {
-    //         0.0
-    //     };
-    //     let multivector = Multivector::from_vector(reduced.try_into().unwrap_or([0.0; 3]));
+    let annotate_word = move |word: &str| -> AnnotatedWord {
+        let embedding = vec![0.0; 384];
+        /*if *enable_embedding.read() {
+            match embed_text(word, &device) {
+                Ok(emb) => emb,
+                Err(_) => vec![0.0; 384],
+            }
+        } else {
+            vec![0.0; 384]
+        };*/
 
-    //     if *enable_wikidata.read() {
-    //         if let Some(data) = wikidata_data.read().as_ref() {
-    //             return annotator.annotate_word(word, data);
-    //         }
-    //     }
+        let mut coeffs = [0.0; 8];
+        for i in 0..std::cmp::min(embedding.len(), 8) {
+            coeffs[i] = embedding[i];
+        }
+        let clifford_vector = Some(SolMultivector::from_vector(&coeffs).unwrap());
 
-    //     AnnotatedWord {
-    //         word: word.to_string(),
-    //         primary_emoji: "🌟".to_string(),
-    //         secondary_emoji: "✨".to_string(),
-    //         wikidata: None,
-    //         embedding,
-    //         multivector,
-    //         sentiment,
-    //     }
-    // };
+        AnnotatedWord {
+            word: word.to_string(),
+            primary_emoji: "🌟".to_string(),
+            secondary_emoji: "✨".to_string(),
+            wikidata: None,
+            embedding,
+            clifford_vector,
+        }
+    };
 
     //     let generate_program = |annotations: &[AnnotatedWord]| -> String {
     //         let struct_defs = r#"

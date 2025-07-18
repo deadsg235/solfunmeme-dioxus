@@ -6,7 +6,7 @@ license = "AGPL-3.0"
 
 [[bin]]
 name = "prepare_sources"
-path = "src/bin/prepare_sources.rs"
+path = "src/main.rs"
 
 [dependencies]
 solfunmeme_search_tantivy = { path = "../solfunmeme_search_tantivy" }
@@ -30,9 +30,13 @@ md5 = "0.7"
 tclifford = "0.1"
 orbital_sim_lib = { path = "../orbital_sim_lib" }
 nalgebra = "0.32"
+sophia_api = { path = "../../vendor/sophia_rs/api" }
+sophia_inmem = { path = "../../vendor/sophia_rs/inmem" }
+sophia_turtle = { path = "../../vendor/sophia_rs/turtle" }
+sophia_iri = { path = "../../vendor/sophia_rs/iri" }
 
 # solfunmeme_embedding = { path = "../solfunmeme_embedding" }
-# candle-core = { version = "0.2.0" }
+# candle-core = { version = "0.2.2" }
 # tokenizers = { version = "0.15.0" }
 
 [features]

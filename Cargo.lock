@@ -7823,6 +7823,10 @@ dependencies = [
  "solfunmeme_input_fs",
  "solfunmeme_search_tantivy",
  "solfunmeme_solana_data",
+ "sophia_api 0.9.0",
+ "sophia_inmem 0.9.0",
+ "sophia_iri 0.9.0",
+ "sophia_turtle 0.9.0",
  "syn 2.0.104",
  "tclifford",
  "walkdir",
@@ -9076,23 +9080,6 @@ name = "scopeguard"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
-
-[[package]]
-name = "scraper"
-version = "0.17.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c95a930e03325234c18c7071fd2b60118307e025d6fff3e12745ffbf63a3d29c"
-dependencies = [
- "ahash 0.8.12",
- "cssparser 0.31.2",
- "ego-tree 0.6.3",
- "getopts",
- "html5ever 0.26.0",
- "once_cell",
- "selectors 0.25.0",
- "smallvec 1.15.1",
- "tendril",
-]
 
 [[package]]
 name = "scraper"
@@ -11913,6 +11900,7 @@ dependencies = [
  "anyhow",
  "rand 0.8.5",
  "serde",
+ "sha2 0.10.9",
  "tclifford",
 ]
 
@@ -12054,11 +12042,11 @@ dependencies = [
  "regex",
  "rrust_kontekst",
  "rrust_kontekst_base",
- "scraper 0.17.1",
  "serde",
  "serde_json",
  "sha2 0.10.9",
- "shared_analysis_types",
+ "solfunmeme_clifford",
+ "solfunmeme_function_analysis",
  "walkdir",
  "wasm-bindgen",
  "web-sys",
@@ -12090,6 +12078,7 @@ dependencies = [
  "quote",
  "serde",
  "shared_analysis_types",
+ "solfunmeme_clifford",
  "syn 2.0.104",
  "walkdir",
 ]
@@ -12133,6 +12122,8 @@ dependencies = [
  "serde",
  "serde_json",
  "solfunmeme_rdf_utils",
+ "sophia_term 0.9.0",
+ "sophia_turtle 0.9.0",
  "thiserror 1.0.69",
 ]
 
@@ -12524,6 +12515,19 @@ dependencies = [
 [[package]]
 name = "sophia_api"
 version = "0.9.0"
+dependencies = [
+ "lazy_static",
+ "mownstr 0.3.1",
+ "regex",
+ "resiter 0.5.0",
+ "serde",
+ "sophia_iri 0.9.0",
+ "thiserror 2.0.12",
+]
+
+[[package]]
+name = "sophia_api"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "103a4138290bec38b9b10e0682b613173a102bca9fd2a74b3db25346e22599a3"
 dependencies = [
@@ -12532,7 +12536,7 @@ dependencies = [
  "regex",
  "resiter 0.5.0",
  "serde",
- "sophia_iri 0.9.0",
+ "sophia_iri 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror 2.0.12",
 ]
 
@@ -12582,10 +12586,18 @@ dependencies = [
 [[package]]
 name = "sophia_inmem"
 version = "0.9.0"
+dependencies = [
+ "sophia_api 0.9.0",
+ "thiserror 2.0.12",
+]
+
+[[package]]
+name = "sophia_inmem"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebacba4fa7baed53f89844a5c9e5962d6232a449d5b450b9de72bb67f0203332"
 dependencies = [
- "sophia_api 0.9.0",
+ "sophia_api 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror 2.0.12",
 ]
 
@@ -12612,6 +12624,16 @@ dependencies = [
  "regex",
  "serde",
  "thiserror 1.0.69",
+]
+
+[[package]]
+name = "sophia_iri"
+version = "0.9.0"
+dependencies = [
+ "oxiri",
+ "regex",
+ "serde",
+ "thiserror 2.0.12",
 ]
 
 [[package]]
@@ -12690,6 +12712,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "sophia_rio"
+version = "0.9.0"
+dependencies = [
+ "rio_api 0.8.5",
+ "sophia_api 0.9.0",
+ "sophia_iri 0.9.0",
+]
+
+[[package]]
 name = "sophia_sparql"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -12700,10 +12731,10 @@ dependencies = [
  "num-bigint 0.4.6",
  "oxiri",
  "rand 0.8.5",
- "sophia_api 0.9.0",
- "sophia_inmem 0.9.0",
- "sophia_iri 0.9.0",
- "sophia_term 0.9.0",
+ "sophia_api 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sophia_inmem 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sophia_iri 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sophia_term 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "spargebra",
  "thiserror 2.0.12",
  "uuid",
@@ -12738,11 +12769,19 @@ dependencies = [
 [[package]]
 name = "sophia_term"
 version = "0.9.0"
+dependencies = [
+ "lazy_static",
+ "sophia_api 0.9.0",
+]
+
+[[package]]
+name = "sophia_term"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "51f4c42480d50d14ac7128ad738d28b68368938cb6f507c9505f68875fd0e4db"
 dependencies = [
  "lazy_static",
- "sophia_api 0.9.0",
+ "sophia_api 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -12778,6 +12817,19 @@ dependencies = [
  "sophia_api 0.8.0",
  "sophia_iri 0.8.0",
  "sophia_rio 0.8.0",
+]
+
+[[package]]
+name = "sophia_turtle"
+version = "0.9.0"
+dependencies = [
+ "lazy_static",
+ "oxiri",
+ "regex",
+ "rio_turtle 0.8.5",
+ "sophia_api 0.9.0",
+ "sophia_iri 0.9.0",
+ "sophia_rio 0.9.0",
 ]
 
 [[package]]

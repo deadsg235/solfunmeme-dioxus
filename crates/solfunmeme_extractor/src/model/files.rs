@@ -1,6 +1,6 @@
 use crate::model::snippets::extract_markdown_snippets as extract_code_snippets_fn;
 // use crate::model::extract_html::extract_code_snippets_from_html;
-use shared_analysis_types::{ExtractedFile, ProcessingFile};
+use solfunmeme_function_analysis::{ExtractedFile, ProcessingFile};
 use dioxus::{
     html::FileEngine,
     signals::{Signal, Writable},
@@ -8,7 +8,7 @@ use dioxus::{
 use gloo_timers::future::TimeoutFuture;
 use std::{pin::Pin, sync::Arc};
 
-async fn process_file_engine_with_callbacks<F, P>(
+async fn _process_file_engine_with_callbacks<F, P>(
     file_engine: Arc<dyn FileEngine>,
     mut on_file_start: F,
     mut on_progress: P,

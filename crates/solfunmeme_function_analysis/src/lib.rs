@@ -3,6 +3,7 @@ use std::path::Path;
 use walkdir::WalkDir;
 use md5;
 use serde::{Deserialize, Serialize};
+use solfunmeme_clifford::{SolMultivector, SerializableMultivector};
 
 
 
@@ -42,13 +43,8 @@ pub struct CodeChunk {
     pub line_count: usize,
     pub char_count: usize,
     pub test_result: String,
-    
-}
-
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct Multivector {
-    pub scalar: f32,
-    pub vector: [f32; 3],
+    pub embedding: Vec<f32>,
+    pub clifford_vector: Option<SerializableMultivector>,
 }
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
@@ -107,7 +103,7 @@ pub struct AnnotatedWord {
     pub secondary_emoji: String,
     pub wikidata: Option<String>,
     pub embedding: Vec<f32>,
-    pub multivector: Multivector,
+    pub clifford_vector: Option<SerializableMultivector>,
 }
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
@@ -238,7 +234,8 @@ pub fn create_code_snippet(
         line_count,
         char_count,
         test_result,
-        
+        embedding: Vec::new(),
+        clifford_vector: None,
     }
 }
 

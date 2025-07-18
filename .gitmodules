@@ -472,3 +472,6 @@
 [submodule "vendor/float-cmp"]
 	path = vendor/float-cmp
 	url = https://github.com/mikedilger/float-cmp
+[submodule "vendor/sophia_rs"]
+	path = vendor/sophia_rs
+	url = https://github.com/meta-introspector/sophia_rs.git

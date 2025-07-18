@@ -5,8 +5,8 @@ use std::io::BufReader;
 use std::path::Path;
 use solfunmeme_rdf_utils::sophia_api::graph::Graph;
 use solfunmeme_rdf_utils::sophia_inmem::graph::FastGraph;
-use solfunmeme_rdf_utils::sophia_parser::turtle;
-use solfunmeme_rdf_utils::sophia_term::{SimpleTerm, Term};
+use sophia_turtle::parser::turtle;
+use sophia_term::{SimpleTerm, Term};
 
 pub struct OntologyResolver {
     graph: FastGraph,

@@ -5,7 +5,6 @@
 use crate::describable::Describable;
 use crate::hash::{Hash, Hasher};
 use std::borrow::Cow;
-use std::borrow::Cow;
 
 /// Represents a fundamental, content-addressable unit in the system.
 ///

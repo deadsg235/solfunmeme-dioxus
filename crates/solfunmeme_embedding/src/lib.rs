@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use std::fs;
 use serde_json;
 
-use sophia_turtle::parser::turtle::parse_str;
-use sophia_api::term::SimpleTerm;
+use sophia_turtle::parser::turtle::TurtleParser;
+use sophia_api::term::Term;
 use sophia_api::triple::Triple;
 use sophia_api::source::TripleSource;
 
@@ -20,12 +20,11 @@ pub fn load_emoji_multivectors(ontology_path: &str) -> Result<HashMap<String, (S
     Ok(emoji_multivectors)
 }
 
-// Helper function to convert a SimpleTerm to a String
-fn term_to_string(term: &SimpleTerm) -> String {
+// Helper function to convert a Term to a String
+fn term_to_string(term: &Term) -> String {
     match term {
-        SimpleTerm::Iri(iri) => iri.to_string(),
-        SimpleTerm::LiteralDatatype(value, _) => value.to_string(),
-        SimpleTerm::LiteralLanguage(value, _) => value.to_string(),
+        Term::Iri(iri) => iri.to_string(),
+        Term::Literal(lit) => lit.value().to_string(),
         _ => "".to_string(), // Handle other term types as needed
     }
 }
