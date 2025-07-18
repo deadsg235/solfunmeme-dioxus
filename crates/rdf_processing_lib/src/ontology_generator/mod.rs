@@ -30,7 +30,7 @@ pub fn generate_token_ontology(
     let mut graph = LightGraph::new();
     let ns = namespaces::define_namespaces();
 
-    for (token_str, token_data) in analyzed_tokens {
+    for (_token_str, token_data) in analyzed_tokens {
         process_function::process_analyzed_token(&mut graph, token_data, &ns)?;
     }
 

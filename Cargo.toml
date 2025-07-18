@@ -96,7 +96,7 @@ members = [
     "crates/solfunmeme_wallet_integration",
     "crates/solfunmeme_core_logic",
     "crates/solfunmeme_generated",
-    "crates/solfunmeme_tools",
+    # "crates/solfunmeme_tools",
     "crates/task_manager",
     "crates/model_lib",
     "crates/playground_lib",
@@ -115,9 +115,9 @@ members = [
     "crates/solfunmeme_function_analysis",
     "crates/solfunmeme_search_tantivy",
     "crates/rdf_output",
-    "crates/git_plugin",
+    # "crates/git_plugin",
     "crates/zip_plugin",
-    "crates/s3_plugin",
+    # "crates/s3_plugin",
     "crates/workflow_manager",
     "crates/emoji_lang_plugin",
     "crates/jsonld_plugin",
@@ -177,7 +177,7 @@ members = [
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 #rust-bert = "0.23" # Only include rust-bert for non-WASM targets
 #bzip2 = "*"
-axum = "0.7" # Example server framework
+# axum = { path = "vendor/axum" } # Example server framework
 tokio = { version = "1.0", features = ["full"] } # For async runtime
 
 [patch.crates-io]

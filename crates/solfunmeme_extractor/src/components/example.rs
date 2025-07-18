@@ -170,8 +170,8 @@ mod tests {
 // }
 
 use crate::components::example::{
-    Comp1::register_embedding_component, Comp2::register_bert_test_component,
-    Comp4::register_experimental_component, Comp5::register_text_processor_component,
+    comp1::register_embedding_component, comp2::register_bert_test_component,
+    comp4::register_experimental_component, comp5::register_text_processor_component,
 };
 
 pub fn register_all_components() {

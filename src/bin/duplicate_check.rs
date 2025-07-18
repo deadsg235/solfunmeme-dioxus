@@ -190,8 +190,8 @@ impl DuplicateChecker {
                 let similarity = self.calculate_similarity(module_snippets[i], module_snippets[j]);
                 if similarity > 0.8 {
                     println!("⚠️  Found similar code in module: {:?} (similarity: {:.2})", module_path, similarity);
-                    println!("   File 1: {}:{}", module_snippets[i].file_path, module_snippets[i].line_start);
-                    println!("   File 2: {}:{}", module_snippets[j].file_path, module_snippets[j].line_start);
+                    println!("   File 1: {}:{}-{}", module_snippets[i].file_path, module_snippets[i].line_start, module_snippets[i].line_end);
+                println!("   File 2: {}:{}-{}", module_snippets[j].file_path, module_snippets[j].line_start, module_snippets[j].line_end);
                     return false;
                 }
             }

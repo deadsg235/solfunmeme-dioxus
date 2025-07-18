@@ -1,6 +1,6 @@
 use solfunmeme_serde_utils::serde::{Deserialize, Serialize};
 use solfunmeme_serde_utils::toml;
-use std::path::PathBuf;
+
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CliConfig {

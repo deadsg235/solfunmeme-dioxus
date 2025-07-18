@@ -13,7 +13,7 @@ dioxus = { version = "0.6.3", features = ["router"] }
 dioxus-router = "0.6.3"
 dioxus-web = "0.6.3"
 dioxus-motion = "0.3.1"
-dioxus-clipboard = "0.2.0"
+# dioxus-clipboard = "0.2.0"
 dioxus-html = "0.6.3"
 dioxus-logger = "0.6.2"
 serde = { version = "1.0", features = ["derive"] }

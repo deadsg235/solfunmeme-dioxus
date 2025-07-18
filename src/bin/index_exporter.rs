@@ -66,7 +66,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         match cli.format.as_str() {
             "json" => export_to_json(&documents, &cli.output)?,
             "csv" => export_to_csv(&documents, &cli.output)?,
-            "markdown" => export_to_markdown(&documents, &cli.output)?,
+            "markdown" => export_to_markdown(&documents, cli.output.as_ref())?,
             _ => {
                 eprintln!("{}: {}", solfunmeme_messages::UNSUPPORTED_FORMAT_ERROR, cli.format);
                 return Ok(());

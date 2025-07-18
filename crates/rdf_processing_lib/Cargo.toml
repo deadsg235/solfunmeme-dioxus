@@ -20,7 +20,7 @@ tclifford = { path = "../../vendor/tclifford" }
 # candle-nn = { path = "../../vendor/candle/candle-nn", optional = true }
 # candle-transformers = { path = "../../vendor/candle/candle-transformers", optional = true }
 # hf-hub = "0.4"
-# tokenizers = "0.15"
+# tokenizers = "0.15" 
 mownstr = "0.1"
 sophia_iri = "0.8"
 serde_json = "1.0"

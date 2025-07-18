@@ -7,7 +7,7 @@ use solana_sdk::{
 };
 use borsh::BorshSerialize;
 use anyhow::Result;
-use tracing::{info, instrument};
+use tracing::info;
 
 use crate::{Ontology, CodeFile, Term, BuyOrder};
 

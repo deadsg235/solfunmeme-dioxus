@@ -1,5 +1,5 @@
 use std::error::Error;
-use tantivy::schema::{TantivyDocument, Schema, Value};
+use tantivy::schema::{TantivyDocument, Schema};
 use tantivy::schema::document::CompactDocValue;
 use crate::types::IndexedDocument;
 use super::value_extractors::{extract_text_value, extract_u64_from_compact_doc_value};
