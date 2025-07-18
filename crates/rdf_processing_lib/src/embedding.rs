@@ -15,7 +15,7 @@ use tokenizers::Tokenizer;
 const MODEL_ID: &str = "sentence-transformers/all-MiniLM-L12-v2";
 const REVISION: &str = "main";
 
-pub fn embed_text(text: &str) -> Result<Vec<f32>> {
+pub fn embed_text(_text: &str) -> Result<Vec<f32>> {
     let api = Api::new()?;
     let repo = Repo::with_revision(MODEL_ID.to_string(), RepoType::Model, REVISION.to_string());
     let tokenizer_path = api.get(&repo, "tokenizer.json")?;
