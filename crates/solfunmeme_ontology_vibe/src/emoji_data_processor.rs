@@ -1,12 +1,13 @@
 use anyhow::Result;
 use sophia_api::prelude::*;
-use sophia_inmem::graph::FastGraph;
-use sophia_iri::{Iri, AsIriRef};
-use solfunmeme_clifford::generate_multivector_from_string;
 use sophia_api::term::SimpleTerm;
 use sophia_api::MownStr;
+use sophia_inmem::graph::FastGraph;
+use sophia_iri::{Iri, AsIriRef};
 
-pub fn process_emoji_data(graph: &mut FastGraph, em_emoji_iri: &Iri<&'static str>, has_clifford_vector_iri: &Iri<&'static str>) -> anyhow::Result<()> {
+use solfunmeme_clifford::generate_multivector_from_string;
+
+pub fn add_emoji_data_internal(graph: &mut FastGraph, em_emoji_iri: &Iri<&'static str>, has_clifford_vector_iri: &Iri<&'static str>) -> Result<()> {
     let mut new_triples = Vec::new();
     for t in graph.triples() {
         let t = t?;
@@ -18,7 +19,7 @@ pub fn process_emoji_data(graph: &mut FastGraph, em_emoji_iri: &Iri<&'static str
                 new_triples.push(sophia_api::triple::Triple::new(
                     subject_iri.to_owned(),
                     has_clifford_vector_iri.to_owned(),
-                    multivector_str.into_term(),
+                    multivector_str.to_string().into_term(),
                 ));
             }
         }

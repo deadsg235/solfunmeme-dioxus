@@ -5896,12 +5896,9 @@ dependencies = [
  "solfunmeme_function_analysis",
  "solfunmeme_input_fs",
  "solfunmeme_language_processing",
+ "solfunmeme_ontology_vibe",
  "solfunmeme_search_tantivy",
  "solfunmeme_solana_data",
- "sophia_api 0.9.0",
- "sophia_inmem 0.9.0",
- "sophia_iri 0.9.0",
- "sophia_turtle 0.9.0",
  "syn 2.0.104",
  "tclifford",
  "walkdir",
@@ -9973,6 +9970,18 @@ dependencies = [
  "shared_types_lib",
  "solfunmeme_clifford",
  "tclifford",
+]
+
+[[package]]
+name = "solfunmeme_ontology_vibe"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "solfunmeme_clifford",
+ "sophia_api 0.9.0",
+ "sophia_inmem 0.9.0",
+ "sophia_iri 0.9.0",
+ "sophia_turtle 0.9.0",
 ]
 
 [[package]]

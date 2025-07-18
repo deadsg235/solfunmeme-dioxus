@@ -13,7 +13,8 @@ use std::path::PathBuf;
 
 use solfunmeme_clifford::generate_multivector_from_string;
 
-pub fn load_graph() -> Result<FastGraph> {
+// Internal function to load graph from TTL files
+pub fn load_graph_internal() -> Result<FastGraph> {
     let index_ttl_path = PathBuf::from("ontologies/index.ttl");
     let zos_v1_ttl_path = PathBuf::from("ontologies/zos/v1.ttl");
 
@@ -28,7 +29,8 @@ pub fn load_graph() -> Result<FastGraph> {
     Ok(graph)
 }
 
-pub fn add_crate_data(graph: &mut FastGraph, crates_root_prefix: &Iri<&'static str>, has_clifford_vector_iri: &Iri<&'static str>) -> Result<()> {
+// Internal function to add crate data to the graph
+pub fn add_crate_data_internal(graph: &mut FastGraph, crates_root_prefix: &Iri<&'static str>, has_clifford_vector_iri: &Iri<&'static str>) -> Result<()> {
     let mut new_triples = Vec::new();
     for t in graph.triples() {
         let t = t?;
@@ -45,7 +47,7 @@ pub fn add_crate_data(graph: &mut FastGraph, crates_root_prefix: &Iri<&'static s
                     new_triples.push(sophia_api::triple::Triple::new(
                         subject_iri.to_owned(),
                         has_clifford_vector_iri.to_owned(),
-                        multivector_str.into_term(),
+                        multivector_str.to_string().into_term(),
                     ));
                 }
             }
@@ -57,7 +59,8 @@ pub fn add_crate_data(graph: &mut FastGraph, crates_root_prefix: &Iri<&'static s
     Ok(())
 }
 
-pub fn add_emoji_data(graph: &mut FastGraph, em_emoji_iri: &Iri<&'static str>, has_clifford_vector_iri: &Iri<&'static str>) -> Result<()> {
+// Internal function to add emoji data to the graph
+pub fn add_emoji_data_internal(graph: &mut FastGraph, em_emoji_iri: &Iri<&'static str>, has_clifford_vector_iri: &Iri<&'static str>) -> Result<()> {
     let mut new_triples = Vec::new();
     for t in graph.triples() {
         let t = t?;
@@ -69,7 +72,7 @@ pub fn add_emoji_data(graph: &mut FastGraph, em_emoji_iri: &Iri<&'static str>, h
                 new_triples.push(sophia_api::triple::Triple::new(
                     subject_iri.to_owned(),
                     has_clifford_vector_iri.to_owned(),
-                    multivector_str.into_term(),
+                    multivector_str.to_string().into_term(),
                 ));
             }
         }
@@ -80,7 +83,8 @@ pub fn add_emoji_data(graph: &mut FastGraph, em_emoji_iri: &Iri<&'static str>, h
     Ok(())
 }
 
-pub fn serialize_graph(graph: &FastGraph, em_prefix: &Iri<&'static str>, crates_root_prefix: &Iri<&'static str>) -> Result<()> {
+// Internal function to serialize the graph to a TTL file
+pub fn serialize_graph_internal(graph: &FastGraph, em_prefix: &Iri<&'static str>, crates_root_prefix: &Iri<&'static str>) -> Result<()> {
     let index_ttl_path = PathBuf::from("ontologies/index.ttl");
     let mut config = TurtleConfig::new();
     let prefix_map_vec = vec![(Prefix::new_unchecked("em").to_owned(), em_prefix.to_owned().into()), (Prefix::new_unchecked("crates_root").to_owned(), crates_root_prefix.to_owned().into())];

@@ -33,8 +33,6 @@ orbital_sim_lib = { path = "../orbital_sim_lib" }
 nalgebra = "0.32"
 solfunmeme_ontology_vibe = { path = "../solfunmeme_ontology_vibe" }
 
-# solfunmeme_embedding = { path = "../solfunmeme_embedding" }
-# candle-core = { version = "0.2.2" }
 # tokenizers = { version = "0.15.0" }
 
 [features]

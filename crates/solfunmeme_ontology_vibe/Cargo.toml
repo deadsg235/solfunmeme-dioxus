@@ -10,4 +10,3 @@ sophia_inmem = { path = "../../vendor/sophia_rs/inmem" }
 sophia_turtle = { path = "../../vendor/sophia_rs/turtle" }
 sophia_iri = { path = "../../vendor/sophia_rs/iri" }
 solfunmeme_clifford = { path = "../solfunmeme_clifford" }
-sophia_api_prelude = { path = "../../vendor/sophia_rs/api/prelude" }
