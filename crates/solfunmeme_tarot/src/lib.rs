@@ -5,11 +5,14 @@ use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
 use libloading::{Library, Symbol};
-use solfunmeme_lean4::OntologyResolver as Lean4OntologyResolver;
-use solfunmeme_rdf_utils::sophia_api::graph::Graph;
-use solfunmeme_rdf_utils::sophia_inmem::graph::FastGraph;
-use solfunmeme_rdf_utils::sophia_parser::turtle;
-use solfunmeme_rdf_utils::sophia_term::{SimpleTerm, Term};
+
+use sophia_api::graph::Graph;
+use sophia_inmem::graph::FastGraph;
+use sophia_turtle::parser::turtle;
+use sophia_api::term::{SimpleTerm, TTerm, Term};
+use sophia_iri::Iri;
+use sophia_api::source::TripleSource;
+use sophia_api::prelude::Triple;
 
 /// Represents a generic semiotic entity loaded from the ontology.
 /// This can be a task, a concept, or eventually, a Tarot card,
@@ -40,44 +43,40 @@ pub struct FunctionBinding {
 #[derive(Debug)]
 pub struct TarotEngine {
     entities: HashMap<String, SemioticEntity>, // Maps URI to Entity
-    bindings: HashMap<String, FunctionBinding>, // Maps URI to FunctionBinding
-    lean4_resolver: Option<Lean4OntologyResolver>,
+    bindings: HashMap<String, FunctionBinding>,
 }
 
 impl TarotEngine {
     /// Loads entities from a Turtle ontology file.
-    pub fn from_ontology(path: &Path, lean4_resolver: Option<Lean4OntologyResolver>) -> Result<Self, Box<dyn Error>> {
+    pub fn from_ontology(path: &Path) -> Result<Self, Box<dyn Error>> {
         let file = File::open(path)?;
         let reader = BufReader::new(file);
-        let graph: sophia::inmem::graph::FastGraph = turtle::parse_bufread(reader).collect_quads()?.collect_graph()?;
+        let graph: FastGraph = turtle::parse_bufread(reader).collect_triples::<FastGraph>()?;
 
         let mut entities = HashMap::new();
-        let concept_type_uri = "http://example.org/emoji#Concept";
+        let concept_type_uri = "https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#vibe:Concept"; // Updated URI
         let rdf_type_uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-        let emoji_prop_uri = "http://example.org/emoji#emoji";
-        let category_prop_uri = "http://example.org/emoji#category";
+        let emoji_prop_uri = "https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#emoji"; // Updated URI
+        let category_prop_uri = "https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#vibe:category"; // Updated URI
 
-        let concept_term = SimpleTerm::new_iri_unchecked(concept_type_uri);
-        let type_term = SimpleTerm::new_iri_unchecked(rdf_type_uri);
+        let concept_term = Iri::new_unchecked(concept_type_uri).into_term();
+        let type_term = Iri::new_unchecked(rdf_type_uri).into_term();
 
-        let subjects = graph.subjects().cloned().collect::<Vec<_>>();
+        let subjects = graph.subjects().filter_map(Result::ok).cloned().collect::<Vec<_>>();
 
         for subject in subjects {
-            if graph.triples_with_sp(&subject, &type_term).any(|t| t.map_or(false, |t| t.o() == &concept_term)) {
-                let uri = subject.value().to_string();
+            let uri = if let Some(iri) = subject.as_iri() {
+                iri.as_str().to_string()
+            } else if let Some(lit) = subject.as_literal() {
+                lit.value().to_string()
+            } else {
+                continue; // Skip other term types
+            };
+            if (graph as &dyn Graph).triples_with_sp(&subject, &type_term).any(|t| t.map_or(false, |t| t.o() == &concept_term)) {
                 let label = uri.split('#').last().unwrap_or("").to_string();
 
-                let mut emoji = get_property(&graph, &subject, emoji_prop_uri)?.unwrap_or_default();
+                let emoji = get_property(&graph, &subject, emoji_prop_uri)?.unwrap_or_default();
                 let category = get_property(&graph, &subject, category_prop_uri)?.unwrap_or_default();
-
-                // If a Lean4 resolver is provided and the URI is a Lean4 concept, use its emoji
-                if let Some(resolver) = &lean4_resolver {
-                    if uri.starts_with("http://example.org/lean4_code#") {
-                        if let Some(lean4_emoji) = resolver.resolve_emoji(&uri) {
-                            emoji = lean4_emoji.clone();
-                        }
-                    }
-                }
 
                 let entity = SemioticEntity {
                     uri: uri.clone(),
@@ -92,7 +91,6 @@ impl TarotEngine {
         Ok(TarotEngine {
             entities,
             bindings: HashMap::new(),
-            lean4_resolver,
         })
     }
 
@@ -107,7 +105,7 @@ impl TarotEngine {
             self.bindings.insert(uri.to_string(), binding);
             Ok(())
         } else {
-            Err(format!("Entity with URI '{}' not found in ontology.", uri))
+            Err(format!("Entity with URI '{}' not found in ontology.", uri).into())
         }
     }
 
@@ -126,8 +124,8 @@ impl TarotEngine {
     /// Executes the function bound to a semiotic entity, returning an ExecutableMeme object.
     pub fn execute_binding(&self, uri: &str) -> Result<Box<dyn ExecutableMeme>, Box<dyn Error>> {
         if let Some(binding) = self.get_binding(uri) {
-            let lib = Library::open(&binding.library_path)?;
-            let func: Symbol<unsafe extern "C" fn() -> Box<dyn ExecutableMeme>> = unsafe { lib.symbol(&binding.function_symbol) }?;
+            let lib = unsafe { Library::new(&binding.library_path)? };
+            let func: Symbol<unsafe extern "C" fn() -> Box<dyn ExecutableMeme>> = unsafe { lib.symbol(binding.function_symbol.as_bytes()) }?;
             
             println!("Executing function for entity: {:?}", binding.entity);
             let result = unsafe { func() };
@@ -138,11 +136,18 @@ impl TarotEngine {
     }
 }
 
-fn get_property(graph: &sophia::inmem::graph::FastGraph, subject: &SimpleTerm, property_uri: &str) -> Result<Option<String>, Box<dyn Error>> {
-    let prop_term = SimpleTerm::new_iri_unchecked(property_uri);
-    if let Some(triple_res) = graph.triples_with_sp(subject, &prop_term).next() {
+fn get_property(graph: &FastGraph, subject: &SimpleTerm, property_uri: &str) -> Result<Option<String>, Box<dyn Error>> {
+    let prop_term = Iri::new_unchecked(property_uri).into_term();
+    if let Some(triple_res) = (graph as &dyn Graph).triples_with_sp(subject, &prop_term).next() {
         let triple = triple_res?;
-        return Ok(Some(triple.o().value().to_string()));
+        let object_str = if let Some(iri) = triple.o().as_iri() {
+            iri.as_str().to_string()
+        } else if let Some(lit) = triple.o().as_literal() {
+            lit.value().to_string()
+        } else {
+            return Ok(None); // Skip other term types
+        };
+        return Ok(Some(object_str));
     }
     Ok(None)
 }

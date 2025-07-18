@@ -3,11 +3,12 @@ use std::error::Error;
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
+
 use solfunmeme_rdf_utils::sophia_api::graph::Graph;
 use solfunmeme_rdf_utils::sophia_inmem::graph::FastGraph;
 use solfunmeme_rdf_utils::sophia_turtle::parser::turtle;
-use solfunmeme_rdf_utils::sophia_api::term::{SimpleTerm, Term};
-use solfunmeme_rdf_utils::sophia_api::iri::Iri;
+use solfunmeme_rdf_utils::sophia_api::term::{SimpleTerm, TTerm};
+use sophia_iri::Iri;
 use solfunmeme_rdf_utils::sophia_api::source::TripleSource;
 use solfunmeme_rdf_utils::sophia_api::prelude::Triple;
 
@@ -23,12 +24,26 @@ impl OntologyResolver {
         let graph: FastGraph = turtle::parse_bufread(reader).collect_triples::<FastGraph>()?;
 
         let mut uri_to_emoji = HashMap::new();
-        let emoji_prop_uri = Iri::new_unchecked("http://example.org/emoji#hasEmojiRepresentation").into_term();
+        let emoji_prop_uri = Iri::new_unchecked("https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#emoji").into_term();
 
         for triple in graph.triples() {
             let triple = triple?;
             if triple.p() == &emoji_prop_uri {
-                uri_to_emoji.insert(triple.s().as_str().unwrap_or("").to_string(), triple.o().as_str().unwrap_or("").to_string());
+                let subject_str = if let Some(iri) = triple.s().as_iri() {
+                    iri.as_str().to_string()
+                } else if let Some(lit) = triple.s().as_literal() {
+                    lit.value().to_string()
+                } else {
+                    continue; // Skip other term types
+                };
+                let object_str = if let Some(iri) = triple.o().as_iri() {
+                    iri.as_str().to_string()
+                } else if let Some(lit) = triple.o().as_literal() {
+                    lit.value().to_string()
+                } else {
+                    continue; // Skip other term types
+                };
+                uri_to_emoji.insert(subject_str, object_str);
             }
         }
 

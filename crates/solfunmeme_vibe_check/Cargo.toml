@@ -1,0 +1,25 @@
+[package]
+name = "solfunmeme_vibe_check"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+solfunmeme_function_analysis = { path = "../solfunmeme_function_analysis" }
+solfunmeme_rdf_utils = { path = "../solfunmeme_rdf_utils" }
+solfunmeme_clifford = { path = "../solfunmeme_clifford" }
+solfunmeme_indexer = { path = "../solfunmeme_indexer" }
+clap = { version = "4", features = ["derive"] }
+sophia_api = { path = "../../vendor/sophia_rs/api" }
+sophia_inmem = { path = "../../vendor/sophia_rs/inmem" }
+sophia_term = { path = "../../vendor/sophia_rs/term" }
+sophia_turtle = { path = "../../vendor/sophia_rs/turtle" }
+sophia_iri = { path = "../../vendor/sophia_rs/iri" }
+sophia_rio = { path = "../../vendor/sophia_rs/rio" }
+sophia = { path = "../../vendor/sophia_rs/sophia" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+log = "0.4"
+env_logger = "0.11"
+walkdir = "2.5"
+tclifford = { path = "../../vendor/tclifford", features = ["serde"] }
+bincode = "1.3"

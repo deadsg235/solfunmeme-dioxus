@@ -23,7 +23,12 @@ vibe:ProjectVibe a owl:Class ;
     rdfs:label "Project Vibe" ;
     rdfs:comment "Represents the overall semantic resonance or 'meme' of a software project." ;
     em:hasEmojiRepresentation rdfs:Literal ;
-    vibe:hasSemanticName rdfs:Literal .
+    vibe:hasSemanticName rdfs:Literal ;
+    vibe:hasCrateBloat xsd:decimal ;
+    vibe:hasLinesOfCode xsd:integer ;
+    vibe:hasFileTreeStructure xsd:string ;
+    vibe:hasTestCoverage xsd:decimal ;
+    vibe:hasTestCoverageReport xsd:anyURI .
 
 # Existing Emoji Definitions (unchanged for now, will be updated as needed)
 em:puzzle_piece a em:Emoji ; em:name "puzzle piece" ; em:utf "U+1F9E9" .
