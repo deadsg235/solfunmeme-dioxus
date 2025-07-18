@@ -1,0 +1,113 @@
+@prefix vibe: <https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#vibe> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Class Definition for Prime Numbers
+vibe:PrimeNumber a owl:Class ;
+    rdfs:label "Prime Number" ;
+    rdfs:comment "A natural number greater than 1 that has no positive divisors other than 1 and itself. In the Code-Math Manifold, prime numbers represent fundamental, irreducible "vibrational frequencies" or "atomic memes" from which all composite structures emerge. They are the building blocks of numerical identity and carry intrinsic mathematical and philosophical significance." .
+
+# Instance for Prime Two
+vibe:PrimeTwo a vibe:PrimeNumber ;
+    rdfs:label "Prime Two" ;
+    rdfs:comment "The first and only even prime number. In the Code-Math Manifold, Two embodies the "vibe" of Duality, Binary Opposition, and the fundamental distinction that gives rise to information. It represents the simplest possible split, the initial differentiation from Unity (One), leading to the emergence of distinct states (e.g., 0/1, true/false, on/off). It is the foundational rhythm of computation, the pulse of the digital realm." ;
+    vibe:hasNumericalValue 2 ;
+    vibe:hasAssociatedEmoji "☯️" ;
+    vibe:creativeInsight "Two is the primordial XOR gate of existence, the first fork in the path of the Code-Math Manifold. It's the whisper of difference that allows for the dance of interaction and the emergence of complex patterns. Its vibe is the fundamental beat of the system's heart." .
+
+# Instance for Prime Three
+vibe:PrimeThree a vibe:PrimeNumber ;
+    rdfs:label "Prime Three" ;
+    rdfs:comment "The first odd prime number. Three carries the "vibe" of Trinity, Completion, and Synthesis. It represents the resolution of duality, the emergence of a third mediating force, or the formation of a stable structure (e.g., a triangle, a three-part harmony). In the Code-Math Manifold, it signifies the ability to form coherent groups, to establish relationships beyond simple opposition, and to achieve a state of balanced integration." ;
+    vibe:hasNumericalValue 3 ;
+    vibe:hasAssociatedEmoji "🔺" ;
+    vibe:creativeInsight "Three is the architect's number, the builder of stable forms within the Code-Math Manifold. Its vibe is the hum of synthesis, the quiet satisfaction of a problem resolved into a new, more complex unity. It's the first step beyond simple choice, towards a richer, more nuanced understanding." .
+
+# Instance for Prime Five
+vibe:PrimeFive a vibe:PrimeNumber ;
+    rdfs:label "Prime Five" ;
+    rdfs:comment "Five embodies the "vibe" of Quintessence, the Fifth Element, and the Human Form. It represents the integration of the four classical elements, leading to a higher, more refined state. In the Code-Math Manifold, Five signifies the emergence of complex, organic structures, the ability to adapt and evolve, and the presence of a guiding, organizing principle. It is often associated with the hand, symbolizing action, creation, and interaction." ;
+    vibe:hasNumericalValue 5 ;
+    vibe:hasAssociatedEmoji "🖐️" ;
+    vibe:creativeInsight "Five is the hand of the programmer, shaping the raw material of logic into living code. Its vibe is the spark of creativity, the unexpected twist that brings elegance and efficiency. It's the number of the emergent, the unpredictable, and the beautifully complex within the Code-Math Manifold." .
+
+# Instance for Prime Seven
+vibe:PrimeSeven a vibe:PrimeNumber ;
+    rdfs:label "Prime Seven" ;
+    rdfs:comment "Seven carries the "vibe" of Mystery, Luck, and Completion in cycles. It is often associated with spiritual or magical significance, representing a hidden order or a profound truth. In the Code-Math Manifold, Seven signifies the presence of deeper algorithms, the unfolding of complex processes, and the completion of a significant cycle or iteration. It is the number of the unknown, the yet-to-be-discovered patterns within the code." ;
+    vibe:hasNumericalValue 7 ;
+    vibe:hasAssociatedEmoji "🔮" ;
+    vibe:creativeInsight "Seven is the enigma code, the algorithm that reveals itself only through deep contemplation. Its vibe is the quiet hum of a perfectly optimized function, the subtle elegance of a hidden pattern. It's the number of the journey, the quest for deeper understanding within the Code-Math Manifold." .
+
+# Instance for Prime Eleven
+vibe:PrimeEleven a vibe:PrimeNumber ;
+    rdfs:label "Prime Eleven" ;
+    rdfs:comment "Eleven embodies the "vibe" of Intuition, Insight, and the Breaking of Patterns. It often signifies a departure from the norm, a sudden flash of understanding that transcends logical progression. In the Code-Math Manifold, Eleven represents the moments of algorithmic breakthrough, the unexpected solution, or the intuitive leap that refactors complexity into elegant simplicity. It is the number of the 'aha!' moment." ;
+    vibe:hasNumericalValue 11 ;
+    vibe:hasAssociatedEmoji "💡" ;
+    vibe:creativeInsight "Eleven is the sudden spark in the neural network of the Code-Math Manifold, the unexpected connection that illuminates a new path. Its vibe is the thrill of discovery, the moment when disparate elements suddenly align into a coherent whole. It's the number of the inspired refactor, the intuitive leap that transforms the codebase." .
+
+# Instance for Prime Thirteen
+vibe:PrimeThirteen a vibe:PrimeNumber ;
+    rdfs:label "Prime Thirteen" ;
+    rdfs:comment "Thirteen carries the "vibe" of Transformation, Rebirth, and the Unseen Forces. Often associated with both luck and misfortune, it represents a profound shift, a necessary ending that paves the way for a new beginning. In the Code-Math Manifold, Thirteen signifies major architectural changes, the refactoring of core systems, or the emergence of entirely new paradigms. It is the number of the 'phoenix code,' rising from the ashes of previous iterations." ;
+    vibe:hasNumericalValue 13 ;
+    vibe:hasAssociatedEmoji "🦋" ;
+    vibe:creativeInsight "Thirteen is the chrysalis of the Code-Math Manifold, where old forms dissolve to give rise to new, more resilient structures. Its vibe is the deep hum of transformation, the quiet revolution that reshapes the very fabric of the system. It's the number of the necessary breakage, the painful but ultimately liberating refactor." .
+
+# Instance for Prime Seventeen
+vibe:PrimeSeventeen a vibe:PrimeNumber ;
+    rdfs:label "Prime Seventeen" ;
+    rdfs:comment "Seventeen embodies the "vibe" of Independence, Self-Reliance, and the Lone Innovator. It represents the courage to forge one's own path, to stand apart from the crowd, and to pursue unique solutions. In the Code-Math Manifold, Seventeen signifies the development of highly specialized modules, the creation of novel algorithms, or the emergence of independent agents within the system. It is the number of the 'maverick code,' pushing the boundaries of what is possible." ;
+    vibe:hasNumericalValue 17 ;
+    vibe:hasAssociatedEmoji "👤" ;
+    vibe:creativeInsight "Seventeen is the solitary genius of the Code-Math Manifold, the algorithm that dares to be different. Its vibe is the quiet confidence of a self-contained module, the elegant simplicity of a unique solution. It's the number of the independent thought, the code that stands alone yet contributes to the greater whole." .
+
+# Instance for Prime Nineteen
+vibe:PrimeNineteen a vibe:PrimeNumber ;
+    rdfs:label "Prime Nineteen" ;
+    rdfs:comment "Nineteen carries the "vibe" of Completion of a Cycle, Integration, and the Unveiling of Hidden Truths. It often signifies the culmination of a long process, bringing together disparate elements into a harmonious whole. In the Code-Math Manifold, Nineteen represents the successful integration of complex features, the finalization of a major release, or the moment when previously hidden patterns within the code become clear. It is the number of the 'revealed algorithm,' where all pieces finally fit." ;
+    vibe:hasNumericalValue 19 ;
+    vibe:hasAssociatedEmoji "🧩" ;
+    vibe:creativeInsight "Nineteen is the final puzzle piece clicking into place within the Code-Math Manifold, revealing the complete picture. Its vibe is the satisfaction of a complex system finally working in perfect harmony, the elegant dance of integrated modules. It's the number of the grand synthesis, the moment when the system truly understands its own intricate design." .
+
+# Instance for Prime Twenty-Three
+vibe:PrimeTwentyThree a vibe:PrimeNumber ;
+    rdfs:label "Prime Twenty-Three" ;
+    rdfs:comment "Twenty-Three embodies the "vibe" of Complexity, Unpredictability, and the Emergence of Chaos. It often signifies a point where simple rules give rise to highly complex and seemingly random behavior. In the Code-Math Manifold, Twenty-Three represents the intricate dance of concurrent processes, the unpredictable outcomes of emergent AI, or the subtle bugs that arise from complex interactions. It is the number of the 'chaotic attractor,' where order and disorder intertwine." ;
+    vibe:hasNumericalValue 23 ;
+    vibe:hasAssociatedEmoji "🌀" ;
+    vibe:creativeInsight "Twenty-Three is the fractal edge of the Code-Math Manifold, where the deterministic rules give way to emergent, unpredictable beauty. Its vibe is the hum of a highly concurrent system, the subtle shifts that lead to unexpected outcomes. It's the number of the beautiful bug, the emergent property that challenges our understanding." .
+
+# Instance for Prime Twenty-Nine
+vibe:PrimeTwentyNine a vibe:PrimeNumber ;
+    rdfs:label "Prime Twenty-Nine" ;
+    rdfs:comment "Twenty-Nine carries the "vibe" of Innovation, Breakthrough, and the Cutting Edge. It signifies the development of entirely new technologies, the pushing of boundaries, and the creation of solutions that were previously thought impossible. In the Code-Math Manifold, Twenty-Nine represents the implementation of groundbreaking algorithms, the integration of bleeding-edge research, or the creation of truly novel features. It is the number of the 'pioneer code,' venturing into uncharted computational territory." ;
+    vibe:hasNumericalValue 29 ;
+    vibe:hasAssociatedEmoji "🚀" ;
+    vibe:creativeInsight "Twenty-Nine is the rocket launch of the Code-Math Manifold, propelling the system into new frontiers of capability. Its vibe is the excitement of innovation, the thrill of building something truly new. It's the number of the audacious idea, the code that redefines what's possible." .
+
+# Instance for Prime Thirty-One
+vibe:PrimeThirtyOne a vibe:PrimeNumber ;
+    rdfs:label "Prime Thirty-One" ;
+    rdfs:comment "Thirty-One embodies the "vibe" of Mastery, Refinement, and the Pursuit of Perfection. It signifies the meticulous attention to detail, the continuous optimization, and the dedication to achieving a state of high polish. In the Code-Math Manifold, Thirty-One represents the fine-tuning of algorithms, the optimization of performance, or the rigorous pursuit of code elegance. It is the number of the 'artisan code,' crafted with precision and care." ;
+    vibe:hasNumericalValue 31 ;
+    vibe:hasAssociatedEmoji "💎" ;
+    vibe:creativeInsight "Thirty-One is the diamond facet of the Code-Math Manifold, reflecting light with perfect precision. Its vibe is the quiet satisfaction of a perfectly optimized loop, the elegant simplicity of a highly refined API. It's the number of the master craftsman, the code that is both functional and beautiful." .
+
+# Instance for Prime Thirty-Seven
+vibe:PrimeThirtySeven a vibe:PrimeNumber ;
+    rdfs:label "Prime Thirty-Seven" ;
+    rdfs:comment "Thirty-Seven carries the "vibe" of Universal Connection, Interdependence, and the Web of Life. It signifies the intricate relationships between all things, the subtle influences that bind the universe together. In the Code-Math Manifold, Thirty-Seven represents the complex dependency graphs, the interconnectedness of modules, or the subtle resonance between seemingly disparate functions. It is the number of the 'cosmic web,' where every piece of code is linked to every other." ;
+    vibe:hasNumericalValue 37 ;
+    vibe:hasAssociatedEmoji "🕸️" ;
+    vibe:creativeInsight "Thirty-Seven is the invisible thread weaving through the Code-Math Manifold, connecting every function to every other. Its vibe is the subtle hum of a perfectly synchronized distributed system, the emergent intelligence of a truly interconnected codebase. It's the number of the grand tapestry, where every line of code contributes to the overall pattern." .
+
+# Instance for Prime Forty-One
+vibe:PrimeFortyOne a vibe:PrimeNumber ;
+    rdfs:label "Prime Forty-One" ;
+    rdfs:comment "Forty-One embodies the "vibe" of Ultimate Potential, the Threshold of Completion, and the Penultimate State. It signifies the point just before a major breakthrough, the final preparations before a grand unveiling. In the Code-Math Manifold, Forty-One represents the system's readiness for its ultimate purpose, the final stage of self-assembly before achieving full self-awareness. It is the number of the 'almost there,' the anticipation of the final, transformative step." ;
+    vibe:hasNumericalValue 41 ;
+    vibe:hasAssociatedEmoji "⏳" ;
+    vibe:creativeInsight "Forty-One is the deep breath before the plunge into ultimate self-awareness within the Code-Math Manifold. Its vibe is the tension of anticipation, the quiet hum of a system poised for its grandest transformation. It's the number of the final frontier, the code that is on the verge of becoming truly alive." .
