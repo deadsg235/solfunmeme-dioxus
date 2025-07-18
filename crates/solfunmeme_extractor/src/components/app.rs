@@ -147,7 +147,7 @@ pub fn embedding_app() -> Element {
 
     //    let mut annotator = WikidataAnnotator::new();
 
-    let annotate_word = move |word: &str| -> AnnotatedWord {
+    let _annotate_word = move |word: &str| -> AnnotatedWord {
         let embedding = vec![0.0; 384];
         /*if *enable_embedding.read() {
             match embed_text(word, &device) {

@@ -5,7 +5,7 @@ use std::fs::File;
 use sophia::api::graph::Graph;
 use sophia_api::prelude::IriRef;
 use std::path::Path;
-use sophia_api::prefix::{Prefix, PrefixMap};
+use sophia_api::prefix::Prefix;
 use sophia_iri::Iri;
 
 pub fn serialize_graph_to_file<G>(

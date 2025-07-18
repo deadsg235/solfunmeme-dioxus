@@ -1,12 +1,10 @@
 use borsh::{BorshSerialize, BorshDeserialize};
 use solana_program::pubkey::Pubkey;
-use sha2::{Sha256, Digest};
 use solana_client::rpc_client::RpcClient;
 use solana_sdk::{
     instruction::{AccountMeta, Instruction},
     pubkey::Pubkey as SolanaPubkey, // Alias to avoid conflict with solana_program::pubkey::Pubkey
     signature::{Keypair, Signer},
-    system_instruction,
     transaction::Transaction,
 };
 use anyhow::Result;

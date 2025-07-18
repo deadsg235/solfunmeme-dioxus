@@ -3,7 +3,7 @@ use rrust_kontekst_base::{get_mcp_tools_schema, invoke_mcp_tool, McpError};
 use serde_json::json;
 use std::error::Error;
 
-mod Comp1 {
+mod comp1 {
 
     #[rrust_kontekst::mcp_component(
         menu = "core",
@@ -18,7 +18,7 @@ mod Comp1 {
     }
 }
 
-mod Comp2 {
+mod comp2 {
     use rrust_kontekst::mcp_component;
     // Example 2: Component with custom configuration
     #[mcp_component(
@@ -36,7 +36,7 @@ mod Comp2 {
     }
 }
 
-mod Comp4 {
+mod comp4 {
     use rrust_kontekst::mcp_component;
     // Example 3: Disabled component (for development)
     #[mcp_component(
@@ -52,7 +52,7 @@ mod Comp4 {
     }
 }
 
-pub mod Comp5 {
+pub mod comp5 {
     use rrust_kontekst::mcp_component;
     // Example 4: High-priority component
     #[mcp_component(

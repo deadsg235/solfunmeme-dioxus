@@ -1,5 +1,5 @@
 use sophia::api::graph::MutableGraph;
-use sophia_api::prelude::{IriRef, Term};
+use sophia_api::prelude::*;
 use sophia_api::term::SimpleTerm;
 
 use crate::ontology_generator::namespaces::Namespaces;

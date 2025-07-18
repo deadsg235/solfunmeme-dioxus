@@ -1,11 +1,10 @@
 
 
-use crate::model::content_hash::create_content_hash;
-use solfunmeme_function_analysis::TestResult;
 use markdown::mdast::Node;
 use crate::model::estimate_token_count::estimate_token_count;
 //use crate::extractor::model::token_count::estimate_token_count;
 use solfunmeme_function_analysis::CodeChunk;
+use solfunmeme_function_analysis::TestResult;
 
 /// Recursively walks the AST to find code snippets.  
 pub fn walk_ast(node: &Node, snippets: &mut Vec<CodeChunk>) {

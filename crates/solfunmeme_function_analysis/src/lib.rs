@@ -222,7 +222,7 @@ pub fn create_code_snippet(
     let token_count = content.split_whitespace().count();
     let line_count = content.lines().count();
     let char_count = content.chars().count();
-    let test_result = Some(TestResult::default());
+    let _test_result = Some(TestResult::default());
 
     CodeChunk {
         language,
