@@ -9,7 +9,8 @@
 crates_root:CratesRoot a rdfs:Class ;
     rdfs:label "All Crates Root Directory" ;
     em:hasEmojiRepresentation "📦🌳" ;
-    rdfs:comment "The root directory containing all individual Rust crates." .
+    rdfs:comment "The root directory containing all individual Rust crates." ;
+    vibe:hasProjectVibe crates_root:EmacsProjectVibe, crates_root:GCCProjectVibe, crates_root:LinuxProjectVibe, crates_root:PHPProjectVibe, crates_root:FirefoxProjectVibe, crates_root:MySQLProjectVibe . # Link to the overall project vibe
 
 # Import individual crate ontologies
 owl:imports <http://example.org/bootstrap#> .
@@ -88,6 +89,9 @@ owl:imports <http://example.org/views_lib#> .
 owl:imports <http://example.org/vtext_plugin#> .
 owl:imports <http://example.org/workflow_manager#> .
 owl:imports <http://example.org/zip_plugin#> .
+owl:imports <http://example.org/solfunmeme_core_utils#> .
+owl:imports <http://example.org/solfunmeme_frontend_core#> .
+owl:imports <http://example.org/solfunmeme_language_processing#> .
 
 # Individual Crate References with Emoji Representations
 
@@ -626,3 +630,55 @@ crates_root:zipPluginCrate a rdfs:Class ;
     em:hasNumericalAddress "76" ;
     rdfs:comment "The zip_plugin crate." ;
     vibe:hasVibe "BasicBlock", "Number", "Mind", "Loop", "Sum", "Recursion", "Package", "Gene", "Vibe", "Fiber", "Inference", "Insight", "EmojiCode" .
+
+crates_root:solfunmemeCoreUtilsCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Core Utils Crate" ;
+    em:hasEmojiRepresentation "🛠️⚙️" ;
+    em:hasNumericalAddress "77" ;
+    rdfs:comment "Core utility functions and common dependencies." ;
+    vibe:hasVibe "Builder", "Symbols", "Magic", "Flow", "Compass", "Gears", "Toolkit", "Magnifier", "Switch", "Mirror", "Brick", "Mesh", "Rule", "Signal" .
+
+crates_root:solfunmemeFrontendCoreCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Frontend Core Crate" ;
+    em:hasEmojiRepresentation "🖥️✨" ;
+    em:hasNumericalAddress "78" ;
+    rdfs:comment "Core frontend components and UI framework dependencies." ;
+    vibe:hasVibe "MusicScore", "Frame", "Film", "Thread", "Mic", "Controller", "Dice", "Bullseye", "Link", "PlanetRing", "Speech", "Bubbles", "Idea", "Broadcast", "Outbox", "Thought" .
+
+crates_root:solfunmemeLanguageProcessingCrate a rdfs:Class ;
+    rdfs:label "Solfunmeme Language Processing Crate" ;
+    em:hasEmojiRepresentation "🗣️🧠" ;
+    em:hasNumericalAddress "79" ;
+    rdfs:comment "Language-specific parsing and analysis logic." ;
+    vibe:hasVibe "Speech", "Bubbles", "Idea", "Broadcast", "Outbox", "Thought", "Ruler", "Telescope", "Nazar", "Cosmos", "FerrisWheel", "Temple", "DNA", "Brain" .
+
+# Project Vibe Instances
+crates_root:EmacsProjectVibe a vibe:ProjectVibe ;
+    rdfs:label "Emacs" ;
+    em:hasEmojiRepresentation "🧠✍️" ;
+    vibe:hasSemanticName "Extensible Editor", "Lisp Machine", "Self-Documenting", "Integrated Development Environment" .
+
+crates_root:GCCProjectVibe a vibe:ProjectVibe ;
+    rdfs:label "GCC" ;
+    em:hasEmojiRepresentation "⚙️💻" ;
+    vibe:hasSemanticName "Compiler", "Toolchain", "Optimization", "Standard Compliance" .
+
+crates_root:LinuxProjectVibe a vibe:ProjectVibe ;
+    rdfs:label "Linux" ;
+    em:hasEmojiRepresentation "🐧💻" ;
+    vibe:hasSemanticName "Kernel", "Operating System", "Open Source", "Community-Driven" .
+
+crates_root:PHPProjectVibe a vibe:ProjectVibe ;
+    rdfs:label "PHP" ;
+    em:hasEmojiRepresentation "🌐📜" ;
+    vibe:hasSemanticName "Web Development", "Scripting Language", "Server-Side", "Dynamic Content" .
+
+crates_root:FirefoxProjectVibe a vibe:ProjectVibe ;
+    rdfs:label "Firefox" ;
+    em:hasEmojiRepresentation "🦊🌐" ;
+    vibe:hasSemanticName "Web Browser", "Privacy-Focused", "Open Source", "Standards Compliant" .
+
+crates_root:MySQLProjectVibe a vibe:ProjectVibe ;
+    rdfs:label "MySQL" ;
+    em:hasEmojiRepresentation "🗄️📊" ;
+    vibe:hasSemanticName "Relational Database", "Data Storage", "SQL", "Client-Server" .

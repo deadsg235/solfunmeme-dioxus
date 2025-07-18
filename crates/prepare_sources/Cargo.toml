@@ -15,6 +15,7 @@ solfunmeme_function_analysis = { path = "../solfunmeme_function_analysis" }
 solfunmeme_clifford = { path = "../solfunmeme_clifford" }
 solfunmeme_solana_data = { path = "../solfunmeme_solana_data" }
 solfunmeme_input_fs = { path = "../solfunmeme_input_fs" }
+solfunmeme_language_processing = { path = "../solfunmeme_language_processing" }
 
 anyhow = "1.0"
 clap = { version = "4", features = ["derive"] }

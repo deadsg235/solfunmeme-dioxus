@@ -22,6 +22,7 @@ pub fn handle_inline_code_node(inline_code: &markdown::mdast::InlineCode, snippe
             line_end: 0,   // Default value
             embedding: Vec::new(), // Default value
             clifford_vector: None, // Default value
+            semantic_summary: None,
         });
     }
 }

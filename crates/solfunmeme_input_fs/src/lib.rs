@@ -1,18 +1,16 @@
 use walkdir::WalkDir;
 use std::fs;
-use std::path::Path;
+use std::path::PathBuf;
 use anyhow::Result;
-use solfunmeme_function_analysis::{CodeChunk, TestResult};
-use md5;
 
-pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Result<Vec<CodeChunk>> {
+pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Result<Vec<(PathBuf, String)>> {
     let mut discovered_files = Vec::new();
     if let Some(ref path) = target_path {
-        let path = Path::new(path);
+        let path = PathBuf::from(path);
         if path.is_file() {
-            discovered_files.push(path.to_path_buf());
+            discovered_files.push(path);
         } else if path.is_dir() {
-            for entry in WalkDir::new(path).into_iter().filter_map(Result::ok) {
+            for entry in WalkDir::new(&path).into_iter().filter_map(Result::ok) {
                 if entry.file_type().is_file() {
                     discovered_files.push(entry.path().to_path_buf());
                 }
@@ -31,33 +29,16 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
         discovered_files.truncate(lim);
     }
 
-    let mut code_chunks = Vec::new();
+    let mut file_contents = Vec::new();
     for path in discovered_files {
-        let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
-        if !matches!(ext.as_str(), "rs" | "md") {
-            // Only process .rs and .md files for now
-            continue;
-        }
-        match fs::read(&path) {
-            Ok(bytes) => {
-                let content = String::from_utf8_lossy(&bytes).to_string();
-                let mut chunk = CodeChunk::default();
-                chunk.language = ext.clone(); // Use file extension as language
-                chunk.content = content.clone();
-                chunk.line_start = 1;
-                chunk.line_end = content.lines().count();
-                chunk.content_hash = format!("{:x}", md5::compute(&content)); // Placeholder hash
-                chunk.token_count = content.split_whitespace().count(); // Placeholder token count
-                chunk.line_count = content.lines().count();
-                chunk.char_count = content.chars().count();
-                chunk.test_result = Some(TestResult::default()); // Placeholder test result
-                
-                code_chunks.push(chunk);
+        match fs::read_to_string(&path) {
+            Ok(content) => {
+                file_contents.push((path, content));
             },
             Err(e) => {
                 eprintln!("[ERROR] Failed to read file {} (possibly non-UTF-8 or binary): {}", path.display(), e);
             }
         }
     }
-    Ok(code_chunks)
+    Ok(file_contents)
 }

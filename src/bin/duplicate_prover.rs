@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::error::Error;
-use walkdir::WalkDir;
+use solfunmeme_core_utils::walkdir::WalkDir;
 use solfunmeme_crypto_utils::sha2::{Sha256, Digest};
 
 #[derive(Debug, Clone)]

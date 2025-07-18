@@ -2,7 +2,8 @@ use anyhow::Result;
 use std::path::Path;
 use std::fs;
 use walkdir::WalkDir;
-use solfunmeme_function_analysis::{AnalyzedDocument, extract_code_snippets};
+use solfunmeme_function_analysis::AnalyzedDocument;
+use solfunmeme_language_processing::{LanguageProcessor, markdown_processor::MarkdownProcessor};
 use indicatif::ProgressBar;
 
 pub fn analyze_markdown_files(project_root: &Path, _ontology_path: &Path, _use_gpu: bool, pb: &ProgressBar) -> Result<Vec<AnalyzedDocument>> {
@@ -12,22 +13,12 @@ pub fn analyze_markdown_files(project_root: &Path, _ontology_path: &Path, _use_g
             let file_path = entry.path();
             let ext = file_path.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
             if ext == "md" || ext == "markdown" {
+                let processor = MarkdownProcessor;
                 let content = fs::read_to_string(file_path)?;
-                let code_snippets = extract_code_snippets(&content);
-                let mut text_chunks = Vec::new();
-                let mut last_end = 0;
-                let lines: Vec<&str> = content.lines().collect();
-                for snippet in &code_snippets {
-                    let start = snippet.line_start.saturating_sub(1);
-                    let end = snippet.line_end;
-                    if start > last_end {
-                        text_chunks.push(lines[last_end..start].join("\n"));
-                    }
-                    last_end = end;
-                }
-                if last_end < lines.len() {
-                    text_chunks.push(lines[last_end..].join("\n"));
-                }
+                let code_snippets = processor.process_code(&content, &file_path.to_string_lossy())?;
+                let text_chunks = Vec::new();
+                // Simplified text chunk extraction for now. In a full implementation,
+                // the MarkdownProcessor would ideally return both code and text chunks.
                 analyzed_documents.push(AnalyzedDocument {
                     file_path: file_path.to_string_lossy().into_owned(),
                     code_snippets: code_snippets.clone(),

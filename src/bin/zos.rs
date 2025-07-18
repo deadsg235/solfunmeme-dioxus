@@ -5,7 +5,7 @@ use std::process;
 use chat_indexer::ChatIndexer;
 use vibe_prover::VibeProver;
 
-use clap::Parser;
+use solfunmeme_core_utils::clap::Parser;
 use zos_cli_modules::cli::Cli;
 use zos_cli_modules::commands::Commands;
 use zos_cli_modules::task_commands::TaskCommands;

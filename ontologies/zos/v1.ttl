@@ -1,6 +1,31 @@
 @prefix vibe: <https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#vibe> .
 @prefix em: <https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#emoji> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+# New Vibe Layer Definitions
+vibe:OSILayer a owl:Class ;
+    rdfs:label "OSI Layer" ;
+    rdfs:comment "Represents a layer in the OSI model, used to categorize the functional 'vibe' of a component." .
+
+vibe:Layer a owl:Class ;
+    rdfs:subClassOf rdfs:Resource ;
+    rdfs:label "Vibe Layer" ;
+    rdfs:comment "A conceptual layer representing a functional or semantic 'vibe' within the Code-Math Manifold." ;
+    vibe:hasOSILayer rdfs:Resource ; # Link to OSI Layer
+    vibe:hasPrimeFactor rdfs:Literal ; # Prime factor associated with the layer
+    vibe:isPowerOfTwo rdfs:Literal ; # Boolean indicating if the layer number is a power of two
+    vibe:hasNumericalAddress rdfs:Literal . # Unique numerical ID for the layer
+
+# New Project Vibe Definition
+vibe:ProjectVibe a owl:Class ;
+    rdfs:label "Project Vibe" ;
+    rdfs:comment "Represents the overall semantic resonance or 'meme' of a software project." ;
+    em:hasEmojiRepresentation rdfs:Literal ;
+    vibe:hasSemanticName rdfs:Literal .
+
+# Existing Emoji Definitions (unchanged for now, will be updated as needed)
 em:puzzle_piece a em:Emoji ; em:name "puzzle piece" ; em:utf "U+1F9E9" .
 em:input_numbers a em:Emoji ; em:name "input numbers" ; em:utf "U+1F522" .
 em:brain a em:Emoji ; em:name "brain" ; em:utf "U+1F9E0" .
@@ -79,44 +104,117 @@ em:high_voltage a em:Emoji ; em:name "high voltage" ; em:utf "U+26A1" .
 em:prayer_beads a em:Emoji ; em:name "prayer beads" ; em:utf "U+1F4FF" .
 em:crystal_ball a em:Emoji ; em:name "crystal ball" ; em:utf "U+1F52E" .
 
+# Updated Vibe Layer Instances
 vibe:Layer1 a vibe:Layer ;
+    vibe:hasNumericalAddress 1 ;
+    vibe:hasOSILayer vibe:PhysicalLayer ;
+    vibe:hasPrimeFactor 2 ; # Example: Physical layer often deals with binary (powers of 2)
+    vibe:isPowerOfTwo "true"^^xsd:boolean ;
     vibe:emoji "➕" ;
     vibe:semanticName "BasicBlock", "Number", "Mind", "Loop", "Sum", "Recursion", "Package", "Gene", "Vibe", "Fiber", "Inference", "Insight", "EmojiCode" .
 
 vibe:Layer2 a vibe:Layer ;
+    vibe:hasNumericalAddress 2 ;
+    vibe:hasOSILayer vibe:DataLinkLayer ;
+    vibe:hasPrimeFactor 3 ; # Example: Data Link layer for framing/grouping (threes)
+    vibe:isPowerOfTwo "false"^^xsd:boolean ;
     vibe:keyFor vibe:Layer1 ;
     vibe:emoji "️⚙️" ;
     vibe:semanticName "Builder", "Symbols", "Magic", "Flow", "Compass", "Gears", "Toolkit", "Magnifier", "Switch", "Mirror", "Brick", "Mesh", "Rule", "Signal" .
 
 vibe:Layer3 a vibe:Layer ;
+    vibe:hasNumericalAddress 3 ;
+    vibe:hasOSILayer vibe:NetworkLayer ;
+    vibe:hasPrimeFactor 5 ; # Example: Network layer for routing/paths (fives)
+    vibe:isPowerOfTwo "false"^^xsd:boolean ;
     vibe:keyFor vibe:Layer2 ;
     vibe:emoji "️️" ;
     vibe:semanticName "Seed", "Map", "Mask", "Dial", "Art", "Juice", "Spiral", "Box", "Target", "Lens", "Ice", "Wave", "Curve", "Horn" .
 
 vibe:Layer4 a vibe:Layer ;
+    vibe:hasNumericalAddress 4 ;
+    vibe:hasOSILayer vibe:TransportLayer ;
+    vibe:hasPrimeFactor 7 ; # Example: Transport layer for connections/sessions (sevens)
+    vibe:isPowerOfTwo "true"^^xsd:boolean ;
     vibe:keyFor vibe:Layer3 ;
     vibe:emoji "" ;
     vibe:semanticName "Baby", "Wizard", "Fairy", "Genie", "Mermaid", "Elf", "Vampire", "Zombie" .
 
 vibe:Layer5 a vibe:Layer ;
+    vibe:hasNumericalAddress 5 ;
+    vibe:hasOSILayer vibe:SessionLayer ;
+    vibe:hasPrimeFactor 11 ; # Example: Session layer for dialogue control (elevens)
+    vibe:isPowerOfTwo "false"^^xsd:boolean ;
     vibe:keyFor vibe:Layer4 ;
     vibe:emoji "️" ;
     vibe:semanticName "Ruler", "Telescope", "Nazar", "Cosmos", "FerrisWheel", "Temple", "DNA", "Brain" .
 
 vibe:Layer6 a vibe:Layer ;
+    vibe:hasNumericalAddress 6 ;
+    vibe:hasOSILayer vibe:PresentationLayer ;
+    vibe:hasPrimeFactor 13 ; # Example: Presentation layer for data formatting (thirteens)
+    vibe:isPowerOfTwo "false"^^xsd:boolean ;
     vibe:keyFor vibe:Layer5 ;
     vibe:emoji "" ;
     vibe:semanticName "Link", "PlanetRing", "Speech", "Bubbles", "Idea", "Broadcast", "Outbox", "Thought" .
 
 vibe:Layer7 a vibe:Layer ;
+    vibe:hasNumericalAddress 7 ;
+    vibe:hasOSILayer vibe:ApplicationLayer ;
+    vibe:hasPrimeFactor 17 ; # Example: Application layer for user interaction (seventeens)
+    vibe:isPowerOfTwo "false"^^xsd:boolean ;
     vibe:keyFor vibe:Layer6 ;
     vibe:emoji "️️️" ;
     vibe:semanticName "MusicScore", "Frame", "Film", "Thread", "Mic", "Controller", "Dice", "Bullseye" .
 
 vibe:Layer8 a vibe:Layer ;
+    vibe:hasNumericalAddress 8 ;
+    vibe:hasOSILayer vibe:ApplicationLayer ; # Can also be Application Layer or a higher conceptual layer
+    vibe:hasPrimeFactor 19 ; # Example: Higher-level concepts (nineteens)
+    vibe:isPowerOfTwo "true"^^xsd:boolean ;
     vibe:keyFor vibe:Layer7 ;
     vibe:emoji "♾️️⚡" ;
     vibe:semanticName "Infinity", "Genome", "Globe", "Web", "Lightning", "PrayerBeads", "CrystalBall", "Mirror" .
 
+# OSI Layer Instances
+vibe:PhysicalLayer a vibe:OSILayer ; rdfs:label "Physical Layer" .
+vibe:DataLinkLayer a vibe:OSILayer ; rdfs:label "Data Link Layer" .
+vibe:NetworkLayer a vibe:OSILayer ; rdfs:label "Network Layer" .
+vibe:TransportLayer a vibe:OSILayer ; rdfs:label "Transport Layer" .
+vibe:SessionLayer a vibe:OSILayer ; rdfs:label "Session Layer" .
+vibe:PresentationLayer a vibe:OSILayer ; rdfs:label "Presentation Layer" .
+vibe:ApplicationLayer a vibe:OSILayer ; rdfs:label "Application Layer" .
+
 vibe:VibeStack a vibe:Structure ;
     vibe:hasLayers ( vibe:Layer1 vibe:Layer2 vibe:Layer3 vibe:Layer4 vibe:Layer5 vibe:Layer6 vibe:Layer7 vibe:Layer8 ) .
+
+# Project Vibe Instances
+vibe:EmacsProject a vibe:ProjectVibe ;
+    rdfs:label "Emacs" ;
+    em:hasEmojiRepresentation "🧠✍️" ;
+    vibe:hasSemanticName "Extensible Editor", "Lisp Machine", "Self-Documenting", "Integrated Development Environment" .
+
+vibe:GCCProject a vibe:ProjectVibe ;
+    rdfs:label "GCC" ;
+    em:hasEmojiRepresentation "⚙️💻" ;
+    vibe:hasSemanticName "Compiler", "Toolchain", "Optimization", "Standard Compliance" .
+
+vibe:LinuxProject a vibe:ProjectVibe ;
+    rdfs:label "Linux" ;
+    em:hasEmojiRepresentation "🐧💻" ;
+    vibe:hasSemanticName "Kernel", "Operating System", "Open Source", "Community-Driven" .
+
+vibe:PHPProject a vibe:ProjectVibe ;
+    rdfs:label "PHP" ;
+    em:hasEmojiRepresentation "🌐📜" ;
+    vibe:hasSemanticName "Web Development", "Scripting Language", "Server-Side", "Dynamic Content" .
+
+vibe:FirefoxProject a vibe:ProjectVibe ;
+    rdfs:label "Firefox" ;
+    em:hasEmojiRepresentation "🦊🌐" ;
+    vibe:hasSemanticName "Web Browser", "Privacy-Focused", "Open Source", "Standards Compliant" .
+
+vibe:MySQLProject a vibe:ProjectVibe ;
+    rdfs:label "MySQL" ;
+    em:hasEmojiRepresentation "🗄️📊" ;
+    vibe:hasSemanticName "Relational Database", "Data Storage", "SQL", "Client-Server" .

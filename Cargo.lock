@@ -6793,6 +6793,7 @@ dependencies = [
  "solfunmeme_clifford",
  "solfunmeme_function_analysis",
  "solfunmeme_input_fs",
+ "solfunmeme_language_processing",
  "solfunmeme_search_tantivy",
  "solfunmeme_solana_data",
  "sophia_api 0.9.0",
@@ -10675,7 +10676,6 @@ dependencies = [
  "component_emoji_lib",
  "component_registry_lib",
  "core_data_lib",
- "dioxus-charts 0.3.1",
  "emoji_matrix_lib",
  "gitaccount",
  "index_exporter_lib",
@@ -10688,18 +10688,17 @@ dependencies = [
  "orbital_sim_lib",
  "playground_lib",
  "prepare_sources",
- "rand 0.8.5",
- "rand_core 0.6.4",
  "rdf_processing_lib",
  "rrust_kontekst",
  "rrust_kontekst_base",
  "rust-embed 8.7.2",
- "sha2 0.10.9",
  "shared_analysis_types",
  "shared_types_lib",
  "signals_lib",
  "solana_integration_lib",
+ "solfunmeme_app",
  "solfunmeme_clifford",
+ "solfunmeme_core_utils",
  "solfunmeme_crypto_utils",
  "solfunmeme_extractor",
  "solfunmeme_extractor_system",
@@ -10722,7 +10721,6 @@ dependencies = [
  "tokio",
  "vibe_prover",
  "views_lib",
- "walkdir",
  "wallet-adapter",
  "zos_cli_modules",
 ]
@@ -10731,31 +10729,13 @@ dependencies = [
 name = "solfunmeme_app"
 version = "0.1.0"
 dependencies = [
- "ctor 0.1.26",
- "dioxus",
- "emoji_lang_plugin",
- "emoji_workflow_macro",
- "gloo-storage",
- "gloo-utils 0.2.0",
- "js-sys",
  "jzon",
- "log",
- "model_lib",
- "qrcodegen",
  "reqwasm",
  "serde",
  "serde_json",
  "solana-sdk",
- "solfunmeme_core_logic",
- "solfunmeme_input_fs",
- "solfunmeme_search_tantivy",
- "solfunmeme_wallet_integration",
- "views_lib",
+ "solfunmeme_frontend_core",
  "wallet-adapter",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
- "workflow_manager",
 ]
 
 [[package]]
@@ -10856,6 +10836,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "solfunmeme_core_utils"
+version = "0.1.0"
+dependencies = [
+ "clap 4.5.41",
+ "rand 0.8.5",
+ "rand_core 0.6.4",
+ "sha2 0.10.9",
+ "walkdir",
+]
+
+[[package]]
 name = "solfunmeme_crypto_utils"
 version = "0.1.0"
 dependencies = [
@@ -10934,6 +10925,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "solfunmeme_frontend_core"
+version = "0.1.0"
+dependencies = [
+ "dioxus",
+ "dioxus-charts 0.3.1",
+ "dioxus-html",
+ "dioxus-logger",
+ "dioxus-motion",
+ "dioxus-router",
+ "dioxus-web",
+ "easer",
+]
+
+[[package]]
 name = "solfunmeme_function_analysis"
 version = "0.1.0"
 dependencies = [
@@ -10983,6 +10988,18 @@ dependencies = [
  "anyhow",
  "md5",
  "solfunmeme_function_analysis",
+ "walkdir",
+]
+
+[[package]]
+name = "solfunmeme_language_processing"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "md5",
+ "quote",
+ "solfunmeme_function_analysis",
+ "syn 2.0.104",
  "walkdir",
 ]
 
@@ -14236,6 +14253,7 @@ version = "0.1.0"
 dependencies = [
  "clap 4.5.41",
  "serde",
+ "solfunmeme_core_utils",
  "solfunmeme_serde_utils",
 ]
 

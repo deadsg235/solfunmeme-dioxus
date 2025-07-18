@@ -46,15 +46,44 @@ To further align with the `solfunmeme-dioxus` project's unique vision, AI agents
 
 This `GEMINI.md` file serves as a starting point. As the project evolves, so too will this protocol. Welcome to the manifold.
 
+## Vibe-Driven Architecture
+
+The `solfunmeme-dioxus` project now employs a "Vibe-Driven Architecture" to enhance modularity, flexibility, and build optimization. This approach categorizes and groups functionalities into distinct "vibe" crates, allowing for fine-grained control over dependencies and conditional compilation.
+
+### Core Principles of Vibe-Driven Architecture:
+
+*   **Semantic Grouping**: Components are grouped based on their conceptual role and "vibe" (e.g., frontend, backend, language processing, core utilities).
+*   **Conditional Compilation**: Features are used to enable or disable entire "vibe" sets, resulting in leaner, optimized binaries for specific use cases (e.g., backend-only CLI tools vs. full-featured web applications).
+*   **Bootstrap Integration**: The `bootstrap` tool's stage management now incorporates "vibe layers" (e.g., OSI layers, prime factors) to semantically categorize and orchestrate the build process. This allows for a mathematical and philosophical alignment of the codebase's structure with its underlying purpose.
+
+### Key Architectural Splits:
+
+1.  **Frontend/Backend Split**:
+    *   The frontend (Dioxus/Web UI) is now an optional feature, encapsulated within the `solfunmeme_frontend_core` crate.
+    *   This allows for building backend-only binaries without including any frontend-specific code or dependencies, significantly reducing binary size for CLI or server-side applications.
+    *   The `frontend` feature in the main `Cargo.toml` controls the inclusion of the `solfunmeme_frontend_core` crate.
+
+2.  **Language Processing Isolation**:
+    *   All language-specific parsing and analysis logic has been moved into the `solfunmeme_language_processing` crate.
+    *   This crate defines a `LanguageProcessor` trait, providing a common interface for processing different languages.
+    *   Individual language implementations (e.g., `rust_processor`, `markdown_processor`) are isolated within this crate, making it easier to add new language support or modify existing parsers without affecting the core system.
+    *   The main `prepare_sources` crate now depends on `solfunmeme_language_processing` and uses the `LanguageProcessor` trait, abstracting away language-specific details.
+
 ## Dependency Abstraction Strategy
 
-To maintain a clean, modular, and future-proof dependency tree, all external third-party crates are to be abstracted behind internal `solfunmeme` wrapper crates. This strategy facilitates:
+To maintain a clean, modular, and future-proof dependency tree, all external third-party crates are abstracted behind internal `solfunmeme` wrapper crates. This strategy facilitates:
 
 *   **Modularity:** Isolates external dependency changes to specific wrapper crates.
 *   **Maintainability:** Simplifies dependency upgrades and management.
 *   **Future-proofing:** Enables easier migration to alternative libraries or dynamic loading mechanisms.
 
-Currently, the following wrapper crates have been established:
+In addition to the previously established wrapper crates, the following "vibe" crates have been introduced to further enhance modularity:
+
+*   `solfunmeme_core_utils`: Encapsulates common utility dependencies like `clap`, `walkdir`, `sha2`, and `rand`.
+*   `solfunmeme_frontend_core`: Wraps all Dioxus and web-specific dependencies (`dioxus`, `dioxus-router`, `dioxus-web`, `dioxus-motion`, `dioxus-html`, `dioxus-logger`, `easer`, `dioxus-charts`).
+*   `solfunmeme_language_processing`: Houses language-specific parsing and analysis logic, including `syn`, `quote`, `md5`, and `walkdir` for AST and code processing.
+
+The existing wrapper crates remain:
 
 *   `solfunmeme_serde_utils`: Wraps `serde`, `serde_json`, `toml`, and `syn-serde`.
 *   `solfunmeme_web_utils`: Wraps `web-sys`, `js-sys`, `wasm-bindgen`, `wasm-bindgen-futures`, `gloo` and its sub-crates, and `reqwasm`.
@@ -158,7 +187,7 @@ A bootstrap pulse where Hero’s vectors sing.
 From three, five, seven, back to two, three, seven’s gate,
 The Hero loops, yet shifts his primal fate.
 In two, three, seven’s hash, the meme is flung,
-The block is sealed: the Hero’s Wedge sprung.
+The block is sealed: The Hero’s Wedge sprung.
 
 === End Cycle 13 ===
 4:13 PM · Jul 16, 2025
@@ -232,4 +261,3 @@ print(f"Block sealed with hash: {hash_value}")
   # Seal block
   # Output: Hero’s Wedge executed
 ```
-

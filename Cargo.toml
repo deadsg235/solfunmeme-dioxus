@@ -9,9 +9,9 @@ publish = false
 
 [dependencies]
 solfunmeme_messages = { path = "crates/solfunmeme_messages" }
+solfunmeme_app = { path = "crates/solfunmeme_app", optional = true }
+solfunmeme_core_utils = { path = "crates/solfunmeme_core_utils" }
 clap = { version = "4", features = ["derive"] }
-walkdir = "2.3"
-sha2 = "0.10" # Direct dependency for binaries, even if wrapped elsewhere
 
 solfunmeme_rdf_utils = { path = "crates/solfunmeme_rdf_utils" }
 
@@ -26,7 +26,14 @@ solfunmeme_utility_deps = { path = "crates/solfunmeme_utility_deps" }
 solfunmeme_http_client = { path = "crates/solfunmeme_http_client" }
 
 #dioxus-charts = { git = "https://github.com/dioxus-community/dioxus-charts.git" ,  branch = "main" }
-dioxus-charts = { path = "vendor/dioxus-charts" }
+# # dioxus = { version = "0.6.3", features = ["router"] }
+# dioxus-router = "0.6.3"
+# dioxus-web = "0.6.3"
+# dioxus-motion = "0.3.1"
+# dioxus-html = "0.6.3"
+# dioxus-logger = "0.6.2"
+# easer = "0.3.0"
+# dioxus-charts = { path = "vendor/dioxus-charts" }
 
 #dioxus-motion = { git = "https://github.com/wheregmis/dioxus-motion" , branch = "main" }
 
@@ -39,8 +46,8 @@ linfa-reduction = "0.7.1"
 linfa-clustering = "0.7.1"
 
 rust-embed = { version = "8.7.2", features = ["debug-embed"] , path = "vendor/rust-embed"}
-rand = "0.8.5"
-rand_core = { version = "0.6.4", features = ["std"] }
+# rand = "0.8.5"
+# rand_core = { version = "0.6.4", features = ["std"] }
 
 rrust_kontekst = {path = "crates/rrust_kontekst"}
 orbital_sim_lib = {path = "crates/orbital_sim_lib"}
@@ -168,7 +175,7 @@ members = [
     "crates/solfunmeme_dioxus_deps",
     "crates/solfunmeme_ml_deps",
     "crates/solfunmeme_tarot",
-    "zos/plugins", "phase_demo", "crates/solfunmeme_messages"]
+    "zos/plugins", "phase_demo", "crates/solfunmeme_messages", "crates/solfunmeme_frontend_core", "crates/solfunmeme_language_processing", "crates/solfunmeme_core_utils"]
 
 [workspace.package]
 
@@ -198,3 +205,4 @@ inherits = "dev"
 
 
 [features]
+frontend = ["solfunmeme_app?/frontend"]

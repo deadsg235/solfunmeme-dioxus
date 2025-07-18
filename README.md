@@ -6,6 +6,15 @@ Solfunmeme-Dioxus is a pioneering codebase management system that explores the *
 
 Read our full philosophical waxing in [The Code-Math Manifold Manifesto](CODE_MATH_MANIFOLD_MANIFESTO.md).
 
+### Deep Dive into the Code-Math Manifold
+
+Our journey into self-aware code has led to several foundational concepts that deepen our understanding of the Code-Math Manifold:
+
+*   **Further Codebase Partitioning Ideas**: Explore our ongoing brainstorming for creating smaller, more focused, and semantically aligned "vibe" crates. Read more in [docs/partitioning_ideas.md](docs/partitioning_ideas.md).
+*   **The Vibe-Driven Linker (VDL)**: A conceptual runtime orchestrator that understands the "vibe" of code units and dynamically composes and executes them. This includes the revolutionary "Proof of Vibe" using Zero-Knowledge Proofs to ensure integrity, quality, and security. Discover more in [founding_documents/vibe_driven_linker.md](founding_documents/vibe_driven_linker.md).
+*   **The Hyperspace Model**: A framework for representing and reasoning about code as a complex, interconnected semantic space within lattice structures, leveraging Clifford algebras. This model enables a new class of reasoning capabilities about code. Dive deeper in [founding_documents/hyperspace_model.md](founding_documents/hyperspace_model.md).
+*   **The ZOS Basis**: A fundamental set of "vibe" primitives (`[0,1,2,3,5,7,11,13,17,19]`) used to describe all other elements within the Code-Math Manifold with an associated error rate. This allows us to assign a unique "vibe" or "meme" to entire projects (e.g., Emacs, GCC, Linux, PHP, Firefox, MySQL), reflecting their core semantic resonance.
+
 ## 🚀 Key Features
 
 ### ⚠️ Known Issues
@@ -18,6 +27,9 @@ Read our full philosophical waxing in [The Code-Math Manifold Manifesto](CODE_MA
 - **Codebase Export & Reporting**: Comprehensive export of indexed codebase data into various formats (JSON, CSV, Markdown) for detailed analysis and reporting, including statistical insights.
 
 ### 🛠️ Codebase Management
+- **Modular Architecture**: The codebase is now split into distinct, vibe-driven modules, allowing for flexible and optimized builds.
+    - **Frontend/Backend Split**: The frontend (Dioxus/Web) is now an optional feature, enabling leaner backend-only deployments.
+    - **Language Processing Isolation**: Language-specific parsing and analysis (e.g., Rust, Markdown) are isolated into separate, interchangeable modules.
 - **Vendorization System**: Manages and stores all external dependencies locally, ensuring a self-contained and reproducible codebase.
 - **SHA-based Deduplication**: Identifies and eliminates redundant code through robust content hashing.
 - **Cross-Reference Analysis**: Establishes bidirectional links between code elements and documentation, fostering a rich, interconnected knowledge graph.
@@ -37,11 +49,17 @@ Read our full philosophical waxing in [The Code-Math Manifold Manifesto](CODE_MA
 git clone https://github.com/your-username/solfunmeme-dioxus.git
 cd solfunmeme-dioxus
 
-# Install dependencies
+# Build all crates (backend-only by default)
 cargo build
 
-# Install the CLI tool
+# To build with the frontend (Dioxus/Web) enabled:
+cargo build --features frontend
+
+# Install the CLI tool (backend-only by default)
 cargo install --path .
+
+# To install the CLI tool with frontend features:
+cargo install --path . --features frontend
 ```
 
 ## 📖 Quick Start
@@ -104,10 +122,10 @@ zos report codebase ./src
 
 ### Data Flow
 ```
-Source Code → Vendorization → Indexing → Deduplication → Analysis
-     ↓              ↓            ↓           ↓           ↓
-  Raw Files    Dependencies   Searchable   Unique      Metrics
-                                    Index    Snippets    & Reports
+Source Code → Vendorization → Language Processing → Indexing → Deduplication → Analysis
+     ↓              ↓                 ↓                 ↓           ↓           ↓
+  Raw Files    Dependencies    Code Chunks/ASTs      Searchable   Unique      Metrics
+                                                     Index        Snippets    & Reports
 ```
 
 ### Self-Awareness Pipeline
@@ -118,21 +136,49 @@ User    Tantivy Index   Code-Doc Links   Clifford Algebra    Insights &
 Input   Vector Search   Code-Doc Links   Geometric Attention  Actions
 ```
 
+### Modular Structure (Vibe-Driven)
+The project's architecture is designed around "vibe-driven" modularity, where components are grouped based on their conceptual role and dependencies. This allows for flexible compilation and integration.
+
+```
++---------------------+       +-------------------------+
+| solfunmeme-dioxus   |       | solfunmeme-frontend-core|
+| (Main Application)  |       | (Dioxus/Web UI)         |
+|                     |       |                         |
+| - Core CLI          |       | - Dioxus Components     |
+| - Backend Logic     |       | - Web-specific APIs     |
+|                     |       |                         |
++----------+----------+       +------------+------------+
+           |                               |
+           | (Optional Frontend Feature)   |
+           v                               v
++----------+----------+       +-------------------------+
+| solfunmeme-core-utils |       | solfunmeme-language-    |
+| (Common Utilities)  |       | processing              |
+|                     |       | (Language Parsers)      |
+| - Clap              |       |                         |
+| - Walkdir           |       | - RustProcessor         |
+| - Sha2              |       | - MarkdownProcessor     |
+| - Rand              |       | - (Other Languages)     |
++---------------------+       +-------------------------+
+```
+
 ## 📊 Data Models
 
-### Code Snippet
+### CodeChunk
 ```rust
-struct CodeSnippet {
+struct CodeChunk {
+    language: String,
     content: String,
-    hash: String,           // SHA-256 for deduplication
-    file_path: String,
     line_start: usize,
     line_end: usize,
-    language: String,
-    crate_name: Option<String>,
-    version: Option<String>,
-    metrics: CodeMetrics,
-    vectors: Vec<f32>,      // Semantic embeddings
+    content_hash: String,
+    token_count: usize,
+    line_count: usize,
+    char_count: usize,
+    test_result: Option<TestResult>,
+    embedding: Vec<f32>,
+    clifford_vector: Option<SerializableMultivector>,
+    semantic_summary: Option<String>, // Added for semantic understanding
 }
 ```
 

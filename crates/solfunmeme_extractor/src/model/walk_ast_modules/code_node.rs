@@ -22,6 +22,7 @@ pub fn handle_code_node(code: &markdown::mdast::Code, snippets: &mut Vec<CodeChu
             line_end: 0,   // Default value
             embedding: Vec::new(), // Default value
             clifford_vector: None, // Default value
+            semantic_summary: None,
         });
     }
 }
