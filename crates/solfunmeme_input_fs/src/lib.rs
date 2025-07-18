@@ -2,7 +2,7 @@ use walkdir::WalkDir;
 use std::fs;
 use std::path::Path;
 use anyhow::Result;
-use solfunmeme_function_analysis::CodeChunk;
+use solfunmeme_function_analysis::{CodeChunk, TestResult};
 use md5;
 
 pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Result<Vec<CodeChunk>> {
@@ -50,7 +50,7 @@ pub fn read_code_chunks(target_path: Option<String>, limit: Option<usize>) -> Re
                 chunk.token_count = content.split_whitespace().count(); // Placeholder token count
                 chunk.line_count = content.lines().count();
                 chunk.char_count = content.chars().count();
-                chunk.test_result = "Untested".to_string(); // Placeholder test result
+                chunk.test_result = Some(TestResult::default()); // Placeholder test result
                 
                 code_chunks.push(chunk);
             },

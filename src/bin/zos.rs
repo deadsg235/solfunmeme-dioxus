@@ -1,10 +1,11 @@
-use clap::Parser;
+
 use std::path::PathBuf;
 use std::process;
 
 use chat_indexer::ChatIndexer;
 use vibe_prover::VibeProver;
 
+use clap::Parser;
 use zos_cli_modules::cli::Cli;
 use zos_cli_modules::commands::Commands;
 use zos_cli_modules::task_commands::TaskCommands;
@@ -32,7 +33,7 @@ fn main() {
         }
         
         Commands::Search { query, limit } => {
-            println!("{}", format!("{}", config.search.message.replace("{}", query).replace("{}", &limit.to_string())));
+            println!("{}", format!("{}", config.search.message.replace("{}", &query).replace("{}", &limit.to_string())));
             // TODO: Implement search functionality
         }
         
@@ -43,18 +44,18 @@ fn main() {
                     // TODO: Implement task listing
                 }
                 TaskCommands::Run { task_name } => {
-                    println!("{}", format!("{}", config.tasks.run_message.replace("{}", task_name)));
+                    println!("{}", format!("{}", config.tasks.run_message.replace("{}", &task_name)));
                     // TODO: Implement task execution
                 }
                 TaskCommands::Report { format } => {
-                    println!("{}", format!("{}", config.tasks.report_message.replace("{}", format)));
+                    println!("{}", format!("{}", config.tasks.report_message.replace("{}", &format)));
                     // TODO: Implement report generation
                 }
             }
         }
         
         Commands::Analyze { format, output } => {
-            println!("{}", format!("{}", config.analyze.message.replace("{}", format).replace("{}", &output.display().to_string())));
+            println!("{}", format!("{}", config.analyze.message.replace("{}", &format).replace("{}", &output.display().to_string())));
             // TODO: Implement analysis functionality
         }
         
@@ -62,7 +63,7 @@ fn main() {
             match operation {
                 ChatCommands::Index { input, output } => {
                     println!("{}", format!("{}", config.chat.index_message.replace("{}", &input.display().to_string()).replace("{}", &output.display().to_string())));
-                    let indexer = ChatIndexer::new(input.clone(), output.clone());
+                    let mut indexer = ChatIndexer::new(input.clone(), output.clone());
                     if let Err(e) = indexer.index_all() {
                         eprintln!("{}", format!("{} {}", config.chat.index_error, e));
                         process::exit(1);
@@ -74,7 +75,7 @@ fn main() {
                 
                 ChatCommands::Vibe { ontology, output } => {
                     println!("{}", format!("{} {} {}", config.chat.vibe_message, ontology, output.display()));
-                    let prover = VibeProver::new(ontology.clone());
+                    let mut prover = VibeProver::new(ontology.clone());
                     if let Err(e) = prover.generate_proof(&output) {
                         eprintln!("{}", format!("{} {}", config.chat.vibe_error, e));
                         process::exit(1);

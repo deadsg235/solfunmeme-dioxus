@@ -1,6 +1,7 @@
 
 
 use crate::model::content_hash::create_content_hash;
+use solfunmeme_function_analysis::TestResult;
 use markdown::mdast::Node;
 use crate::model::estimate_token_count::estimate_token_count;
 //use crate::extractor::model::token_count::estimate_token_count;
@@ -11,7 +12,7 @@ pub fn walk_ast(node: &Node, snippets: &mut Vec<CodeChunk>) {
     match node {
         Node::Code(code) => {
             if !code.value.trim().is_empty() {
-                let content_hash = create_content_hash(&code.value);
+                let content_hash = crate::model::content_hash::create_content_hash(&code.value);
                 let token_count = estimate_token_count(&code.value);
                 let line_count = code.value.lines().count();
                 let char_count = code.value.chars().count();
@@ -24,7 +25,7 @@ pub fn walk_ast(node: &Node, snippets: &mut Vec<CodeChunk>) {
                     token_count,
                     line_count,
                     char_count,
-                    test_result: "Untested".to_string(), // Default value
+                    test_result: Some(TestResult::default()), // Default value
                     line_start: 0, // Default value
                     line_end: 0,   // Default value
                     embedding: Vec::new(), // Default value
@@ -47,7 +48,7 @@ pub fn walk_ast(node: &Node, snippets: &mut Vec<CodeChunk>) {
                     token_count,
                     line_count,
                     char_count,
-                    test_result: "Untested".to_string(), // Default value
+                    test_result: Some(TestResult::default()), // Default value
                     line_start: 0, // Default value
                     line_end: 0,   // Default value
                     embedding: Vec::new(), // Default value

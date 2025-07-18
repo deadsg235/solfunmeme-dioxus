@@ -3,7 +3,7 @@ use std::path::Path;
 use walkdir::WalkDir;
 use md5;
 use serde::{Deserialize, Serialize};
-use solfunmeme_clifford::{SolMultivector, SerializableMultivector};
+use solfunmeme_clifford::SerializableMultivector;
 
 
 
@@ -42,7 +42,7 @@ pub struct CodeChunk {
     pub token_count: usize,
     pub line_count: usize,
     pub char_count: usize,
-    pub test_result: String,
+    pub test_result: Option<TestResult>,
     pub embedding: Vec<f32>,
     pub clifford_vector: Option<SerializableMultivector>,
 }
@@ -222,7 +222,7 @@ pub fn create_code_snippet(
     let token_count = content.split_whitespace().count();
     let line_count = content.lines().count();
     let char_count = content.chars().count();
-    let test_result = "Untested".to_string();
+    let test_result = Some(TestResult::default());
 
     CodeChunk {
         language,
@@ -233,7 +233,7 @@ pub fn create_code_snippet(
         token_count,
         line_count,
         char_count,
-        test_result,
+        test_result: Some(TestResult::default()),
         embedding: Vec::new(),
         clifford_vector: None,
     }

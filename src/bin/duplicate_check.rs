@@ -3,7 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::error::Error;
 use walkdir::WalkDir;
-use sha2::{Sha256, Digest};
+use solfunmeme_crypto_utils::sha2::{Sha256, Digest};
 
 #[derive(Debug, Clone)]
 struct CodeSnippet {

@@ -1,4 +1,4 @@
-use tclifford::{declare_algebra, Multivector, ClError};
+use tclifford::{declare_algebra, Multivector};
 use sha2::{Sha256, Digest};
 use serde::{Serialize, Deserialize};
 use serde::ser::{Serializer, SerializeTuple};

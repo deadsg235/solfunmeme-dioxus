@@ -116,7 +116,7 @@ impl SearchIndex {
             token_count_field => chunk.token_count as u64,
             line_count_field => chunk.line_count as u64,
             char_count_field => chunk.char_count as u64,
-            test_result_field => chunk.test_result.clone(),
+            test_result_field => chunk.test_result.clone().map(|tr| format!("{:?}", tr)).unwrap_or_default(),
 //            embedding_field => embedding_bytes,
         );
         

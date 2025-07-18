@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 use std::error::Error;
-use clap::Parser;
+use clap::{Parser, arg, command};
 
 use index_exporter_lib::exporter::IndexExporter;
 use index_exporter_lib::formats::json_exporter::export_to_json;

@@ -3,7 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::error::Error;
 use walkdir::WalkDir;
-use sha2::{Sha256, Digest};
+use solfunmeme_crypto_utils::sha2::{Sha256, Digest};
 
 #[derive(Debug, Clone)]
 pub struct CodeSnippet {
@@ -204,7 +204,7 @@ impl DuplicateProver {
             for j in (i + 1)..self.snippets.len() {
                 let similarity = self.calculate_similarity(&self.snippets[i], &self.snippets[j]);
                 if similarity >= threshold && similarity < 1.0 {
-                    let mut group = DuplicateGroup {
+                    let group = DuplicateGroup {
                         snippets: vec![self.snippets[i].clone(), self.snippets[j].clone()],
                         similarity_score: similarity,
                     };

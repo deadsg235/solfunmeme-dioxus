@@ -9,6 +9,9 @@ publish = false
 
 [dependencies]
 solfunmeme_messages = { path = "crates/solfunmeme_messages" }
+clap = { version = "4", features = ["derive"] }
+walkdir = "2.3"
+sha2 = "0.10" # Direct dependency for binaries, even if wrapped elsewhere
 
 solfunmeme_rdf_utils = { path = "crates/solfunmeme_rdf_utils" }
 
@@ -19,6 +22,8 @@ solfunmeme_web_utils = { path = "crates/solfunmeme_web_utils" }
 solfunmeme_logging = { path = "crates/solfunmeme_logging" }
 solfunmeme_crypto_utils = { path = "crates/solfunmeme_crypto_utils" }
 solfunmeme_utility_deps = { path = "crates/solfunmeme_utility_deps" }
+
+solfunmeme_http_client = { path = "crates/solfunmeme_http_client" }
 
 #dioxus-charts = { git = "https://github.com/dioxus-community/dioxus-charts.git" ,  branch = "main" }
 dioxus-charts = { path = "vendor/dioxus-charts" }
@@ -58,6 +63,8 @@ prepare_sources = { path = "crates/prepare_sources" }
 solana_integration_lib = { path = "crates/solana_integration_lib" }
 rdf_processing_lib = { path = "crates/rdf_processing_lib" }
 # New refactored crates
+solfunmeme_function_analysis = { path = "crates/solfunmeme_function_analysis" }
+solfunmeme_clifford = { path = "crates/solfunmeme_clifford" }
 solfunmeme_extractor_system = { path = "crates/solfunmeme_extractor_system" }
 solfunmeme_models = { path = "crates/solfunmeme_models" }
 solfunmeme_views = { path = "crates/solfunmeme_views" }

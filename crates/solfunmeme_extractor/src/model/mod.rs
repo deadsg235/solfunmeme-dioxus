@@ -8,4 +8,5 @@ pub mod drag;
 pub mod files;
 pub mod snippets;
 pub mod walk_ast;
+pub mod create_default_test_result;
 //pub mod macro;

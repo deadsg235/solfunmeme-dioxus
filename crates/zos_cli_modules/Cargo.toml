@@ -9,3 +9,4 @@ path = "src/lib.rs"
 [dependencies]
 clap = { version = "4.5.4", features = ["derive"] }
 solfunmeme_serde_utils = { path = "../solfunmeme_serde_utils" }
+serde = { version = "1.0", features = ["derive"] }
