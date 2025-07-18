@@ -31,7 +31,7 @@ pub use reasoning::*;
 pub use inference::*;
 pub use graph::*;
 pub use query::*;
-pub use serialization::*;
+pub use use serialization::*;
 pub use aspects::*;
 use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 
@@ -97,15 +97,14 @@ impl<'a> SemWebContext<'a> {
     
     /// Add triples from Turtle string
     pub fn add_turtle(&mut self, turtle_data: &str) -> SemWebResult<()> {
-        // This will need to be implemented in RdfGraph
-        // For now, this is a placeholder
-        Ok(())
+        self.graph.add_turtle_str(turtle_data)
+            .map_err(|e| SemWebError::RdfParse(e.to_string()))
     }
     
     /// Query the graph using SPARQL-like syntax
     pub fn query(&self, query: &str) -> SemWebResult<Vec<(String, String, String)>> {
-        // This will need to be implemented in RdfGraph
-        // For now, this is a placeholder
+        // This is a placeholder, a real implementation would parse the query
+        // and execute it against the graph.
         Ok(Vec::new())
     }
     
@@ -123,5 +122,39 @@ impl<'a> SemWebContext<'a> {
 impl<'a> Default for SemWebContext<'a> {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_semweb_context_basic_ops() -> SemWebResult<()> {
+        let mut context = SemWebContext::new();
+
+        // Add a triple
+        context.graph.add_triple(
+            "http://example.org/subject1",
+            "http://example.org/predicate1",
+            "http://example.org/object1",
+        )?;
+
+        // Serialize to string and check content
+        let turtle_string = context.graph.serialize_to_turtle_string()?;
+        assert!(turtle_string.contains("<http://example.org/subject1> <http://example.org/predicate1> <http://example.org/object1>"));
+
+        // Add a literal triple
+        context.graph.add_literal_triple(
+            "http://example.org/subject2",
+            "http://example.org/predicate2",
+            "Hello, World!",
+            "http://www.w3.org/2001/XMLSchema#string",
+        )?;
+
+        let turtle_string_with_literal = context.graph.serialize_to_turtle_string()?;
+        assert!(turtle_string_with_literal.contains("<http://example.org/subject2> <http://example.org/predicate2> \"Hello, World!\"^^<http://www.w3.org/2001/XMLSchema#string>"));
+
+        Ok(())
     }
 }

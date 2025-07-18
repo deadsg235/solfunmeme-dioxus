@@ -1,10 +1,10 @@
-use sophia_api::prelude::{IriRef, Term};
 use sophia_api::term::SimpleTerm;
 use sophia_iri::Iri;
 use std::collections::HashMap;
+use crate::term_factory;
 
 pub struct NamespaceManager<'a> {
-    namespaces: HashMap<String, IriRef<String>>,
+    namespaces: HashMap<String, String>, // Store IRI as String
     terms: HashMap<String, SimpleTerm<'a>>,
 }
 
@@ -17,10 +17,9 @@ impl<'a> NamespaceManager<'a> {
     }
 
     pub fn add_namespace(&mut self, prefix: &str, iri: &str) -> anyhow::Result<()> {
-        let iri_ref = IriRef::new(iri.to_string())?;
-        self.namespaces.insert(prefix.to_string(), iri_ref.clone());
+        self.namespaces.insert(prefix.to_string(), iri.to_string());
         self.terms
-            .insert(prefix.to_string(), iri_ref.into_term());
+            .insert(prefix.to_string(), term_factory::iri_term(iri)?);
         Ok(())
     }
 
@@ -37,7 +36,7 @@ impl<'a> NamespaceManager<'a> {
         Ok(iri.into_term())
     }
 
-    pub fn get_base_iri(&self, prefix: &str) -> Option<&IriRef<String>> {
+    pub fn get_base_iri(&self, prefix: &str) -> Option<&String> { // Return &String instead of &IriRef
         self.namespaces.get(prefix)
     }
 }

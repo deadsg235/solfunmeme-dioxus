@@ -1,17 +1,17 @@
 use anyhow::Result;
-use std::io::Write;
 use solfunmeme_input_fs::read_code_chunks;
 use solfunmeme_function_analysis::CodeChunk;
 use solfunmeme_clifford::SerializableMultivector;
 use tclifford::Multivector;
 use solfunmeme_language_processing::{LanguageProcessor, rust_processor::RustProcessor, markdown_processor::MarkdownProcessor};
 
-pub fn process_code_chunks(path: Option<String>, limit: Option<usize>, output_writer: &mut Box<dyn Write>) -> Result<()> {
+pub fn process_code_chunks(path: Option<String>, limit: Option<usize>) -> Result<Vec<CodeChunk>> {
     let files_content = read_code_chunks(path, limit)?;
-
     eprintln!("[INFO] Processing {} files:", files_content.len());
 
+    let mut all_chunks: Vec<CodeChunk> = Vec::new();
     let mut processed_count = 0;
+
     for (file_path, content) in files_content {
         let ext = file_path.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
         let mut chunks: Vec<CodeChunk> = Vec::new();
@@ -44,8 +44,7 @@ pub fn process_code_chunks(path: Option<String>, limit: Option<usize>, output_wr
             chunk.clifford_vector = Some(clifford_vector);
             chunk.embedding = coeffs.to_vec(); // Store the simulated embedding
 
-            let json_chunk = serde_json::to_string(&chunk)?;
-            writeln!(output_writer, "{}", json_chunk)?;
+            all_chunks.push(chunk);
 
             processed_count += 1;
             if processed_count % 100 == 0 {
@@ -55,5 +54,5 @@ pub fn process_code_chunks(path: Option<String>, limit: Option<usize>, output_wr
     }
     eprintln!("[INFO] Finished processing all {} chunks.", processed_count);
 
-    Ok(())
+    Ok(all_chunks)
 }

@@ -90,7 +90,8 @@ The existing wrapper crates remain:
 *   `solfunmeme_logging`: Wraps `log`, `console_log`, `tracing`, and `wasm-logger`.
 *   `solfunmeme_crypto_utils`: Wraps `aes-gcm`, `base64`, `bip39`, `bs58`, `chacha20poly1305`, `ring`, `ring-compat`, `sha2`, `curve25519-dalek`, `x25519-dalek`, and `uuid`.
 *   `solfunmeme_utility_deps`: Wraps `inventory`, `lazy_static`, `ctor`, and `thiserror`.
-*   `solfunmeme_rdf_utils`: Wraps `sophia_turtle`, `sophia_api`, `sophia_inmem`.
+*   `solfunmeme_rdf_utils`: Provides a simplified API for RDF graph manipulation and term creation, abstracting away direct `sophia` usage. See [`crates/solfunmeme_rdf_utils/GEMINI.md`](crates/solfunmeme_rdf_utils/GEMINI.md) for detailed documentation.
+
 *   `solfunmeme_markdown_utils`: Wraps `markdown-meta-parser`, `markdown`, `pulldown-cmark`.
 *   `solfunmeme_http_client`: Wraps `reqwest`.
 

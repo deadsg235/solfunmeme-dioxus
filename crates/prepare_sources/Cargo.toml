@@ -32,6 +32,7 @@ tclifford = "0.1"
 orbital_sim_lib = { path = "../orbital_sim_lib" }
 nalgebra = "0.32"
 solfunmeme_ontology_vibe = { path = "../solfunmeme_ontology_vibe" }
+rdf_processing_lib = { path = "../rdf_processing_lib" }
 
 # tokenizers = { version = "0.15.0" }
 

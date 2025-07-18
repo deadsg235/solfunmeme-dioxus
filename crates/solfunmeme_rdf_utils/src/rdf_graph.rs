@@ -9,6 +9,7 @@ use sophia_turtle::serializer::turtle::{TurtleConfig, TurtleSerializer};
 use std::fs::File;
 use std::io::BufWriter;
 use std::path::Path;
+use crate::term_factory; // Import the new term_factory
 
 pub struct RdfGraph<'a> {
     graph: FastGraph,
@@ -53,25 +54,32 @@ impl<'a> RdfGraph<'a> {
         }
     }
 
+    // Modified add_triple to accept &str for IRIs
     pub fn add_triple(
         &mut self,
-        subject: &SimpleTerm<'a>,
-        predicate: &SimpleTerm<'a>,
-        object: &SimpleTerm<'a>,
+        subject_iri: &str,
+        predicate_iri: &str,
+        object_iri: &str,
     ) -> anyhow::Result<()> {
-        self.graph.insert(subject, predicate, object)?;
+        let subject = term_factory::iri_term(subject_iri)?;
+        let predicate = term_factory::iri_term(predicate_iri)?;
+        let object = term_factory::iri_term(object_iri)?;
+        self.graph.insert(&subject, &predicate, &object)?;
         Ok(())
     }
 
+    // Modified add_literal_triple to accept &str for literal_type
     pub fn add_literal_triple(
         &mut self,
-        subject: &SimpleTerm<'a>,
-        predicate: &SimpleTerm<'a>,
+        subject_iri: &str,
+        predicate_iri: &str,
         literal_value: &str,
-        literal_type: &IriRef<String>,
+        literal_type_iri: &str,
     ) -> anyhow::Result<()> {
-        let literal = SimpleTerm::new_literal_dt(literal_value, literal_type.clone())?;
-        self.graph.insert(subject, predicate, &literal)?;
+        let subject = term_factory::iri_term(subject_iri)?;
+        let predicate = term_factory::iri_term(predicate_iri)?;
+        let literal = term_factory::literal_term_typed(literal_value, literal_type_iri)?;
+        self.graph.insert(&subject, &predicate, &literal)?;
         Ok(())
     }
 
@@ -141,5 +149,42 @@ impl<'a> RdfGraph<'a> {
         writer.serialize_graph(&self.graph)?;
 
         Ok(())
+    }
+}
+
+pub struct GraphBuilder<'a> {
+    graph: RdfGraph<'a>,
+}
+
+impl<'a> GraphBuilder<'a> {
+    pub fn new() -> Self {
+        GraphBuilder {
+            graph: RdfGraph::new(),
+        }
+    }
+
+    pub fn with_namespace(mut self, prefix: &str, iri: &str) -> anyhow::Result<Self> {
+        self.graph.namespaces.add_namespace(prefix, iri)?;
+        Ok(self)
+    }
+
+    pub fn add_triple(mut self, subject_iri: &str, predicate_iri: &str, object_iri: &str) -> anyhow::Result<Self> {
+        self.graph.add_triple(subject_iri, predicate_iri, object_iri)?;
+        Ok(self)
+    }
+
+    pub fn add_literal_triple(
+        mut self,
+        subject_iri: &str,
+        predicate_iri: &str,
+        literal_value: &str,
+        literal_type_iri: &str,
+    ) -> anyhow::Result<Self> {
+        self.graph.add_literal_triple(subject_iri, predicate_iri, literal_value, literal_type_iri)?;
+        Ok(self)
+    }
+
+    pub fn build(self) -> RdfGraph<'a> {
+        self.graph
     }
 }

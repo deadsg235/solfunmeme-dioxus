@@ -1,32 +1,25 @@
 use std::collections::HashMap;
 use std::error::Error;
-use std::fs::File;
-use std::io::BufReader;
 use std::path::Path;
 
-use solfunmeme_rdf_utils::sophia_api::graph::Graph;
-use solfunmeme_rdf_utils::sophia_inmem::graph::FastGraph;
-use solfunmeme_rdf_utils::sophia_turtle::parser::turtle;
-use solfunmeme_rdf_utils::sophia_api::term::{SimpleTerm, TTerm};
-use sophia_iri::Iri;
-use solfunmeme_rdf_utils::sophia_api::source::TripleSource;
+use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
+use solfunmeme_rdf_utils::term_factory;
+use solfunmeme_rdf_utils::sophia_api::term::TTerm;
 use solfunmeme_rdf_utils::sophia_api::prelude::Triple;
 
 pub struct OntologyResolver {
-    graph: FastGraph,
+    graph: RdfGraph,
     uri_to_emoji: HashMap<String, String>,
 }
 
 impl OntologyResolver {
     pub fn load(path: &Path) -> Result<Self, Box<dyn Error>> {
-        let file = File::open(path)?;
-        let reader = BufReader::new(file);
-        let graph: FastGraph = turtle::parse_bufread(reader).collect_triples::<FastGraph>()?;
+        let graph = RdfGraph::from_file(path)?;
 
         let mut uri_to_emoji = HashMap::new();
-        let emoji_prop_uri = Iri::new_unchecked("https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#emoji").into_term();
+        let emoji_prop_uri = term_factory::iri_term("https://rdf.solfunmeme.com/spec/2025/07/17/emoji.ttl#emoji")?;
 
-        for triple in graph.triples() {
+        for triple in graph.graph.triples() {
             let triple = triple?;
             if triple.p() == &emoji_prop_uri {
                 let subject_str = if let Some(iri) = triple.s().as_iri() {
