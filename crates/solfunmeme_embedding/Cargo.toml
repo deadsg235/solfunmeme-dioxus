@@ -12,10 +12,10 @@ solfunmeme_clifford = { path = "../solfunmeme_clifford" }
 sophia_api = { path = "../../vendor/sophia_rs/api" }
 sophia_turtle = { path = "../../vendor/sophia_rs/turtle" }
 sophia_inmem = { path = "../../vendor/sophia_rs/inmem" }
-candle-core = { version = "0.5.1" }
-tokenizers = { version = "0.15.2" }
+# candle-core = { version = "0.5.1" }
+# tokenizers = { version = "0.15.2" }
 
 
 [features]
-# default = []
+default = []
 

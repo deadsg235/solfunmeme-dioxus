@@ -34,7 +34,7 @@ async fn read_files(
                 p.total_lines = total_lines;
             }
 
-            let _snippet: Vec<CodeSnippet> = [].to_vec();
+            let _snippet: Vec<CodeChunk> = [].to_vec();
             let _code_annotations: Vec<AnnotatedWord> = [].to_vec();
 
             // FIXME: broken code, please fix
@@ -162,7 +162,7 @@ pub fn embedding_app() -> Element {
         for i in 0..std::cmp::min(embedding.len(), 8) {
             coeffs[i] = embedding[i];
         }
-        let clifford_vector = Some(SolMultivector::from_vector(&coeffs).unwrap());
+        let clifford_vector = Some(SerializableMultivector(SolMultivector::from_vector(coeffs.iter().cloned()).unwrap()));
 
         AnnotatedWord {
             word: word.to_string(),

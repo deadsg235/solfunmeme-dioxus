@@ -4,10 +4,10 @@ use crate::model::content_hash::create_content_hash;
 use markdown::mdast::Node;
 use crate::model::estimate_token_count::estimate_token_count;
 //use crate::extractor::model::token_count::estimate_token_count;
-use shared_analysis_types::CodeSnippet;
+use solfunmeme_function_analysis::CodeChunk;
 
 /// Recursively walks the AST to find code snippets.  
-pub fn walk_ast(node: &Node, snippets: &mut Vec<CodeSnippet>) {
+pub fn walk_ast(node: &Node, snippets: &mut Vec<CodeChunk>) {
     match node {
         Node::Code(code) => {
             if !code.value.trim().is_empty() {
@@ -17,16 +17,18 @@ pub fn walk_ast(node: &Node, snippets: &mut Vec<CodeSnippet>) {
                 let char_count = code.value.chars().count();
                 let language = code.lang.as_deref().unwrap_or("text").to_string();
 
-                snippets.push(CodeSnippet {
+                snippets.push(CodeChunk {
                     content: code.value.clone(),
                     content_hash,
                     language,
                     token_count,
                     line_count,
                     char_count,
-                    test_result: None,
-                    line_start: 0,
-                    line_end: 0,
+                    test_result: "Untested".to_string(), // Default value
+                    line_start: 0, // Default value
+                    line_end: 0,   // Default value
+                    embedding: Vec::new(), // Default value
+                    clifford_vector: None, // Default value
                 });
             }
         }
@@ -38,16 +40,18 @@ pub fn walk_ast(node: &Node, snippets: &mut Vec<CodeSnippet>) {
                 let line_count = inline_code.value.lines().count();
                 let char_count = inline_code.value.chars().count();
 
-                snippets.push(CodeSnippet {
+                snippets.push(CodeChunk {
                     content: inline_code.value.clone(),
                     content_hash,
                     language: "inline".to_string(),
                     token_count,
                     line_count,
                     char_count,
-                    test_result: None,
-                    line_start: 0,
-                    line_end: 0,
+                    test_result: "Untested".to_string(), // Default value
+                    line_start: 0, // Default value
+                    line_end: 0,   // Default value
+                    embedding: Vec::new(), // Default value
+                    clifford_vector: None, // Default value
                 });
             }
         }

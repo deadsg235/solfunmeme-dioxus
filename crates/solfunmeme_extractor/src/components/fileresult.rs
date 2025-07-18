@@ -11,7 +11,7 @@ pub fn FileResults(
     file: ExtractedFile,
     copied_snippets: std::collections::HashSet<String>,
     on_copy: EventHandler<(String, String)>,
-    on_download: EventHandler<(Vec<CodeSnippet>, String)>,
+    on_download: EventHandler<(Vec<CodeChunk>, String)>,
 ) -> Element {
     let unique_languages: Vec<String> = file
         .snippets
