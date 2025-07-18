@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use crate::term_factory;
 
 pub struct NamespaceManager<'a> {
-    namespaces: HashMap<String, String>, // Store IRI as String
+    namespaces: HashMap<String, String>,
     terms: HashMap<String, SimpleTerm<'a>>,
 }
 
@@ -16,7 +16,7 @@ impl<'a> NamespaceManager<'a> {
         }
     }
 
-    pub fn add_namespace(&mut self, prefix: &str, iri: &str) -> anyhow::Result<()> {
+    pub fn add_namespace(&mut self, prefix: &str, iri: &'a str) -> anyhow::Result<()> {
         self.namespaces.insert(prefix.to_string(), iri.to_string());
         self.terms
             .insert(prefix.to_string(), term_factory::iri_term(iri)?);
@@ -31,12 +31,16 @@ impl<'a> NamespaceManager<'a> {
         Ok(Iri::new(format!("{}{}", base_iri, local_name))?)
     }
 
-    pub fn get_term(&self, prefix: &str, local_name: &str) -> anyhow::Result<SimpleTerm<'a>> {
+    pub fn get_term(&self, prefix: &str, local_name: &str) -> anyhow::Result<SimpleTerm> {
         let iri = self.get_iri(prefix, local_name)?;
-        Ok(iri.into_term())
+        Ok(SimpleTerm::new_iri(iri))
     }
 
-    pub fn get_base_iri(&self, prefix: &str) -> Option<&String> { // Return &String instead of &IriRef
+    pub fn get_base_iri(&self, prefix: &str) -> Option<&String> {
         self.namespaces.get(prefix)
+    }
+
+    pub fn get_all_namespaces(&self) -> &HashMap<String, String> {
+        &self.namespaces
     }
 }

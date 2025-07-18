@@ -87,10 +87,10 @@ The `term_factory` module provides convenience functions for creating `sophia_ap
 
 **Available Functions:**
 
-*   `iri_term(iri_string: &str) -> anyhow::Result<SimpleTerm<'static>>`: Creates an IRI term.
-*   `literal_term(value: &str) -> SimpleTerm<'static>`: Creates an untyped literal term.
-*   `literal_term_typed(value: &str, datatype_iri: &str) -> anyhow::Result<SimpleTerm<'static>>`: Creates a typed literal term.
-*   `bnode_term(id: &str) -> SimpleTerm<'static>`: Creates a blank node term.
+*   `iri_term(iri_string: &str) -> anyhow::Result<SimpleTerm>`: Creates an IRI term.
+*   `literal_term(value: &str) -> SimpleTerm`: Creates an untyped literal term.
+*   `literal_term_typed(value: &str, datatype_iri: &str) -> anyhow::Result<SimpleTerm>`: Creates a typed literal term.
+*   `bnode_term(id: &str) -> SimpleTerm`: Creates a blank node term.
 
 **Example Usage:**
 
@@ -144,8 +144,34 @@ The primary goal of `solfunmeme_rdf_utils` is to reduce the boilerplate and cogn
 *   **Centralized Namespace Management:** `NamespaceManager` ensures consistent IRI generation and avoids hardcoding namespace URIs throughout the codebase.
 *   **Fluent Graph Construction:** The `GraphBuilder` pattern allows for a more readable and chainable way to build RDF graphs.
 
-By using these abstractions, other crates in the project can interact with RDF data at a higher level, focusing on the semantic content rather than the intricacies of the RDF library.
-
 ### Refactoring Impact:
 
 The refactoring efforts involved updating several crates (e.g., `rdf_processing_lib`, `semweb_lib`, `solfunmeme_lean4`) to leverage this new simplified API. This has resulted in cleaner code, fewer direct `sophia` imports outside of `solfunmeme_rdf_utils`, and a more maintainable RDF layer for the project.
+
+## Lessons Learned: Sophia 0.8.0 API Migration
+
+Migrating to Sophia 0.8.0 introduced significant breaking changes, primarily due to the adoption of Generic Associated Types (GATs) and a redesign of the core API. Here are key lessons learned and tips for working with Sophia 0.8.0+:
+
+1.  **`SimpleTerm` Construction:**
+    *   **Old Way (0.7.x):** Direct constructors like `SimpleTerm::new_iri()`, `SimpleTerm::new_literal_untyped()`, `SimpleTerm::new_literal_dt()`, `SimpleTerm::new_bnode()`. These are **removed** in 0.8.0.
+    *   **New Way (0.8.0+):** Use `SimpleTerm::new_iri(Iri::new(...)?)`, `SimpleTerm::new_literal_untyped(...)`, `SimpleTerm::new_literal_dt(...)`, `SimpleTerm::new_bnode(BNode::new(...))`. Note that `Iri` and `BNode` are now distinct types that need to be constructed first.
+
+2.  **IRI and BNode Imports:**
+    *   **Old Way (0.7.x):** `sophia_iri::Iri`, `sophia_api::term::BNode`.
+    *   **New Way (0.8.0+):** `sophia_api::iri::Iri` and `sophia_api::term::BNode` (for the struct, not the enum variant). Ensure you import `sophia_api::iri::Iri` for IRI construction and `sophia_api::term::BNode` for blank node construction.
+
+3.  **Graph Query Methods:**
+    *   **Old Way (0.7.x):** Specific methods like `graph.triples_with_sp(s, p)` or `graph.triples_with_po(p, o)`.
+    *   **New Way (0.8.0+):** Use `graph.triples_matching(subject_matcher, predicate_matcher, object_matcher)`. This method is more flexible and replaces many specific query methods.
+
+4.  **Parser and Serializer Instantiation:**
+    *   **Old Way (0.7.x):** `TurtleParser::new()`, `TurtleSerializer::new()`.
+    *   **New Way (0.8.0+):** Parsers and serializers often require arguments in their `new()` constructors (e.g., `TurtleParser::new(content.as_bytes(), None)`). Always check the specific `new()` signature in the 0.8.0+ documentation.
+
+5.  **Asynchronous Operations (JSON-LD):**
+    *   `JsonLdParser::parse_json()` returns a `Future`. You must `await` the result and then call `collect_triples()` on the awaited value. This is a common pattern for asynchronous operations in Rust.
+
+6.  **StreamSerializer `flush()` method:**
+    *   The `flush()` method on `TurtleSerializer` (and other serializers implementing `StreamSerializer`) is still available, but ensure `use sophia_api::serializer::StreamSerializer;` is present.
+
+By centralizing `sophia` interactions within `solfunmeme_rdf_utils`, we aim to minimize the impact of future upstream API changes on the rest of the codebase. Always refer to the official `sophia` 0.8.0+ documentation for the most accurate and up-to-date API usage.
