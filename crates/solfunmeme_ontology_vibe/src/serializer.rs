@@ -4,6 +4,7 @@ use sophia_api::prefix::{Prefix, PrefixMap, PrefixMapPair};
 use sophia_iri::Iri;
 use sophia_turtle::serializer::turtle::{TurtleSerializer, TurtleConfig};
 use std::path::PathBuf;
+use sophia_inmem::graph::FastGraph;
 
 pub fn serialize_graph_internal(graph: &FastGraph, em_prefix: &Iri<&'static str>, crates_root_prefix: &Iri<&'static str>) -> Result<()> {
     let index_ttl_path = PathBuf::from("ontologies/index.ttl");

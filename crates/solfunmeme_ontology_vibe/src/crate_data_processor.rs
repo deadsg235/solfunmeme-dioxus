@@ -6,6 +6,7 @@ use sophia_inmem::graph::FastGraph;
 use sophia_iri::Iri;
 
 use solfunmeme_clifford::generate_multivector_from_string;
+use crate::create_literal_simple_term;
 
 pub fn add_crate_data_internal(graph: &mut FastGraph, crates_root_prefix: &Iri<&'static str>, has_clifford_vector_iri: &Iri<&'static str>) -> Result<()> {
     let mut new_triples = Vec::new();
@@ -24,7 +25,7 @@ pub fn add_crate_data_internal(graph: &mut FastGraph, crates_root_prefix: &Iri<&
                     new_triples.push(sophia_api::triple::Triple::new(
                         subject_iri.to_owned(),
                         has_clifford_vector_iri.to_owned(),
-                        multivector_str.to_string().into_term(),
+                        create_literal_simple_term(&multivector_str),
                     ));
                 }
             }
