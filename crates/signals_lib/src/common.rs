@@ -1,4 +1,4 @@
-use dioxus::prelude::*;
+use solfunmeme_dioxus_deps::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// Signal state wrapper for better type safety

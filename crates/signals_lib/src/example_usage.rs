@@ -2,7 +2,7 @@
 // This demonstrates how to register components, menus, and emojis dynamically
 
 use crate::common::{SignalManager, use_signal_manager, SignalState};
-use dioxus::prelude::*;
+use solfunmeme_dioxus_deps::prelude::*;
 
 /// Example component showing how to use signal managers
 pub fn example_component() -> Element {

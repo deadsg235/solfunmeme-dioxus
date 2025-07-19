@@ -7433,10 +7433,10 @@ dependencies = [
 name = "signals_lib"
 version = "0.1.0"
 dependencies = [
- "dioxus",
  "fastrand",
  "serde",
  "shared_types_lib",
+ "solfunmeme_dioxus_deps",
  "solfunmeme_rdf_utils",
 ]
 

@@ -6,7 +6,7 @@ license = "MIT OR Apache-2.0"
 publish = false
 
 [dependencies]
-dioxus = { version = "0.6.3", features = ["router"] }
+solfunmeme_dioxus_deps = { path = "../solfunmeme_dioxus_deps" }
 serde = { version = "1.0", features = ["derive"] }
 shared_types_lib = { path = "../shared_types_lib" }
 fastrand = "2.0"

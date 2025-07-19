@@ -1,4 +1,4 @@
-use dioxus::prelude::*;
+use solfunmeme_dioxus_deps::prelude::*;
 use std::collections::HashMap;
 
 /// Simple interface that all dynamic modules must implement
