@@ -9,7 +9,7 @@ pub fn load_graph_internal() -> Result<RdfGraph<'static>> {
     let mut graph = RdfGraph::from_file(&index_ttl_path)?;
     let graph2 = RdfGraph::from_file(&zos_v1_ttl_path)?;
 
-    graph.graph.insert_all(graph2.graph.triples())?;
+    graph.merge_graph(graph2)?;
 
     Ok(graph)
 }

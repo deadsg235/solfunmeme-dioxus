@@ -15,7 +15,8 @@ pub fn generate_ontology(
     graph.namespaces = namespaces::define_namespaces();
 
     for func in analyzed_functions {
-        process_function::process_analyzed_function(&mut graph, func, &graph.namespaces)?;
+        let ns_clone = graph.namespaces.clone();
+        process_function::process_analyzed_function(&mut graph, func, &ns_clone)?;
     }
 
     serialize::serialize_graph_to_file(&graph, output_path)?;
@@ -31,7 +32,8 @@ pub fn generate_token_ontology(
     graph.namespaces = namespaces::define_namespaces();
 
     for (_token_str, token_data) in analyzed_tokens {
-        process_function::process_analyzed_token(&mut graph, token_data, &graph.namespaces)?;
+        let ns_clone = graph.namespaces.clone();
+        process_function::process_analyzed_token(&mut graph, token_data, &ns_clone)?;
     }
 
     serialize::serialize_graph_to_file(&graph, output_path)?;

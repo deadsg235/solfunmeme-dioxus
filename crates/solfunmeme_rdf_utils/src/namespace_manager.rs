@@ -3,13 +3,13 @@ use sophia_iri::Iri;
 use std::collections::HashMap;
 use crate::term_factory;
 
-#[derive(Clone)]
-pub struct NamespaceManager<'a> {
+#[derive(Clone, Debug)]
+pub struct NamespaceManager {
     namespaces: HashMap<String, String>,
-    terms: HashMap<String, SimpleTerm<'a>>,
+    terms: HashMap<String, SimpleTerm<'static>>,
 }
 
-impl<'a> NamespaceManager<'a> {
+impl NamespaceManager {
     pub fn new() -> Self {
         NamespaceManager {
             namespaces: HashMap::new(),
@@ -17,7 +17,7 @@ impl<'a> NamespaceManager<'a> {
         }
     }
 
-    pub fn add_namespace(&mut self, prefix: &str, iri: &'a str) -> anyhow::Result<()> {
+    pub fn add_namespace(&mut self, prefix: &str, iri: &str) -> anyhow::Result<()> {
         self.namespaces.insert(prefix.to_string(), iri.to_string());
         self.terms
             .insert(prefix.to_string(), term_factory::iri_term(iri.to_string())?);

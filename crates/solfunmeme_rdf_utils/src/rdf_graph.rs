@@ -9,15 +9,16 @@ use sophia_api::term::SimpleTerm;
 use std::path::Path;
 use crate::term_factory; // Import the new term_factory
 use sophia_api::serializer::TripleSerializer;
+use uuid;
 
 
-#[derive(Clone)]
-pub struct RdfGraph<'a> {
+#[derive(Clone, Debug)]
+pub struct RdfGraph {
     pub graph: FastGraph,
-    pub namespaces: NamespaceManager<'a>,
+    pub namespaces: NamespaceManager,
 }
 
-impl<'a> RdfGraph<'a> {
+impl RdfGraph {
     pub fn from_turtle_str(turtle_data: &str) -> anyhow::Result<Self> {
         let parser = TurtleParser { base: None };
         let graph: FastGraph = parser.parse_str(turtle_data).collect_triples()?;
@@ -71,7 +72,7 @@ impl<'a> RdfGraph<'a> {
         Ok(())
     }
 
-    pub fn merge_graph(&mut self, other: RdfGraph<'a>) -> anyhow::Result<()> {
+    pub fn merge_graph(&mut self, other: RdfGraph) -> anyhow::Result<()> {
         self.graph.insert_all(other.graph.triples())?;
         Ok(())
     }
@@ -109,6 +110,46 @@ impl<'a> RdfGraph<'a> {
         results
     }
 
+    pub fn get_subjects_with_property(
+        &self,
+        predicate_iri: &str,
+        object_iri: &str,
+    ) -> anyhow::Result<Vec<String>> {
+        let predicate = term_factory::iri_term(predicate_iri.to_string())?;
+        let object = term_factory::iri_term(object_iri.to_string())?;
+        let mut subjects = Vec::new();
+        for t in self.graph.triples_matching(None::<&SimpleTerm>, Some(&predicate), Some(&object)) {
+            subjects.push(term_to_string(t.unwrap().s()));
+        }
+        Ok(subjects)
+    }
+
+    pub fn get_property_value(
+        &self,
+        subject_iri: &str,
+        predicate_iri: &str,
+    ) -> anyhow::Result<Option<String>> {
+        let subject = term_factory::iri_term(subject_iri.to_string())?;
+        let predicate = term_factory::iri_term(predicate_iri.to_string())?;
+        for t in self.graph.triples_matching(Some(&subject), Some(&predicate), None::<&SimpleTerm>) {
+            return Ok(Some(term_to_string(t.unwrap().o())));
+        }
+        Ok(None)
+    }
+
+    pub fn new_bnode(&mut self) -> anyhow::Result<SimpleTerm<'static>> {
+        let id = uuid::Uuid::new_v4().to_string();
+        term_factory::bnode_term(id)
+    }
+
+    pub fn serialize_to_turtle(&self, path: &Path) -> anyhow::Result<()> {
+        let mut buffer = Vec::new();
+        let mut serializer = TurtleSerializer::new(&mut buffer);
+        serializer.serialize_graph(&self.graph)?;
+        std::fs::write(path, buffer)?;
+        Ok(())
+    }
+
     pub fn serialize_to_turtle_string(&self) -> anyhow::Result<String> {
         let mut buffer = Vec::new();
         let mut serializer = TurtleSerializer::new(&mut buffer);
@@ -117,7 +158,7 @@ impl<'a> RdfGraph<'a> {
     }
 }
 
-fn term_to_string(term: &SimpleTerm) -> String {
+pub fn term_to_string(term: &SimpleTerm) -> String {
     match term.kind() {
         TermKind::Iri => term.iri().unwrap().to_string(),
         TermKind::Literal => term.lexical_form().unwrap().to_string(),
@@ -126,7 +167,7 @@ fn term_to_string(term: &SimpleTerm) -> String {
     }
 }
 
-pub struct GraphBuilder<'a> {
+pub struct GraphBuilder {
     graph: RdfGraph<'a>,
 }
 

@@ -16,6 +16,6 @@ pub fn literal_term_typed<'a>(value: &'a str, datatype_iri: &'a str) -> anyhow::
     Ok(SimpleTerm::LiteralDatatype(MownStr::from(value), iri_ref))
 }
 
-pub fn bnode_term(id: &str) -> anyhow::Result<SimpleTerm> {
+pub fn bnode_term(id: String) -> anyhow::Result<SimpleTerm<'static>> {
     Ok(SimpleTerm::BlankNode(BnodeId::new(MownStr::from(id))?))
 }
