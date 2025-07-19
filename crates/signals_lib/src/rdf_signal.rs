@@ -13,32 +13,14 @@ pub fn new_rdf_signal_from_turtle(turtle_data: &str) -> RdfSignal {
 pub fn add_triples_from_turtle(signal: &mut RdfSignal, turtle_data: &str) {
     let mut graph = signal.get();
     let new_graph = RdfGraph::from_turtle_str(turtle_data).expect("Failed to parse Turtle");
-    graph.graph.insert_all(new_graph.graph.triples()).unwrap();
+    graph.merge_graph(new_graph).unwrap();
     signal.set_success(graph);
 }
 
 /// Query the RDF signal for triples matching a pattern
 pub fn query_triples(signal: &RdfSignal, subj: Option<&str>, pred: Option<&str>, obj: Option<&str>) -> Vec<(String, String, String)> {
     let graph = signal.get();
-    let s = subj.map(|s| graph.namespaces.get_term("ex", s).unwrap());
-    let p = pred.map(|p| graph.namespaces.get_term("ex", p).unwrap());
-    let o = obj.map(|o| graph.namespaces.get_term("ex", o).unwrap());
-
-    let mut results = Vec::new();
-    for t in graph.graph.triples() {
-        let t = t.unwrap();
-        let s_str = t.s().to_string();
-        let p_str = t.p().to_string();
-        let o_str = t.o().to_string();
-
-        if s.as_ref().map_or(true, |s_| s_ == t.s())
-            && p.as_ref().map_or(true, |p_| p_ == t.p())
-            && o.as_ref().map_or(true, |o_| o_ == t.o())
-        {
-            results.push((s_str, p_str, o_str));
-        }
-    }
-    results
+    graph.query_triples_as_strings(subj, pred, obj)
 }
 
 #[cfg(test)]

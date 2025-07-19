@@ -3,6 +3,7 @@ use sophia_iri::Iri;
 use std::collections::HashMap;
 use crate::term_factory;
 
+#[derive(Clone)]
 pub struct NamespaceManager<'a> {
     namespaces: HashMap<String, String>,
     terms: HashMap<String, SimpleTerm<'a>>,
@@ -19,7 +20,7 @@ impl<'a> NamespaceManager<'a> {
     pub fn add_namespace(&mut self, prefix: &str, iri: &'a str) -> anyhow::Result<()> {
         self.namespaces.insert(prefix.to_string(), iri.to_string());
         self.terms
-            .insert(prefix.to_string(), term_factory::iri_term(iri)?);
+            .insert(prefix.to_string(), term_factory::iri_term(iri.to_string())?);
         Ok(())
     }
 
@@ -33,7 +34,7 @@ impl<'a> NamespaceManager<'a> {
 
     pub fn get_term(&self, prefix: &str, local_name: &str) -> anyhow::Result<SimpleTerm> {
         let iri = self.get_iri(prefix, local_name)?;
-        Ok(SimpleTerm::new_iri(iri))
+        term_factory::iri_term(iri.to_string())
     }
 
     pub fn get_base_iri(&self, prefix: &str) -> Option<&String> {

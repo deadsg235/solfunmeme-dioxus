@@ -1,19 +1,21 @@
-use sophia_api::term::{SimpleTerm, Term};
-use sophia_iri::Iri;
+use sophia_api::term::{SimpleTerm, BnodeId};
+use sophia_iri::IriRef;
+use sophia_api::ns::xsd;
+use sophia_api::MownStr;
 
-pub fn iri_term(iri_string: &str) -> anyhow::Result<SimpleTerm> {
-    Ok(Term::new_iri(Iri::new(iri_string.to_string())?))
+pub fn iri_term(iri_string: String) -> anyhow::Result<SimpleTerm<'static>> {
+    Ok(SimpleTerm::Iri(IriRef::new_unchecked(MownStr::from(iri_string))))
 }
 
 pub fn literal_term(value: &str) -> SimpleTerm {
-    Term::new_literal_untyped(value.to_string())
+    SimpleTerm::LiteralDatatype(MownStr::from(value), IriRef::new_unchecked(xsd::string.iriref().unwrap()))
 }
 
 pub fn literal_term_typed<'a>(value: &'a str, datatype_iri: &'a str) -> anyhow::Result<SimpleTerm<'a>> {
-    let iri = Iri::new(datatype_iri)?;
-    Ok(Term::new_literal_dt(value.to_string(), iri))
+    let iri_ref = IriRef::new_unchecked(MownStr::from(datatype_iri));
+    Ok(SimpleTerm::LiteralDatatype(MownStr::from(value), iri_ref))
 }
 
 pub fn bnode_term(id: &str) -> anyhow::Result<SimpleTerm> {
-    Ok(Term::new_bnode(id.to_string())?)
+    Ok(SimpleTerm::BlankNode(BnodeId::new(MownStr::from(id))?))
 }
