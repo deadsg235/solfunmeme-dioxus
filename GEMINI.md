@@ -59,3 +59,32 @@ Consider using the `FromTerm` and `TryFromTerm` traits for easier term construct
 Wiki pages you might want to explore:
 - [Overview (pchampin/sophia_rs)](/wiki/pchampin/sophia_rs#1)
 - [API Foundation (pchampin/sophia_rs)](/wiki/pchampin/sophia_rs#2.1)
+
+---
+
+## Recent Build Success and Dependency Alignment (July 19, 2025)
+
+The `bootstrap` crate has successfully compiled. All previous compilation errors related to lifetime parameters and `sophia` API usage have been resolved.
+
+**Key Resolutions:**
+-   **Lifetime Parameters:** Removed explicit lifetime parameters from `RdfGraph` and `NamespaceManager` in `solfunmeme_rdf_utils`, and updated dependent structs (`GraphBuilder`, `PrimeVibeOntology`) accordingly.
+-   **Sophia Dependency Alignment:** Ensured that the `bootstrap` crate now exclusively uses `solfunmeme_rdf_utils` for RDF operations, and `solfunmeme_rdf_utils` itself manages the `sophia` dependencies. This aligns with the project policy of centralizing external crate usage within dedicated utility crates.
+-   **Graph Querying:** Updated `PrimeVibeOntology` to use the `query_graph_triples` helper function from `solfunmeme_rdf_utils` for querying the RDF graph, abstracting away direct `sophia` `triples_matching` calls.
+
+This marks a stable checkpoint for the `bootstrap` crate's compilation.
+
+---
+
+## Test Results for `bootstrap` crate (July 19, 2025)
+
+**Command Executed:** `cargo test --package bootstrap`
+
+**Outcome:** All tests passed successfully.
+
+**Details:**
+-   **4 tests passed** in `kernel::tests` (within `src/lib.rs`).
+-   **0 tests failed**.
+-   **0 tests ignored**.
+-   **Numerous warnings** regarding missing documentation were reported, but these do not prevent successful compilation or test execution. These warnings are primarily related to the `function_number_linkage.rs` and `prime_vibe_ontology.rs` files, indicating areas where documentation can be improved.
+
+This confirms the functional correctness of the `bootstrap` crate's tested components after the recent fixes.
