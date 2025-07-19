@@ -25,10 +25,10 @@ pub struct AnalyzedToken {
     pub orbital_path: Option<Vec<(f64, f64)>>,
 }
 
-pub fn process_analyzed_function<'a>(
-    graph: &mut RdfGraph<'a>,
+pub fn process_analyzed_function(
+    graph: &mut RdfGraph,
     func: AnalyzedFunction,
-    ns: &NamespaceManager<'a>,
+    ns: &NamespaceManager,
 ) -> anyhow::Result<()> {
     let func_iri = ns.get_term("ex", &func.function_name)?;
     let type_pred = ns.get_term("rdf", "type")?;
@@ -101,10 +101,10 @@ pub fn process_analyzed_function<'a>(
     Ok(())
 }
 
-pub fn process_analyzed_token<'a>(
-    graph: &mut RdfGraph<'a>,
+pub fn process_analyzed_token(
+    graph: &mut RdfGraph,
     token_data: AnalyzedToken,
-    ns: &NamespaceManager<'a>,
+    ns: &NamespaceManager,
 ) -> anyhow::Result<()> {
     let token_iri = ns.get_term("ex", &token_data.token)?;
     let type_pred = ns.get_term("rdf", "type")?;

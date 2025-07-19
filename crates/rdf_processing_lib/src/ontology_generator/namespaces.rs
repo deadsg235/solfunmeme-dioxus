@@ -1,6 +1,6 @@
 use solfunmeme_rdf_utils::namespace_manager::NamespaceManager;
 
-pub fn define_namespaces<'a>() -> NamespaceManager<'a> {
+pub fn define_namespaces() -> NamespaceManager {
     let mut ns = NamespaceManager::new();
     ns.add_namespace("ex", "http://example.org/ontology/").unwrap();
     ns.add_namespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#").unwrap();

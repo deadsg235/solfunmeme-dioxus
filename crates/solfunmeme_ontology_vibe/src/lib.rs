@@ -5,7 +5,7 @@ pub mod serializer;
 use anyhow::Result;
 use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 
-pub fn load_graph() -> Result<RdfGraph<'static>> {
+pub fn load_graph() -> Result<RdfGraph> {
     loader::load_graph_internal()
 }
 

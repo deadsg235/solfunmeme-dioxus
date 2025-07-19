@@ -2,7 +2,7 @@ use anyhow::Result;
 use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 use std::path::PathBuf;
 
-pub fn load_graph_internal() -> Result<RdfGraph<'static>> {
+pub fn load_graph_internal() -> Result<RdfGraph> {
     let index_ttl_path = PathBuf::from("ontologies/index.ttl");
     let zos_v1_ttl_path = PathBuf::from("ontologies/zos/v1.ttl");
 

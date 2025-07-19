@@ -142,6 +142,24 @@ impl RdfGraph {
         term_factory::bnode_term(id)
     }
 
+    pub fn query_graph_triples(
+        &self,
+        subj_iri: Option<&str>,
+        pred_iri: Option<&str>,
+        obj_iri: Option<&str>,
+    ) -> Vec<(String, String, String)> {
+        let s_term = subj_iri.and_then(|s| term_factory::iri_term(s.to_string()).ok());
+        let p_term = pred_iri.and_then(|p| term_factory::iri_term(p.to_string()).ok());
+        let o_term = obj_iri.and_then(|o| term_factory::iri_term(o.to_string()).ok());
+
+        let mut results = Vec::new();
+        for t in self.graph.triples_matching(s_term.as_ref(), p_term.as_ref(), o_term.as_ref()) {
+            let t = t.unwrap();
+            results.push((term_to_string(t.s()), term_to_string(t.p()), term_to_string(t.o())));
+        }
+        results
+    }
+
     pub fn serialize_to_turtle(&self, path: &Path) -> anyhow::Result<()> {
         let mut buffer = Vec::new();
         let mut serializer = TurtleSerializer::new(&mut buffer);
@@ -168,17 +186,17 @@ pub fn term_to_string(term: &SimpleTerm) -> String {
 }
 
 pub struct GraphBuilder {
-    graph: RdfGraph<'a>,
+    graph: RdfGraph,
 }
 
-impl<'a> GraphBuilder<'a> {
+impl GraphBuilder {
     pub fn new() -> Self {
         GraphBuilder {
             graph: RdfGraph::new(),
         }
     }
 
-    pub fn with_namespace(mut self, prefix: &str, iri: &'a str) -> anyhow::Result<Self> {
+    pub fn with_namespace(mut self, prefix: &str, iri: &str) -> anyhow::Result<Self> {
         self.graph.namespaces.add_namespace(prefix, iri)?;
         Ok(self)
     }
@@ -199,7 +217,7 @@ impl<'a> GraphBuilder<'a> {
         Ok(self)
     }
 
-    pub fn build(self) -> RdfGraph<'a> {
+    pub fn build(self) -> RdfGraph {
         self.graph
     }
 }

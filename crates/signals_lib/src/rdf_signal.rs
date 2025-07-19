@@ -1,7 +1,7 @@
 use solfunmeme_rdf_utils::rdf_graph::RdfGraph;
 use crate::common::SignalManager;
 
-pub type RdfSignal<'a> = SignalManager<RdfGraph<'a>>;
+pub type RdfSignal = SignalManager<RdfGraph>;
 
 /// Create a new RDF signal from Turtle data
 pub fn new_rdf_signal_from_turtle(turtle_data: &str) -> RdfSignal {
