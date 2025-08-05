@@ -21,7 +21,8 @@ dioxus-html = "0.6.3"
 rrust_kontekst = { path = "../rrust_kontekst" }
 solfunmeme_function_analysis = { path = "../solfunmeme_function_analysis" }
 # solfunmeme_embedding = { path = "../solfunmeme_embedding" }
-solfunmeme_clifford = { path = "../solfunmeme_clifford" }
+# solfunmeme_clifford = { path = "../solfunmeme_clifford" }
 # candle-core = { version = "0.5.1" }
 dioxus-logger = "0.6.2"
+tokio = { version = "1.38", features = ["full"] }
 # Add any other dependencies that src/extractor might have

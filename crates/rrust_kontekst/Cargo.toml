@@ -9,8 +9,8 @@ quote = "1.0.40"
 syn = { version = "2.0.104", features=["full"] }
 rrust_kontekst_base = { path = "../rrust_kontekst_base" }
 dioxus-logger = "0.6.2"
+rrust_kontekst_macros = { path = "../rrust_kontekst_macros" }
 
 [lib]
 name = "rrust_kontekst"
 path = "src/lib.rs"
-proc-macro = true
