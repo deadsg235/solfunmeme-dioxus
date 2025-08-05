@@ -13,7 +13,7 @@ solfunmeme_app = { path = "crates/solfunmeme_app", optional = true }
 solfunmeme_core_utils = { path = "crates/solfunmeme_core_utils" }
 clap = { version = "4", features = ["derive"] }
 
-solfunmeme_rdf_utils = { path = "crates/solfunmeme_rdf_utils" }
+# solfunmeme_rdf_utils = { path = "crates/solfunmeme_rdf_utils" }
 
 ### git deps, could be submodules
 wallet-adapter = { git = "https://github.com/meta-introspector/SolanaWalletAdapter-zos", branch ="no-template"} #
@@ -78,7 +78,8 @@ solfunmeme_views = { path = "crates/solfunmeme_views" }
 solfunmeme_playground = { path = "crates/solfunmeme_playground" }
 solfunmeme_state = { path = "crates/solfunmeme_state" }
 solfunmeme_indexer = { path = "crates/solfunmeme_indexer" }
-# solfunmeme_embedding = { path = "crates/solfunmeme_embedding", optional = true } # Made optional
+    # solfunmeme_embedding = { path = "crates/solfunmeme_embedding", optional = true } # Made optional
+    # solfunmeme_ontology_vibe = { path = "crates/solfunmeme_ontology_vibe" }
 tantivy = { path = "vendor/tantivy" }
 bootstrap = { path = "bootstrap" }
 chat_indexer = { path = "crates/chat_indexer" }
@@ -93,7 +94,7 @@ zos_cli_modules = { path = "crates/zos_cli_modules" }
 
 # Exclude vendor from certain cargo operations
 [workspace]
-exclude = ["vendor"]
+exclude = ["vendor", "crates/solfunmeme_embedding", "crates/solfunmeme_ontology_vibe", "crates/solfunmeme_rdf_utils", "crates/solfunmeme_clifford", "crates/solfunmeme_solana_data", "crates/solfunmeme_function_analysis", "crates/solfunmeme_search_tantivy", "crates/solfunmeme_extractor_system", "crates/solfunmeme_models", "crates/solfunmeme_views", "crates/solfunmeme_playground", "crates/solfunmeme_state", "crates/solfunmeme_indexer", "crates/chat_indexer", "crates/vibe_prover", "crates/index_exporter_lib", "crates/zos_cli_modules", "crates/solfunmeme_serde_utils", "crates/solfunmeme_web_utils", "crates/solfunmeme_logging", "crates/solfunmeme_crypto_utils", "crates/solfunmeme_utility_deps"]
 members = [
     "bootstrap",
     "bootstrap/stage1",
@@ -117,67 +118,39 @@ members = [
     "crates/rrust_kontekst_base",
     "crates/shared_analysis_types",
     "crates/gitaccount",
-    "crates/solfunmeme_clifford",
-    "crates/solfunmeme_solana_data",
-    "crates/solfunmeme_function_analysis",
-    "crates/solfunmeme_search_tantivy",
-    "crates/rdf_output",
-    # "crates/git_plugin",
-    "crates/zip_plugin",
-    "crates/solfunmeme_vibe_check",
-    # "crates/s3_plugin",
-    "crates/workflow_manager",
-    "crates/emoji_lang_plugin",
-    "crates/emoji_workflow_macro",
-    # "crates/rust_sbert_plugin",
-    "crates/llms_from_scratch_rs_plugin",
-    # "crates/gline_rs_plugin", # Temporarily disabled due to ort-sys compilation issues on Android
-    # "crates/extractous_plugin",
-    # New refactored crates
-    "crates/solfunmeme_extractor_system",
-    "crates/solfunmeme_models",
-    "crates/solfunmeme_views",
-    "crates/solfunmeme_playground",
-    "crates/solfunmeme_state",
-    "crates/solfunmeme_indexer",
-    "crates/chat_indexer",
-    "crates/vibe_prover",
-    "crates/index_exporter_lib",
-    "crates/zos_cli_modules",
-    "crates/solfunmeme_serde_utils",
-    "crates/solfunmeme_web_utils",
-    "crates/solfunmeme_logging",
-    "crates/solfunmeme_crypto_utils",
-    "crates/solfunmeme_utility_deps",
-    "crates/solfunmeme_rdf_utils",
-
-    # "crates/model2vec_rs_plugin",
-    # "crates/layered_nlp_plugin",
-    # "crates/vibrato_plugin",
-    # "crates/keyword_extraction_rs_plugin",
-    # "crates/rust_sentence_transformers_plugin",
-    # "crates/eliza_rs_plugin",
-    # "crates/bm25_plugin",
-    # "crates/vaporetto_plugin",
-    # "crates/tongrams_rs_plugin",
-    "crates/solana_airdrop_service_plugin",
-    # "crates/json_ld_plugin",
-    # "crates/rhai_plugin",
-    # "crates/steel_plugin",
-    "crates/solfunmeme_tantivy_report",
-    # "crates/doc_cross_references",
-    "crates/gemini_cli_lib",
-    "crates/solfunmeme_market_maker",
-    "crates/llm_echo_provider",
-    "crates/clifford_flow_provider",
-    "crates/solfunmeme_code_evolution",
-    "crates/solfunmeme_solana_deps",
-    "crates/solfunmeme_dioxus_deps",
-    "crates/solfunmeme_ml_deps",
-    # "crates/solfunmeme_tarot",
-    "zos/plugins", "phase_demo", "crates/solfunmeme_messages", "crates/solfunmeme_frontend_core", "crates/solfunmeme_language_processing", "crates/solfunmeme_core_utils"]
+    # "crates/solfunmeme_clifford",
+    # "crates/solfunmeme_solana_data",
+    # "crates/solfunmeme_function_analysis",
+    # "crates/solfunmeme_search_tantivy",
+    # "crates/solfunmeme_extractor_system",
+    # "crates/solfunmeme_models",
+    # "crates/solfunmeme_views",
+    # "crates/solfunmeme_playground",
+    # "crates/solfunmeme_state",
+    # "crates/solfunmeme_indexer",
+    # "crates/chat_indexer",
+    # "crates/vibe_prover",
+    # "crates/index_exporter_lib",
+    # "crates/zos_cli_modules",
+    # "crates/solfunmeme_serde_utils",
+    # "crates/solfunmeme_web_utils",
+    # "crates/solfunmeme_logging",
+    # "crates/solfunmeme_crypto_utils",
+    # "crates/solfunmeme_utility_deps",
+    # "crates/solfunmeme_rdf_utils",
+    # "crates/solfunmeme_ontology_vibe",
+    # "crates/solfunmeme_embedding",
 
 [workspace.package]
+edition = "2021"
+version = "0.1.0"
+authors = ["James Michael Dupont <h4@solfunmeme.com>"]
+keywords = ["solana", "dioxus", "blockchain", "ai", "rust"]
+license = "MIT"
+repository = "https://github.com/meta-introspector/solfunmeme-dioxus"
+documentation = "https://docs.rs/solfunmeme-dioxus"
+description = "A Dioxus-based application for Solfunmeme"
+homepage = "https://solfunmeme.com"
 
 
 # Server-side dependencies (excluded from WASM)
