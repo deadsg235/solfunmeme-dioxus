@@ -124,6 +124,17 @@ help:
 	@echo "  dev-setup      - Set up development environment"
 	@echo "  help           - Show this help message"
 
+# ── Android ────────────────────────────────────────────────────────
+
+.PHONY: android android-install
+
+android:
+	@echo "🤖 Building Android APK..."
+	dx build --features native --platform android --release
+
+android-install: android
+	adb install target/dx/solfunmeme-dioxus/release/android/app/app/build/outputs/apk/debug/*.apk
+
 # ── Nix build ─────────────────────────────────────────────────────
 
 .PHONY: nix-check nix-build nix-serve nix-test-headless deploy-local

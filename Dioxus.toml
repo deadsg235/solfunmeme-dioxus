@@ -4,6 +4,11 @@ default_platform = "web"
 out_dir = "dist"
 asset_dir = "assets"
 
+[application.android]
+app_id = "com.solfunmeme.dioxus"
+min_sdk_version = 24
+target_sdk_version = 34
+
 [web.app]
 title = "SOLFUNMEME DAO"
 

@@ -1,0 +1,39 @@
+name: Build APK (Android)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: meta-introspector/checkout@main
+      - uses: meta-introspector/install-nix-action@master
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Build Android APK
+        run: |
+          nix develop --command bash -c '
+            # Gradle needs writable SDK
+            if [ ! -d "$HOME/.android-sdk" ]; then
+              cp -rL $ANDROID_HOME $HOME/.android-sdk 2>/dev/null || true
+              chmod -R u+w $HOME/.android-sdk 2>/dev/null || true
+              export ANDROID_HOME="$HOME/.android-sdk"
+              export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/26.3.11579264"
+            fi
+            dx build --features native --platform android --release
+          '
+
+      - uses: meta-introspector/upload-artifact@main
+        with:
+          name: solfunmeme-dioxus-apk
+          path: |
+            target/dx/solfunmeme-dioxus/release/android/app/app/build/outputs/apk/**/*.apk
+            dist/android/app/build/outputs/apk/**/*.apk
