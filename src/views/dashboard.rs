@@ -1,5 +1,4 @@
 use dioxus::prelude::*;
-use crate::model::storage::ACTIVE_CONNECTION;
 
 const TOKEN_ADDRESS: &str = "BwUTq7fS6sfUmHDwAiCQZ3asSiPEapW5zDrsbwtapump";
 
